@@ -13,7 +13,7 @@
  * See the GNU Library General Public License version 2 for more details
  *)
 
-(*i $Id: date.ml,v 1.24 2004-11-13 20:14:07 signoles Exp $ i*)
+(*i $Id: date.ml,v 1.25 2004-12-15 09:59:20 signoles Exp $ i*)
 
 (*S Introduction.
 
@@ -78,21 +78,25 @@ let make y m d =
 
 let lmake ~year ?(month = 1) ?(day = 1) () = make year month day
 
-let from_unixtm x =
-  make (x.Unix.tm_year + 1900) (x.Unix.tm_mon + 1) x.Unix.tm_mday
-
-let today () = 
-  let today = Unix.gmtime (Unix.time ()) in
-  let d = (* current day at GMT *) from_unixtm today in
-  let hour = Time_Zone.from_gmt () + today.Unix.tm_hour in
+let current_day day gmt_hour =
+  let hour = Time_Zone.from_gmt () + gmt_hour in
   (* change the day according to the time zone *)
   if hour < 0 then begin
     assert (hour > - 13); 
-    d - 1
+    day - 1
   end else if hour >= 24 then begin
     assert (hour < 36);
-    d + 1
-  end else d
+    day + 1
+  end else 
+    day
+
+let jan_1_1970 = 2440588
+
+let from_unixfloat x = 
+  let d = int_of_float (x /. 86400.) + jan_1_1970 in
+  current_day d (Unix.gmtime x).Unix.tm_hour
+
+let today () = from_unixfloat (Unix.time ())
 
 let from_jd n = n
 
@@ -334,6 +338,12 @@ let corpus_christi y = easter y + 60
 
 (*S Exported Coercions. *)
 
+let from_unixtm x =
+  let d = (* current day at GMT *)
+    make (x.Unix.tm_year + 1900) (x.Unix.tm_mon + 1) x.Unix.tm_mday 
+  in
+  current_day d x.Unix.tm_hour
+
 let to_unixtm d =
   { Unix.tm_sec = 0; Unix.tm_min = 0; Unix.tm_hour = 0;
     Unix.tm_mday = day_of_month d; 
@@ -343,12 +353,8 @@ let to_unixtm d =
     Unix.tm_yday = day_of_year d - 1;
     Unix.tm_isdst = false }
 
-let jan_1_1970 = 2440588
-
 let to_unixfloat x = float_of_int (x - jan_1_1970) *. 86400.
   (* do not replace [*.] by [*]: the result is bigger than [max_int] ! *)
-
-let from_unixfloat x = int_of_float (x /. 86400.) + jan_1_1970
 
 let to_business d =
   let w = week d in

@@ -1,4 +1,4 @@
-(*i $Id: test_date.ml,v 1.14 2004-11-13 20:14:07 signoles Exp $ i*)
+(*i $Id: test_date.ml,v 1.15 2004-12-15 09:59:20 signoles Exp $ i*)
 
 Printf.printf "\nTests of Date:\n\n";;
 
@@ -54,12 +54,6 @@ test (century 2001 = 21) "century 2001";;
 test (millenium 2000 = 2) "millenium 2000";;
 test (millenium 2001 = 3) "millenium 2001";;
 test (easter 2003 = make 2003 4 20) "Paques 2003";;
-test (to_unixfloat (make 1970 1 1) = 0.) "to_unixfloat 1 Jan 1970";;
-test (from_unixfloat 0. = make 1970 1 1) "from_unixfloat 1 Jan 1970";;
-test (to_unixfloat (make 2004 11 13) = 1100304000.) "to_unixfloat";;
-test (from_unixfloat 1100304000. = make 2004 11 13) "to_unixfloat";;
-test (from_unixtm (to_unixtm (make 2003 7 16)) = make 2003 7 16) 
-  "from_unixtm to_unixtm = id";;
 test (Period.nb_days (Period.make 0 0 6) = 6) "Period.nb_days ok";;
 test_exn (lazy (Period.nb_days (Period.make 1 0 0))) "Period.nb_days ko";;
 test (week_first_last 21 2004 = (make 2004 5 17, make 2004 5 23)) 
@@ -67,6 +61,30 @@ test (week_first_last 21 2004 = (make 2004 5 17, make 2004 5 23))
 test (Period.ymd (Period.make 1 2 3) = (1, 2, 3)) "Period.ymd";;
 test (nth_weekday_of_month 2004 Oct Thu 5 = make 2004 10 28) 
   "nth_weekday_of_month";;
+
+(* Unix *)
+Time_Zone.change Time_Zone.UTC;;
+test (to_unixfloat (make 1970 1 1) = 0.) "to_unixfloat 1 Jan 1970";;
+test (from_unixfloat 0. = make 1970 1 1) "from_unixfloat 0.";;
+test (to_unixfloat (make 2004 11 13) = 1100304000.) "to_unixfloat";;
+test (from_unixfloat 1100304000. = make 2004 11 13) "from_unixfloat";;
+test (from_unixtm (to_unixtm (make 2003 7 16)) = make 2003 7 16) 
+  "from_unixtm to_unixtm = id";;
+Time_Zone.change (Time_Zone.UTC_Plus (-1));;
+test (from_unixfloat 0. = make 1969 12 31) "from_unixfloat 0. (dec-)";;
+test (from_unixtm { Unix.tm_sec = 0; tm_min = 0; tm_hour = 0; tm_mday = 1; 
+		    tm_mon = 0; tm_year = 70; tm_wday = 4; tm_yday = 0; 
+		    tm_isdst = false } = make 1969 12 31) 
+  "from_unixtm (dec-)";;
+Time_Zone.change (Time_Zone.UTC_Plus 1);;
+test (from_unixfloat 1100390390. = make 2004 11 14) "from_unixfloat (dec+)";;
+test (from_unixtm { Unix.tm_sec = 0; tm_min = 0; tm_hour = 0; tm_mday = 14; 
+		    tm_mon = 10; tm_year = 104; tm_wday = 0; tm_yday = 318;
+		    tm_isdst = false } = make 2004 11 14) 
+  "from_unixtm (dec+)";;
+test (from_unixtm (to_unixtm (make 2003 7 16)) = make 2003 7 16) 
+  "from_unixtm to_unixtm = id";;
+
 
 (* to_business *)
 test (to_business (make 2003 1 1) = (2003, 1, Wed)) "to_business 1";;

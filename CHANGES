@@ -1,3 +1,7 @@
+version 1.09.2, 2004-12-15:
+===========================
+* bug fixed in Date.from_unixfloat and Date.from_unixtm with time zones <> UTC
+
 version 1.09.1, 2004-11-17:
 ===========================
 * bug fixed in Calendar.to/from_unixfloat with time zones <> UTC

@@ -13,7 +13,7 @@
  * See the GNU Library General Public License version 2 for more details
  *)
 
-(*i $Id: date.mli,v 1.21 2004-11-15 16:36:55 signoles Exp $ i*)
+(*i $Id: date.mli,v 1.22 2004-12-15 09:59:20 signoles Exp $ i*)
 
 (** Date operations.
 
@@ -159,7 +159,7 @@ val to_unixtm : t -> Unix.tm
     @since 1.01 *)
 
 val from_unixtm : Unix.tm -> t
-  (** Inverse of [to_unixtm]. 
+  (** Inverse of [to_unixtm]. Assume the current time zone.
     @since 1.01 *)
 
 val to_unixfloat : t -> float
@@ -169,7 +169,8 @@ val to_unixfloat : t -> float
     @since 1.01 *)
 
 val from_unixfloat : float -> t
-  (** Inverse of [to_unixfloat]. Ignore the fractional part of the argument. 
+  (** Inverse of [to_unixfloat]. Ignore the fractional part of the argument.
+    Assume the current time zone.
     @since 1.01 *)
 
 val to_business: t -> year * int * day
