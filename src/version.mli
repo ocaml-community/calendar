@@ -13,9 +13,9 @@
  * See the GNU Library General Public License version 2 for more details
  *)
 
-(*i $Id: version.mli,v 1.1 2004-10-25 15:16:28 signoles Exp $ i*)
+(*i $Id: version.mli,v 1.2 2004-10-25 15:23:57 signoles Exp $ i*)
 
-(** Information about calendar *)
+(** Information about calendar. *)
 
 val version: string
   (** Version of the calendar library which is used *)

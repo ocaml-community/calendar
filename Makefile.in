@@ -11,7 +11,7 @@
 #  
 #  See the GNU Library General Public License version 2 for more details
 #
-# $Id: Makefile.in,v 1.39 2004-10-25 15:16:27 signoles Exp $
+# $Id: Makefile.in,v 1.40 2004-10-25 15:23:56 signoles Exp $
 
 # Used programs
 ###############
@@ -214,10 +214,10 @@ clean:
 	  rm -f $$i/*~ $$i/\#* $$i/*.cm[iox] $$i/*.*a $$i/*.o $$i/a.out; \
 	done
 
-dist-clean: clean
+dist-clean distclean: clean
 	rm -rf $(NAME).ps.gz doc
 
-clean-configure: dist-clean
+clean-configure cleanconfig: dist-clean
 	rm -f Makefile configure config.*
 
 # Depend

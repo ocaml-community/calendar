@@ -13,7 +13,7 @@
  * See the GNU Library General Public License version 2 for more details
  *)
 
-(*i $Id: calendar.ml,v 1.17 2004-10-25 15:16:28 signoles Exp $ i*)
+(*i $Id: calendar.ml,v 1.18 2004-10-25 15:22:48 signoles Exp $ i*)
 
 (*S Introduction.
 
@@ -240,8 +240,8 @@ let split x =
   Date.from_jd d, Time.from_seconds t
 
 let unsplit d t =
- to_gmt (float_of_int (Date.to_jd d) +. 
-	   (float_of_int (Time.to_seconds t) /. 86400.)) -. 0.5
+  to_gmt (float_of_int (Date.to_jd d) +. 
+	    (float_of_int (Time.to_seconds t) /. 86400.)) -. 0.5
 
 let add x p =
   let d, t = split x in
