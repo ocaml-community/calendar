@@ -13,7 +13,7 @@
  * See the GNU Library General Public License version 2 for more details
  *)
 
-(*i $Id: calendar.ml,v 1.5 2003-07-07 21:01:34 signoles Exp $ i*)
+(*i $Id: calendar.ml,v 1.6 2003-07-08 08:12:18 signoles Exp $ i*)
 
 (*S Introduction.
 
@@ -22,6 +22,11 @@
   January first, 4713 BC at MIDDAY (and then, this Julian day is 0.0). 
   But, for implementation facilities, the Julian day 0.0 is coded as
   January first, 4713 BC at MIDNIGHT. *)
+
+(* Round a float to the nearest int. *)
+let round x =
+  let f, i = modf x in
+  int_of_float i + (if f < 0.5 then 0 else 1)
 
 (*S Datatypes. *)
 
@@ -54,17 +59,17 @@ let to_date x = Date.from_jd (int_of_float (from_gmt x +. 0.5))
 (* Return the fractional part of [x] as a time. *)
 let to_time x = 
   let t, _ = modf (from_gmt (x +. 0.5)) in 
-  let f, i = modf (t *. 86400.) in
-  let i = if f < 0.5 then int_of_float i else int_of_float i + 1 in
+  let i = round (t *. 86400.) in
+  assert (i < 86400);
   Time.from_seconds i
-
-let build d t = 
-  to_gmt (float_of_int (Date.to_jd d) +. 
-	    float_of_int (Time.to_seconds t) /. 86400.) -. 0.5
 
 (*S Constructors. *)
 
 let is_valid x = x >= 0. && x < 2914695.
+
+let build d t = 
+  to_gmt (float_of_int (Date.to_jd d) +. 
+	    float_of_int (Time.to_seconds t) /. 86400.) -. 0.5
 
 let make y m d h mn s = 
   let x = build (Date.make y m d) (Time.make h mn s) in
@@ -164,13 +169,15 @@ module Period = struct
 
   let compare = Pervasives.compare
 
-  let to_date_period x = x.d
+  let to_date x = 
+    Date.Period.add 
+      x.d 
+      (Date.Period.day 
+	 (round (float_of_int (Time.Period.length x.t) /. 86400.)))
 
-  let from_date_period x = { empty with d = x }
+  let from_date x = { empty with d = x }
 
-  let to_time_period x = x.t
-
-  let from_time_period x = { empty with t = x }
+  let from_time x = { empty with t = x }
 end
 
 (*S Arithmetic operations on calendars and periods. *)
@@ -184,9 +191,8 @@ let add x p =
 let rem x p = add x (Period.opp p)
 
 let sub x y = 
-  Period.add 
-    (Period.from_date_period (Date.sub (to_date x) (to_date y)))
-    (Period.from_time_period (Time.sub (to_time x) (to_time y)))
+  { Period.d = Date.sub (to_date x) (to_date y);
+    Period.t = Time.sub (to_time x) (to_time y) }
 
 let next x f = 
   let t, d = modf x in
@@ -194,11 +200,7 @@ let next x f =
     | #Date.field as f -> from_date (Date.next (to_date d) f) +. t
     | #Time.field as f -> d +. from_time (Time.next (to_time t) f)
       
-let prev x f =
-  let t, d = modf x in
-  match f with
-    | #Date.field as f -> from_date (Date.prev (to_date d) f) +. t
-    | #Time.field as f -> d +. from_time (Time.prev (to_time t) f)
+let prev x f = -. next (-. x) f
 
 (* Exported [from_date]. *)
 let from_date x = to_gmt (from_date x) -. 0.5

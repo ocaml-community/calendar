@@ -13,7 +13,7 @@
  * See the GNU Library General Public License version 2 for more details
  *)
 
-(*i $Id: calendar.mli,v 1.4 2003-07-07 21:01:34 signoles Exp $ i*)
+(*i $Id: calendar.mli,v 1.5 2003-07-08 08:12:18 signoles Exp $ i*)
 
 (*S Introduction. 
 
@@ -155,17 +155,18 @@ module Period : sig
 
   (* Coercions *)
 
-  (* Convert a calendar period to a date period. *)
-  val to_date_period : t -> Date.Period.t
+  (* Convert a calendar period to a date period. 
+     The time period is rounded to the nearest day
+     (e.g. if the time period is 15 hours, it is rounded to 1 day). *)
+  val to_date : t -> Date.Period.t
 
   (* Convert a date period to a calendar period. *)
-  val from_date_period : Date.Period.t -> t
+  val from_date : Date.Period.t -> t
 
-  (* Convert a calendar period to a time period. *)
-  val to_time_period : t -> Time.Period.t
-
-  (* Convert a time period to a calendar period. *)
-  val from_time_period : Time.Period.t -> t
+  (* Convert a time period to a calendar period. 
+     Note there is no [to_time] function because it is not possible to compute
+     such a time period from a date period. *)
+  val from_time : Time.Period.t -> t
 end
 
 (*S Arithmetic operations on calendars and periods. *)

@@ -13,7 +13,7 @@
  * See the GNU Library General Public License version 2 for more details
  *)
 
-(*i $Id: time.ml,v 1.5 2003-07-07 21:01:34 signoles Exp $ i*)
+(*i $Id: time.ml,v 1.6 2003-07-08 08:12:18 signoles Exp $ i*)
 
 (*S Introduction.
 
@@ -100,6 +100,8 @@ module Period = struct
   type t = int
 
   let make h m s = h * 3600 + m * 60 + s
+
+  let length x = x
 
   let hour x = x * 3600
 

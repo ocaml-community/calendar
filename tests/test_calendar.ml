@@ -1,4 +1,4 @@
-(*i $Id: test_calendar.ml,v 1.4 2003-07-07 21:01:34 signoles Exp $ i*)
+(*i $Id: test_calendar.ml,v 1.5 2003-07-08 08:12:19 signoles Exp $ i*)
 
 Printf.printf "\nTests of Calendar:\n\n";;
 
@@ -9,6 +9,8 @@ reset ();;
 let eps = 0.000001;;
 
 Time_Zone.change Time_Zone.GMT;;
+
+(* Calendar *)
 
 test_exn (lazy (make (-4712) 1 1 12 0 (-1))) "-4713-12-31-23-59-59";;
 test (make (-4712) 1 1 12 0 0 = make (-4712) 1 0 36 0 0) "calendar coercion";;
@@ -21,8 +23,14 @@ test (abs_float (to_jd (from_jd 12345.6789) -. 12345.6789) < eps)
   "to_jd (from_jd x) = x";;
 test (abs_float (to_mjd (from_mjd 12345.6789) -. 12345.6789) < eps) 
   "to_mjd (from_mjd x) = x";;
+test (Period.to_date (Period.hour 59) = Date.Period.day 2) 
+  "period(59h) = period(2d)";;
+test (Period.to_date (Period.hour 60) = Date.Period.day 3) 
+  "period(60h) = period(3d)";;
 test (to_string (from_string "1-2-3; 4-5-6") = "1-2-3; 4-5-6") 
   "to_string from_string = id";;
+
+(* Date *)
 
 let d = make 2003 12 31 12 24 48;;
 test (to_string (next d `Month) = "2004-1-31; 12-24-48") 

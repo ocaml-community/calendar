@@ -13,7 +13,7 @@
  * See the GNU Library General Public License version 2 for more details
  *)
 
-(*i $Id: time.mli,v 1.6 2003-07-07 21:01:34 signoles Exp $ i*)
+(*i $Id: time.mli,v 1.7 2003-07-08 08:12:18 signoles Exp $ i*)
 
 (*S Introduction.
 
@@ -147,6 +147,9 @@ module Period : sig
   include Period.S (*r Arithmetic operations. *)
 
   (* Some other arithmetic operations. *)
+
+  (* Number of seconds of a period. *)
+  val length : t -> int
 
   (* Multiplication. *)
   val mul : t -> t -> t
