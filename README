@@ -27,6 +27,7 @@ configure	  Script generating Makefile
 configure.in	  Script generating configure (with autoconf)
 calendar_faq.txt  FAQ frow which some algorithms come
 calendar.ps.gz	  Source files documentation
+html		  HTML version of the .mli files
 src		  Source files directory
 tests		  Test files directory
 

@@ -41,6 +41,7 @@ MLI	= $(filter %.mli, $(SRC))
 
 CMO	= $(ML:.ml=.cmo)
 CMX	= $(CMO:.cmo=.cmx)
+CMI	= $(MLI:.mli=.cmi) # ok with those source files
 
 # Libs and flags
 ################
@@ -71,9 +72,6 @@ mli2html: $(patsubst src/%.mli, html/%.html, $(filter %.mli, $(SRC)))
 
 # Generic rules
 ###############
-
-%.tar: %
-	tar cvf $@ $<
 
 %.gz: %
 	gzip -f --best $<
@@ -128,21 +126,24 @@ $(NAME).ps: $(SRC)
 #########
 
 install:
-	cp -f $(LIBS) $(CMO) $(CMX) $(CAMLLIB)
+	cp -f $(LIBS) $(CMI) $(CMO) $(CMX) $(CAMLLIB)
 
 uninstall:
-	rm -f $(patsubst src/, $(CAMLLIB), $(LIBS) $(CMO) $(CMX))
+	rm -f $(addprefix $(CAMLLIB)/, $(notdir $(LIBS) $(CMI) $(CMO) $(CMX)))
 
 # Exporting
 ###########
 
-EXPORT_DIR= $$HOME/WWW
+EXPORT_DIR= $$HOME/WWW/prog/calendar
 
 export: $(NAME).ps.gz mli2html
 	cvs export -d /tmp/$(NAME) -D now $(NAME)
-	cp -rf $(NAME).ps.gz html /tmp/$(NAME)
+	cp -rf .depend configure $(NAME).ps.gz html /tmp/$(NAME)
+	cp -f $(NAME).ps.gz html/*.html $(EXPORT_DIR)
+	rm -f /tmp/$(NAME)/html/touch-html
 	cd /tmp; \
-	  ($(MAKE) $(NAME).tar.gz; \
+	  (tar cvf $(NAME).tar $(NAME); \
+	   gzip -f --best $(NAME).tar; \
 	   rm -rf $(NAME); \
 	   mv $(NAME).tar.gz $(EXPORT_DIR))
 
