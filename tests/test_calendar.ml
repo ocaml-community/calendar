@@ -1,4 +1,4 @@
-(*i $Id: test_calendar.ml,v 1.5 2003-07-08 08:12:19 signoles Exp $ i*)
+(*i $Id: test_calendar.ml,v 1.6 2003-07-08 09:46:16 signoles Exp $ i*)
 
 Printf.printf "\nTests of Calendar:\n\n";;
 
@@ -23,12 +23,22 @@ test (abs_float (to_jd (from_jd 12345.6789) -. 12345.6789) < eps)
   "to_jd (from_jd x) = x";;
 test (abs_float (to_mjd (from_mjd 12345.6789) -. 12345.6789) < eps) 
   "to_mjd (from_mjd x) = x";;
-test (Period.to_date (Period.hour 59) = Date.Period.day 2) 
-  "period(59h) = period(2d)";;
-test (Period.to_date (Period.hour 60) = Date.Period.day 3) 
-  "period(60h) = period(3d)";;
+test (Period.to_date (Period.hour 60) = Date.Period.day 2) 
+  "period(60h) = period(2d)";;
+test (Period.compare (Period.day 2) (Period.hour 60) < 0) "Period.compare <";;
+test (Period.compare (Period.day 3) (Period.hour 60) > 0) "Period.compare >";;
+test (Period.compare 
+	(Period.add (Period.day 2) (Period.hour 12)) 
+	(Period.hour 60) = 0) "Period.compare =";;
 test (to_string (from_string "1-2-3; 4-5-6") = "1-2-3; 4-5-6") 
   "to_string from_string = id";;
+test 
+  (add (make 1 2 3 4 5 6) (Period.make 9 8 7 6 5 4) = make 10 10 10 10 10 10) 
+  "add 1-2-3-4-5-6 9-8-7-6-5-4";;
+test (rem (make 9 8 7 6 5 4) (Period.make 1 2 3 4 5 6) = make 8 6 4 1 59 58) 
+  "rem 9-8-7-6-5-4 1-2-3-4-5-6";;
+test (sub (make 0 0 7 6 5 4) (make 0 0 3 54 5 6) = Period.make 0 0 1 23 59 58) 
+  "sub 0-0-7-6-5-4 0-0-3-54-5-6";;
 
 (* Date *)
 
@@ -39,6 +49,12 @@ test (to_string (add d (Period.month 2)) = "2004-3-2; 12-24-48")
   "2003-12-31 + 2 mois";;
 let d2 = make (-3000) 1 1 6 12 24;;
 test (egal (rem d (sub d d2)) d2) "rem x (sub x y) = y";;
+test (is_leap_day (make 2000 2 24 0 0 0)) "2000-2-24 leap day";;
+test (not (is_leap_day (make 2000 2 25 0 0 0))) "2000-2-25 not leap day";;
+test (is_gregorian (make 1600 1 1 0 0 0)) "1600-1-1 gregorian";;
+test (not (is_gregorian (make 1400 1 1 0 0 0))) "1400-1-1 not gregorian";;
+test (is_julian (make 1582 1 1 0 0 0)) "1582-1-1 julian";;
+test (not (is_julian (make 1583 1 1 0 0 0))) "1583-1-1 not julian";;
 
 (* Time *)
 
@@ -48,11 +64,7 @@ test (egal (add (make 0 0 0 10 0 0) (Period.hour 30)) (make 0 0 1 16 0 0))
   "add 0-0-0-20-0-0 30h";;
 test (egal (next (make 1999 12 31 23 59 59) `Second) (make 2000 1 1 0 0 0))
   "next 1999-31-12-23-59-59 `Second";;
-(*Time_Zone.change Time_Zone.Local;;*)
 let n = now ();;
-Printf.printf "sss %s %s %s\n" (to_string (now ())) (to_string n) (to_string (prev (next n `Minut) `Minut));;
-Printf.printf "sss %s %s\n" (to_string (next n `Minut)) (to_string (prev n `Minut));;
-
 test (egal (prev (next n `Minut) `Minut) n) "prev next = id";;
 test (egal 
 	(convert 

@@ -13,7 +13,7 @@
  * See the GNU Library General Public License version 2 for more details
  *)
 
-(*i $Id: calendar.ml,v 1.6 2003-07-08 08:12:18 signoles Exp $ i*)
+(*i $Id: calendar.ml,v 1.7 2003-07-08 09:46:16 signoles Exp $ i*)
 
 (*S Introduction.
 
@@ -47,11 +47,7 @@ let to_gmt x = convert x (Time_Zone.current ()) Time_Zone.GMT
 
 let from_gmt x = convert x Time_Zone.GMT (Time_Zone.current ())
 
-(* Local [from_date]: ignore time part and time zone. *)
-let from_date x = float_of_int (Date.to_jd x)
-
-(* Local [from_time]: ignore time zone. *)
-let from_time x = to_gmt ((float_of_int (Time.to_seconds x)) /. 86400.) -. 0.5
+let from_date x = to_gmt (float_of_int (Date.to_jd x)) -. 0.5
 
 (* Return the integral part of [x] as a date. *)
 let to_date x = Date.from_jd (int_of_float (from_gmt x +. 0.5))
@@ -142,10 +138,23 @@ let to_string x =
 module Period = struct
   type t = { d : Date.Period.t; t : Time.Period.t }
 
+  let split x = 
+    let f, days = modf (float_of_int (Time.Period.length x.t) /. 86400.) in
+    let seconds, days = round (f *. 86400.), int_of_float days in
+    let seconds, days = 
+      if seconds < 0 then seconds + 86400, days - 1 else seconds, days
+    in
+    assert (seconds >= 0 && seconds < 86400);
+    Date.Period.day days, Time.Period.second seconds
+
+  let normalize x =
+    let days, seconds = split x in
+    { d = Date.Period.add x.d days; t = seconds }
+
   let empty = { d = Date.Period.empty; t = Time.Period.empty }
 
   let make y m d h mn s = 
-    { d = Date.Period.make y m d; t = Time.Period.make h mn s }
+    normalize { d = Date.Period.make y m d; t = Time.Period.make h mn s }
 
   let year x = { empty with d = Date.Period.year x }
 
@@ -155,55 +164,70 @@ module Period = struct
 
   let day x = { empty with d = Date.Period.day x }
 
-  let hour x = { empty with t = Time.Period.hour x }
+  let hour x = normalize { empty with t = Time.Period.hour x }
 
-  let minut x = { empty with t = Time.Period.minut x }
+  let minut x = normalize { empty with t = Time.Period.minut x }
 
-  let second x = { empty with t = Time.Period.second x }
+  let second x = normalize { empty with t = Time.Period.second x }
 
-  let add x y = { d = Date.Period.add x.d y.d; t = Time.Period.add x.t y.t }
+  let add x y = 
+    normalize { d = Date.Period.add x.d y.d; t = Time.Period.add x.t y.t }
 
-  let sub x y = { d = Date.Period.sub x.d y.d; t = Time.Period.sub x.t y.t }
+  let sub x y = 
+    normalize { d = Date.Period.sub x.d y.d; t = Time.Period.sub x.t y.t }
 
   let opp x = { d = Date.Period.opp x.d; t = Time.Period.opp x.t }
 
+  (* Lexicographical order over the fields of the type [t].
+     Yep, [Pervasives.compare] correctly works. *)
   let compare = Pervasives.compare
 
-  let to_date x = 
-    Date.Period.add 
-      x.d 
-      (Date.Period.day 
-	 (round (float_of_int (Time.Period.length x.t) /. 86400.)))
+  let to_date x = x.d
 
   let from_date x = { empty with d = x }
 
   let from_time x = { empty with t = x }
+
+  let to_string x = 
+    Date.Period.to_string x.d ^ "; " ^ Time.Period.to_string x.t
+
+  let from_string s =
+    match Str.split (Str.regexp "; ") s with
+      | [ d; t ] -> 
+	  normalize { d = Date.Period.from_string d; 
+		      t = Time.Period.from_string t }
+      | _ -> raise (Invalid_argument (s ^ " is not a calendar"))
 end
 
-(*S Arithmetic operations on calendars and periods. *)
+let split x = 
+  let t, d = modf (from_gmt (x +. 0.5)) in 
+  let t, d = round (t *. 86400.), int_of_float d in
+  let t, d = if t < 0 then t + 86400, d - 1 else t, d in
+  assert (t >= 0 && t < 86400);
+  Date.from_jd d, Time.from_seconds t
+
+let unsplit d t =
+ to_gmt (float_of_int (Date.to_jd d) +. 
+	   (float_of_int (Time.to_seconds t) /. 86400.)) -. 0.5
 
 let add x p =
-  (* potentiellement bugge sur des periodes de 1 mois
-     avec une date franchissant un mois par decalage horaire. *)
-  from_date (Date.add (to_date x) p.Period.d) +. 
-    from_time (Time.add (to_time x) p.Period.t)
+  let d, t = split x in
+  unsplit (Date.add d p.Period.d) (Time.add t p.Period.t)
 
 let rem x p = add x (Period.opp p)
 
 let sub x y = 
-  { Period.d = Date.sub (to_date x) (to_date y);
-    Period.t = Time.sub (to_time x) (to_time y) }
+  let d1, t1 = split x
+  and d2, t2 = split y in
+  Period.normalize { Period.d = Date.sub d1 d2; Period.t = Time.sub t1 t2 }
 
 let next x f = 
-  let t, d = modf x in
+  let d, t = split x in
   match f with
-    | #Date.field as f -> from_date (Date.next (to_date d) f) +. t
-    | #Time.field as f -> d +. from_time (Time.next (to_time t) f)
+    | #Date.field as f -> unsplit (Date.next d f) t
+    | #Time.field as f -> unsplit d (Time.next t f)
       
 let prev x f = -. next (-. x) f
-
-(* Exported [from_date]. *)
-let from_date x = to_gmt (from_date x) -. 0.5
 
 let egal x y = to_string x = to_string y
 

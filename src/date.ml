@@ -13,7 +13,7 @@
  * See the GNU Library General Public License version 2 for more details
  *)
 
-(*i $Id: date.ml,v 1.6 2003-07-07 21:01:34 signoles Exp $ i*)
+(*i $Id: date.ml,v 1.7 2003-07-08 09:46:16 signoles Exp $ i*)
 
 (*S Introduction.
 
@@ -201,7 +201,16 @@ module Period = struct
 
   (* Lexicographical order over the fields of the type [t].
      Yep, [Pervasives.compare] correctly works. *)
-  let compare = Pervasives.compare 
+  let compare = Pervasives.compare
+
+  let to_string p = 
+    string_of_int p.y ^ "-" ^ string_of_int p.m ^ "-" ^ string_of_int p.d
+
+  let from_string s = 
+    match List.map int_of_string (Str.split (Str.regexp "-") s) with
+      | [ y; m; d ] -> make (if s.[0] = '-' then - y else y) m d
+      | _ -> raise (Invalid_argument (s ^ " is not a date"))
+
 end
 
 let add d p = 
