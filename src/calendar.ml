@@ -13,7 +13,7 @@
  * See the GNU Library General Public License version 2 for more details
  *)
 
-(*i $Id: calendar.ml,v 1.12 2003-09-18 10:29:27 signoles Exp $ i*)
+(*i $Id: calendar.ml,v 1.13 2003-09-18 10:33:16 signoles Exp $ i*)
 
 (*S Introduction.
 
@@ -145,7 +145,7 @@ let to_unixfloat x = x -. jan_1_1970
 
 (*S Boolean operations on dates. *)
 
-let equal x y = int_of_float (x *. 100000.) = int_of_float (y *. 100000.)
+let equal x y = abs_float (x -. y) < 1e-6
 
 let compare x y = 
   if equal x y then 0 
