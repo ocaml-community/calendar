@@ -5,9 +5,10 @@ Summary
 2- Contents
 3- Copyright
 4- Installation
-5- Documentation
-6- Makefile
-7- Contact the developper
+5- Use
+6- Documentation
+7- Makefile
+8- Contact the developper
 
 1- Introduction 
 ---------------
@@ -51,15 +52,27 @@ You can remove files installed by "make install" at any time with :
 
 	make uninstall (you may need superuser permissions)
 
-5- Documentation
+5- How to use
+-------------
+
+Simply link calendar.cma or calendar.cmxa with your files.
+
+For example, if you have a file foo_using_this_library.ml, 
+compile it as follow:
+
+	ocamlc calendar.cma foo_using_this_library.ml
+or
+	ocamlopt calendar.cmxa foo_using_this_library.ml
+
+6- Documentation
 ----------------
 
 The definitions provided by this library are fully commented in the
-.mli files.
+.mli files. The html directory contains an html version of those .mli files.
 
 The file calendar.ps.gz is a more user friendly documentation.
 
-6- Makefile
+7- Makefile
 -----------
 
 A description of some Makefile entries follows :
@@ -79,7 +92,7 @@ Same as above. Moreover the documentation is zipped.
 (*)  ocamlwc is available at http://www.lri.fr/~filliatr/software.en.html
 (**) ocamlweb is available at http://www.lri.fr/~filliatr/ocamlweb
 
-7- Contact the developper
+8- Contact the developper
 -------------------------
 
 You can report bugs and/or give feedbacks by e-mail to :

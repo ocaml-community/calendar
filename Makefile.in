@@ -28,7 +28,7 @@ CAML2HTML= caml2html
 
 NAME	= calendar
 
-LIBS	= src/$(NAME).cma src/$(NAME).cmxa
+LIBS	= src/$(NAME).a src/$(NAME).cma src/$(NAME).cmxa
 
 DIRS	= src
 
@@ -60,7 +60,7 @@ all: $(LIBS)
 src/$(NAME).cma: $(CMO)
 	$(CAMLC) $(BYTEFLAGS) -a -o $@ unix.cma str.cma $^
 
-src/$(NAME).cmxa: src/others/unix.cmx src/others/str.cmx $(CMX)
+src/$(NAME).a src/$(NAME).cmxa: src/others/unix.cmx src/others/str.cmx $(CMX)
 	$(CAMLOPT) $(OPTFLAGS) -a -o $@ \
 		-cclib -lunix -cclib -lstr -cclib -L$(CAMLLIB) $^
 
