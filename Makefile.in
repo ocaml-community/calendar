@@ -27,6 +27,7 @@ CAML2HTML= caml2html
 #########
 
 NAME	= calendar
+VERSION	= 1.0
 
 LIBS	= src/$(NAME).a src/$(NAME).cma src/$(NAME).cmxa
 
@@ -61,8 +62,7 @@ src/$(NAME).cma: $(CMO)
 	$(CAMLC) $(BYTEFLAGS) -a -o $@ unix.cma str.cma $^
 
 src/$(NAME).a src/$(NAME).cmxa: src/others/unix.cmx src/others/str.cmx $(CMX)
-	$(CAMLOPT) $(OPTFLAGS) -a -o $@ \
-		-cclib -lunix -cclib -lstr -cclib -L$(CAMLLIB) $^
+	$(CAMLOPT) $(OPTFLAGS) -a -o $@ -cclib -lunix -cclib -lstr $^
 
 html/touch-html:
 	mkdir html
@@ -142,11 +142,13 @@ export: $(NAME).ps.gz mli2html
 	cp -f $(NAME).ps.gz html/*.html $(EXPORT_DIR)
 	rm -f /tmp/$(NAME)/html/touch-html
 	cd /tmp; \
-	  (tar cvf $(NAME).tar $(NAME); \
-	   gzip -f --best $(NAME).tar; \
+	  (tar cvf $(NAME)-$(VERSION).tar $(NAME); \
+	   gzip -f --best $(NAME)-$(VERSION).tar; \
 	   rm -rf $(NAME); \
 	   mv $(NAME).tar.gz $(EXPORT_DIR))
-
+	cd $(EXP_DIR); \
+	  (rm -f prog.fr.tex prog.en.tex; \
+	   $(MAKE) VERSION=$(VERSION))
 
 # Rebuilding Makefile
 #####################
