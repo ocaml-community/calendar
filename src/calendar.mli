@@ -13,7 +13,7 @@
  * See the GNU Library General Public License version 2 for more details
  *)
 
-(*i $Id: calendar.mli,v 1.9 2003-08-20 14:18:56 signoles Exp $ i*)
+(*i $Id: calendar.mli,v 1.10 2003-08-25 15:54:12 signoles Exp $ i*)
 
 (*S Introduction. 
 
@@ -146,6 +146,9 @@ val from_date : Date.t -> t
 
 (* Convert a calendar to a date. Time part of the calendar is ignored. *)
 val to_date : t -> Date.t
+
+(* Convert a calendar to a time. Date part of the calendar is ignored. *)
+val to_time : t -> Time.t
 
 (*S Period.
 

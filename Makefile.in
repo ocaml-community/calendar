@@ -11,7 +11,7 @@
 #  
 #  See the GNU Library General Public License version 2 for more details
 #
-# $Id: Makefile.in,v 1.25 2003-08-20 12:30:05 signoles Exp $
+# $Id: Makefile.in,v 1.26 2003-08-25 15:54:38 signoles Exp $
 
 # Used programs
 ###############
@@ -30,7 +30,7 @@ CAML2HTML= @CAML2HTML@
 #########
 
 NAME	= calendar
-VERSION	= 1.02
+VERSION	= 1.03
 
 LIBS	= src/$(NAME).cma src/$(NAME).cmxa
 
