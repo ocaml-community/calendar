@@ -69,9 +69,9 @@ or
 (b) Alternatively, do not use ocamlfind, link calendar with unix and str and
 specify the directory containing calendar:
 
-	ocamlc -I /usr/local/lib/ocaml/site-lib/calendar unix.cma str.cma calendar.cma foo_using_calendar.ml
+	ocamlc -I /usr/local/lib/ocaml/site-lib/calendar unix.cma calendar.cma foo_using_calendar.ml
 or
-	ocamlopt -I /usr/local/lib/ocaml/site-lib/calendar unix.cmxa str.cmxa calendar.cmxa foo_using_calendar.ml
+	ocamlopt -I /usr/local/lib/ocaml/site-lib/calendar unix.cmxa calendar.cmxa foo_using_calendar.ml
 
 6- Documentation
 ----------------
