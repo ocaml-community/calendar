@@ -13,7 +13,7 @@
  * See the GNU Library General Public License version 2 for more details
  *)
 
-(*i $Id: printer.ml,v 1.4 2003-09-18 13:16:55 signoles Exp $ i*)
+(*i $Id: printer.ml,v 1.5 2003-09-18 13:38:32 signoles Exp $ i*)
 
 module type S = sig
   type t
@@ -38,7 +38,9 @@ let day_name =
 	 | Date.Fri -> "Friday"
 	 | Date.Sat -> "Saturday")
 
-let short_day_name day = String.sub (!day_name day) 0 3
+let short_day_name day = 
+  let d = !day_name day in
+  try String.sub d 0 3 with Invalid_argument _ -> d
 
 let month_name =
   ref (function
@@ -55,7 +57,9 @@ let month_name =
 	 | Date.Nov -> "November"
 	 | Date.Dec -> "December")
 
-let short_month_name month = String.sub (!month_name month) 0 3
+let short_month_name month = 
+  let m = !month_name month in
+  try String.sub m 0 3 with Invalid_argument _ -> m
 
 type pad =
   | Zero
