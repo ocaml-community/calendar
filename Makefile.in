@@ -11,7 +11,7 @@
 #  
 #  See the GNU Library General Public License version 2 for more details
 #
-# $Id: Makefile.in,v 1.23 2003-08-20 07:45:35 signoles Exp $
+# $Id: Makefile.in,v 1.24 2003-08-20 12:27:10 signoles Exp $
 
 # Used programs
 ###############
@@ -75,10 +75,10 @@ mli2html: $(patsubst src/%.mli, html/%.html, $(filter %.mli, $(SRC)))
 
 META: 
 	rm -f META
-	echo "description = \"calendar library\"" > $@
+	echo "description = \"$(NAME) library\"" > $@
 	echo "version = \"$(VERSION)\"" >> $@
-	echo "archive(byte) = \"calendar.cma\"" >> $@
-	echo "archive(native) = \"calendar.cmxa\"" >> $@
+	echo "archive(byte) = \"$(NAME).cma\"" >> $@
+	echo "archive(native) = \"$(NAME).cmxa\"" >> $@
 	echo "requires = \"unix str\"" >> $@
 
 # Generic rules
