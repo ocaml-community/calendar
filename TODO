@@ -8,3 +8,4 @@
 * ouvrir la porte à de nouveaux calendriers en codant plusieurs implantations de Date basés sur divers calendrier (avec signature commune) et en ayant une version fonctorielle des modules basés sur Date (comme Calendar ou DatePrinter).
 Mettre alors en place des conversions inter-calendrier (de grégorien vers julien et vice-versa, etc).
 * ajouter de quoi faire un timer ?
+* adapter par rapport à la nouvelle FAQ
