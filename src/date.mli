@@ -13,7 +13,7 @@
  * See the GNU Library General Public License version 2 for more details
  *)
 
-(*i $Id: date.mli,v 1.18 2004-10-25 15:16:28 signoles Exp $ i*)
+(*i $Id: date.mli,v 1.19 2004-10-29 13:49:09 signoles Exp $ i*)
 
 (** Date operations.
 
@@ -261,14 +261,22 @@ val is_leap_year : year -> bool
 val same_calendar : year -> year -> bool
   (** Return [true] if two years have the same calendar; [false] otherwise. *)
 
-val days_in_year : year -> int
-  (** Number of days in a year. *)
+val days_in_year : ?month:month -> year -> int
+  (** Number of days in a year. 
 
-val weeks_in_year : year -> int
+    [days_in_year ~month y] returns the number of days in the year [y] up to
+    the end of the given month. Thus [days_in_year ~month:Dec y] is the same as
+    [days_in_year y]. *)
+
+val weeks_in_year: year -> int
   (** Number of weeks in a year. *)
 
-val week_first_last : int -> year -> t * t
-  (** Return the first and last days of a week in a year *)
+val week_first_last: int -> year -> t * t
+  (** Return the first and last days of a week in a year. *)
+
+val nth_weekday_of_month: year -> month -> day -> int -> t
+  (** [nth_weekday_of_month y m d n] returns the [n]-th day [d] in the month
+    [m] of the year [y] (for instance the 3rd Thursday of the month). *)
 
 val century : year -> int
   (** Century of a year. 
@@ -346,4 +354,3 @@ val withmonday: year -> t
 
 val corpus_christi: year -> t
   (** Feast of Corpus Christi. [corpus_christi y] is [easter + 60]. *)
-

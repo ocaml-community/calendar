@@ -1,10 +1,12 @@
 * add module Version
+* add the optional parameter ?month to Date.days_in_year
+* add Date.nth_weekday_of_month
 * add Date.Period.ymd and Calendar.Period.ymds
+* Date: add some Christian dates
 * Printer: add the format string %i corresponding to the ISO-8601 notation
 * Printer: ISO-8601 notation is now the default format
 * add [equal] in all the modules
 * Calendar.Period: bug fixed with negative period
-* Date: add some Christian dates
 
 version 1.08, 2004-05-18:
 =========================

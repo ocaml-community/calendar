@@ -1,4 +1,4 @@
-(*i $Id: test_date.ml,v 1.11 2004-10-25 15:16:28 signoles Exp $ i*)
+(*i $Id: test_date.ml,v 1.12 2004-10-29 13:49:09 signoles Exp $ i*)
 
 Printf.printf "\nTests of Date:\n\n";;
 
@@ -41,6 +41,10 @@ test (same_calendar 1998 2009) "same calendar 1998 2009";;
 test (same_calendar 2003 2025) "same calendar 2003 2025";;
 test (days_in_year 2000 = 366) "days_in_year 2000";;
 test (days_in_year 1900 = 365) "days_in_year 1900";;
+test (days_in_year ~month:Jan 2000 = 31) "days_in_year Jan 2000";;
+test (days_in_year ~month:Feb 2000 = 60) "days_in_year Feb 2000";;
+test (days_in_year ~month:Jan 2000 = 31) "days_in_year Jan 2000";;
+test (days_in_year ~month:Mar 1900 = 90) "days_in_year Mar 1900";;
 test (weeks_in_year 2000 = 52) "weeks_in_year 2000";;
 test (weeks_in_year 2020 = 53) "weeks_in_year 2020";;
 test (weeks_in_year 1991 = 53) "weeks_in_year 1991";;
@@ -59,6 +63,8 @@ test_exn (lazy (Period.nb_days (Period.make 1 0 0))) "Period.nb_days ko";;
 test (week_first_last 21 2004 = (make 2004 5 17, make 2004 5 23)) 
   "week_beggining_end";;
 test (Period.ymd (Period.make 1 2 3) = (1, 2, 3)) "Period.ymd";;
+test (nth_weekday_of_month 2004 Oct Thu 5 = make 2004 10 28) 
+  "nth_weekday_of_month";;
 
 let ok = nb_ok ();;
 let bug = nb_bug ();;

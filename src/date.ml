@@ -13,7 +13,7 @@
  * See the GNU Library General Public License version 2 for more details
  *)
 
-(*i $Id: date.ml,v 1.20 2004-10-25 15:16:28 signoles Exp $ i*)
+(*i $Id: date.ml,v 1.21 2004-10-29 13:49:09 signoles Exp $ i*)
 
 (*S Introduction.
 
@@ -83,9 +83,8 @@ let from_unixtm x =
 
 let today () = 
   let today = Unix.gmtime (Unix.gettimeofday ()) in
-  let d = (* current day at GMT *)
-    from_unixtm today
-  and hour = Time_Zone.from_gmt () + today.Unix.tm_hour in
+  let d = (* current day at GMT *) from_unixtm today in
+  let hour = Time_Zone.from_gmt () + today.Unix.tm_hour in
   (* change the day according to the time zone *)
   if hour < 0 then begin
     assert (hour > - 13); 
@@ -157,7 +156,9 @@ let year d =
   let e = c - (1461 * d) / 4 in
   b * 100 + d - 4800 + ((5 * e + 2) / 153) / 10
 
-let day_of_week d = day_of_int ((d + 1) mod 7)
+let int_day_of_week d = (d + 1) mod 7
+
+let day_of_week d = day_of_int (int_day_of_week d)
 
 let day_of_year d = d - make (year d - 1) 12 31
 
@@ -259,7 +260,12 @@ let same_calendar y1 y2 =
     else false
   in d mod 28 = 0 || aux
 
-let days_in_year y = if is_leap_year y then 366 else 365
+let days_in_year =
+  let days = [| 31; 59; 90; 120; 151; 181; 212; 243; 273; 304; 334; 365 |] in
+  fun ?(month=Dec) y ->
+    let m = int_of_month month in
+    let res = days.(m) in
+    if is_leap_year y && m > 0 then res + 1 else res
 
 let weeks_in_year y =
   let first_day = day_of_week (make y 1 1) in
@@ -273,6 +279,10 @@ let week_first_last w y =
   let d = d - d mod 7 in
   let b = d + 7 * (w - 1) in
   b, 6 + b
+
+let nth_weekday_of_month y m d n =
+  let first = make y (int_of_month m + 1) 1 in
+  first + int_of_day d - int_day_of_week first + (n - 1) * 7
 
 let century y = if y mod 100 = 0 then y / 100 else y / 100 + 1
 
@@ -328,7 +338,7 @@ let to_unixtm d =
     Unix.tm_mday = day_of_month d; 
     Unix.tm_mon = int_month d - 1;
     Unix.tm_year = year d - 1900;
-    Unix.tm_wday = int_of_day (day_of_week d);
+    Unix.tm_wday = int_day_of_week d;
     Unix.tm_yday = day_of_year d - 1;
     Unix.tm_isdst = false }
 
