@@ -11,7 +11,7 @@
 #  
 #  See the GNU Library General Public License version 2 for more details
 #
-# $Id: Makefile.in,v 1.28 2003-08-31 07:56:48 signoles Exp $
+# $Id: Makefile.in,v 1.29 2003-09-17 15:51:44 signoles Exp $
 
 # Used programs
 ###############
@@ -37,7 +37,8 @@ LIBS	= src/$(NAME).cma src/$(NAME).cmxa
 DIRS	= src
 
 SRC	= time_Zone.mli time_Zone.ml period.mli \
-	time.mli time.ml date.mli date.ml calendar.mli calendar.ml
+	time.mli time.ml date.mli date.ml calendar.mli calendar.ml \
+	printer.mli printer.ml
 SRC	:= $(addprefix src/, $(SRC))
 
 ML	= $(filter %.ml, $(SRC))
