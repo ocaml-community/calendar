@@ -1,3 +1,7 @@
+version 1.08, 2004-05-18:
+=========================
+* add [week_first_last] computing the first and last days of a week in a year
+
 version 1.07, 2004-03-22:
 =========================
 * compile even if no ocaml native compiler is available

@@ -13,7 +13,7 @@
  * See the GNU Library General Public License version 2 for more details
  *)
 
-(*i $Id: date.ml,v 1.16 2004-03-22 12:08:26 signoles Exp $ i*)
+(*i $Id: date.ml,v 1.17 2004-05-18 14:58:44 signoles Exp $ i*)
 
 (*S Introduction.
 
@@ -164,6 +164,12 @@ let week d =
   let d4 = (d + 31741 - (d mod 7)) mod 146097 mod 36524 mod 1461 in
   let l = d4 / 1460 in
   (((d4 - l) mod 365) + l) / 7 + 1
+
+let week_first_last w y =
+  let d = make y 1 1 in
+  let d = d - d mod 7 in
+  let b = d + 7 * (w - 1) in
+  b, 6 + b
 
 let days_in_month d =
   match month d with
