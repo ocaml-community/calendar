@@ -13,7 +13,7 @@
  * See the GNU Library General Public License version 2 for more details
  *)
 
-(*i $Id: calendar.ml,v 1.13 2003-09-18 10:33:16 signoles Exp $ i*)
+(*i $Id: calendar.ml,v 1.14 2003-09-18 14:34:01 signoles Exp $ i*)
 
 (*S Introduction.
 
@@ -115,15 +115,7 @@ let minute x = Time.minute (to_time x)
 let second x = Time.second (to_time x)
 
 (*S Coercions. *)
-(*
-let from_string s =
-  match Str.split (Str.regexp "; ") s with
-    | [ d; t ] -> create (Date.from_string d) (Time.from_string t)
-    | _ -> raise (Invalid_argument (s ^ " is not a calendar"))
 
-let to_string x = 
-  Date.to_string (to_date x) ^ "; " ^ Time.to_string (to_time x)
-*)
 let from_unixtm x = 
   make 
     (x.Unix.tm_year + 1900) (x.Unix.tm_mon + 1) x.Unix.tm_mday
@@ -225,16 +217,6 @@ module Period = struct
 
   let to_time x = 
     Time.Period.add (Time.Period.hour (Date.Period.nb_days x.d * 24)) x.t
-
-  let to_string x = 
-    Date.Period.to_string x.d ^ "; " ^ Time.Period.to_string x.t
-
-  let from_string s =
-    match Str.split (Str.regexp "; ") s with
-      | [ d; t ] -> 
-	  normalize { d = Date.Period.from_string d; 
-		      t = Time.Period.from_string t }
-      | _ -> raise (Invalid_argument (s ^ " is not a calendar"))
 end
 
 (*S Arithmetic operations on calendars and periods. *)

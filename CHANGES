@@ -1,3 +1,9 @@
+version 1.05, 2003-09-18:
+=========================
+* add module Printer (from a suggestion of Stefano Zacchiroli)
+* add lmake in Date, Date.Period, Time, Time.Period, Calendar, Calendar.Period
+* Calendar.equal is faster
+
 version 1.04, 2003-08-31:
 =========================
 * add getters in Time.Period, Date.Period and Calendar.Period

@@ -11,7 +11,7 @@
 #  
 #  See the GNU Library General Public License version 2 for more details
 #
-# $Id: Makefile.in,v 1.29 2003-09-17 15:51:44 signoles Exp $
+# $Id: Makefile.in,v 1.30 2003-09-18 14:34:01 signoles Exp $
 
 # Used programs
 ###############
@@ -79,7 +79,7 @@ META:
 	echo "version = \"$(VERSION)\"" >> $@
 	echo "archive(byte) = \"$(NAME).cma\"" >> $@
 	echo "archive(native) = \"$(NAME).cmxa\"" >> $@
-	echo "requires = \"unix str\"" >> $@
+	echo "requires = \"unix\"" >> $@
 
 # Generic rules
 ###############
@@ -116,7 +116,7 @@ $(TESTS_CMO): tests/gen_test.cmo
 tests/test.cmo: $(TESTS_CMO)
 
 tests/test: src/$(NAME).cma tests/test.cmo
-	$(CAMLC) -o $@ $(BYTEFLAGS) unix.cma str.cma src/$(NAME).cma \
+	$(CAMLC) -o $@ $(BYTEFLAGS) unix.cma src/$(NAME).cma \
 		tests/gen_test.cmo $(TESTS_CMO) tests/test.cmo
 
 .PHONY: tests

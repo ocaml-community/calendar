@@ -13,7 +13,7 @@
  * See the GNU Library General Public License version 2 for more details
  *)
 
-(*i $Id: period.mli,v 1.6 2003-07-08 11:21:32 signoles Exp $ i*)
+(*i $Id: period.mli,v 1.7 2003-09-18 14:34:01 signoles Exp $ i*)
 
 (* A period represents the time passed between two events (a date, a time...). 
    Only an interface defining arithmetic operations on periods is defined here.
@@ -23,12 +23,6 @@ module type S = sig
 
   (* Type of a period. *)
   type t
-
-  (* Convert a period to a string. *)
-  val to_string : t -> string
-
-  (* Inverse of [to_string]. *)
-  val from_string : string -> t
 
   (* The empty period. *)
   val empty : t

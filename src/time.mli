@@ -13,7 +13,7 @@
  * See the GNU Library General Public License version 2 for more details
  *)
 
-(*i $Id: time.mli,v 1.11 2003-09-18 07:03:14 signoles Exp $ i*)
+(*i $Id: time.mli,v 1.12 2003-09-18 14:34:01 signoles Exp $ i*)
 
 (*S Introduction.
 
@@ -125,13 +125,6 @@ val is_pm : t -> bool
 val is_am : t -> bool
 
 (*S Coercions. *)
-
-(* Convert a time to a string with the format "h-m-s". *)
-val to_string : t -> string
-
-(* Inverse of [to_string].
-   Raise [Invalid_argument] if the string format is bad. *)
-val from_string : string -> t
 
 (* Inverse of [to_seconds]. *)
 val from_seconds : int -> t

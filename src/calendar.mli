@@ -13,7 +13,7 @@
  * See the GNU Library General Public License version 2 for more details
  *)
 
-(*i $Id: calendar.mli,v 1.14 2003-09-18 10:29:27 signoles Exp $ i*)
+(*i $Id: calendar.mli,v 1.15 2003-09-18 14:34:01 signoles Exp $ i*)
 
 (*S Introduction. 
 
@@ -123,14 +123,7 @@ val is_pm : t -> bool
 val is_am : t -> bool
 
 (*S Coercions. *)
-(*
-(* Convert a calendar to a string with the format "y-m-d; h-mn-s". *)
-val to_string : t -> string
 
-(* Inverse of [to_string].
-   Raise [Invalid_argument] if the string format is bad. *)
-val from_string : string -> t
-*)
 (* Convert a calendar into the [unix.tm] type.
    The field [isdst] is always [false]. 
    More precise than [Date.to_unixtm]. *)

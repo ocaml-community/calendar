@@ -13,7 +13,7 @@
  * See the GNU Library General Public License version 2 for more details
  *)
 
-(*i $Id: time.ml,v 1.11 2003-09-18 07:03:14 signoles Exp $ i*)
+(*i $Id: time.ml,v 1.12 2003-09-18 14:34:01 signoles Exp $ i*)
 
 (*S Introduction.
 
@@ -81,15 +81,6 @@ let is_pm t = let t, _ = normalize t in t < midday ()
 let is_am t = let t, _ = normalize t in t >= midday ()
 
 (*S Coercions. *)
-
-let to_string t = 
-  string_of_int (hour t) ^ "-" ^ string_of_int (minute t) 
-  ^ "-" ^ string_of_int (second t)
-
-let from_string s =
-  match List.map int_of_string (Str.split (Str.regexp "-") s) with
-    | [ h; m; s ] -> make h m s
-    | _ -> raise (Invalid_argument (s ^ " is not a time"))
 
 let from_hours t = to_gmt (int_of_float (t *. 3600.))
 

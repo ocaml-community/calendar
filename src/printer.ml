@@ -13,7 +13,7 @@
  * See the GNU Library General Public License version 2 for more details
  *)
 
-(*i $Id: printer.ml,v 1.5 2003-09-18 13:38:32 signoles Exp $ i*)
+(*i $Id: printer.ml,v 1.6 2003-09-18 14:34:01 signoles Exp $ i*)
 
 module type S = sig
   type t
@@ -66,6 +66,7 @@ type pad =
   | Blank
   | Empty
 
+(* [k] should be a power of 10. *)
 let rec print_number fmt pad k n =
   let fill fmt = function
     | Zero -> Format.pp_print_int fmt 0
@@ -83,6 +84,7 @@ let bad_format () = raise (Invalid_argument "bad format")
 let not_match f s = 
   raise (Invalid_argument (s ^ " does not match the format " ^ f))
 
+(* [Make] creates a printer from a small set of functions. *)
 module Make(X : sig
 	      type t
 	      val make : int -> int -> int -> int -> int -> int -> t
@@ -237,7 +239,7 @@ struct
       if i = lenf then bad_format ();
       (* else *)
       (match f.[i] with
-	 | '%' | 'n' | 't' as c -> read_char c
+	 | '%' -> read_char '%'
 	 | 'd' -> day := read_number 2
 	 | 'D' -> 
 	     month := read_number 2;
@@ -245,7 +247,16 @@ struct
 	     day := read_number 2;
 	     read_char '/';
 	     year := read_number 2 + 1900
+	 | 'H' -> hour := read_number 2
 	 | 'm' -> month := read_number 2
+	 | 'M' -> minute := read_number 2
+	 | 'S' -> second := read_number 2
+	 | 'T' ->
+	     hour := read_number 2;
+	     read_char ':';
+	     minute := read_number 2;
+	     read_char ':';
+	     second := read_number 2
 	 | 'y' -> year := read_number 2 + 1900
 	 | 'Y' -> year := read_number 4
 	 | _  -> bad_format ());
@@ -303,5 +314,5 @@ module CalendarPrinter =
 	 let make y m d h mn s =
 	   cannot_create_event "calendar" [ y; m; d; h; mn; s ];
 	   make y m d h mn s
-	 let default_format = "%D; %T"
+	 let default_format = "%c"
        end)
