@@ -11,7 +11,7 @@
 #  
 #  See the GNU Library General Public License version 2 for more details
 #
-# $Id: Makefile.in,v 1.13 2003-07-08 14:22:16 signoles Exp $
+# $Id: Makefile.in,v 1.14 2003-07-09 07:17:08 signoles Exp $
 
 # Used programs
 ###############
@@ -78,7 +78,7 @@ mli2html: $(patsubst src/%.mli, html/%.html, $(filter %.mli, $(SRC)))
 %.gz: %
 	gzip -f --best $<
 
-.SUFFIXES: .ml .mli .cmo .cmi .cmx .html
+.SUFFIXES: .ml .mli .cmo .cmi .cmx .html .o
 
 html/%.html: src/%.mli html/touch-html
 	$(CAML2HTML) -o $@ $<
@@ -139,14 +139,14 @@ uninstall:
 EXPORT_DIR= $$HOME/WWW/prog/calendar
 
 export: $(NAME).ps.gz mli2html
-	cvs export -d /tmp/$(NAME) -D now $(NAME)
-	cp -rf .depend configure $(NAME).ps.gz html /tmp/$(NAME)
+	cvs export -d /tmp/$(NAME)-$(VERSION) -D now $(NAME)
+	cp -rf .depend configure $(NAME).ps.gz html /tmp/$(NAME)-$(VERSION)
 	cp -f $(NAME).ps.gz html/*.html $(EXPORT_DIR)
-	rm -f /tmp/$(NAME)/html/touch-html
+	rm -f /tmp/$(NAME)-$(VERSION)/html/touch-html
 	cd /tmp; \
-	  (tar cvf $(NAME)-$(VERSION).tar $(NAME); \
+	  (tar cvf $(NAME)-$(VERSION).tar $(NAME)-$(VERSION); \
 	   gzip -f --best $(NAME)-$(VERSION).tar; \
-	   rm -rf $(NAME); \
+	   rm -rf $(NAME)-$(VERSION); \
 	   mv $(NAME)-$(VERSION).tar.gz $(EXPORT_DIR))
 	cd $(EXPORT_DIR); \
 	  (rm -f prog.fr.tex prog.en.tex; \

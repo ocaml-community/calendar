@@ -57,12 +57,16 @@ You can remove files installed by "make install" at any time with :
 
 Simply link calendar.cma or calendar.cmxa with your files.
 
-For example, if you have a file foo_using_this_library.ml, 
-compile it as follow:
+For example, if you have a file foo_using_calendar.ml, compile it as follow:
 
-	ocamlc calendar.cma foo_using_this_library.ml
+	ocamlc calendar.cma foo_using_calendar.ml
 or
-	ocamlopt calendar.cmxa foo_using_this_library.ml
+	ocamlopt calendar.cmxa foo_using_calendar.ml
+
+The calendar library includes the predefined caml libraries "Str" and "Unix".
+So do not link calendar.cmxa with str.cmxa or unix.cmxa. Following the 
+previous example, if foo_using_calendar.ml uses Unix (and Calendar), 
+compile it exactly as above.
 
 6- Documentation
 ----------------
