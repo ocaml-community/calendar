@@ -11,7 +11,7 @@
 #  
 #  See the GNU Library General Public License version 2 for more details
 #
-# $Id: Makefile.in,v 1.22 2003-08-18 15:45:04 signoles Exp $
+# $Id: Makefile.in,v 1.23 2003-08-20 07:45:35 signoles Exp $
 
 # Used programs
 ###############
@@ -151,7 +151,7 @@ EXPORT_DIR= $$HOME/WWW/prog/calendar
 export: $(NAME).ps.gz mli2html
 	cvs export -d /tmp/$(NAME)-$(VERSION) -D now $(NAME)
 	cp -rf .depend configure $(NAME).ps.gz html /tmp/$(NAME)-$(VERSION)
-	cp -f $(NAME).ps.gz html/*.html $(EXPORT_DIR)
+	cp -f $(NAME).ps.gz html/*.html CHANGES $(EXPORT_DIR)
 	rm -f /tmp/$(NAME)-$(VERSION)/html/touch-html
 	cd /tmp; \
 	  (tar cvf $(NAME)-$(VERSION).tar $(NAME)-$(VERSION); \
