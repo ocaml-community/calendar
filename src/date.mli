@@ -13,7 +13,7 @@
  * See the GNU Library General Public License version 2 for more details
  *)
 
-(*i $Id: date.mli,v 1.7 2003-07-08 11:21:32 signoles Exp $ i*)
+(*i $Id: date.mli,v 1.8 2003-07-16 09:04:30 signoles Exp $ i*)
 
 (*S Introduction. 
 
@@ -148,6 +148,22 @@ val to_string : t -> string
 (* Inverse of [to_string]. 
    Raise [Invalid_argument] if the string format is bad. *)
 val from_string : string -> t
+
+(* Convert a date into the [Unix.tm] type. 
+   The field [is_isdst] is always [false]. The fields [Unix.tm_sec], 
+   [Unix.tm_min] and [Unix.tm_hour] are irrelevant. *)
+val to_unixtm : t -> Unix.tm
+
+(* Inverse of [to_unixtm]. *)
+val from_unixtm : Unix.tm -> t
+
+(* Convert a date to a float such than [to_unixfloat (make 1970 1 1)] returns 
+   [0.0]. So such a float is convertible with those of the [Unix] module. 
+   The fractional part of the result is always [0]. *)
+val to_unixfloat : t -> float
+
+(* Inverse of [to_unixfloat]. Ignore the fractional part of the argument. *)
+val from_unixfloat : float -> t
 
 (* Convert a day to an integer respecting ISO-8601.
    So, Monday is 1, Tuesday is 2, ..., and sunday is 7. *)

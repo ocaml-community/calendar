@@ -13,7 +13,7 @@
  * See the GNU Library General Public License version 2 for more details
  *)
 
-(*i $Id: calendar.ml,v 1.8 2003-07-08 11:21:32 signoles Exp $ i*)
+(*i $Id: calendar.ml,v 1.9 2003-07-16 09:04:30 signoles Exp $ i*)
 
 (*S Introduction.
 
@@ -43,9 +43,9 @@ type field = [ Date.field | Time.field ]
 
 let convert x t1 t2 = x +. float_of_int (Time_Zone.gap t1 t2) /. 24.
 
-let to_gmt x = convert x (Time_Zone.current ()) Time_Zone.GMT
+let to_gmt x = convert x (Time_Zone.current ()) Time_Zone.UTC
 
-let from_gmt x = convert x Time_Zone.GMT (Time_Zone.current ())
+let from_gmt x = convert x Time_Zone.UTC (Time_Zone.current ())
 
 let from_date x = to_gmt (float_of_int (Date.to_jd x)) -. 0.5
 
@@ -63,12 +63,12 @@ let to_time x =
 
 let is_valid x = x >= 0. && x < 2914695.
 
-let build d t = 
+let create d t = 
   to_gmt (float_of_int (Date.to_jd d) +. 
 	    float_of_int (Time.to_seconds t) /. 86400.) -. 0.5
 
 let make y m d h mn s = 
-  let x = build (Date.make y m d) (Time.make h mn s) in
+  let x = create (Date.make y m d) (Time.make h mn s) in
   if is_valid x then x else raise Date.Out_of_bounds
 
 let now () = 
@@ -107,7 +107,7 @@ let year x = Date.year (to_date x)
 
 let hour x = Time.hour (to_time x)
 
-let minut x = Time.minut (to_time x)
+let minute x = Time.minute (to_time x)
 
 let second x = Time.second (to_time x)
 
@@ -115,18 +115,37 @@ let second x = Time.second (to_time x)
 
 let from_string s =
   match Str.split (Str.regexp "; ") s with
-    | [ d; t ] -> build (Date.from_string d) (Time.from_string t)
+    | [ d; t ] -> create (Date.from_string d) (Time.from_string t)
     | _ -> raise (Invalid_argument (s ^ " is not a calendar"))
 
 let to_string x = 
   Date.to_string (to_date x) ^ "; " ^ Time.to_string (to_time x)
 
+let from_unixtm x = 
+  make 
+    (x.Unix.tm_year + 1900) (x.Unix.tm_mon + 1) x.Unix.tm_mday
+    x.Unix.tm_hour x.Unix.tm_min x.Unix.tm_sec
+
+let to_unixtm x =
+  let tm = Date.to_unixtm (to_date x)
+  and t = to_time x in
+  { tm with 
+      Unix.tm_sec = Time.second t; 
+      Unix.tm_min = Time.minute t; 
+      Unix.tm_hour = Time.hour t }
+
+let jan_1_1970 = 2440587.5
+
+let from_unixfloat x = x +. jan_1_1970
+
+let to_unixfloat x = x -. jan_1_1970
+
 (*S Boolean operations on dates. *)
 
-let egal x y = to_string x = to_string y
+let equal x y = to_string x = to_string y
 
 let compare x y = 
-  if egal x y then 0 
+  if equal x y then 0 
   else if x < y then -1
   else 1
 
@@ -173,7 +192,7 @@ module Period = struct
 
   let hour x = normalize { empty with t = Time.Period.hour x }
 
-  let minut x = normalize { empty with t = Time.Period.minut x }
+  let minute x = normalize { empty with t = Time.Period.minute x }
 
   let second x = normalize { empty with t = Time.Period.second x }
 

@@ -13,16 +13,16 @@
  * See the GNU Library General Public License version 2 for more details
  *)
 
-(*i $Id: time.mli,v 1.8 2003-07-08 11:21:32 signoles Exp $ i*)
+(*i $Id: time.mli,v 1.9 2003-07-16 09:04:30 signoles Exp $ i*)
 
 (*S Introduction.
 
   This module implements operations on times.
-  A time is a triple (hour, minut, second). 
+  A time is a triple (hour, minute, second). 
 
-  If minuts and seconds do not belong to [[0; 59]], they are coerced into this
-  interval. For example, the time "30 hours, 60 minuts, 80 seconds" is coerced
-  to the time "31 hours, 1 minut, 20 seconds". 
+  If minutes and seconds do not belong to [[0; 59]], they are coerced into this
+  interval. For example, the time "30 hours, 60 minutes, 80 seconds" is coerced
+  to the time "31 hours, 1 minute, 20 seconds". 
 
   Each time is interpreted in the current time zone (given by 
   [Time_Zone.current ()]). So, if you change the time zone (by 
@@ -36,11 +36,11 @@
 type t
 
 (* The different fields of a time. *)
-type field = [ `Hour | `Minut | `Second ]
+type field = [ `Hour | `Minute | `Second ]
 
 (*S Constructors. *)
 
-(* [make hour minut second] makes the time hour-minut-second. *)
+(* [make hour minute second] makes the time hour-minute-second. *)
 val make : int -> int -> int -> t
 
 (* The current time based on [Time_Zone.current ()]. *)
@@ -85,9 +85,9 @@ val normalize : t -> t * int
    E.g. [hour (make 20 0 0)] returns 20. *)
 val hour : t -> int
 
-(* Minut.
-   E.g. [minut (make 20 10 0)] returns 10. *)
-val minut : t -> int
+(* Minute.
+   E.g. [minute (make 20 10 0)] returns 10. *)
+val minute : t -> int
 
 (* Second.
    E.g. [second (make 20 10 5)] returns 5. *)
@@ -97,13 +97,13 @@ val second : t -> int
    E.g. [to_seconds (make 1 2 3)] returns [3600 + 120 + 3 = 3723]. *)
 val to_seconds : t -> int
 
-(* Number of minuts of a time. The resulting fractional part represents 
+(* Number of minutes of a time. The resulting fractional part represents 
    seconds.\\
-   E.g. [to_minuts (make 1 2 3)] returns [60 + 2 + 0.05 = 62.05]. *)
-val to_minuts : t -> float
+   E.g. [to_minutes (make 1 2 3)] returns [60 + 2 + 0.05 = 62.05]. *)
+val to_minutes : t -> float
 
 (* Number of hours of a time. The resulting fractional part represents 
-   minuts and seconds.
+   minutes and seconds.
    E.g. [to_hours (make 1 3 0)] returns [1 + 0.05 = 1.05]. *)
 val to_hours : t -> float
 
@@ -133,8 +133,8 @@ val from_string : string -> t
 (* Inverse of [to_seconds]. *)
 val from_seconds : int -> t
 
-(* Inverse of [to_minuts]. *)
-val from_minuts : float -> t
+(* Inverse of [to_minutes]. *)
+val from_minutes : float -> t
 
 (* Inverse of [to_hours]. *)
 val from_hours : float -> t
@@ -159,14 +159,14 @@ module Period : sig
 
   (* Constructors.\\ *)
 
-  (* [make hour minut second] makes a period of the specified length. *)
+  (* [make hour minute second] makes a period of the specified length. *)
   val make : int -> int -> int -> t
 
   (* [hour n] makes a period of [n] hours. *)
   val hour : int -> t
 
-  (* [minut n] makes a period of [n] minuts. *)
-  val minut : int -> t
+  (* [minute n] makes a period of [n] minutes. *)
+  val minute : int -> t
 
   (* [second n] makes a period of [n] seconds. *)
   val second : int -> t
@@ -175,7 +175,7 @@ end
 (*S Arithmetic operations on times and periods. *)
 
 (* [app t p] returns [t + p]. 
-   E.g. [add (make 20 0 0) (Period.minut 70)] returns the time 21-10-0. *)
+   E.g. [add (make 20 0 0) (Period.minute 70)] returns the time 21-10-0. *)
 val add : t -> Period.t -> t
 
 (* [sub t1 t2] returns the period between [t1] and [t2]. *)
@@ -185,8 +185,8 @@ val sub : t -> t -> Period.t
 val rem : t -> Period.t -> t
 
 (* [next t f] returns the time corresponding to the next specified field.\\
-   E.g [next (make 20 3 31) `Minut] returns the time 20-4-31.
-   (i.e. one minut later). *)
+   E.g [next (make 20 3 31) `Minute] returns the time 20-4-31.
+   (i.e. one minute later). *)
 val next : t -> field -> t
 
 (* [prev t f] returns the time corresponding to the previous specified field.\\

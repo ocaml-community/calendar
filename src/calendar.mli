@@ -13,12 +13,12 @@
  * See the GNU Library General Public License version 2 for more details
  *)
 
-(*i $Id: calendar.mli,v 1.7 2003-07-08 11:21:32 signoles Exp $ i*)
+(*i $Id: calendar.mli,v 1.8 2003-07-16 09:04:30 signoles Exp $ i*)
 
 (*S Introduction. 
 
   This module combines the implementations on [Date] and [Time].
-  So, a calendar is a 6-uple (year, month, day, hour, minut, second).
+  So, a calendar is a 6-uple (year, month, day, hour, minute, second).
 
   If you only need operations on dates, you should better use the module 
   [Date]. But if you need to manage more precise date, use this module. 
@@ -48,9 +48,12 @@ type field = [ Date.field | Time.field ]
 
 (*S Constructors. *)
 
-(* [make year month day hour minut second] makes the calendar
-   "year-month-day; hour-minut-second". *)
+(* [make year month day hour minute second] makes the calendar
+   "year-month-day; hour-minute-second". *)
 val make : int -> int -> int -> int -> int -> int -> t
+
+(* [create d t] creates a calendar from the given date and time. *)
+val create : Date.t -> Time.t -> t
 
 (* [now ()] returns the current date and time (in the current time zone). *)
 val now : unit -> t
@@ -92,13 +95,13 @@ val to_mjd : t -> float
 (* Those functions have the same behavious as those defined in [Time]. *)
 
 val hour : t -> int
-val minut : t -> int
+val minute : t -> int
 val second : t -> int
 
 (*S Boolean operations on calendars. *)
 
-(* [egal] should be used instead of [(=)]. *)
-val egal : t -> t -> bool
+(* [equal] should be used instead of [(=)]. *)
+val equal : t -> t -> bool
 
 (* Those functions have the same behavious as those defined in [Date]. *)
 
@@ -121,6 +124,22 @@ val to_string : t -> string
    Raise [Invalid_argument] if the string format is bad. *)
 val from_string : string -> t
 
+(* Convert a calendar into the [unix.tm] type.
+   The field [isdst] is always [false]. 
+   More precise than [Date.to_unixtm]. *)
+val to_unixtm : t -> Unix.tm
+
+(* Inverse of [to_unixtm]. *)
+val from_unixtm : Unix.tm -> t
+
+(* Convert a calendar to a float such than [to_unixfloat (make 1970 1 1 0 0 0)]
+   returns [0.0] at UTC. So such a float is convertible with those of the 
+   [Unix] module. More precise than [Date.to_unixfloat]. *)
+val to_unixfloat : t -> float
+
+(* Inverse of [from_unixfloat]. *)
+val from_unixfloat : float -> t
+
 (* Convert a date to a calendar. 
    The time is midnight in the current time zone. *)
 val from_date : Date.t -> t
@@ -137,7 +156,7 @@ module Period : sig
 
   (* Constructors.\\ *)
 
-  (* [make year month day hour minut second] makes a period of the specified
+  (* [make year month day hour minute second] makes a period of the specified
      length. *)
   val make : int -> int -> int -> int -> int -> int -> t
 
@@ -151,7 +170,7 @@ module Period : sig
   (* Those functions have the same behavious as those defined in [Time]. *)
 
   val hour : int -> t
-  val minut : int -> t
+  val minute : int -> t
   val second : int -> t
 
   (* Coercions.\\ *)

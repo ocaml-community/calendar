@@ -13,7 +13,7 @@
  * See the GNU Library General Public License version 2 for more details
  *)
 
-(*i $Id: date.ml,v 1.8 2003-07-08 11:21:32 signoles Exp $ i*)
+(*i $Id: date.ml,v 1.9 2003-07-16 09:04:30 signoles Exp $ i*)
 
 (*S Introduction.
 
@@ -74,10 +74,13 @@ let make y m d =
     else raise Undefined
   else raise Out_of_bounds
 
+let from_unixtm x =
+  make (x.Unix.tm_year + 1900) (x.Unix.tm_mon + 1) x.Unix.tm_mday
+
 let today () = 
   let today = Unix.gmtime (Unix.gettimeofday ()) in
   let d = (* current day at GMT *)
-    make (today.Unix.tm_year + 1900) (today.Unix.tm_mon + 1) today.Unix.tm_mday
+    from_unixtm today
   and hour = Time_Zone.from_gmt () + today.Unix.tm_hour in
   (* change the day according to the time zone *)
   if hour < 0 then begin
@@ -303,6 +306,21 @@ let from_string s =
   match List.map int_of_string (Str.split (Str.regexp "-") s) with
     | [ y; m; d ] -> make (if s.[0] = '-' then - y else y) m d
     | _ -> raise (Invalid_argument (s ^ " is not a date"))
+
+let to_unixtm d =
+  { Unix.tm_sec = 0; Unix.tm_min = 0; Unix.tm_hour = 0;
+    Unix.tm_mday = day_of_month d; 
+    Unix.tm_mon = int_month d - 1;
+    Unix.tm_year = year d - 1900;
+    Unix.tm_wday = int_of_day (day_of_week d);
+    Unix.tm_yday = day_of_year d - 1;
+    Unix.tm_isdst = false }
+
+let jan_1_1970 = 2440588
+
+let to_unixfloat x = float_of_int (x - jan_1_1970)
+
+let from_unixfloat x = int_of_float x + jan_1_1970
 
 (* These coercions redefined those defined at the beginning of the module.
    They respect ISO-8601. *)

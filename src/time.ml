@@ -13,11 +13,11 @@
  * See the GNU Library General Public License version 2 for more details
  *)
 
-(*i $Id: time.ml,v 1.8 2003-07-08 11:21:32 signoles Exp $ i*)
+(*i $Id: time.ml,v 1.9 2003-07-16 09:04:30 signoles Exp $ i*)
 
 (*S Introduction.
 
-  A time is represents by a number of seconds in GMT.
+  A time is represents by a number of seconds in UTC.
   Outside this module, a time is interpreted in the current time zone.
   So, each operations have to coerce a given time according to the current
   time zone. *)
@@ -26,7 +26,7 @@
 
 type t = int
 
-type field = [ `Hour | `Minut | `Second ]
+type field = [ `Hour | `Minute | `Second ]
 
 (*S Conversions. *)
 
@@ -34,9 +34,9 @@ let one_day = 86400
 
 let convert t t1 t2 = t + 3600 * Time_Zone.gap t1 t2
 
-let from_gmt t = convert t Time_Zone.GMT (Time_Zone.current ())
+let from_gmt t = convert t Time_Zone.UTC (Time_Zone.current ())
 
-let to_gmt t = convert t (Time_Zone.current ()) Time_Zone.GMT
+let to_gmt t = convert t (Time_Zone.current ()) Time_Zone.UTC
 
 (* Coerce [t] into the interval $[0; 86400[$ (i.e. a one day interval). *)
 let normalize t = 
@@ -60,13 +60,13 @@ let now () =
 
 let hour t = from_gmt t / 3600
 
-let minut t = from_gmt t mod 3600 / 60
+let minute t = from_gmt t mod 3600 / 60
 
 let second t = from_gmt t mod 60
 
 let to_hours t = float_of_int (from_gmt t) /. 3600.
 
-let to_minuts t = float_of_int (from_gmt t) /. 60.
+let to_minutes t = float_of_int (from_gmt t) /. 60.
 
 let to_seconds t = from_gmt t
 
@@ -81,7 +81,7 @@ let is_am t = let t, _ = normalize t in t >= midday ()
 (*S Coercions. *)
 
 let to_string t = 
-  string_of_int (hour t) ^ "-" ^ string_of_int (minut t) 
+  string_of_int (hour t) ^ "-" ^ string_of_int (minute t) 
   ^ "-" ^ string_of_int (second t)
 
 let from_string s =
@@ -91,7 +91,7 @@ let from_string s =
 
 let from_hours t = to_gmt (int_of_float (t *. 3600.))
 
-let from_minuts t = to_gmt (int_of_float (t *. 60.))
+let from_minutes t = to_gmt (int_of_float (t *. 60.))
 
 let from_seconds t = to_gmt t
 
@@ -106,7 +106,7 @@ module Period = struct
 
   let hour x = x * 3600
 
-  let minut x = x * 60
+  let minute x = x * 60
 
   let second x = x
 
@@ -144,10 +144,10 @@ let rem = (-)
 
 let next x = function
   | `Hour   -> x + 3600
-  | `Minut  -> x + 60
+  | `Minute -> x + 60
   | `Second -> x + 1
 
 let prev x = function
   | `Hour   -> x - 3600
-  | `Minut  -> x - 60
+  | `Minute -> x - 60
   | `Second -> x - 1

@@ -1,3 +1,13 @@
+version 1.01, 2003-07-16:
+=========================
+* change "minut" by "minute"
+* change "egal" by "equal"
+* change "GMT" by "UTC"
+* add to_unixtm, from_unixtm, to_unixfloat and from_unixfloat in 
+	Date and Calendar
+
+(Thank's to Eric C. Cooper for those suggestions)
+
 version 1.0, 2003-07-11: 
 ========================
 * first release

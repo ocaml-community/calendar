@@ -13,32 +13,32 @@
  * See the GNU Library General Public License version 2 for more details
  *)
 
-(*i $Id: time_Zone.mli,v 1.5 2003-07-07 21:01:34 signoles Exp $ i*)
+(*i $Id: time_Zone.mli,v 1.6 2003-07-16 09:04:30 signoles Exp $ i*)
 
 (* [Time_Zone] manages the time zone by side effects:
    there is a [current] time zone in the program you can [change].\\ *)
 
 (* Type of a time zone. *)
 type t = 
-  | GMT             (*r Greenwich Meridian Time              *)
+  | UTC             (*r Greenwich Meridian Time              *)
   | Local           (*r Local Time                           *)
-  | GMT_Plus of int (*r Another time zone specified from GMT *)
+  | UTC_Plus of int (*r Another time zone specified from UTC *)
 
-(* Return the current time zone. It is [GMT] before any change. *)
+(* Return the current time zone. It is [UTC] before any change. *)
 val current : unit -> t
 
 (* Change the current time zone by another one. 
-   Raise [Invalid_argument] if the specified time zone is [GMT_Plus x] with
+   Raise [Invalid_argument] if the specified time zone is [UTC_Plus x] with
    $x < -12$ or $x > 11$ *)
 val change : t -> unit
 
 (* Return the gap between two time zone. 
-   E.g. [gap GMT (GMT_Plus 5)] returns 5 and, at Paris in summer,
-   [gap Local GMT] returns -2. *)
+   E.g. [gap UTC (UTC_Plus 5)] returns 5 and, at Paris in summer,
+   [gap Local UTC] returns -2. *)
 val gap : t -> t -> int
 
-(* [from_gmt ()] is equivalent to [gap GMT (current ())]. *)
+(* [from_gmt ()] is equivalent to [gap UTC (current ())]. *)
 val from_gmt : unit  -> int
 
-(* [to_gmt ()] is equivalent to [gap (current ()) GMT]. *)
+(* [to_gmt ()] is equivalent to [gap (current ()) UTC]. *)
 val to_gmt : unit -> int

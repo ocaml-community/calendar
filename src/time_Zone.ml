@@ -13,14 +13,14 @@
  * See the GNU Library General Public License version 2 for more details
  *)
 
-(*i $Id: time_Zone.ml,v 1.5 2003-07-07 21:01:34 signoles Exp $ i*)
+(*i $Id: time_Zone.ml,v 1.6 2003-07-16 09:04:30 signoles Exp $ i*)
 
 type t = 
-  | GMT
+  | UTC
   | Local 
-  | GMT_Plus of int
+  | UTC_Plus of int
 
-let tz = ref GMT
+let tz = ref UTC
 
 let out_of_bounds x = x < - 12 || x > 11
 
@@ -33,7 +33,7 @@ let gap_gmt_local =
 let current () = !tz
 
 let change = function
-  | GMT_Plus x when out_of_bounds x -> 
+  | UTC_Plus x when out_of_bounds x -> 
       raise (Invalid_argument "Not a valid time zone")
   | _ as t -> tz := t
 
@@ -41,10 +41,10 @@ let gap t1 t2 =
   let aux t1 t2 = 
     assert (t1 < t2);
     match t1, t2 with
-      | GMT, Local             -> gap_gmt_local
-      | GMT, GMT_Plus x        -> x
-      | Local, GMT_Plus x      -> x - gap_gmt_local
-      | GMT_Plus x, GMT_Plus y -> y - x
+      | UTC, Local             -> gap_gmt_local
+      | UTC, UTC_Plus x        -> x
+      | Local, UTC_Plus x      -> x - gap_gmt_local
+      | UTC_Plus x, UTC_Plus y -> y - x
       | _                      -> assert false
   in let res = 
     if t1 = t2 then 0
@@ -54,6 +54,6 @@ let gap t1 t2 =
   assert (in_bounds res);
   res
 
-let from_gmt () = gap GMT (current ())
+let from_gmt () = gap UTC (current ())
 
-let to_gmt () = gap (current ()) GMT
+let to_gmt () = gap (current ()) UTC
