@@ -79,7 +79,7 @@ or
 The doc directory contains an html documentation of the .mli files.
 This documentation is available online at 
 
-	http://www.lri.fr/~signoles/prog/calendar/doc/index.html
+	http://www.lri.fr/~signoles/prog/calendar/doc
 
 The file calendar.ps.gz is the source code documentation.
 
