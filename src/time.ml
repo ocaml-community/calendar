@@ -13,7 +13,7 @@
  * See the GNU Library General Public License version 2 for more details
  *)
 
-(*i $Id: time.ml,v 1.12 2003-09-18 14:34:01 signoles Exp $ i*)
+(*i $Id: time.ml,v 1.13 2003-09-18 16:07:58 signoles Exp $ i*)
 
 (*S Introduction.
 
@@ -119,15 +119,6 @@ module Period = struct
   let opp x = - x
 
   let compare = (-)
-
-  let to_string p = 
-    string_of_int (p / 3600) ^ "-" ^ string_of_int (p mod 3600 / 60)
-    ^ "-" ^ string_of_int (p mod 60)
-
-  let from_string s =
-    match List.map int_of_string (Str.split (Str.regexp "-") s) with
-      | [ h; m; s ] -> make h m s
-      | _ -> raise (Invalid_argument (s ^ " is not a time"))
 
   let to_seconds x = x
 

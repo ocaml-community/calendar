@@ -13,7 +13,7 @@
  * See the GNU Library General Public License version 2 for more details
  *)
 
-(*i $Id: printer.mli,v 1.5 2003-09-18 14:34:01 signoles Exp $ i*)
+(*i $Id: printer.mli,v 1.6 2003-09-18 16:07:58 signoles Exp $ i*)
 
 (*S Introduction. 
 
@@ -25,12 +25,12 @@
   and a [from_fstring : string -> string -> t] function.
   The first one prints an event according to a format string 
   (see below for a description of such a format). 
-  The second one converts a string to an event according a format string.
+  The second one converts a string to an event according to a format string.
 
-  A format string is an Unix-like date format. It is a string which contains 
-  two types of objects: plain characters and conversion specifications. 
-  Those specifications are introduced by a [%] character and 
-  their meanings are:
+  A format string follows the unix date utility (with few modifications). 
+  It is a string which contains two types of objects: plain characters and 
+  conversion specifications. Those specifications are introduced by 
+  a [%] character and their meanings are:
   
   \begin{tabular}{l@{\hspace{5mm}}l}
   [%%] & a literal [%]\\
@@ -72,19 +72,45 @@
   \end{tabular}
      
   For example:\\
-  [01/06/03] is matched by [%D];\\
-  [the date is January, the 6th] is matched by [the date is %B, the %-dth];\\
-  [Thu Sep 18 14:10:51 2003] is matched by [%c]. *)
+  a possible output of [%D] is [01/06/03];\\
+  a possible output of [the date is %B, the %-dth] is 
+  [the date is January, the 6th] is matched by ;\\
+  a possible output of [%c] is [Thu Sep 18 14:10:51 2003]. *)
 
-(*S Useful functions. *)
+(*S Internationalization. 
 
-(* String representation of a day. By default, English names are used
-   (so [!day_name Sun] is ["Sunday"], etc). *)
+  You can manage the string representations of days and months.
+  By default, the English names are used but you can change their by
+  setting the references [day_name] and [month_name].
+
+  For example,\\
+  [day_name := function Date.Mon -> "lundi" | Date.Tue -> "mardi" | 
+     Date.Wed -> "mercredi" | Date.Thu -> "jeudi" | Date.Fri -> "vendredi" |
+     Date.Sat -> "samedi" | Date.Sun -> "dimanche"]\\
+  sets the names of the days to the French names.\\ *)
+
+(* String representation of a day. *)
 val day_name : (Date.day -> string) ref
 
-(* String representation of a month. By default, English names are used
-   (so [!day_name Jan] is ["January"], etc). *)
+(* [name_of_day d] is equivalent to [!day_name d]. 
+   Used by the specification [%A]. *)
+val name_of_day : Date.day -> string
+
+(* [short_name_of_day d] returns the 3 first characters of [name_of_day d]. 
+   Used by the specification [%a]. *)
+val short_name_of_day : Date.day -> string
+
+(* String representation of a month. *)
 val month_name : (Date.month -> string) ref
+
+(* [name_of_month m] is equivalent to [!day_month m]. 
+   Used by the specification [%B]. *)
+val name_of_month : Date.month -> string
+
+(* [short_name_of_month d] returns the 3 first characters of 
+   [name_of_month d]. 
+   Used by the specification [%b]. *)
+val short_name_of_month : Date.month -> string
 
 (*S Generic signature of a printer. *)
 
@@ -92,31 +118,34 @@ module type S = sig
   type t (*r Generic type of a printer. *)
 
   (* [fprint format formatter x] outputs [x] on [formatter] according to
-     the specified [format]. The year before 1 AC are not correctly 
-     pretty printed. Raise [Invalid_argument] if the format is incorrect. *)
+     the specified [format]. Raise [Invalid_argument] if the format is 
+     incorrect. *)
   val fprint : string -> Format.formatter -> t -> unit
     
   (* [print format] is equivalent to [fprint format Format.std_formatter] *)
   val print : string -> t -> unit
 
-  (* Same as [print d] where [d] is the default format. *)
+  (* Same as [print d] where [d] is the default format 
+     (see the printer implementations). *)
   val dprint : t -> unit
 
   (* [sprint format date] converts [date] to a string according to [format]. *)
   val sprint : string -> t -> string
     
-  (* Same as [sprint d] where [d] is the default format. *)
+  (* Same as [sprint d] where [d] is the default format
+     (see the printer implementations). *)
   val to_string : t -> string
 
   (* [from_fstring format s] converts [s] to a date according to [format].
-     Only the format [%%], [%d], [%D], [%m], [%M], [%S], [%T], [%y] and [%Y] 
-     are available.
+     Only the specifications [%%], [%d], [%D], [%m], [%M], [%S], [%T], [%y] 
+     and [%Y] are available.
      When the format has only two digits for the year number, 1900 are added
-     to this number (see the example). The year before 1 AC are not recognized.
+     to this number (see the example).
      
      Raise [Invalid_argument] if either the format is incorrect 
      or the string does not match the format
-     or the event cannot be created.
+     or the event cannot be created (e.g. if you do not specify a year for
+     a date).
 
      For example [from_fstring "the date is %D" "the date is 01/06/03"] returns
      a date equivalent to [Date.make 1903 1 6]. *)
@@ -130,7 +159,7 @@ end
 
 (* Date printer.
 
-   The formats which use time functionalities are not available 
+   The specifications which use time functionalities are not available 
    on this printer.
 
    The default format is [%D]. *)
@@ -138,7 +167,7 @@ module DatePrinter : S with type t = Date.t
 
 (* Time printer.
 
-   The formats which use date functionalities are not available 
+   The specifications which use date functionalities are not available 
    on this printer.
 
    The default format is [%T]. *)
@@ -146,5 +175,5 @@ module TimePrinter : S with type t = Time.t
 
 (* Calendar printer.
 
-   The default format is [%c]. *)
+   The default format is [%D; %T]. *)
 module CalendarPrinter : S with type t = Calendar.t

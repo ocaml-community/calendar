@@ -13,7 +13,7 @@
  * See the GNU Library General Public License version 2 for more details
  *)
 
-(*i $Id: printer.ml,v 1.6 2003-09-18 14:34:01 signoles Exp $ i*)
+(*i $Id: printer.ml,v 1.7 2003-09-18 16:07:58 signoles Exp $ i*)
 
 module type S = sig
   type t
@@ -38,8 +38,10 @@ let day_name =
 	 | Date.Fri -> "Friday"
 	 | Date.Sat -> "Saturday")
 
-let short_day_name day = 
-  let d = !day_name day in
+let name_of_day d = !day_name d
+
+let short_name_of_day d = 
+  let d = name_of_day d in
   try String.sub d 0 3 with Invalid_argument _ -> d
 
 let month_name =
@@ -57,8 +59,10 @@ let month_name =
 	 | Date.Nov -> "November"
 	 | Date.Dec -> "December")
 
-let short_month_name month = 
-  let m = !month_name month in
+let name_of_month m = !month_name m
+
+let short_name_of_month m = 
+  let m = name_of_month m in
   try String.sub m 0 3 with Invalid_argument _ -> m
 
 type pad =
@@ -67,17 +71,21 @@ type pad =
   | Empty
 
 (* [k] should be a power of 10. *)
-let rec print_number fmt pad k n =
-  let fill fmt = function
-    | Zero -> Format.pp_print_int fmt 0
-    | Blank -> Format.pp_print_char fmt ' '
-    | Empty -> ()
+let print_number fmt pad k n =
+  let rec aux k n =
+    let fill fmt = function
+      | Zero -> Format.pp_print_int fmt 0
+      | Blank -> Format.pp_print_char fmt ' '
+      | Empty -> ()
+    in
+    if k = 0 then Format.pp_print_int fmt n
+    else begin
+      if n < k then fill fmt pad;
+      aux (k mod 10) n
+    end
   in
-  if k = 0 then Format.pp_print_int fmt n
-  else begin
-    if n < k then fill fmt pad;
-    print_number fmt pad (k mod 10) n
-  end
+  if n < 0 then Format.pp_print_char fmt '-';
+  aux k (abs n)
 
 let bad_format () = raise (Invalid_argument "bad format")
 
@@ -104,11 +112,11 @@ struct
 
   let fprint f fmt x =
     let len = String.length f in
-    let weekday = lazy (!day_name (X.day_of_week x)) in
-    let sweekday = lazy (short_day_name (X.day_of_week x)) in
+    let weekday = lazy (name_of_day (X.day_of_week x)) in
+    let sweekday = lazy (short_name_of_day (X.day_of_week x)) in
     let day_of_week = lazy (Date.int_of_day (X.day_of_week x)) in
-    let month_name = lazy (!month_name (X.month x)) in
-    let smonth_name = lazy (short_month_name (X.month x)) in
+    let month_name = lazy (name_of_month (X.month x)) in
+    let smonth_name = lazy (short_name_of_month (X.month x)) in
     let int_month = lazy (Date.int_of_month (X.month x)) in
     let day_of_month = lazy (X.day_of_month x) in
     let day_of_year = lazy (X.day_of_year x) in
@@ -200,7 +208,9 @@ struct
 	| c   -> 
 	    Format.pp_print_char fmt c;
 	    parse_format (i + 1) Zero
-    in parse_format 0 Zero
+    in 
+    parse_format 0 Zero;
+    Format.pp_print_flush fmt ()
 
   let print f = fprint f Format.std_formatter
 
@@ -210,7 +220,6 @@ struct
     let buf = Buffer.create 15 in
     let fmt = Format.formatter_of_buffer buf in
     fprint f fmt d;
-    Format.pp_print_flush fmt ();
     Buffer.contents buf
 
   let to_string = sprint X.default_format
@@ -285,6 +294,7 @@ module DatePrinter =
 	 include Date
 	 let make y m d _ _ _ =
 	   cannot_create_event "date" [ y; m; d ];
+	   Printf.printf " ATT: %d %d %d\n" y m d;
 	   make y m d
 	 let default_format = "%D"
 	 let hour _ = bad_format ()
@@ -314,5 +324,5 @@ module CalendarPrinter =
 	 let make y m d h mn s =
 	   cannot_create_event "calendar" [ y; m; d; h; mn; s ];
 	   make y m d h mn s
-	 let default_format = "%c"
+	 let default_format = "%D; %T"
        end)
