@@ -11,7 +11,7 @@
 #  
 #  See the GNU Library General Public License version 2 for more details
 #
-# $Id: Makefile.in,v 1.38 2004-10-25 14:12:51 signoles Exp $
+# $Id: Makefile.in,v 1.39 2004-10-25 15:16:27 signoles Exp $
 
 # Used programs
 ###############
@@ -44,7 +44,7 @@ DIRS	= src
 
 SRC	= time_Zone.mli time_Zone.ml period.mli \
 	time.mli time.ml date.mli date.ml calendar.mli calendar.ml \
-	printer.mli printer.ml
+	printer.mli printer.ml version.mli version.ml
 SRC	:= $(addprefix src/, $(SRC))
 
 ML	= $(filter %.ml, $(SRC))
@@ -53,6 +53,10 @@ MLI	= $(filter %.mli, $(SRC))
 CMO	= $(ML:.ml=.cmo)
 CMX	= $(CMO:.cmo=.cmx)
 CMI	= $(MLI:.mli=.cmi)
+
+CMO_NOVERSION= $(filter-out src/version.cmo, $(CMO))
+
+GENERATED= src/version.ml
 
 # Libs and flags
 ################
@@ -74,13 +78,22 @@ src/$(NAME).cma: $(CMO)
 src/$(NAME).a src/$(NAME).cmxa: $(CMX)
 	$(CAMLFIND) ocamlopt $(OPTFLAGS) -a -o $@ $^
 
+.PHONY	= src/version.ml
+src/version.ml:
+	if test -e $@; then chmod a+w $@; fi		
+	echo "let version = \"$(VERSION)\"" > $@
+	echo "let compile_at = Calendar.now ()" >> $@
+	chmod a-w $@
+
 .PHONY: META
 META: 
+	if test -e $@; then chmod a+w $@; fi		
 	echo "description = \"$(NAME) library\"" > $@
 	echo "version = \"$(VERSION)\"" >> $@
 	echo "archive(byte) = \"$(NAME).cma\"" >> $@
 	echo "archive(native) = \"$(NAME).cmxa\"" >> $@
 	echo "requires = \"unix\"" >> $@
+	chmod a-w $@
 
 # Generic rules
 ###############
@@ -196,7 +209,7 @@ TAGS: $(SRC)
 ##########
 
 clean:
-	rm -f TAGS META $(TESTS) tests/test
+	rm -f TAGS META $(TESTS) tests/test $(GENERATED)
 	for i in . src tests; do \
 	  rm -f $$i/*~ $$i/\#* $$i/*.cm[iox] $$i/*.*a $$i/*.o $$i/a.out; \
 	done
@@ -210,7 +223,7 @@ clean-configure: dist-clean
 # Depend
 ########
 
-depend:
+depend: $(GENERATED)
 	rm -f .depend
 	for i in src tests; do \
 	  $(CAMLDEP) $(CAMLIBS) $$i/*.ml $$i/*.mli; \
