@@ -1,19 +1,44 @@
-  type t = 
-    | GMT             (*r Greenwich Meridian Time              *)
-    | Local           (*r Locale Time                          *)
-    | GMT_Plus of int (*r Another time zone specified from GMT *)
+(*
+ * Calendar library
+ * Copyright (C) 2003 Julien SIGNOLES
+ * 
+ * This software is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Library General Public
+ * License version 2, as published by the Free Software Foundation.
+ * 
+ * This software is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * 
+ * See the GNU Library General Public License version 2 for more details
+ *)
 
-  let tz = ref GMT
+(*i $Id: time_Zone.ml,v 1.2 2003-07-04 12:15:35 signoles Exp $ i*)
 
-  let gap_gmt_local = 
-    let t = Unix.time () in
-     (Unix.localtime t).Unix.tm_hour - (Unix.gmtime t).Unix.tm_hour
+type t = 
+  | GMT
+  | Local 
+  | GMT_Plus of int
 
-  let value () = !tz
+let tz = ref GMT
 
-  let change t = tz := t
+let out_of_bounds x = x < - 12 || x > 11
 
-  let rec gap t1 t2 = 
+let in_bounds x = not (out_of_bounds x)
+
+let gap_gmt_local = 
+  let t = Unix.time () in
+  (Unix.localtime t).Unix.tm_hour - (Unix.gmtime t).Unix.tm_hour
+
+let current () = !tz
+
+let change = function
+  | GMT_Plus x when out_of_bounds x -> 
+      raise (Invalid_argument "Not a valid time zone")
+  | _ as t -> tz := t
+
+let gap t1 t2 =
+  let rec aux t1 t2 = 
     match t1, t2 with
       | GMT, GMT 
       | Local, Local           -> 0
@@ -21,4 +46,7 @@
       | GMT, GMT_Plus x        -> x
       | Local, GMT_Plus x      -> x - gap_gmt_local
       | GMT_Plus x, GMT_Plus y -> y - x
-      | _                      -> - gap t2 t1
+      | _                      -> - aux t2 t1
+  in let res = aux t1 t2 in
+  assert (in_bounds res);
+  res
