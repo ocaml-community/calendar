@@ -13,7 +13,7 @@
  * See the GNU Library General Public License version 2 for more details
  *)
 
-(*i $Id: date.ml,v 1.1.1.1 2003-06-26 16:09:30 signoles Exp $ i*)
+(*i $Id: date.ml,v 1.2 2003-07-01 14:24:07 signoles Exp $ i*)
 
 (*S Introduction.
 
@@ -74,9 +74,9 @@ let from_jd n = n
 
 let to_jd d = d
 
-let from_mjd x = int_of_float (x +. 240000.5)
+let from_mjd x = x + 2400001
 
-let to_mjd d = float_of_int d -. 240000.5
+let to_mjd d = d - 2400001
 
 (*S Useful operations. *)
 
@@ -197,8 +197,8 @@ let epact y =
     (* 1900 belongs to the 20th century for this algorithm *) 
     abs ((julian_epact - (3 * c) / 4 + (8 * c + 5) / 25 + 8) mod 30)
 
-(* [eastern] implements the algorithm of Oudin (1940) *)
-let eastern y = 
+(* [easter] implements the algorithm of Oudin (1940) *)
+let easter y = 
   let g = y mod 19 in
   let i, j = 
     if y <= 1582 then (* Julian calendar *)

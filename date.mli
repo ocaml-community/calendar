@@ -13,7 +13,7 @@
  * See the GNU Library General Public License version 2 for more details
  *)
 
-(*i $Id: date.mli,v 1.1.1.1 2003-06-26 16:09:30 signoles Exp $ i*)
+(*i $Id: date.mli,v 1.2 2003-07-01 14:24:07 signoles Exp $ i*)
 
 (*S Introduction. 
 
@@ -29,7 +29,7 @@
 (* Days of the week. *)
 type day = Sun | Mon | Tue | Wed | Thu | Fri | Sat
 
-(* Month of the year. *)
+(* Months of the year. *)
 type month = 
     Jan | Feb | Mar | Apr | May | Jun | Jul | Aug | Sep | Oct | Nov | Dec
 
@@ -53,7 +53,7 @@ val make : int -> int -> int -> t
 val from_jd : int -> t
 
 (* Make a date from its modified Julian day. *)
-val from_mjd : float -> t
+val from_mjd : int -> t
 
 (*S Getters. *)
 
@@ -91,8 +91,10 @@ val year : t -> int
    E.g. [to_jd (make (-4712) 1 1)] returns 0. *)
 val to_jd : t -> int
 
-(* Modified Julian day. *)
-val to_mjd : t -> float
+(* Modified Julian day (i.e. Julian day - 2 400 001).
+   More manageable than the Julian day. 
+   E.g. [to_mjd (make 1858 11 17)] returns 0. *)
+val to_mjd : t -> int
 
 (*S Boolean operations on dates. *)
 
@@ -159,23 +161,46 @@ val days_in_year : int -> int
 (* Number of weeks in a year. *)
 val weeks_in_year : int -> int
 
-(* Century of a year. *)
+(* Century of a year. 
+   E.g. [(century 2000)] returns 20 and [(century 2001)] returns 21. *)
 val century : int -> int
 
-(* Millenium of a year. *)
+(* Millenium of a year.
+   E.g. [(millenium 2000)] returns 2 and [(millenium 2001)] returns 3. *)
 val millenium : int -> int
 
-(* Solar number. *)
+(* Solar number. 
+
+   In the Julian calendar there is a one-to-one relationship between the
+   Solar number and the day on which a particular date falls. *)
 val solar_number : int -> int
 
-(* Indiction. *)
+(* Indiction. 
+   
+   The Indiction was used in the middle ages to specify the position of a year
+   in a 15 year taxation cycle. It was introduced by emperor Constantine 
+   the Great on 1 September 312 and ceased to be used in 1806. 
+
+   The Indiction has no astronomical significance. *)
 val indiction : int -> int
 
-(* Golden number. *)
+(* Golden number. 
+
+   Considering that the relationship between the moon's phases and the days 
+   of the year repeats itself every 19 years, it is natural to associate a 
+   number between 1 and 19 with each year. 
+   This number is the so-called Golden number. *)
 val golden_number : int -> int
 
-(* Epact. *)
+(* Epact. 
+
+   The Epact is a measure of the age of the moon (i.e. the number of days that
+   have passed since an "official" new moon) on a particular date. *)
 val epact : int -> int
 
-(* Date of Eastern. *)
-val eastern : int -> t
+(* Date of Easter. 
+
+   In the Christian world, Easter (and the days immediately preceding it) is 
+   the celebration of the death and resurrection of Jesus in (approximately) 
+   AD 30. *)
+val easter : int -> t
