@@ -13,7 +13,7 @@
  * See the GNU Library General Public License version 2 for more details
  *)
 
-(*i $Id: date.mli,v 1.6 2003-07-07 21:01:34 signoles Exp $ i*)
+(*i $Id: date.mli,v 1.7 2003-07-08 11:21:32 signoles Exp $ i*)
 
 (*S Introduction. 
 
@@ -170,9 +170,9 @@ val month_of_int : int -> month
   A period is the number of days between two date. *)
 
 module Period : sig
-  include Period.S
+  include Period.S (*r Arithmetic operations. *)
 
-  (* Constructors. *)
+  (* Constructors.\\ *)
 
   (* [make year month day] makes a period of the specified lenght. *)
   val make : int -> int -> int -> t

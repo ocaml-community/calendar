@@ -13,7 +13,7 @@
  * See the GNU Library General Public License version 2 for more details
  *)
 
-(*i $Id: calendar.ml,v 1.7 2003-07-08 09:46:16 signoles Exp $ i*)
+(*i $Id: calendar.ml,v 1.8 2003-07-08 11:21:32 signoles Exp $ i*)
 
 (*S Introduction.
 
@@ -21,7 +21,7 @@
   This gap of 0.5 is because the Julian period begins 
   January first, 4713 BC at MIDDAY (and then, this Julian day is 0.0). 
   But, for implementation facilities, the Julian day 0.0 is coded as
-  January first, 4713 BC at MIDNIGHT. *)
+  January first, 4713 BC at MIDNIGHT.\\ *)
 
 (* Round a float to the nearest int. *)
 let round x =
@@ -111,7 +111,24 @@ let minut x = Time.minut (to_time x)
 
 let second x = Time.second (to_time x)
 
+(*S Coercions. *)
+
+let from_string s =
+  match Str.split (Str.regexp "; ") s with
+    | [ d; t ] -> build (Date.from_string d) (Time.from_string t)
+    | _ -> raise (Invalid_argument (s ^ " is not a calendar"))
+
+let to_string x = 
+  Date.to_string (to_date x) ^ "; " ^ Time.to_string (to_time x)
+
 (*S Boolean operations on dates. *)
+
+let egal x y = to_string x = to_string y
+
+let compare x y = 
+  if egal x y then 0 
+  else if x < y then -1
+  else 1
 
 let is_leap_day x = Date.is_leap_day (to_date x)
 
@@ -123,17 +140,7 @@ let is_pm x = Time.is_pm (to_time x)
 
 let is_am x = Time.is_am (to_time x)
 
-(*S Coercions. *)
-
-let from_string s =
-  match Str.split (Str.regexp "; ") s with
-    | [ d; t ] -> build (Date.from_string d) (Time.from_string t)
-    | _ -> raise (Invalid_argument (s ^ " is not a calendar"))
-
-let to_string x = 
-  Date.to_string (to_date x) ^ "; " ^ Time.to_string (to_time x)
-
-(*S Periods. *)
+(*S Period. *)
 
 module Period = struct
   type t = { d : Date.Period.t; t : Time.Period.t }
@@ -199,6 +206,8 @@ module Period = struct
       | _ -> raise (Invalid_argument (s ^ " is not a calendar"))
 end
 
+(*S Arithmetic operations on calendars and periods. *)
+
 let split x = 
   let t, d = modf (from_gmt (x +. 0.5)) in 
   let t, d = round (t *. 86400.), int_of_float d in
@@ -228,10 +237,3 @@ let next x f =
     | #Time.field as f -> unsplit d (Time.next t f)
       
 let prev x f = -. next (-. x) f
-
-let egal x y = to_string x = to_string y
-
-let compare x y = 
-  if egal x y then 0 
-  else if x < y then -1
-  else 1

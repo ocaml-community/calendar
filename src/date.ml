@@ -13,7 +13,7 @@
  * See the GNU Library General Public License version 2 for more details
  *)
 
-(*i $Id: date.ml,v 1.7 2003-07-08 09:46:16 signoles Exp $ i*)
+(*i $Id: date.ml,v 1.8 2003-07-08 11:21:32 signoles Exp $ i*)
 
 (*S Introduction.
 
@@ -168,7 +168,7 @@ let days_in_month d =
 let is_leap_day d = 
   is_leap_year (year d) && month d = Feb && day_of_month d = 24
 
-(*S Arithmetic operations on dates and periods. *)
+(*S Period. *)
 
 module Period = struct
 
@@ -212,6 +212,8 @@ module Period = struct
       | _ -> raise (Invalid_argument (s ^ " is not a date"))
 
 end
+
+(*S Arithmetic operations on dates and periods. *)
 
 let add d p = 
   make 

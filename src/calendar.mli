@@ -13,7 +13,7 @@
  * See the GNU Library General Public License version 2 for more details
  *)
 
-(*i $Id: calendar.mli,v 1.6 2003-07-08 09:46:16 signoles Exp $ i*)
+(*i $Id: calendar.mli,v 1.7 2003-07-08 11:21:32 signoles Exp $ i*)
 
 (*S Introduction. 
 
@@ -28,7 +28,8 @@
 
   This module uses floating point arithmetics. 
   Then, egality over calendars may be erroneous (as egality over [float]).
-  [egal] function defined in this module is however more precise than [(=)]. *)
+  You should better use the [egal] function defined in this module instead 
+  of [(=)]. *)
 
 (*S Datatypes. *)
 
@@ -132,9 +133,9 @@ val to_date : t -> Date.t
   A period is the number of seconds between two calendars. *)
 
 module Period : sig
-  include Period.S
+  include Period.S (*r Arithmetic operations. *)
 
-  (* Constructors *)
+  (* Constructors.\\ *)
 
   (* [make year month day hour minut second] makes a period of the specified
      length. *)
@@ -153,7 +154,7 @@ module Period : sig
   val minut : int -> t
   val second : int -> t
 
-  (* Coercions *)
+  (* Coercions.\\ *)
 
   (* Convert a calendar period to a date period. 
      The fractional time period is ignored. 

@@ -13,7 +13,7 @@
  * See the GNU Library General Public License version 2 for more details
  *)
 
-(*i $Id: time.mli,v 1.7 2003-07-08 08:12:18 signoles Exp $ i*)
+(*i $Id: time.mli,v 1.8 2003-07-08 11:21:32 signoles Exp $ i*)
 
 (*S Introduction.
 
@@ -146,7 +146,7 @@ val from_hours : float -> t
 module Period : sig
   include Period.S (*r Arithmetic operations. *)
 
-  (* Some other arithmetic operations. *)
+  (* Some other arithmetic operations.\\ *)
 
   (* Number of seconds of a period. *)
   val length : t -> int
@@ -157,7 +157,7 @@ module Period : sig
   (* Division. *)
   val div : t -> t -> t
 
-  (* Constructors. *)
+  (* Constructors.\\ *)
 
   (* [make hour minut second] makes a period of the specified length. *)
   val make : int -> int -> int -> t

@@ -13,7 +13,7 @@
  * See the GNU Library General Public License version 2 for more details
  *)
 
-(*i $Id: time.ml,v 1.7 2003-07-08 09:46:16 signoles Exp $ i*)
+(*i $Id: time.ml,v 1.8 2003-07-08 11:21:32 signoles Exp $ i*)
 
 (*S Introduction.
 
@@ -38,6 +38,7 @@ let from_gmt t = convert t Time_Zone.GMT (Time_Zone.current ())
 
 let to_gmt t = convert t (Time_Zone.current ()) Time_Zone.GMT
 
+(* Coerce [t] into the interval $[0; 86400[$ (i.e. a one day interval). *)
 let normalize t = 
   let t = from_gmt t in
   let t_mod, t_div = to_gmt (t mod one_day), t / one_day in

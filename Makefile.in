@@ -21,6 +21,7 @@ CAMLWEB	= @OCAMLWEB@
 CAMLWC	= @OCAMLWC@
 CAMLDOT	= @OCAMLDOT@
 CAMLLIB	= @OCAMLLIB@
+CAML2HTML= caml2html
 
 # Project
 #########
@@ -62,6 +63,12 @@ src/$(NAME).cmxa: src/others/unix.cmx src/others/str.cmx $(CMX)
 	$(CAMLOPT) $(OPTFLAGS) -a -o $@ \
 		-cclib -lunix -cclib -lstr -cclib -L$(CAMLLIB) $^
 
+html/touch-html:
+	mkdir html
+	touch $@
+
+mli2html: $(patsubst src/%.mli, html/%.html, $(filter %.mli, $(SRC)))
+
 # Generic rules
 ###############
 
@@ -71,7 +78,10 @@ src/$(NAME).cmxa: src/others/unix.cmx src/others/str.cmx $(CMX)
 %.gz: %
 	gzip -f --best $<
 
-.SUFFIXES: .ml .mli .cmo .cmi .cmx
+.SUFFIXES: .ml .mli .cmo .cmi .cmx .html
+
+html/%.html: src/%.mli html/touch-html
+	$(CAML2HTML) -o $@ $<
 
 .mli.cmi:
 	$(CAMLC) $(BYTEFLAGS) -c $<
@@ -128,8 +138,9 @@ uninstall:
 
 EXPORT_DIR= $$HOME/WWW
 
-export:
+export: $(NAME).ps.gz mli2html
 	cvs export -d /tmp/$(NAME) -D now $(NAME)
+	cp -rf $(NAME).ps.gz html /tmp/$(NAME)
 	cd /tmp; \
 	  ($(MAKE) $(NAME).tar.gz; \
 	   rm -rf $(NAME); \
@@ -164,6 +175,9 @@ clean:
 	done
 
 dist-clean: clean
+	rm -rf $(NAME).ps.gz html
+
+clean-configure: dist-clean
 	rm -f Makefile configure config.*
 
 # Depend
