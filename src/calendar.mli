@@ -13,7 +13,7 @@
  * See the GNU Library General Public License version 2 for more details
  *)
 
-(*i $Id: calendar.mli,v 1.8 2003-07-16 09:04:30 signoles Exp $ i*)
+(*i $Id: calendar.mli,v 1.9 2003-08-20 14:18:56 signoles Exp $ i*)
 
 (*S Introduction. 
 
@@ -28,7 +28,7 @@
 
   This module uses floating point arithmetics. 
   Then, egality over calendars may be erroneous (as egality over [float]).
-  You should better use the [egal] function defined in this module instead 
+  You should better use the [equal] function defined in this module instead 
   of [(=)]. *)
 
 (*S Datatypes. *)
