@@ -4,7 +4,7 @@
 #                                                                            #
 #                      Copyright (C) 2002 Julien SIGNOLES                    #
 #                                                                            #
-#       $Id: Makefile.in,v 1.3 2003-07-04 13:59:42 signoles Exp $            #
+#       $Id: Makefile.in,v 1.4 2003-07-04 15:03:52 signoles Exp $            #
 #                                                                            #
 ##############################################################################
 
@@ -80,8 +80,8 @@ src/$(NAME).cmxa: src/others/unix.cmx src/others/str.cmx $(CMX)
 .ml.cmx:
 	$(CAMLOPT) $(OPTFLAGS) -c $<
 
-# Test
-######
+# Tests
+#######
 
 tests/%: src/calendar.cma tests/%.cmo
 	$(CAMLC) -o $@ -I src $^

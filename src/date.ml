@@ -13,7 +13,7 @@
  * See the GNU Library General Public License version 2 for more details
  *)
 
-(*i $Id: date.ml,v 1.3 2003-07-04 13:59:42 signoles Exp $ i*)
+(*i $Id: date.ml,v 1.4 2003-07-04 15:03:52 signoles Exp $ i*)
 
 (*S Introduction.
 
@@ -60,12 +60,12 @@ module Period = struct
 
   let opp x = { y = - x.y; m = - x.m; d = - x.d }
 
-  (* Implement a lexicographical order over the fields of [t].
+  (* Lexicographical order over the fields of the type [t].
      Yep, [Pervasives.compare] correctly works. *)
   let compare = compare 
 end
 
-(*S. The signature [S]. *)
+(*S The signature [S]. *)
 
 module type S = sig
   exception Out_of_bounds
@@ -240,7 +240,8 @@ let days_in_month d =
     | Apr | Jun | Sep | Nov -> 30
     | Feb -> if is_leap_year (year d) then 29 else 28
 
-let is_leap_day d = is_leap_year d && month d = Feb && day_of_month d = 24
+let is_leap_day d = 
+  is_leap_year (year d) && month d = Feb && day_of_month d = 24
 
 (*S Operations on years. *)
 

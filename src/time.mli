@@ -13,7 +13,7 @@
  * See the GNU Library General Public License version 2 for more details
  *)
 
-(*i $Id: time.mli,v 1.3 2003-07-04 13:59:42 signoles Exp $ i*)
+(*i $Id: time.mli,v 1.4 2003-07-04 15:03:52 signoles Exp $ i*)
 
 type t
 
@@ -57,40 +57,40 @@ val from_string : string -> t
 
 module type S = sig
 
-(* [convert t tz]. [t] est une heure exprimee dans [Time_Zone.value ()].
-   Retourne l'heure de [t] dans [tz]. *)
-val convert : t -> Time_Zone.t -> t
+  (* [convert t tz]. [t] est une heure exprimee dans [Time_Zone.value ()].
+     Retourne l'heure de [t] dans [tz]. *)
+  val convert : t -> Time_Zone.t -> t
 
-val to_gmt : t -> t
+  val to_gmt : t -> t
 
-val from_gmt : t -> t
+  val from_gmt : t -> t
 
-(* midnight et midday donne 0h et 12h dans la zone courante *)
-val midnight : unit -> t
+  (* midnight et midday donne 0h et 12h dans la zone courante *)
+  val midnight : unit -> t
+  
+  val midday : unit -> t
 
-val midday : unit -> t
+  val hour : t -> int
 
-val hour : t -> int
+  val minut : t -> int
 
-val minut : t -> int
+  val second : t -> int
 
-val second : t -> int
+  val to_seconds : t -> int
 
-val to_seconds : t -> int
+  val to_minuts : t -> float
 
-val to_minuts : t -> float
+  val to_hours : t -> float
 
-val to_hours : t -> float
+  val from_seconds : int -> t
 
-val from_seconds : int -> t
+  val from_minuts : float -> t
 
-val from_minuts : float -> t
+  val from_hours : float -> t
 
-val from_hours : float -> t
+  val is_pm : t -> bool
 
-val is_pm : t -> bool
-
-val is_am : t -> bool
+  val is_am : t -> bool
 end
 
 include S

@@ -13,7 +13,7 @@
  * See the GNU Library General Public License version 2 for more details
  *)
 
-(*i $Id: date.mli,v 1.3 2003-07-04 13:59:42 signoles Exp $ i*)
+(*i $Id: date.mli,v 1.4 2003-07-04 15:03:52 signoles Exp $ i*)
 
 (*S Introduction. 
 
@@ -195,7 +195,8 @@ module type S = sig
 
   (*S Boolean operations on dates. *)
 
-  (* Return [true] iff a date is a leap day. *)
+  (* Return [true] iff a date is a leap day 
+     (i.e. February, 24th of a leap year). *)
   val is_leap_day : t -> bool
 
   (* Return [true] iff a date belongs to the Gregorian calendar. *)

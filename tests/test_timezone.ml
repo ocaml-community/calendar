@@ -1,4 +1,4 @@
-Printf.printf "\nTests of Time_Zone :\n\n";;
+Printf.printf "\nTests of Time_Zone:\n\n";;
 
 open Time_Zone;;
 
