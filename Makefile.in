@@ -1,0 +1,132 @@
+##############################################################################
+#                                                                            #
+#                       Basic Makefile using ocamldefun           	     #
+#                                                                            #
+#                      Copyright (C) 2002 Julien SIGNOLES                    #
+#                                                                            #
+#       $Id: Makefile.in,v 1.1 2003-07-04 07:11:07 signoles Exp $       #
+#                                                                            #
+##############################################################################
+
+# Used programs
+###############
+
+CAMLC	= @OCAMLC@
+CAMLOPT	= @OCAMLOPT@
+CAMLDEP	= @OCAMLDEP@
+CAMLWEB	= @OCAMLWEB@
+CAMLWC	= @OCAMLWC@
+CAMLDOT	= @OCAMLDOT@
+CAMLLIB	= @OCAMLLIB@
+
+# Project
+#########
+
+# Project name
+NAME	= calendar
+
+# Directories containing the source files
+DIRS	= src
+
+# Ocaml files
+SRC	= period.mli time_Zone.mli time_Zone.ml \
+	date.mli date.ml time.mli time.ml calendar.mli calendar.ml
+SRC	:= $(addprefix src/, $(SRC))
+
+ML	= $(filter %.ml, $(SRC))
+MLI	= $(filter %.mli, $(SRC))
+
+CMO	= $(ML:.ml=.cmo)
+CMX	= $(CMO:.cmo=.cmx)
+
+# Libs and flags
+################
+
+# Included directories
+CAMLIBS	= -I $(DIRS)
+
+CAMLFLAGS= $(CAMLIBS)
+# Flags for ocamlc
+BYTEFLAGS= $(CAMLFLAGS)
+# Flags for ocamlopt
+OPTFLAGS = $(CAMLFLAGS) -I src/others
+
+# Main rules
+############
+
+all: src/$(NAME).cma src/$(NAME).cmxa
+
+src/$(NAME).cma: $(CMO)
+	$(CAMLC) $(BYTEFLAGS) -a -o $@ unix.cma str.cma $^
+
+src/$(NAME).cmxa: src/others/unix.cmx src/others/str.cmx $(CMX)
+	$(CAMLOPT) $(OPTFLAGS) -a -o $@ \
+		-cclib -lunix -cclib -lstr -cclib -L$(CAMLLIB) $^
+
+# Generic rules
+###############
+
+.SUFFIXES: .ml .mli .cmo .cmi .cmx
+
+.mli.cmi:
+	$(CAMLC) $(BYTEFLAGS) -c $<
+
+.ml.cmo:
+	$(CAMLC) $(BYTEFLAGS) -c $<
+
+.ml.o:
+	$(CAMLOPT) $(OPTFLAGS) -c $<
+
+.ml.cmx:
+	$(CAMLOPT) $(OPTFLAGS) -c $<
+
+# Documentation
+###############
+
+wc: $(SRC)
+	$(CAMLWC) -p $^
+
+$(NAME).ps.gz: $(SRC)
+	$(CAMLWEB) --ps -o $(basename $@) $^
+	gzip -f --best $(basename $@)
+
+# Exporting
+###########
+
+# Rebuilding Makefile
+#####################
+
+Makefile: Makefile.in config.status
+	./config.status			
+
+config.status: configure
+	./config.status --recheck
+
+configure: configure.in
+	autoconf
+
+# Emacs tags
+############
+
+TAGS: $(SRC)
+	otags -o $@ $^
+
+# Cleaning
+##########
+
+clean:
+	rm -f TAGS
+	for i in . src src/others; do \
+	  rm -f $$i/*~ $$i/\#* $$i/*.cm[iox] $$i/*.*a $$i/*.o; \
+	done
+
+# Depend
+########
+
+depend:
+	rm -f .depend
+	for i in src src/others; do \
+	  $(CAMLDEP) $(CAMLIBS) $$i/*.ml $$i/*.mli; \
+	done > .depend
+
+include .depend

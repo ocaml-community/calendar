@@ -13,18 +13,102 @@
  * See the GNU Library General Public License version 2 for more details
  *)
 
-(*i $Id: date.mli,v 1.2 2003-07-01 14:24:07 signoles Exp $ i*)
+(*i $Id: date.mli,v 1.1 2003-07-04 07:11:07 signoles Exp $ i*)
 
 (*S Introduction. 
 
   This module implements operations on dates. 
   A date is a triple (year, month, day). 
 
+  All the dates should belong to 
+  [[January, 1st 4713 BC; January 22th, 3268 AC]] (called the Julian period).
+  We raise the [Out_of_bounds] exception if you attempt to create a date 
+  outside the Julian period.
+
+  If a date [d] does not exists and if [d_bef] (resp. [d_aft]) is 
+  the last (resp. first) existing date before (resp. after) [d], 
+  we automatically coerce it to [d_aft + d - d_bef - 1].
+  For example, both dates "February 29th, 2003" and 
+  "February 30th, 2003" do not exist and they are coerced respectively to the 
+  date "Mars 1st, 2003" and "Mars 2nd, 2003". 
+  We call this rule the "coercion rule".
+  As an exception to the coercion rule, the date belongs to 
+  [[October 5th, 1582; October 14th, 1582]] do not exist and we raise the 
+  [Undefined] exception if you attempt to create such a date.
+  Those dropped days corresponds to the change from the Julian to the Gregorian
+  calendar.  
+
   The function [today] uses the module [Unix] and 
   the function [from_string] uses the module [Str].
   So, link this library with [Unix] and [Str]. *)
 
-(*S Datatypes. *)
+(* Type of a date. *)
+type t
+
+(* The differents fields of a date. *)
+type field = [ `Year | `Month | `Week | `Day ]
+
+(* A period between two date. *)
+module Period : sig
+  include Period.S
+
+  val make : int -> int -> int -> t
+
+  val day : int -> t
+
+  val month : int -> t
+
+  val year : int -> t
+end
+
+(* [make year month day] makes the date year-month-day.
+   A BC year [y] corresponds to the year [-(y+1)].
+   E.g. the years (5 BC) and (1 BC) respectively corresponds to the years 
+   (-4) and 0. *)
+val make : int -> int -> int -> t
+
+(* Comparison function between two dates. 
+   Same behavior as [Pervasives.compare]. *)
+val compare : t -> t -> int
+
+(*S Arithmetic operations on dates and periods. *)
+
+(* [add d p] returns [d + p].
+   E.g. [(add (make 2003 12 31) (Period.make (Month, 1))] returns the date 
+   2004-1-31 and [(add (make 2003 12 31) (Period.make (Month, 2))] returns the
+   date 2004-3-2 (following the coercion rule describes in the 
+   introduction). *)
+val add : t -> Period.t -> t
+
+(* [sub d1 d2] returns the period corresponding to the number of days between
+   [d1] and [d2]. *)
+val sub : t -> t -> Period.t
+
+(* [rem d p] is equivalent to [add d (Period.opp p)]. *)
+val rem : t -> Period.t -> t
+
+(* [next d f] is equivalent to [add d (Period.make (f, 1))]. *)
+val next : t -> field -> t
+
+(* [prev d f] is equivalent to [rem d (Period.make (f, 1))]. *)
+val prev : t -> field -> t
+
+(* Convert a date into a string with the format "y-m-d". *)
+val to_string : t -> string
+
+(* Inverse of [to_string]. 
+   Raise [Invalid_argument] if the string format is bad. *)
+val from_string : string -> t
+
+module type S = sig
+
+  (*S Datatypes and exceptions. *)
+
+  (* Raised when a date is outside the Julian period. *)
+  exception Out_of_bounds
+
+(* Raised when a date belongs to [[October 5th, 1582; October 14th, 1582]]. *)
+exception Undefined
 
 (* Days of the week. *)
 type day = Sun | Mon | Tue | Wed | Thu | Fri | Sat
@@ -33,21 +117,10 @@ type day = Sun | Mon | Tue | Wed | Thu | Fri | Sat
 type month = 
     Jan | Feb | Mar | Apr | May | Jun | Jul | Aug | Sep | Oct | Nov | Dec
 
-(* Type of a date. *)
-type t
-
 (*S Constructors. *)
 
-(* Date of the current day (based on UTC / GMT). *)
+(* Date of the current day (based on UTC/GMT). *)
 val today : unit -> t
-
-(* [make year month day] makes the date year-month-day.
-   Raise [Invalid_argument] if the triple (year, month, day) is 
-   unacceptable. 
-   A BC year [y] corresponds to the year [-(y+1)].
-   E.g. the years (5 BC) and (1 BC) respectively corresponds to the years 
-   (-4) and 0. *)
-val make : int -> int -> int -> t
 
 (* Make a date from its Julian day. *)
 val from_jd : int -> t
@@ -102,49 +175,27 @@ val to_mjd : t -> int
 val is_leap_day : t -> bool
 
 (* Return [true] iff a date belongs to the Gregorian calendar. *)
-val in_gregorian_calendar : t -> bool
+val is_gregorian : t -> bool
 
 (* Return [true] iff a date belongs to the Julian calendar. *)
-val in_julian_calendar : t -> bool
-
-(* Comparison function between two dates. 
-   Same behavior as [Pervasives.compare]. *)
-val compare : t -> t -> int
-
-(*S Arithmetic operations on dates. *)
-
-(* [add d n] adds [n] days to [d]. *)
-val add : t -> int -> t
-
-(* Same as [add d (-n)]. *)
-val remove : t -> int -> t
-
-(* Same as [add d 1]. *)
-val next : t -> t
-
-(* Same as [remove d 1]. *)
-val previous : t -> t
+val is_julian : t -> bool
 
 (*S Coercions. *)
 
-(* Convert a date into a string with the format "y-m-d". *)
-val to_string : t -> string
-
-(* Inverse of [to_string]. *)
-val from_string : string -> t
-
 (* Convert a day to an integer respecting ISO-8601.
-   So, Monday is 1, Tuesday is 2, ..., and sunday is 7 *)
+   So, Monday is 1, Tuesday is 2, ..., and sunday is 7. *)
 val int_of_day : day -> int
 
-(* Inverse of [int_of_day]. *)
+(* Inverse of [int_of_day]. 
+   Raise [Invalid_argument] if the int $\notin [1; 7]$. *)
 val day_of_int : int -> day
 
 (* Convert a month to an integer respecting ISO-8601.
    So, January is 1, February is 2 and so on. *)
 val int_of_month : month -> int
 
-(* Inverse of [int_of_month]. *)
+(* Inverse of [int_of_month]. 
+   Raise [Invalid_argument] if the month $\notin [1; 12]$. *)
 val month_of_int : int -> month
 
 (*S Operations on years. *)
@@ -204,3 +255,6 @@ val epact : int -> int
    the celebration of the death and resurrection of Jesus in (approximately) 
    AD 30. *)
 val easter : int -> t
+end
+
+include S

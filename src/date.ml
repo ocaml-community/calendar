@@ -13,7 +13,7 @@
  * See the GNU Library General Public License version 2 for more details
  *)
 
-(*i $Id: date.ml,v 1.2 2003-07-01 14:24:07 signoles Exp $ i*)
+(*i $Id: date.ml,v 1.1 2003-07-04 07:11:07 signoles Exp $ i*)
 
 (*S Introduction.
 
@@ -22,14 +22,86 @@
   available at~:
   \begin{center}http://www.tondering.dk/claus/calendar.html\end{center} *)
 
-(*S Datatypes. *)
+type t = int (*r representing the Julian day *)
+
+(* The differents fields of a date. *)
+type field = [ `Year | `Month | `Week | `Day ]
+
+module Period = struct
+
+  type t = { y : int; m : int; d : int }
+
+  let empty = { y = 0; m = 0; d = 0 }
+
+  let make y m d = { y = y; m = m; d = d }
+
+  let day n = { empty with d = n }
+
+  let month n = { empty with m = n }
+
+  let year n = { empty with y = n }
+
+  let add x y = { y = x.y + y.y; m = x.m + y.m; d = x.d + y.d }
+
+  let sub x y = { y = x.y - y.y; m = x.m - y.m; d = x.d - y.d }
+
+  let mul x y = { y = x.y * y.y; m = x.m * y.m; d = x.d * y.d }
+
+  let div x y = { y = x.y / y.y; m = x.m / y.m; d = x.d / y.d }
+
+  let opp x = { y = - x.y; m = - x.m; d = - x.d }
+
+  let compare = compare (*r lexicographical order on (y, m, d) *)
+end
+
+module type S = sig
+  exception Out_of_bounds
+exception Undefined
+type day = Sun | Mon | Tue | Wed | Thu | Fri | Sat
+type month = 
+    Jan | Feb | Mar | Apr | May | Jun | Jul | Aug | Sep | Oct | Nov | Dec
+val today : unit -> t
+val from_jd : int -> t
+val from_mjd : int -> t
+val days_in_month : t -> int
+val day_of_week : t -> day
+val day_of_month : t -> int
+val day_of_year : t -> int
+val week : t -> int
+val month : t -> month
+val year : t -> int
+val to_jd : t -> int
+val to_mjd : t -> int
+val is_leap_day : t -> bool
+val is_gregorian : t -> bool
+val is_julian : t -> bool
+val int_of_day : day -> int
+val day_of_int : int -> day
+val int_of_month : month -> int
+val month_of_int : int -> month
+val is_leap_year : int -> bool
+val same_calendar : int -> int -> bool
+val days_in_year : int -> int
+val weeks_in_year : int -> int
+val century : int -> int
+val millenium : int -> int
+val solar_number : int -> int
+val indiction : int -> int
+val golden_number : int -> int
+val epact : int -> int
+val easter : int -> t
+end
+
+(*S Datatypes and exceptions. *)
+
+exception Out_of_bounds
+
+exception Undefined
 
 type day = Sun | Mon | Tue | Wed | Thu | Fri | Sat
 
 type month = 
     Jan | Feb | Mar | Apr | May | Jun | Jul | Aug | Sep | Oct | Nov | Dec
-
-type t = int (*r representing the Julian day *)
 
 (*S Locale coercions.
 
@@ -62,9 +134,8 @@ let make y m d =
     else if lt (y, m, d) (1582, 10, 5) then
       (* Julian calendar *)
       d + (153 * m' + 2) / 5 + y' * 365 + y' / 4 - 32083
-    else raise (Invalid_argument 
-		  "the dates in [1582-10-5; 1582-10-14] do not exist")
-  else raise (Invalid_argument "the date is not in [4713 BC-1-1; 3268-1-22]")
+    else raise Undefined
+  else raise Out_of_bounds
 
 let today () = 
   let today = Unix.gmtime (Unix.gettimeofday ()) in
@@ -92,9 +163,9 @@ let is_leap_year y =
 
 (*S Boolean operations on dates. *)
 
-let in_julian_calendar d = d < 2299161
+let is_julian d = d < 2299161
 
-let in_gregorian_calendar d = d >= 2299161
+let is_gregorian d = d >= 2299161
 
 let compare = (-)
 
@@ -106,7 +177,7 @@ let a d = d + 32044
 
 let e d = 
   let c =   
-    if in_julian_calendar d then d + 32082 
+    if is_julian d then d + 32082 
     else let a = a d in a - (((4 * a + 3) / 146097) * 146097) / 4
   in c - (1461 * ((4 * c + 3) / 1461)) / 4
 
@@ -122,7 +193,7 @@ let month d = month_of_int (int_month d - 1)
 let year d = 
   let a = a d in
   let b, c = 
-    if in_julian_calendar d then 0, d + 32082
+    if is_julian d then 0, d + 32082
     else 
       let b = (4 * a + 3) / 146097 in
       b, a - (b * 146097) / 4 in
@@ -147,16 +218,6 @@ let days_in_month d =
     | Feb -> if is_leap_year (year d) then 29 else 28
 
 let is_leap_day d = is_leap_year d && month d = Feb && day_of_month d = 24
-
-(*S Arithmetic operations on dates. *)
-
-let add d n = d + n
-
-let remove d n = d - n
-
-let next d = d + 1
-
-let previous d = d - 1
 
 (*S Operations on years. *)
 
@@ -213,6 +274,30 @@ let easter y =
   let l = i - j in
   let m = 3 + (l + 40) / 44 in
   make y m (l + 28 - 31 * (m / 4))
+
+(*S Arithmetic operations on dates and periods. *)
+
+let add d p = 
+  make 
+    (year d         + p.Period.y) 
+    (int_month d    + p.Period.m) 
+    (day_of_month d + p.Period.d)
+
+let sub x y = { Period.empty with Period.d = x - y }
+
+let rem d p = add d (Period.opp p)
+
+let next d = function
+  | `Year  -> add d (Period.year 1)
+  | `Month -> add d (Period.month 1)
+  | `Week  -> add d (Period.day 7)
+  | `Day   -> add d (Period.day 1)
+
+let prev d = function
+  | `Year  -> add d (Period.year (- 1))
+  | `Month -> add d (Period.month (- 1))
+  | `Week  -> add d (Period.day (- 7))
+  | `Day   -> add d (Period.day (- 1))
 
 (*S Exported Coercions. 
 
