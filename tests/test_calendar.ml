@@ -1,4 +1,4 @@
-(*i $Id: test_calendar.ml,v 1.7 2003-07-16 09:04:30 signoles Exp $ i*)
+(*i $Id: test_calendar.ml,v 1.8 2003-07-16 16:21:18 signoles Exp $ i*)
 
 Printf.printf "\nTests of Calendar:\n\n";;
 
@@ -93,3 +93,4 @@ test (from_unixtm (to_unixtm (make 2003 7 16 23 22 21)) =
 let ok = nb_ok ();;
 let bug = nb_bug ();;
 Printf.printf "\ntests ok : %d; tests ko : %d\n" ok bug;;
+flush stdout;;

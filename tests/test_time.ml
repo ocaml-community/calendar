@@ -1,4 +1,4 @@
-(*i $Id: test_time.ml,v 1.5 2003-07-16 09:04:30 signoles Exp $ i*)
+(*i $Id: test_time.ml,v 1.6 2003-07-16 16:21:18 signoles Exp $ i*)
 
 Printf.printf "\nTests of Time:\n\n";;
 
@@ -43,3 +43,4 @@ test (not (is_am (make 34 0 0))) "not (is_pm 34 0 0)";;
 let ok = nb_ok ();;
 let bug = nb_bug ();;
 Printf.printf "\ntests ok : %d; tests ko : %d\n" ok bug;;
+flush stdout;;
