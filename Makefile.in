@@ -11,7 +11,7 @@
 #  
 #  See the GNU Library General Public License version 2 for more details
 #
-# $Id: Makefile.in,v 1.16 2003-07-11 14:48:40 signoles Exp $
+# $Id: Makefile.in,v 1.17 2003-07-11 15:13:24 signoles Exp $
 
 # Used programs
 ###############
@@ -116,8 +116,8 @@ $(TESTS_CMO): tests/gen_test.cmo
 tests/test.cmo: $(TESTS_CMO)
 
 tests/test: src/$(NAME).cma tests/test.cmo
-	$(CAMLC) -o $@ $(BYTEFLAGS) src/$(NAME).cma tests/gen_test.cmo \
-		$(TESTS_CMO) tests/test.cmo
+	$(CAMLC) -o $@ $(BYTEFLAGS) unix.cma str.cma src/$(NAME).cma \
+		tests/gen_test.cmo $(TESTS_CMO) tests/test.cmo
 
 .PHONY: tests
 tests: BYTEFLAGS := $(BYTEFLAGS) -I tests

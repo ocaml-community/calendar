@@ -98,8 +98,12 @@ Produce the source file documentation. You need ocamlweb (**).
 iv. calendar.ps.gz
 Same as above. Moreover the documentation is zipped.
 
-(*)  ocamlwc is available at http://www.lri.fr/~filliatr/software.en.html
-(**) ocamlweb is available at http://www.lri.fr/~filliatr/ocamlweb
+v. mli2html
+Produce the html files in the html directory. You need caml2html (***).
+
+(*)   ocamlwc is available at http://www.lri.fr/~filliatr/software.en.html
+(**)  ocamlweb is available at http://www.lri.fr/~filliatr/ocamlweb
+(***) caml2html is available at http://perso.wanadoo.fr/sebastien.ailleret/caml
 
 8- Contact the developper
 -------------------------
