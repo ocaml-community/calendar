@@ -13,7 +13,7 @@
  * See the GNU Library General Public License version 2 for more details
  *)
 
-(*i $Id: calendar.mli,v 1.11 2003-08-31 07:50:47 signoles Exp $ i*)
+(*i $Id: calendar.mli,v 1.12 2003-09-01 07:44:41 signoles Exp $ i*)
 
 (*S Introduction. 
 
@@ -189,7 +189,7 @@ module Period : sig
   (* Convert a time period to a calendar period. *)
   val from_time : Time.Period.t -> t
 
-  exception Not_computable (* = Date.Period.Not_computable *)
+  exception Not_computable (*r [= Date.Period.Not_computable] *)
 
   (* Convert a calendar period to a date period. Throw [Not_computable] if the
      time period is not computable.
