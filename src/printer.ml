@@ -13,7 +13,7 @@
  * See the GNU Library General Public License version 2 for more details
  *)
 
-(*i $Id: printer.ml,v 1.8 2003-09-18 16:15:10 signoles Exp $ i*)
+(*i $Id: printer.ml,v 1.9 2004-03-10 14:27:38 signoles Exp $ i*)
 
 module type S = sig
   type t
@@ -122,11 +122,10 @@ struct
     let day_of_year = lazy (X.day_of_year x) in
     let week = lazy (X.week x) in
     let year = lazy (X.year x) in
-    let syear = lazy ((Lazy.force year) mod 100) in
+    let syear = lazy (Lazy.force year mod 100) in
     let hour = lazy (X.hour x) in
     let shour = 
-      lazy (let h = Lazy.force hour in
-	    (if h = 0 then 24 else h) mod 12) in
+      lazy (let h = Lazy.force hour in (if h = 0 then 24 else h) mod 12) in
     let minute = lazy (X.minute x) in
     let second = lazy (X.second x) in
     let apm = lazy (if Lazy.force hour < 12 then "AM" else "PM") in
@@ -166,10 +165,10 @@ struct
 	      print_int pad 10 syear
 	  | 'e' -> print_int Blank 10 day_of_month
 	  | 'H' -> print_int pad 10 hour;
-	  | 'I' -> print_number fmt pad 10 ((Lazy.force hour) mod 12)
+	  | 'I' -> print_number fmt pad 10 (Lazy.force hour mod 12)
 	  | 'j' -> print_int pad 100 day_of_year
 	  | 'k' -> print_int Blank 10 hour
-	  | 'l' -> print_number fmt Blank 10 ((Lazy.force hour) mod 12)
+	  | 'l' -> print_number fmt Blank 10 (Lazy.force hour mod 12)
 	  | 'm' -> print_int pad 10 int_month
 	  | 'M' -> print_int pad 10 minute
 	  | 'n' -> print_char '\n'
@@ -187,7 +186,7 @@ struct
 	  | 'Y' -> print_int pad 1000 year
 	  | _  -> bad_format ()
 	end;
-	parse_format (i + 1) Zero
+	parse_format (i + 1)
       in
       assert (i <= len);
       if i = len then bad_format ();
@@ -200,16 +199,16 @@ struct
 	    if pad <> Zero then bad_format ();
 	    (* else *) parse_option (i + 1) Blank
 	| c  -> parse_char c
-    and parse_format i pad =
-      assert (i <= len && pad = Zero);
+    and parse_format i =
+      assert (i <= len);
       if i = len then ()
       else match f.[i] with
 	| '%' -> parse_option (i + 1) Zero
 	| c   -> 
 	    Format.pp_print_char fmt c;
-	    parse_format (i + 1) Zero
+	    parse_format (i + 1)
     in 
-    parse_format 0 Zero;
+    parse_format 0;
     Format.pp_print_flush fmt ()
 
   let print f = fprint f Format.std_formatter
@@ -235,12 +234,13 @@ struct
       incr j 
     in
     let read_number n =
-      if !j + n > lens then not_match f s;
+      let jn = !j + n in
+      if jn > lens then not_match f s;
       let res = 
 	try int_of_string (String.sub s !j n)
 	with Failure _ -> not_match f s
       in 
-      j := !j + n;
+      j := jn;
       res
     in
     let rec parse_option i = 
