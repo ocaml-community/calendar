@@ -1,3 +1,8 @@
+version 1.06, 2003-12-05:
+=========================
+* compile with an optimized compiler (ocamlopt.opt or ocamlc.opt) if possible
+* improved "make install"
+
 version 1.05, 2003-09-18:
 =========================
 * add module Printer (from a suggestion of Stefano Zacchiroli)

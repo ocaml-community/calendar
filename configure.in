@@ -72,6 +72,34 @@ else
         fi
 fi
 
+# checking for ocamlc.opt
+AC_CHECK_PROG(OCAMLCDOTOPT,ocamlc.opt,ocamlc.opt,no)
+if test "$OCAMLCDOTOPT" != no ; then
+	AC_MSG_CHECKING(ocamlc.opt version)
+	TMPVERSION=`$OCAMLCDOTOPT -v | sed -n -e 's|.*version *\(.*\)$|\1|p' `
+	if test "$TMPVERSION" != "$OCAMLVERSION" ; then
+	    AC_MSG_RESULT(differs from ocamlc; ocamlc.opt discarded.)
+	else
+	    AC_MSG_RESULT(ok)
+	    OCAMLC=$OCAMLCDOTOPT
+	fi
+fi
+
+# checking for ocamlopt.opt
+if test "$OCAMLOPT" != no ; then
+    AC_CHECK_PROG(OCAMLOPTDOTOPT,ocamlopt.opt,ocamlopt.opt,no)
+    if test "$OCAMLOPTDOTOPT" != no ; then
+	AC_MSG_CHECKING(ocamlc.opt version)
+	TMPVER=`$OCAMLOPTDOTOPT -v | sed -n -e 's|.*version *\(.*\)$|\1|p' `
+	if test "$TMPVER" != "$OCAMLVERSION" ; then
+	    AC_MSG_RESULT(differs from ocamlc; ocamlopt.opt discarded.)
+	else
+	    AC_MSG_RESULT(ok)
+	    OCAMLOPT=$OCAMLOPTDOTOPT
+	fi
+    fi
+fi
+
 # ocamldep and ocamlfind should also be present in the path
 AC_CHECK_PROG(OCAMLDEP,ocamldep,ocamldep,no)
 if test "$OCAMLDEP" = no ; then
