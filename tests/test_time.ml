@@ -1,4 +1,4 @@
-(*i $Id: test_time.ml,v 1.2 2003-07-07 17:34:56 signoles Exp $ i*)
+(*i $Id: test_time.ml,v 1.3 2003-07-07 21:01:34 signoles Exp $ i*)
 
 Printf.printf "\nTests of Time:\n\n";;
 
@@ -30,7 +30,13 @@ test (to_hours (make 1 3 0) = 1.05) "to_hours";;
 test (from_seconds 3723 = from_minuts 62.05) "from_seconds; from_minuts";;
 test (from_hours 1.05 = make 1 3 0) "from_hours";;
 test (is_pm (midnight ())) "is_pm midnight";;
+test (is_pm (make 10 0 0)) "is_pm 10-0-0";;
+test (is_pm (make 34 0 0)) "is_pm 34-0-0";;
+test (not (is_pm (make (- 10) 0 0))) "not (is_pm (- 10) 0 0)";;
 test (is_am (midday ())) "is_am midday";;
+test (is_am (make 20 0 0)) "is_am 20-0-0";;
+test (is_am (make (- 34) 0 0)) "is_am (- 34) 0 0";;
+test (not (is_am (make 34 0 0))) "not (is_pm 34 0 0)";;
 
 let ok = nb_ok ();;
 let bug = nb_bug ();;

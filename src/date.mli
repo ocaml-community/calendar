@@ -13,7 +13,7 @@
  * See the GNU Library General Public License version 2 for more details
  *)
 
-(*i $Id: date.mli,v 1.5 2003-07-07 17:34:56 signoles Exp $ i*)
+(*i $Id: date.mli,v 1.6 2003-07-07 21:01:34 signoles Exp $ i*)
 
 (*S Introduction. 
 
@@ -22,20 +22,20 @@
 
   All the dates should belong to 
   [[January, 1st 4713 BC; January 22th, 3268 AC]] (called the Julian period).
-  We raise the [Out_of_bounds] exception if you attempt to create a date 
+  An [Out_of_bounds] exception is raised if you attempt to create a date 
   outside the Julian period.
 
   If a date [d] does not exists and if [d_bef] (resp. [d_aft]) is 
   the last (resp. first) existing date before (resp. after) [d], 
-  we automatically coerce it to [d_aft + d - d_bef - 1].
+  [d] is automatically coerced to [d_aft + d - d_bef - 1].
   For example, both dates "February 29th, 2003" and 
   "February 30th, 2003" do not exist and they are coerced respectively to the 
   date "Mars 1st, 2003" and "Mars 2nd, 2003". 
-  We call this rule the "coercion rule".
-  As an exception to the coercion rule, the date belongs to 
-  [[October 5th, 1582; October 14th, 1582]] do not exist and we raise the 
-  [Undefined] exception if you attempt to create such a date.
-  Those dropped days corresponds to the change from the Julian to the Gregorian
+  This rule is called the \emph{coercion rule}.
+  As an exception to the coercion rule, the date belonging to 
+  [[October 5th, 1582; October 14th, 1582]] do not exist and an [Undefined] 
+  exception is raised if you attempt to create such a date.
+  Those dropped days correspond to the change from the Julian to the Gregorian
   calendar.\\ *)
 
 (*S Datatypes. *)
@@ -65,7 +65,7 @@ exception Undefined
 
 (* [make year month day] makes the date year-month-day.
    A BC year [y] corresponds to the year [-(y+1)].
-   E.g. the years (5 BC) and (1 BC) respectively corresponds to the years 
+   E.g. the years (5 BC) and (1 BC) respectively correspond to the years 
    (-4) and 0. *)
 val make : int -> int -> int -> t
 
@@ -128,14 +128,16 @@ val to_mjd : t -> int
    Same behavior as [Pervasives.compare]. *)
 val compare : t -> t -> int
 
-(* Return [true] iff a date is a leap day 
-   (i.e. February, 24th of a leap year). *)
+(* Return [true] if a date is a leap day
+   (i.e. February, 24th of a leap year); [false] otherwise. *)
 val is_leap_day : t -> bool
 
-(* Return [true] iff a date belongs to the Gregorian calendar. *)
+(* Return [true] if a date belongs to the Gregorian calendar;
+   [false] otherwise. *)
 val is_gregorian : t -> bool
 
-(* Return [true] iff a date belongs to the Julian calendar. *)
+(* Return [true] iff a date belongs to the Julian calendar;
+   [false] otherwise. *)
 val is_julian : t -> bool
 
 (*S Coercions. *)
@@ -152,7 +154,7 @@ val from_string : string -> t
 val int_of_day : day -> int
     
 (* Inverse of [int_of_day]. 
-   Raise [Invalid_argument] if the int $\notin [1; 7]$. *)
+   Raise [Invalid_argument] if the argument $\notin [1; 7]$. *)
 val day_of_int : int -> day
 
 (* Convert a month to an integer respecting ISO-8601.
@@ -160,7 +162,7 @@ val day_of_int : int -> day
 val int_of_month : month -> int
 
 (* Inverse of [int_of_month]. 
-   Raise [Invalid_argument] if the month $\notin [1; 12]$. *)
+   Raise [Invalid_argument] if the argument $\notin [1; 12]$. *)
 val month_of_int : int -> month
 
 (*S Period. 
@@ -215,10 +217,10 @@ val prev : t -> field -> t
 
 (*S Operations on years. *)
 
-(* Return [true] iff a year is a leap year. *)
+(* Return [true] if a year is a leap year; [false] otherwise. *)
 val is_leap_year : int -> bool
 
-(* Return [true] iff two years have the same calendar. *)
+(* Return [true] if two years have the same calendar; [false] otherwise. *)
 val same_calendar : int -> int -> bool
 
 (* Number of days in a year. *)

@@ -13,7 +13,7 @@
  * See the GNU Library General Public License version 2 for more details
  *)
 
-(*i $Id: date.ml,v 1.5 2003-07-07 17:34:56 signoles Exp $ i*)
+(*i $Id: date.ml,v 1.6 2003-07-07 21:01:34 signoles Exp $ i*)
 
 (*S Introduction.
 
@@ -24,7 +24,7 @@
 
 (*S Datatypes. *)
 
-type t = int (*r representing the Julian day *)
+type t = int (*r Representing the Julian day *)
 
 type day = Sun | Mon | Tue | Wed | Thu | Fri | Sat
 
@@ -56,7 +56,8 @@ external int_of_month : month -> int = "%identity"
 
 let lt (d1 : int * int * int) (d2 : int * int * int) = compare d1 d2 < 0
 
-(* [date_ok] returns [true] is the date belongs to the Julian period. *)
+(* [date_ok] returns [true] is the date belongs to the Julian period;
+   [false] otherwise. *)
 let date_ok y m d = lt (-4713, 12, 31) (y, m, d) && lt (y, m, d) (3268, 1, 23)
 
 let make y m d = 
@@ -163,7 +164,7 @@ let days_in_month d =
     | Apr | Jun | Sep | Nov -> 30
     | Feb -> if is_leap_year (year d) then 29 else 28
 
-(* Boolean operations (using some getters). *)
+(* Boolean operation using some getters. *)
 let is_leap_day d = 
   is_leap_year (year d) && month d = Feb && day_of_month d = 24
 
@@ -281,10 +282,7 @@ let easter y =
   let m = 3 + (l + 40) / 44 in
   make y m (l + 28 - 31 * (m / 4))
 
-(*S Exported Coercions. 
-
-  These coercions redefined those defined at the beginning of the module.
-  They respect ISO-8601. *)
+(*S Exported Coercions. *)
 
 let to_string d = 
   string_of_int (year d) ^ "-" ^ string_of_int (int_month d) 
@@ -294,6 +292,9 @@ let from_string s =
   match List.map int_of_string (Str.split (Str.regexp "-") s) with
     | [ y; m; d ] -> make (if s.[0] = '-' then - y else y) m d
     | _ -> raise (Invalid_argument (s ^ " is not a date"))
+
+(* These coercions redefined those defined at the beginning of the module.
+   They respect ISO-8601. *)
 
 let int_of_day d = let n = int_of_day d in if n = 0 then 7 else n
 

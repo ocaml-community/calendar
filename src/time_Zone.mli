@@ -13,7 +13,7 @@
  * See the GNU Library General Public License version 2 for more details
  *)
 
-(*i $Id: time_Zone.mli,v 1.4 2003-07-07 17:34:56 signoles Exp $ i*)
+(*i $Id: time_Zone.mli,v 1.5 2003-07-07 21:01:34 signoles Exp $ i*)
 
 (* [Time_Zone] manages the time zone by side effects:
    there is a [current] time zone in the program you can [change].\\ *)
@@ -28,8 +28,8 @@ type t =
 val current : unit -> t
 
 (* Change the current time zone by another one. 
-   Raise [Invalid_argument] is the specified time zone is [GMT_Plus x] with
-   x < -12 or x > 11 *)
+   Raise [Invalid_argument] if the specified time zone is [GMT_Plus x] with
+   $x < -12$ or $x > 11$ *)
 val change : t -> unit
 
 (* Return the gap between two time zone. 
@@ -40,5 +40,5 @@ val gap : t -> t -> int
 (* [from_gmt ()] is equivalent to [gap GMT (current ())]. *)
 val from_gmt : unit  -> int
 
-(* [to_gmt ()] is equivalent to [- from_gmt ()]. *)
+(* [to_gmt ()] is equivalent to [gap (current ()) GMT]. *)
 val to_gmt : unit -> int

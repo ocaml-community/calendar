@@ -13,7 +13,7 @@
  * See the GNU Library General Public License version 2 for more details
  *)
 
-(*i $Id: time_Zone.ml,v 1.4 2003-07-07 17:34:56 signoles Exp $ i*)
+(*i $Id: time_Zone.ml,v 1.5 2003-07-07 21:01:34 signoles Exp $ i*)
 
 type t = 
   | GMT
@@ -38,16 +38,19 @@ let change = function
   | _ as t -> tz := t
 
 let gap t1 t2 =
-  let rec aux t1 t2 = 
+  let aux t1 t2 = 
+    assert (t1 < t2);
     match t1, t2 with
-      | GMT, GMT 
-      | Local, Local           -> 0
       | GMT, Local             -> gap_gmt_local
       | GMT, GMT_Plus x        -> x
       | Local, GMT_Plus x      -> x - gap_gmt_local
       | GMT_Plus x, GMT_Plus y -> y - x
-      | _                      -> - aux t2 t1
-  in let res = aux t1 t2 in
+      | _                      -> assert false
+  in let res = 
+    if t1 = t2 then 0
+    else if t1 < t2 then aux t1 t2
+    else - aux t2 t1
+  in
   assert (in_bounds res);
   res
 

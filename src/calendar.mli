@@ -13,33 +13,32 @@
  * See the GNU Library General Public License version 2 for more details
  *)
 
-(*i $Id: calendar.mli,v 1.3 2003-07-07 17:34:56 signoles Exp $ i*)
+(*i $Id: calendar.mli,v 1.4 2003-07-07 21:01:34 signoles Exp $ i*)
 
 (*S Introduction. 
 
-  This module combines implementations on dates and times.
+  This module combines the implementations on [Date] and [Time].
   So, a calendar is a 6-uple (year, month, day, hour, minut, second).
 
   If you only need operations on dates, you should better use the module 
   [Date]. But if you need to manage more precise date, use this module. 
 
-  The exact Julian period is now 
+  The exact Julian period is now\\ 
   [[January, 1st 4713 BC at midday GMT; January 22th, 3268 AC at midday GMT]].
 
   This module uses floating point arithmetics. 
-  Then, egality over calendars may be erroneous.
-  Use the [egal] function defined in this module is more precise than use 
-  [(=)]. *)
+  Then, egality over calendars may be erroneous (as egality over [float]).
+  [egal] function defined in this module is however more precise than [(=)]. *)
 
 (*S Datatypes. *)
 
-(* Type of a date refined with a time, so called a {\emph calendar}. *)
+(* Type of a date refined with a time, so called a \emph{calendar}. *)
 type t
 
 (* Days of the week. *)
 type day = Date.day = Sun | Mon | Tue | Wed | Thu | Fri | Sat
 
-(* Month of the year. *)
+(* Months of the year. *)
 type month = Date.month =
     Jan | Feb | Mar | Apr | May | Jun | Jul | Aug | Sep | Oct | Nov | Dec
 
@@ -55,13 +54,13 @@ val make : int -> int -> int -> int -> int -> int -> t
 (* [now ()] returns the current date and time (in the current time zone). *)
 val now : unit -> t
 
-(* Return the Julian Day. 
+(* Return the Julian day. 
    More precise than [Date.from_jd]: the fractional part represents the 
    time. *)
 val from_jd : float -> t
 
-(* Return the Modified Julian Day.
-   It is [Julian Day - 2 400 000.5] (more precise than [Date.from_mjd]). *)
+(* Return the Modified Julian day.
+   It is [Julian day - 2 400 000.5] (more precise than [Date.from_mjd]). *)
 val from_mjd : float -> t
 
 (*S Conversions. *)
@@ -97,10 +96,10 @@ val second : t -> int
 
 (*S Boolean operations on calendars. *)
 
-(* Those functions have the same behavious as those defined in [Date]. *)
-
 (* [egal] should be used instead of [(=)]. *)
 val egal : t -> t -> bool
+
+(* Those functions have the same behavious as those defined in [Date]. *)
 
 val compare : t -> t -> int
 val is_leap_day : t -> bool

@@ -13,18 +13,18 @@
  * See the GNU Library General Public License version 2 for more details
  *)
 
-(*i $Id: time.mli,v 1.5 2003-07-07 17:34:56 signoles Exp $ i*)
+(*i $Id: time.mli,v 1.6 2003-07-07 21:01:34 signoles Exp $ i*)
 
 (*S Introduction.
 
   This module implements operations on times.
   A time is a triple (hour, minut, second). 
 
-  If minuts and seconds do not belong to [[0; 59]], we coerce them into this
+  If minuts and seconds do not belong to [[0; 59]], they are coerced into this
   interval. For example, the time "30 hours, 60 minuts, 80 seconds" is coerced
   to the time "31 hours, 1 minut, 20 seconds". 
 
-  Each time are interpreted in the current time zone (given by 
+  Each time is interpreted in the current time zone (given by 
   [Time_Zone.current ()]). So, if you change the time zone (by 
   [Time_Zone.change]), each time consequently changes. 
   If you want to express a time in another time zone (and do not affect 
@@ -47,11 +47,11 @@ val make : int -> int -> int -> t
 val now : unit -> t
   
 (* [midnight ()] is midnight (expressed in the current time zone).
-   So, it is equivalent to [make 0 0 0]. *)
+   So, it has always the same behaviour as [make 0 0 0]. *)
 val midnight : unit -> t
   
 (* [midday ()] is midday (expressed in the current time zone).
-   So, it is equivalent to [make 12 0 0]. *)
+   So, it has always the same behaviour as [make 12 0 0]. *)
 val midday : unit -> t
 
 (*S Conversions. *)
@@ -63,20 +63,20 @@ val midday : unit -> t
    returns the time 22-0-0. *)
 val convert : t -> Time_Zone.t -> Time_Zone.t -> t
 
-(* [to_gmt t] is equivalent to 
-   [convert t (Time_Zone.current ()) Time_Zone.GMT]. *)
-val to_gmt : t -> t
-
 (* [from_gmt t] is equivalent to
    [convert t Time_Zone.GMT (Time_Zone.current ())]. *)
 val from_gmt : t -> t
 
+(* [to_gmt t] is equivalent to 
+   [convert t (Time_Zone.current ()) Time_Zone.GMT]. *)
+val to_gmt : t -> t
+
 (* [normalize t] returns [t] such that [hour t] $\in [0; 23]$.
    The second component of the result is the number of days needed by the 
    modification.
-   E.g. [normalize (make 22-0-0)] returns the time 22-0-0 and 0,
-   [normalize (make 73-0-0)] returns the time 1-0-0 and 3 and
-   [normalize (make (-73)-0-0)] returns the time 23-0-0 and (-4). *)
+   E.g. [normalize (make 22 0 0)] returns the time 22-0-0 and 0,
+   [normalize (make 73 0 0)] returns the time 1-0-0 and 3 and
+   [normalize (make (-73) 0 0)] returns the time 23-0-0 and (-4). *)
 val normalize : t -> t * int
 
 (*S Getters. *)
@@ -98,7 +98,7 @@ val second : t -> int
 val to_seconds : t -> int
 
 (* Number of minuts of a time. The resulting fractional part represents 
-   seconds.
+   seconds.\\
    E.g. [to_minuts (make 1 2 3)] returns [60 + 2 + 0.05 = 62.05]. *)
 val to_minuts : t -> float
 
@@ -113,10 +113,12 @@ val to_hours : t -> float
    Same behaviour as [Pervasives.compare]. *)
 val compare : t -> t -> int
 
-(* Return [true] is the time is before midday; [false] otherwise.  *)
+(* Return [true] is the time is before midday; [false] otherwise. 
+   E.g. both [is_pm (make 10 0 0)] and [is_pm (make 34 0 0)] return [true]. *)
 val is_pm : t -> bool
     
-(* Return [true] is the time is after midday; [false] otherwise. *)
+(* Return [true] is the time is after midday; [false] otherwise. 
+   E.g. both [is_am (make 20 0 0)] and [is_am (make 44 0 0)] return [true]. *)
 val is_am : t -> bool
 
 (*S Coercions. *)
@@ -142,7 +144,7 @@ val from_hours : float -> t
   A period is the number of seconds between two times. *)
 
 module Period : sig
-  include Period.S
+  include Period.S (*r Arithmetic operations. *)
 
   (* Some other arithmetic operations. *)
 

@@ -1,4 +1,4 @@
-(*i $Id: test_calendar.ml,v 1.3 2003-07-07 17:34:56 signoles Exp $ i*)
+(*i $Id: test_calendar.ml,v 1.4 2003-07-07 21:01:34 signoles Exp $ i*)
 
 Printf.printf "\nTests of Calendar:\n\n";;
 
@@ -31,6 +31,36 @@ test (to_string (add d (Period.month 2)) = "2004-3-2; 12-24-48")
   "2003-12-31 + 2 mois";;
 let d2 = make (-3000) 1 1 6 12 24;;
 test (egal (rem d (sub d d2)) d2) "rem x (sub x y) = y";;
+
+(* Time *)
+
+Time_Zone.change (Time_Zone.GMT_Plus 10);;
+
+test (egal (add (make 0 0 0 10 0 0) (Period.hour 30)) (make 0 0 1 16 0 0))
+  "add 0-0-0-20-0-0 30h";;
+test (egal (next (make 1999 12 31 23 59 59) `Second) (make 2000 1 1 0 0 0))
+  "next 1999-31-12-23-59-59 `Second";;
+(*Time_Zone.change Time_Zone.Local;;*)
+let n = now ();;
+Printf.printf "sss %s %s %s\n" (to_string (now ())) (to_string n) (to_string (prev (next n `Minut) `Minut));;
+Printf.printf "sss %s %s\n" (to_string (next n `Minut)) (to_string (prev n `Minut));;
+
+test (egal (prev (next n `Minut) `Minut) n) "prev next = id";;
+test (egal 
+	(convert 
+	   (make 0 0 0 23 0 0) 
+	   (Time_Zone.GMT_Plus 2) 
+	   (Time_Zone.GMT_Plus 4))
+	(make 0 0 1 1 0 0)) "convert";;
+test (hour (make 0 0 0 20 0 0) = 20) "hour";;
+test (minut (make 0 0 0 20 10 0) = 10) "minut";;
+test (second (make 0 0 0 20 10 5) = 5) "second";;
+test (is_pm (make 0 0 0 10 0 0)) "is_pm 10-0-0";;
+test (is_pm (make 0 0 0 34 0 0)) "is_pm 34-0-0";;
+test (not (is_pm (make 0 0 0 (- 10) 0 0))) "not (is_pm (- 10) 0 0)";;
+test (is_am (make 0 0 0 20 0 0)) "is_am 20-0-0";;
+test (is_am (make 0 0 0 (- 34) 0 0)) "is_am (- 34) 0 0";;
+test (not (is_am (make 0 0 0 34 0 0))) "not (is_pm 34 0 0)";;
 
 let ok = nb_ok ();;
 let bug = nb_bug ();;

@@ -13,14 +13,18 @@
  * See the GNU Library General Public License version 2 for more details
  *)
 
-(*i $Id: calendar.ml,v 1.4 2003-07-07 17:34:56 signoles Exp $ i*)
+(*i $Id: calendar.ml,v 1.5 2003-07-07 21:01:34 signoles Exp $ i*)
+
+(*S Introduction.
+
+  A calendar is representing by its (exact) Julian Day -. 0.5.
+  This gap of 0.5 is because the Julian period begins 
+  January first, 4713 BC at MIDDAY (and then, this Julian day is 0.0). 
+  But, for implementation facilities, the Julian day 0.0 is coded as
+  January first, 4713 BC at MIDNIGHT. *)
 
 (*S Datatypes. *)
 
-(* A calendar is representing by its (exact) Julian Day -. 0.5.
-   0.5 is because the Julian Period begins January first, 4713 BC at MIDDAY
-   (and then, this Julian day is 0.0). But, for us, the Julian day 0.0 is
-   January first, 4713 BC at MIDNIGHT (for implementation facilities). *)
 type t = float
 
 type day = Date.day = Sun | Mon | Tue | Wed | Thu | Fri | Sat
@@ -38,13 +42,14 @@ let to_gmt x = convert x (Time_Zone.current ()) Time_Zone.GMT
 
 let from_gmt x = convert x Time_Zone.GMT (Time_Zone.current ())
 
-(* Local [from_date]: ignore time part. *)
+(* Local [from_date]: ignore time part and time zone. *)
 let from_date x = float_of_int (Date.to_jd x)
+
+(* Local [from_time]: ignore time zone. *)
+let from_time x = to_gmt ((float_of_int (Time.to_seconds x)) /. 86400.) -. 0.5
 
 (* Return the integral part of [x] as a date. *)
 let to_date x = Date.from_jd (int_of_float (from_gmt x +. 0.5))
-
-let from_time x = to_gmt ((float_of_int (Time.to_seconds x)) /. 86400.) -. 0.5
 
 (* Return the fractional part of [x] as a time. *)
 let to_time x = 
@@ -65,7 +70,15 @@ let make y m d h mn s =
   let x = build (Date.make y m d) (Time.make h mn s) in
   if is_valid x then x else raise Date.Out_of_bounds
 
-let now () = build (Date.today ()) (Time.now ())
+let now () = 
+  let now = Unix.gmtime (Unix.gettimeofday ()) in
+  from_gmt (make 
+	      (now.Unix.tm_year + 1900) 
+	      (now.Unix.tm_mon + 1) 
+	      (now.Unix.tm_mday) 
+	      (now.Unix.tm_hour) 
+	      (now.Unix.tm_min) 
+	      (now.Unix.tm_sec))
 
 let from_jd x = to_gmt x
 
@@ -75,7 +88,7 @@ let from_mjd x = to_gmt x +. 2400000.5
 
 let to_jd x = from_gmt x
 
-let to_mjd x = let x = from_gmt x -. 2400000.5 in Printf.printf "%f\n" x; x
+let to_mjd x = from_gmt x -. 2400000.5
 
 let days_in_month x = Date.days_in_month (to_date x)
 
@@ -162,7 +175,9 @@ end
 
 (*S Arithmetic operations on calendars and periods. *)
 
-let add x p = 
+let add x p =
+  (* potentiellement bugge sur des periodes de 1 mois
+     avec une date franchissant un mois par decalage horaire. *)
   from_date (Date.add (to_date x) p.Period.d) +. 
     from_time (Time.add (to_time x) p.Period.t)
 
@@ -175,14 +190,15 @@ let sub x y =
 
 let next x f = 
   let t, d = modf x in
-  Printf.printf "time = %s\n" (to_string x);
   match f with
-    | #Date.field as f -> 
-	let x = from_date (Date.next (to_date d) f) +. t in
-	Printf.printf "time_next = %s\n" (to_string x); x
+    | #Date.field as f -> from_date (Date.next (to_date d) f) +. t
     | #Time.field as f -> d +. from_time (Time.next (to_time t) f)
       
-let prev x f = next (-. x) f
+let prev x f =
+  let t, d = modf x in
+  match f with
+    | #Date.field as f -> from_date (Date.prev (to_date d) f) +. t
+    | #Time.field as f -> d +. from_time (Time.prev (to_time t) f)
 
 (* Exported [from_date]. *)
 let from_date x = to_gmt (from_date x) -. 0.5

@@ -13,30 +13,35 @@
  * See the GNU Library General Public License version 2 for more details
  *)
 
-(*i $Id: time.ml,v 1.4 2003-07-07 17:34:56 signoles Exp $ i*)
+(*i $Id: time.ml,v 1.5 2003-07-07 21:01:34 signoles Exp $ i*)
+
+(*S Introduction.
+
+  A time is represents by a number of seconds in GMT.
+  Outside this module, a time is interpreted in the current time zone.
+  So, each operations have to coerce a given time according to the current
+  time zone. *)
 
 (*S Datatypes. *)
 
-(* A time is represents by a number of seconds in GMT.
-   Outside this module, a time is interpreted in the current time zone.
-   So, each operations have to coerce a given time according to the current
-   time zone. *)
 type t = int
 
 type field = [ `Hour | `Minut | `Second ]
 
 (*S Conversions. *)
 
-let convert t t1 t2 = t + 3600 * Time_Zone.gap t1 t2
+let one_day = 86400
 
-let to_gmt t = convert t (Time_Zone.current ()) Time_Zone.GMT
+let convert t t1 t2 = t + 3600 * Time_Zone.gap t1 t2
 
 let from_gmt t = convert t Time_Zone.GMT (Time_Zone.current ())
 
+let to_gmt t = convert t (Time_Zone.current ()) Time_Zone.GMT
+
 let normalize t = 
   let t = from_gmt t in
-  let t_mod, t_div = to_gmt (t mod 86400), t / 86400 in
-  if t < 0 then t_mod + 86400, t_div - 1 else t_mod, t_div
+  let t_mod, t_div = to_gmt (t mod one_day), t / one_day in
+  if t < 0 then t_mod + one_day, t_div - 1 else t_mod, t_div
 
 (*S Constructors. *)
 
@@ -96,11 +101,11 @@ module Period = struct
 
   let make h m s = h * 3600 + m * 60 + s
 
-  let hour h = h * 3600
+  let hour x = x * 3600
 
-  let minut m = m * 60
+  let minut x = x * 60
 
-  let second s = s
+  let second x = x
 
   let empty = 0
 
