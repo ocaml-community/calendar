@@ -6,7 +6,9 @@
 * ouvrir la porte à de nouveaux calendriers en codant plusieurs implantations de Date basés sur divers calendrier (avec signature commune) et en ayant une version fonctorielle des modules basés sur Date (comme Calendar ou DatePrinter).
 Mettre alors en place des conversions inter-calendrier (de grégorien vers julien et vice-versa, etc).
 * ajouter de quoi faire un timer ?
-* adapter par rapport à la nouvelle FAQ
+* adapter par rapport à la nouvelle FAQ et aux fichiers .ps
 * ajouter module Version (version; compile_at) ; à faire seulement après -pack
 * supprimer ocamlweb et ses commentaires dédiés (ne conserver que ocamldoc)
 * ajouter module Printer.Date, .Time et .Calendar (déprécier les 3 autres)
+* ajouter tag example dans la doc (voir manuel ocamldoc)
+* changer le script de tests pour n'afficher que les tests faux
