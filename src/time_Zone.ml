@@ -13,7 +13,7 @@
  * See the GNU Library General Public License version 2 for more details
  *)
 
-(*i $Id: time_Zone.ml,v 1.2 2003-07-04 12:15:35 signoles Exp $ i*)
+(*i $Id: time_Zone.ml,v 1.3 2003-07-04 13:59:42 signoles Exp $ i*)
 
 type t = 
   | GMT
@@ -50,3 +50,7 @@ let gap t1 t2 =
   in let res = aux t1 t2 in
   assert (in_bounds res);
   res
+
+let from_gmt () = gap GMT (current ())
+
+let to_gmt () = gap (current ()) GMT

@@ -13,7 +13,7 @@
  * See the GNU Library General Public License version 2 for more details
  *)
 
-(*i $Id: date.ml,v 1.2 2003-07-04 12:15:52 signoles Exp $ i*)
+(*i $Id: date.ml,v 1.3 2003-07-04 13:59:42 signoles Exp $ i*)
 
 (*S Introduction.
 
@@ -29,7 +29,14 @@ type field = [ `Year | `Month | `Week | `Day ]
 
 module Period = struct
 
-  type t = { y : int; m : int; d : int }
+  (* Cannot use an [int] : periods on months and years have not a constant 
+     number of days. 
+     For example, if we add a "one year" period [p] to the date 2000-3-12,
+     [p] corresponds to 366 days (because 2000 is a leap year) and the 
+     resulting date is 2001-3-12 (yep, one year later). But if we add [p] to 
+     the date 1999-3-12, [p] corresponds to 365 days and the resulting date is
+     2000-3-12 (yep, one year later too). *)
+  type t = { y (* year *) : int; m (* month *) : int; d (* day *) : int }
 
   let empty = { y = 0; m = 0; d = 0 }
 
@@ -53,45 +60,49 @@ module Period = struct
 
   let opp x = { y = - x.y; m = - x.m; d = - x.d }
 
-  let compare = compare (*r lexicographical order on (y, m, d) *)
+  (* Implement a lexicographical order over the fields of [t].
+     Yep, [Pervasives.compare] correctly works. *)
+  let compare = compare 
 end
+
+(*S. The signature [S]. *)
 
 module type S = sig
   exception Out_of_bounds
-exception Undefined
-type day = Sun | Mon | Tue | Wed | Thu | Fri | Sat
-type month = 
-    Jan | Feb | Mar | Apr | May | Jun | Jul | Aug | Sep | Oct | Nov | Dec
-val today : unit -> t
-val from_jd : int -> t
-val from_mjd : int -> t
-val days_in_month : t -> int
-val day_of_week : t -> day
-val day_of_month : t -> int
-val day_of_year : t -> int
-val week : t -> int
-val month : t -> month
-val year : t -> int
-val to_jd : t -> int
-val to_mjd : t -> int
-val is_leap_day : t -> bool
-val is_gregorian : t -> bool
-val is_julian : t -> bool
-val int_of_day : day -> int
-val day_of_int : int -> day
-val int_of_month : month -> int
-val month_of_int : int -> month
-val is_leap_year : int -> bool
-val same_calendar : int -> int -> bool
-val days_in_year : int -> int
-val weeks_in_year : int -> int
-val century : int -> int
-val millenium : int -> int
-val solar_number : int -> int
-val indiction : int -> int
-val golden_number : int -> int
-val epact : int -> int
-val easter : int -> t
+  exception Undefined
+  type day = Sun | Mon | Tue | Wed | Thu | Fri | Sat
+  type month = 
+      Jan | Feb | Mar | Apr | May | Jun | Jul | Aug | Sep | Oct | Nov | Dec
+  val today : unit -> t
+  val from_jd : int -> t
+  val from_mjd : int -> t
+  val days_in_month : t -> int
+  val day_of_week : t -> day
+  val day_of_month : t -> int
+  val day_of_year : t -> int
+  val week : t -> int
+  val month : t -> month
+  val year : t -> int
+  val to_jd : t -> int
+  val to_mjd : t -> int
+  val is_leap_day : t -> bool
+  val is_gregorian : t -> bool
+  val is_julian : t -> bool
+  val int_of_day : day -> int
+  val day_of_int : int -> day
+  val int_of_month : month -> int
+  val month_of_int : int -> month
+  val is_leap_year : int -> bool
+  val same_calendar : int -> int -> bool
+  val days_in_year : int -> int
+  val weeks_in_year : int -> int
+  val century : int -> int
+  val millenium : int -> int
+  val solar_number : int -> int
+  val indiction : int -> int
+  val golden_number : int -> int
+  val epact : int -> int
+  val easter : int -> t
 end
 
 (*S Datatypes and exceptions. *)
@@ -141,7 +152,17 @@ let make y m d =
 
 let today () = 
   let today = Unix.gmtime (Unix.gettimeofday ()) in
-  make (today.Unix.tm_year + 1900) (today.Unix.tm_mon + 1) today.Unix.tm_mday
+  let d = (* current day at GMT *)
+    make (today.Unix.tm_year + 1900) (today.Unix.tm_mon + 1) today.Unix.tm_mday
+  and hour = Time_Zone.from_gmt () + today.Unix.tm_hour in
+  (* change the day according to the time zone *)
+  if hour < 0 then begin
+    assert (hour > - 13); 
+    d - 1
+  end else if hour >= 24 then begin
+    assert (hour < 36);
+    d + 1
+  end else d
 
 let from_jd n = n
 
@@ -193,10 +214,10 @@ let int_month d = let m = (5 * e d + 2) / 153 in m + 3 - 12 * (m / 10)
 let month d = month_of_int (int_month d - 1)
 
 let year d = 
-  let a = a d in
   let b, c = 
     if is_julian d then 0, d + 32082
     else 
+      let a = a d in
       let b = (4 * a + 3) / 146097 in
       b, a - (b * 146097) / 4 in
   let d = (4 * c + 3) / 1461 in

@@ -33,5 +33,8 @@ test
   "gap g6 Local = gap g6 GMT + gap GMT Local";;
 test_exn (lazy (change (GMT_Plus 13))) "change 13";;
 test_exn (lazy (change (GMT_Plus (-15)))) "change (-15)";;
+change (GMT_Plus 4);;
+test (from_gmt () = 4) "from_gmt () = 4";;
+test (to_gmt () = -4) "to_gmt () = -4";;
 
 Printf.printf "\ntests ok : %d; tests ko : %d\n" (nb_ok ()) (nb_bug ());;

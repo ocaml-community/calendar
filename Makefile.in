@@ -4,7 +4,7 @@
 #                                                                            #
 #                      Copyright (C) 2002 Julien SIGNOLES                    #
 #                                                                            #
-#       $Id: Makefile.in,v 1.2 2003-07-04 12:15:52 signoles Exp $       #
+#       $Id: Makefile.in,v 1.3 2003-07-04 13:59:42 signoles Exp $            #
 #                                                                            #
 ##############################################################################
 
@@ -29,8 +29,8 @@ NAME	= calendar
 DIRS	= src
 
 # Ocaml files
-SRC	= period.mli time_Zone.mli time_Zone.ml \
-	date.mli date.ml time.mli time.ml calendar.mli calendar.ml
+SRC	= time_Zone.mli time_Zone.ml period.mli \
+	time.mli time.ml date.mli date.ml calendar.mli calendar.ml
 SRC	:= $(addprefix src/, $(SRC))
 
 ML	= $(filter %.ml, $(SRC))
@@ -49,7 +49,7 @@ CAMLFLAGS= $(CAMLIBS)
 # Flags for ocamlc
 BYTEFLAGS= $(CAMLFLAGS)
 # Flags for ocamlopt
-OPTFLAGS = $(CAMLFLAGS) -I src/others
+OPTFLAGS = $(CAMLFLAGS) -noassert -I src/others
 
 # Main rules
 ############
@@ -83,11 +83,10 @@ src/$(NAME).cmxa: src/others/unix.cmx src/others/str.cmx $(CMX)
 # Test
 ######
 
-test: src/calendar.cma
-	ocamlc -o tests/test_date -I src $< tests/test_date.ml
-	ocamlc -o tests/test_time -I src $< tests/test_time.ml
-	ocamlc -o tests/test_calendar -I src $< tests/test_calendar.ml
-	ocamlc -o tests/test_timezone -I src $< tests/test_timezone.ml
+tests/%: src/calendar.cma tests/%.cmo
+	$(CAMLC) -o $@ -I src $^
+
+tests: tests/test_timezone tests/test_date tests/test_time tests/test_calendar
 
 # Documentation
 ###############
@@ -125,7 +124,7 @@ TAGS: $(SRC)
 
 clean:
 	rm -f TAGS
-	for i in . src src/others; do \
+	for i in . src src/others tests; do \
 	  rm -f $$i/*~ $$i/\#* $$i/*.cm[iox] $$i/*.*a $$i/*.o; \
 	done
 

@@ -1,5 +1,5 @@
 (*
- * Time
+ * Calendar library
  * Copyright (C) 2003 Julien SIGNOLES
  * 
  * This software is free software; you can redistribute it and/or
@@ -13,7 +13,7 @@
  * See the GNU Library General Public License version 2 for more details
  *)
 
-(*i $Id: time.ml,v 1.2 2003-07-04 12:15:52 signoles Exp $ i*)
+(*i $Id: time.ml,v 1.3 2003-07-04 13:59:42 signoles Exp $ i*)
 
 type t = int (*r GMT time *)
 

@@ -13,7 +13,7 @@
  * See the GNU Library General Public License version 2 for more details
  *)
 
-(*i $Id: time_Zone.mli,v 1.2 2003-07-04 12:15:35 signoles Exp $ i*)
+(*i $Id: time_Zone.mli,v 1.3 2003-07-04 13:59:42 signoles Exp $ i*)
 
 (* [Time_Zone] manages the time zone by side effects:
    there is a [current] time zone in the program you can [change]. *)
@@ -36,3 +36,9 @@ val change : t -> unit
    E.g. [(gap GMT (GMT_Plus 5))] returns 5 and, at Paris in summer,
    [(gap Local GMT)] returns -2. *)
 val gap : t -> t -> int
+
+(* [(from_gmt ())] is equivalent to [(gap GMT (current ()))]. *)
+val from_gmt : unit  -> int
+
+(* [(to_gmt ())] is equivalent to [- from_gmt ()]. *)
+val to_gmt : unit -> int
