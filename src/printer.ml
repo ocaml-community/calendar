@@ -13,7 +13,7 @@
  * See the GNU Library General Public License version 2 for more details
  *)
 
-(*i $Id: printer.ml,v 1.3 2003-09-18 10:29:27 signoles Exp $ i*)
+(*i $Id: printer.ml,v 1.4 2003-09-18 13:16:55 signoles Exp $ i*)
 
 module type S = sig
   type t
@@ -83,6 +83,9 @@ module Make(X : sig
 	      type t
 	      val make : int -> int -> int -> int -> int -> int -> t
 	      val default_format : string
+	      val hour : t -> int
+	      val minute : t -> int
+	      val second : t -> int
 	      val day_of_week : t -> Date.day
 	      val day_of_month : t -> int
 	      val day_of_year : t -> int
@@ -94,42 +97,80 @@ struct
   type t = X.t
 
   let fprint f fmt x =
-    let weekday, sweekday, day_of_week =
-      let dow = X.day_of_week x in
-      !day_name dow, short_day_name dow, Date.int_of_day dow (* att : histoire de decalage par rapport au dimanche qq part *) in
-    let month_name, smonth_name, int_month =
-      let m = X.month x in
-      !month_name m, short_month_name m, Date.int_of_month m in
-    let day_of_month = X.day_of_month x in
-    let day_of_year = X.day_of_year x in
-    let week = X.week x in
-    let year = X.year x in
-    let syear = year mod 100 in
     let len = String.length f in
+    let weekday = lazy (!day_name (X.day_of_week x)) in
+    let sweekday = lazy (short_day_name (X.day_of_week x)) in
+    let day_of_week = lazy (Date.int_of_day (X.day_of_week x)) in
+    let month_name = lazy (!month_name (X.month x)) in
+    let smonth_name = lazy (short_month_name (X.month x)) in
+    let int_month = lazy (Date.int_of_month (X.month x)) in
+    let day_of_month = lazy (X.day_of_month x) in
+    let day_of_year = lazy (X.day_of_year x) in
+    let week = lazy (X.week x) in
+    let year = lazy (X.year x) in
+    let syear = lazy ((Lazy.force year) mod 100) in
+    let hour = lazy (X.hour x) in
+    let shour = 
+      lazy (let h = Lazy.force hour in
+	    (if h = 0 then 24 else h) mod 12) in
+    let minute = lazy (X.minute x) in
+    let second = lazy (X.second x) in
+    let apm = lazy (if Lazy.force hour < 12 then "AM" else "PM") in
+    let print_char c = Format.pp_print_char fmt c in
+    let print_int pad k n = print_number fmt pad k (Lazy.force n) in
+    let print_string s = Format.pp_print_string fmt (Lazy.force s) in
+    let print_time pad h =
+      print_int pad 10 h;
+      print_char ':';
+      print_int pad 10 minute;
+      print_char ':';
+      print_int pad 10 second in
     let rec parse_option i pad =
       let parse_char c = 
 	begin match c with
-	  | '%' -> Format.pp_print_char fmt '%'
-	  | 'a' -> Format.pp_print_string fmt sweekday
-	  | 'A' -> Format.pp_print_string fmt weekday
-	  | 'b' | 'h' -> Format.pp_print_string fmt smonth_name
-	  | 'B' -> Format.pp_print_string fmt month_name
-	  | 'd' -> print_number fmt pad 10 day_of_month
+	  | '%' -> print_char '%'
+	  | 'a' -> print_string sweekday
+	  | 'A' -> print_string weekday
+	  | 'b' | 'h' -> print_string smonth_name
+	  | 'B' -> print_string month_name
+	  | 'c' ->
+	      print_string sweekday;
+	      print_char ' ';
+	      print_string smonth_name;
+	      print_char ' ';
+	      print_int pad 10 day_of_month;
+	      print_char ' ';
+	      print_time pad hour;
+	      print_char ' ';
+	      print_int pad 1000 year
+	  | 'd' -> print_int pad 10 day_of_month
 	  | 'D' -> 
-	      print_number fmt Zero 10 int_month;
-	      Format.pp_print_char fmt '/';
-	      print_number fmt Zero 10 day_of_month;
-	      Format.pp_print_char fmt '/';
-	      print_number fmt Zero 10 syear
-	  | 'e' -> print_number fmt Blank 10 day_of_month
-	  | 'j' -> print_number fmt pad 100 day_of_year
-	  | 'm' -> print_number fmt pad 10 int_month
-	  | 'n' -> Format.pp_print_char fmt '\n'
-	  | 't' -> Format.pp_print_char fmt '\t'
-	  | 'V' | 'W' -> print_number fmt pad 10 week	     
-	  | 'w' -> Format.pp_print_int fmt day_of_week
-	  | 'y' -> print_number fmt pad 10 syear
-	  | 'Y' -> print_number fmt pad 1000 year
+	      print_int pad 10 int_month;
+	      print_char '/';
+	      print_int pad 10 day_of_month;
+	      print_char '/';
+	      print_int pad 10 syear
+	  | 'e' -> print_int Blank 10 day_of_month
+	  | 'H' -> print_int pad 10 hour;
+	  | 'I' -> print_number fmt pad 10 ((Lazy.force hour) mod 12)
+	  | 'j' -> print_int pad 100 day_of_year
+	  | 'k' -> print_int Blank 10 hour
+	  | 'l' -> print_number fmt Blank 10 ((Lazy.force hour) mod 12)
+	  | 'm' -> print_int pad 10 int_month
+	  | 'M' -> print_int pad 10 minute
+	  | 'n' -> print_char '\n'
+	  | 'p' -> print_string apm
+	  | 'r' -> 
+	      print_time pad shour;
+	      print_char ' ';
+	      print_string apm
+	  | 'S' -> print_int pad 10 second
+	  | 't' -> print_char '\t'
+	  | 'T' -> print_time pad hour
+	  | 'V' | 'W' -> print_int pad 10 week	     
+	  | 'w' -> print_int Empty 1 day_of_week
+	  | 'y' -> print_int pad 10 syear
+	  | 'Y' -> print_int pad 1000 year
 	  | _  -> bad_format ()
 	end;
 	parse_format (i + 1) Zero
@@ -230,7 +271,10 @@ module DatePrinter =
 	 let make y m d _ _ _ =
 	   cannot_create_event "date" [ y; m; d ];
 	   make y m d
-	 let default_format = "%Y-%m-%d"
+	 let default_format = "%D"
+	 let hour _ = bad_format ()
+	 let minute _ = bad_format ()
+	 let second _ = bad_format ()
        end)
 
 module TimePrinter = 
@@ -239,14 +283,14 @@ module TimePrinter =
 	 let make _ _ _ h m s =
 	   cannot_create_event "time" [ h; m; s ];
 	   make h m s
-	 let default_format = ""
-	 let day_of_week x = bad_format ()
-	 let day_of_month x = bad_format ()
-	 let day_of_year x = bad_format ()
-	 let week x = bad_format ()
-	 let month x = bad_format ()
-	 let int_month x = bad_format ()
-	 let year x = bad_format ()
+	 let default_format = "%T"
+	 let day_of_week _ = bad_format ()
+	 let day_of_month _ = bad_format ()
+	 let day_of_year _ = bad_format ()
+	 let week _ = bad_format ()
+	 let month _ = bad_format ()
+	 let int_month _ = bad_format ()
+	 let year _ = bad_format ()
        end)
 
 module CalendarPrinter = 
@@ -255,5 +299,5 @@ module CalendarPrinter =
 	 let make y m d h mn s =
 	   cannot_create_event "calendar" [ y; m; d; h; mn; s ];
 	   make y m d h mn s
-	 let default_format = ""
+	 let default_format = "%D; %T"
        end)

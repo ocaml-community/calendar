@@ -13,16 +13,16 @@
  * See the GNU Library General Public License version 2 for more details
  *)
 
-(*i $Id: printer.mli,v 1.3 2003-09-18 10:29:27 signoles Exp $ i*)
+(*i $Id: printer.mli,v 1.4 2003-09-18 13:16:55 signoles Exp $ i*)
 
 module type S = sig
   type t
 
-  (* [fprint format formatter date] outputs [date] on [formatter] according to
-     the specified [format]. Only the date with a positive year are correctly 
+  (* [fprint format formatter x] outputs [x] on [formatter] according to
+     the specified [format]. The year before 1 AC are not correctly 
      pretty printed. Raise [Invalid_argument] if the format is incorrect.
      
-     A format is based on the Unix date format. It is
+     The formats are based on the Unix date formats. It is
      a string which contains two types of objects: plain characters and 
      conversion specifications. Those specifications are introduced by a [%]
      character and their meanings are:
@@ -33,19 +33,29 @@ module type S = sig
      [%A] & day name (by using [day_name])\\
      [%b] & short month name (by using [short_month_name])\\
      [%B] & month name (by using [month_name])\\
+     [%c] & shortcut for [%a %b %d %H:%M:%S %Y]\\
      [%d] & day of month (01..31)\\
      [%D] & shortcut for [%m/%d/%y]\\
-     [%e] & day of month, blank padded ( 1..31)\\
+     [%e] & same as [%_d]\\
      [%h] & same as [%b]\\
+     [%H] & hour (00..23)\\
+     [%I] & hour (01..12)\\
      [%j] & day of year (001..366)\\
+     [%k] & same as [%_H]\\
+     [%l] & same as [%_I]\\
      [%m] & month (01..12)\\
+     [%M] & minute (00..59)\\
      [%n] & a newline (same as [\n])\\
+     [%p] & AM or PM\\
+     [%r] & shortcut for [%I:%M:%S %p]\\
+     [%S] & second (00..60)\\
      [%t] & a horizontal tab (same as [\t])\\
+     [%T] & shortcut for [%H:%M:%S]\\
      [%V] & week number of year (01..53)\\
-     [%w] & day of week (0..6);  0 represents Sunday\\
+     [%w] & day of week (1..7)\\
      [%W] & same as [%V]\\
      [%y] & last two digits of year (00..99)\\
-     [%Y] & year (1970...)
+     [%Y] & year (four digits)
      \end{tabular}
      
      By default, date pads numeric fields with zeroes. Two special modifiers 
@@ -56,7 +66,7 @@ module type S = sig
      ['_' (underscore)] & pad the field with spaces
      \end{tabular}
      
-     Some examples follows ([d = make 2003 1 6] and 
+     Some examples follows ([d = Date.make 2003 1 6] and 
      [fmt = Format.std_formatter]):\\
      [fprint "%D" fmt d] prints [01/06/03]\\
      [fprint "the date is %B, the %-dth" fmt d] prints 
