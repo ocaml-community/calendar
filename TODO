@@ -1,7 +1,7 @@
 * ajouter AC ou BC dans le printer
 * utiliser -pack
 * to_ et from_business
-* constructeurs safe et "unsafe"
+* constructeurs safe et "unsafe" (pour Date, Time et Calendar)
 * constructeurs prenant le mois sous forme de month (et non de int) en param
 * Version.compile_at
 * manipulation de milli-secondes pour Time (module Precision_Time ?)
