@@ -13,7 +13,7 @@
  * See the GNU Library General Public License version 2 for more details
  *)
 
-(*i $Id: date.ml,v 1.11 2003-09-16 15:44:26 signoles Exp $ i*)
+(*i $Id: date.ml,v 1.12 2003-09-17 14:22:37 signoles Exp $ i*)
 
 (*S Introduction.
 
@@ -368,6 +368,11 @@ let rec print_number fmt pad k n =
     print_number fmt pad (k mod 10) n
   end
 
+let bad_format f = raise (Invalid_argument (f ^ " : bad date format"))
+
+let not_match f s = 
+  raise (Invalid_argument (s ^ " does not match the date format " ^ f))
+
 let fprint f fmt d =
   let weekday, sweekday, day_of_week =
     let dow = day_of_week d in
@@ -382,50 +387,54 @@ let fprint f fmt d =
   let year = year d in
   let syear = year mod 100 in
   let len = String.length f in
-  let rec parse_option i pad = 
-    assert (i <= len);
-    if i = len then raise (Invalid_argument "Bad date format")
-    else begin 
-      (match f.[i] with
-	 | '%' -> Format.pp_print_char fmt '%'
-	 | 'a' -> Format.pp_print_string fmt sweekday
-	 | 'A' -> Format.pp_print_string fmt weekday
-	 | 'b' | 'h' -> Format.pp_print_string fmt smonth_name
-	 | 'B' -> Format.pp_print_string fmt month_name
-	 | 'd' -> print_number fmt pad 10 day_of_month
-	 | 'D' -> 
-	     print_number fmt Zero 10 int_month;
-	     Format.pp_print_char fmt '/';
-	     print_number fmt Zero 10 day_of_month;
-	     Format.pp_print_char fmt '/';
-	     print_number fmt Zero 10 syear
-	 | 'e' -> print_number fmt Blank 10 day_of_month
-	 | 'j' -> print_number fmt pad 100 day_of_year
-	 | 'm' -> print_number fmt pad 10 int_month
-	 | 'n' -> Format.pp_print_char fmt '\n'
-	 | 't' -> Format.pp_print_char fmt '\t'
-	 | 'V' | 'W' -> print_number fmt pad 10 week	     
-	 | 'w' -> Format.pp_print_int fmt day_of_week
-	 | 'y' -> print_number fmt pad 10 syear
-	 | 'Y' -> print_number fmt pad 1000 year
-	 | '-' -> 
-	     if pad <> Zero then raise (Invalid_argument "Bad date format")
-	     else parse_option (i + 1) Empty
-	 | '_' -> 
-	     if pad <> Zero then raise (Invalid_argument "Bad date format")
-	     else parse_option (i + 1) Blank
-	 | _   -> raise (Invalid_argument "Bad date format"));
+  let rec parse_option i pad =
+    let parse_char c = 
+      begin match c with
+	| '%' -> Format.pp_print_char fmt '%'
+	| 'a' -> Format.pp_print_string fmt sweekday
+	| 'A' -> Format.pp_print_string fmt weekday
+	| 'b' | 'h' -> Format.pp_print_string fmt smonth_name
+	| 'B' -> Format.pp_print_string fmt month_name
+	| 'd' -> print_number fmt pad 10 day_of_month
+	| 'D' -> 
+	    print_number fmt Zero 10 int_month;
+	    Format.pp_print_char fmt '/';
+	    print_number fmt Zero 10 day_of_month;
+	    Format.pp_print_char fmt '/';
+	    print_number fmt Zero 10 syear
+	| 'e' -> print_number fmt Blank 10 day_of_month
+	| 'j' -> print_number fmt pad 100 day_of_year
+	| 'm' -> print_number fmt pad 10 int_month
+	| 'n' -> Format.pp_print_char fmt '\n'
+	| 't' -> Format.pp_print_char fmt '\t'
+	| 'V' | 'W' -> print_number fmt pad 10 week	     
+	| 'w' -> Format.pp_print_int fmt day_of_week
+	| 'y' -> print_number fmt pad 10 syear
+	| 'Y' -> print_number fmt pad 1000 year
+	| _  -> bad_format f
+      end;
       parse_format (i + 1) Zero
-    end
- and parse_format i pad =
-   assert (i <= len && pad = Zero);
-   if i = len then ()
-   else match f.[i] with
-     | '%' -> parse_option (i + 1) Zero
-     | c   -> 
-	 Format.pp_print_char fmt c;
-	 parse_format (i + 1) Zero
- in parse_format 0 Zero
+    in
+    assert (i <= len);
+    if i = len then bad_format f;
+    (* else *)
+    match f.[i] with
+      | '-' -> 
+	  if pad <> Zero then bad_format f;
+	  (* else *) parse_option (i + 1) Empty
+      | '_' -> 
+	  if pad <> Zero then bad_format f;
+	  (* else *) parse_option (i + 1) Blank
+      | c  -> parse_char c
+  and parse_format i pad =
+    assert (i <= len && pad = Zero);
+    if i = len then ()
+    else match f.[i] with
+      | '%' -> parse_option (i + 1) Zero
+      | c   -> 
+	  Format.pp_print_char fmt c;
+	  parse_format (i + 1) Zero
+  in parse_format 0 Zero
 
 let print f = fprint f Format.std_formatter
 
@@ -438,14 +447,59 @@ let sprint f d =
   Format.pp_print_flush fmt ();
   Buffer.contents buf
 
-let from_fstring f s = assert false
-
 let to_string = sprint "%Y-%m-%d"
 
-let from_string s = 
-  match List.map int_of_string (Str.split (Str.regexp "-") s) with
-    | [ y; m; d ] -> make (if s.[0] = '-' then - y else y) m d
-    | _ -> raise (Invalid_argument (s ^ " is not a date"))
+let from_fstring f s = 
+  let year, month, day = ref (-1), ref (-1), ref (-1) in
+  let j = ref 0 in
+  let lenf = String.length f in
+  let lens = String.length s in
+  let read_char c =
+    if !j >= lens || s.[!j] != c then not_match f s;
+    incr j 
+  in
+  let read_number n =
+    if !j + n > lens then not_match f s;
+    let res = 
+      try int_of_string (String.sub s !j n)
+      with Failure _ -> not_match f s
+    in 
+    j := !j + n;
+    res
+  in
+  let rec parse_option i = 
+    assert (i <= lenf);
+    if i = lenf then bad_format f;
+    (* else *)
+    (match f.[i] with
+       | '%' | 'n' | 't' as c -> read_char c
+       | 'd' -> day := read_number 2
+       | 'D' -> 
+	   month := read_number 2;
+	   read_char '/';
+	   day := read_number 2;
+	   read_char '/';
+	   year := read_number 2 + 1900
+       | 'm' -> month := read_number 2
+       | 'y' -> year := read_number 2 + 1900
+       | 'Y' -> year := read_number 4
+       | _  -> bad_format f);
+    parse_format (i + 1)
+  and parse_format i =
+    assert (i <= lenf);
+    if i = lenf then begin if !j != lens then not_match f s end
+    else match f.[i] with
+      | '%' -> parse_option (i + 1)
+      | c -> 
+	  read_char c;
+	  parse_format (i + 1)
+  in 
+  parse_format 0; 
+  if !year = -1 || !month = -1 || !day = -1 then
+    raise (Invalid_argument "Cannot create the date");
+  make !year !month !day
+
+let from_string = from_fstring "%Y-%m-%d"
 
 (*S Exported Coercions. *)
 
