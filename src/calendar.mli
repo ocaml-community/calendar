@@ -13,7 +13,7 @@
  * See the GNU Library General Public License version 2 for more details
  *)
 
-(*i $Id: calendar.mli,v 1.20 2004-11-17 16:05:18 signoles Exp $ i*)
+(*i $Id: calendar.mli,v 1.21 2004-11-17 16:25:42 signoles Exp $ i*)
 
 (** Calendar operations.
 
@@ -148,7 +148,7 @@ val to_unixfloat : t -> float
     @since 1.01 *)
 
 val from_unixfloat : float -> t
-  (** Inverse of [from_unixfloat]. Assumes the current time zone.
+  (** Inverse of [to_unixfloat]. Assumes the current time zone.
     So, we have the following invariant:
     [hour (from_unixfloat u) = (Unix.gmtime u).Unix.tm_hour].
     @since 1.01 *)
