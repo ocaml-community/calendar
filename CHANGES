@@ -1,3 +1,7 @@
+version 1.09.3, 2005-01-17:
+===========================
+* bug fixed in Date.to_business
+
 version 1.09.2, 2004-12-15:
 ===========================
 * bug fixed in Date.from_unixfloat and Date.from_unixtm with time zones <> UTC

@@ -13,7 +13,7 @@
  * See the GNU Library General Public License version 2 for more details
  *)
 
-(*i $Id: date.ml,v 1.25 2004-12-15 09:59:20 signoles Exp $ i*)
+(*i $Id: date.ml,v 1.26 2005-01-17 13:27:36 signoles Exp $ i*)
 
 (*S Introduction.
 
@@ -361,7 +361,13 @@ let to_business d =
   let y =
     let y = year d in
     match int_month d with
-      | 1 -> if w = 1 then y else y - 1
+      | 1 -> 
+	  if w > 4 then begin
+	    let y = y - 1 in
+	    assert (w = weeks_in_year y);
+	    y
+	  end else
+	    y
       | 12 -> if w = 1 then y + 1 else y
       | _ -> y
   in

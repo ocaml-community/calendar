@@ -9,3 +9,4 @@ Mettre alors en place des conversions inter-calendrier (de grégorien vers julien
 * adapter par rapport à la nouvelle FAQ
 * ajouter module Version (version; compile_at) ; à faire seulement après -pack
 * supprimer ocamlweb et ses commentaires dédiés (ne conserver que ocamldoc)
+* ajouter module Printer.Date, .Time et .Calendar (déprécier les 3 autres)
