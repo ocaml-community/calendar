@@ -145,10 +145,10 @@ export: $(NAME).ps.gz mli2html
 	  (tar cvf $(NAME)-$(VERSION).tar $(NAME); \
 	   gzip -f --best $(NAME)-$(VERSION).tar; \
 	   rm -rf $(NAME); \
-	   mv $(NAME).tar.gz $(EXPORT_DIR))
-	cd $(EXP_DIR); \
+	   mv $(NAME)-$(VERSION).tar.gz $(EXPORT_DIR))
+	cd $(EXPORT_DIR); \
 	  (rm -f prog.fr.tex prog.en.tex; \
-	   $(MAKE) VERSION=$(VERSION))
+	   $(MAKE) -C ../.. VERSION=$(VERSION))
 
 # Rebuilding Makefile
 #####################
