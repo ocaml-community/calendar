@@ -11,7 +11,7 @@
 #  
 #  See the GNU Library General Public License version 2 for more details
 #
-# $Id: Makefile.in,v 1.14 2003-07-09 07:17:08 signoles Exp $
+# $Id: Makefile.in,v 1.15 2003-07-09 07:17:57 signoles Exp $
 
 # Used programs
 ###############
@@ -174,7 +174,7 @@ TAGS: $(SRC)
 ##########
 
 clean:
-	rm -f TAGS $(TESTS)
+	rm -f TAGS $(TESTS) tests/test
 	for i in . src src/others tests; do \
 	  rm -f $$i/*~ $$i/\#* $$i/*.cm[iox] $$i/*.*a $$i/*.o $$i/a.out; \
 	done
