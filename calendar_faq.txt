@@ -1,0 +1,2680 @@
+URL: http://www.tondering.dk/claus/calendar.html
+
+                   FREQUENTLY ASKED QUESTIONS ABOUT
+                              CALENDARS
+
+Version 2.3 - 25 Sep 2000
+
+Copyright and disclaimer
+------------------------
+        This document is Copyright (C) 2000 by Claus Tondering.
+        E-mail: claus@tondering.dk.
+        The document may be freely distributed, provided this
+        copyright notice is included and no money is charged for
+        the document.
+
+        This document is provided "as is". No warranties are made as
+        to its correctness.
+
+Introduction
+------------
+        This is the calendar FAQ. Its purpose is to give an overview
+        of the Christian, Hebrew, and Islamic calendars in common
+        use. It will provide a historical background for the Christian
+        calendar, plus an overview of the French Revolutionary
+        calendar, the Maya calendar, and the Chinese calendar.
+
+        Comments are very welcome. My e-mail address is given above.
+
+        I would like to thank
+              - Dr. Monzur Ahmed of the University of Birmingham, UK,
+              - Michael J Appel,
+              - Jay Ball,
+              - Tom Box,
+              - Chris Carrier,
+              - Simon Cassidy,
+              - Claus Dobesch,
+              - Leofranc Holford-Strevens,
+              - David B. Kelley of the Hamamatsu University School of
+                Medicine in Japan,
+              - H. Koenig,
+              - Graham Lewis,
+              - Duncan MacGregor,
+              - Marcos Montes,
+              - James E. Morrison,
+              - Waleed A. Muhanna of the Fisher College of Business,
+                Columbus, Ohio, USA,
+              - Stefan Potthast,
+              - Yves Sagnier of the Centre d'Etudes de la Navigation
+                Aerienne,
+              - Paul Schlyter of the Swedish Amateur Astronomer's Society
+        for their help with this document.
+
+Changes since version 2.2
+-------------------------
+        A few minor corrections have been made, the most interesting
+        being the new algorithm in section 5.8.
+
+Writing dates and years
+-----------------------
+        Dates will be written in the British format (1 January)
+        rather than the American format (January 1). Dates will
+        occasionally be abbreviated: "1 Jan" rather than "1 January".
+
+        Years before and after the "official" birth year of Christ
+        will be written "45 BC" or "AD 1997", respectively. I prefer
+        this notation over the secular "45 BCE" and "1997 CE"
+        (See also section 2.13.4.)
+
+The 'mod' operator
+------------------
+        Throughout this document the operator 'mod' will be used to
+        signify the modulo or remainder operator. For example,
+        17 mod 7=3 because the result of the division 17/7 is 2 with a
+        remainder of 3.
+
+The text in square brackets
+---------------------------
+        Square brackets [like this] identify information that I am
+        unsure about and about which I would like more
+        information. Please write me at claus@tondering.dk.
+
+
+Index:
+------
+
+        1. What Astronomical Events Form the Basis of Calendars?
+           1.1. What are equinoxes and solstices?
+        2. The Christian Calendar
+           2.1. What is the Julian calendar?
+                2.1.1. What years are leap years?
+                2.1.2. What consequences did the use of the Julian
+                       calendar have?
+           2.2. What is the Gregorian calendar?
+                2.2.1. What years are leap years?
+                2.2.2. Isn't there a 4000-year rule?
+                2.2.3. Don't the Greek do it differently?
+                2.2.4. When did country X change from the Julian to
+                       the Gregorian calendar?
+           2.3. What day is the leap day?
+           2.4. What is the Solar Cycle?
+           2.5. What day of the week was 2 August 1953?
+           2.6. When can I reuse my 1992 calendar?
+           2.7. What is the Roman calendar?
+                2.7.1. How did the Romans number days?
+           2.8. What is the proleptic calendar?
+           2.9. Has the year always started on 1 January?
+           2.10. Then what about leap years?
+           2.11. What is the origin of the names of the months?
+           2.12. What is Easter?
+                2.12.1. When is Easter? (Short answer)
+                2.12.2. When is Easter? (Long answer)
+                2.12.3. What is the Golden Number?
+                2.12.4. What is the Epact?
+                2.12.5. How does one calculate Easter then?
+                2.12.6. Isn't there a simpler way to calculate Easter?
+                2.12.7. Is there a simple relationship between two
+                       consecutive Easters?
+                2.12.8. How frequently are the dates for Easter repeated?
+                2.12.9. What about Greek Easter?
+                2.12.10. Will the Easter dates change after 2001?
+           2.13. How does one count years?
+                 2.13.1. How did Dionysius date Christ's birth?
+                 2.13.2. Was Jesus born in the year 0?
+                 2.13.3. When does the 3rd millennium start?
+                 2.13.4. What do AD, BC, CE, and BCE stand for?
+           2.14. What is the Indiction?
+           2.15. What is the Julian period?
+                 2.15.1. Is there a formula for calculating the Julian
+                         day number?
+                 2.15.2. What is the modified Julian day number?
+           2.16. What is the correct way to write dates?
+        3. The Hebrew Calendar
+           3.1. What does a Hebrew year look like?
+           3.2. What years are leap years?
+           3.3. What years are deficient, regular, and complete?
+           3.4. When is New Year's day?
+           3.5. When does a Hebrew day begin?
+           3.6. When does a Hebrew year begin?
+           3.7. When is the new moon?
+           3.8. How does one count years?
+        4. The Islamic Calendar
+           4.1. What does an Islamic year look like?
+           4.2. So you can't print an Islamic calendar in advance?
+           4.3. How does one count years?
+           4.4. When will the Islamic calendar overtake the Gregorian
+                calendar?
+        5. The Week
+           5.1. What is the origin of the 7-day week?
+           5.2. What do the names of the days of the week mean?
+           5.3. What is the system behind the planetary day names?
+           5.4. Has the 7-day week cycle ever been interrupted?
+           5.5. Which day is the day of rest?
+           5.6. What is the first day of the week?
+           5.7. What is the week number?
+           5.8. How can I calculate the week number?
+           5.9. Do weeks of different lengths exist?
+        6. The French Revolutionary Calendar
+           6.1. What does a Republican year look like?
+           6.2. How does one count years?
+           6.3. What years are leap years?
+           6.4. How does one convert a Republican date to a Gregorian one?
+        7. The Maya Calendar
+           7.1. What is the Long Count?
+                7.1.1. When did the Long Count start?
+           7.2. What is the Tzolkin?
+                7.2.1. When did the Tzolkin start?
+           7.3. What is the Haab?
+                7.3.1. When did the Haab start?
+           7.4. Did the Mayas think a year was 365 days?
+        8. The Chinese Calendar
+           8.1. What does the Chinese year look like?
+           8.2. What years are leap years?
+           8.3. How does one count years?
+           8.4. What is the current year in the Chinese calendar?
+        9. Frequently Asked Questions about this FAQ
+           9.1. Why doesn't the FAQ describe calendar X?
+           9.2. Why doesn't the FAQ contain information X?
+           9.3. Why don't you reply to my e-mail?
+           9.4. How do I know that I can trust your information?
+           9.5. Can you recommend any good books about calendars?
+           9.6. Do you know a web site where I can find information
+                about X?
+        10. Date
+
+
+1. What Astronomical Events Form the Basis of Calendars?
+--------------------------------------------------------
+
+Calendars are normally based on astronomical events, and the two most
+important astronomical objects are the sun and the moon. Their cycles
+are very important in the construction and understanding of calendars.
+
+Our concept of a year is based on the earth's motion around the sun.
+The time from one fixed point, such as a solstice or equinox, to the
+next is called a "tropical year". Its length is currently 365.242190
+days, but it varies. Around 1900 its length was 365.242196 days, and
+around 2100 it will be 365.242184 days. (This definition of the
+tropical year is not quite accurate, see section 1.1 for more
+details.)
+
+Our concept of a month is based on the moon's motion around the earth,
+although this connection has been broken in the calendar commonly used
+now. The time from one new moon to the next is called a "synodic
+month", and its length is currently 29.5305889 days, but it
+varies. Around 1900 its length was 29.5305886 days, and around 2100 it
+will be 29.5305891 days.
+
+Note that these numbers are averages. The actual length of a
+particular year may vary by several minutes due to the influence of
+the gravitational force from other planets. Similary, the time between
+two new moons may vary by several hours due to a number of factors,
+including changes in the gravitational force from the sun, and the
+moon's orbital inclination.
+
+It is unfortunate that the length of the tropical year is not a
+multiple of the length of the synodic month. This means that with 12
+months per year, the relationship between our month and the moon
+cannot be maintained.
+
+However, 19 tropical years is 234.997 synodic months, which is very
+close to an integer. So every 19 years the phases of the moon fall on
+the same dates (if it were not for the skewness introduced by leap
+years). 19 years is called a Metonic cycle (after Meton, an astronomer
+from Athens in the 5th century BC).
+
+So, to summarise: There are three important numbers to note:
+A tropical year is 365.24219 days.
+A synodic month is 29.53059 days.
+19 tropical years is close to an integral number of synodic months.
+
+The Christian calendar is based on the motion of the earth around the
+sun, while the months retain no connection with the motion of the moon.
+
+On the other hand, the Islamic calendar is based on the motion of the
+moon, while the year has no connection with the motion of the earth
+around the sun.
+
+Finally, the Hebrew calendar combines both, in that its years are
+linked to the motion of the earth around the sun, and its months are
+linked to the motion of the moon.
+
+
+1.1. What are equinoxes and solstices?
+--------------------------------------
+
+Equinoxes and solstices are frequently used as anchor points for
+calendars. For people in the northern hemisphere:
+
+- Winter solstice is the time in December when the sun reaches its
+  southernmost latitude. At this time we have the shortest day. The
+  date is near 21 December.
+
+- Summer solstice is the time in June when the sun reaches its
+  northernmost latitude. At this time we have the longest day. The
+  date is near 21 June.
+
+- Vernal equinox is the time in March when the sun passes the equator
+  moving from the southern to the northern hemisphere. Day and night
+  have approximately the same length. The date is near 20 March.
+
+- Autumnal equinox is the time in September when the sun passes the
+  equator moving from the northern to the southern hemisphere. Day and
+  night have approximately the same length. The date is near
+  22 September.
+
+For people in the southern hemisphere these events are shifted half a
+year.
+
+The astronomical "tropical year" is frequently defined as the time
+between, say, two vernal equinoxes, but this is not actually true.
+Currently the time between two vernal equinoxes is slightly greater
+than the tropical year. The reason is that the earth's position in its
+orbit at the time of solstices and equinoxes shifts slightly each year
+(taking approximately 21,000 years to move all the way around the
+orbit). This, combined with the fact that the earth's orbit is not
+completely circular, causes the equinoxes and solstices to shift with
+respect to each other.
+
+The astronomer's mean tropical year is really a somewhat artificial
+average of the period between the time when the sun is in any given
+position in the sky with respect to the equinoxes and the next time
+the sun is in the same position.
+
+
+2. The Christian Calendar
+-------------------------
+
+The "Christian calendar" is the term traditionally used to designate
+the calendar commonly in use, although its connection with
+Christianity is highly debatable.
+
+The Christian calendar has years of 365 or 366 days. It is divided into
+12 months that have no relationship to the motion of the moon. In
+parallel with this system, the concept of "weeks" groups the days in
+sets of 7.
+
+Two main versions of the Christian calendar have existed in recent
+times: The Julian calendar and the Gregorian calendar. The difference
+between them lies in the way they approximate the length of the
+tropical year and their rules for calculating Easter.
+
+
+2.1. What is the Julian calendar?
+---------------------------------
+
+The Julian calendar was introduced by Julius Caesar in 45 BC. It was
+in common use until the 1500s, when countries started changing to the
+Gregorian calendar (section 2.2). However, some countries (for
+example, Greece and Russia) used it into the 1900s, and the Orthodox
+church in Russia still uses it, as do some other Orthodox churches.
+
+In the Julian calendar, the tropical year is approximated as 365 1/4
+days = 365.25 days. This gives an error of 1 day in approximately 128
+years.
+
+The approximation 365 1/4 is achieved by having 1 leap year every 4
+years.
+
+
+2.1.1. What years are leap years?
+---------------------------------
+
+The Julian calendar has 1 leap year every 4 years:
+
+        Every year divisible by 4 is a leap year.
+
+However, the 4-year rule was not followed in the first years after the
+introduction of the Julian calendar in 45 BC. Due to a counting error,
+every 3rd year was a leap year in the first years of this calendar's
+existence. The leap years were:
+
+        45 BC(?), 42 BC, 39 BC, 36 BC, 33 BC, 30 BC,
+        27 BC, 24 BC, 21 BC, 18 BC, 15 BC, 12 BC, 9 BC,
+        AD 8, AD 12, and every 4th year from then on.
+
+Authorities disagree about whether 45 BC was a leap year or not.
+
+There were no leap years between 9 BC and AD 8 (or, according to some
+authorities, between 12 BC and AD 4). This period without leap years
+was decreed by emperor Augustus in order to make up for the surplus of
+leap years introduced previously, and it earned him a place in the
+calendar as the 8th month was named after him.
+
+It is a curious fact that although the method of reckoning years after
+the (official) birthyear of Christ was not introduced until the 6th
+century, by some stroke of luck the Julian leap years coincide with
+years of our Lord that are divisible by 4.
+
+
+2.1.2. What consequences did the use of the Julian calendar have?
+-----------------------------------------------------------------
+
+The Julian calendar introduces an error of 1 day every 128 years. So
+every 128 years the tropical year shifts one day backwards with
+respect to the calendar. Furthermore, the method for calculating the
+dates for Easter was inaccurate and needed to be refined.
+
+In order to remedy this, two steps were necessary: 1) The Julian
+calendar had to be replaced by something more adequate. 2) The extra
+days that the Julian calendar had inserted had to be dropped.
+
+The solution to problem 1) was the Gregorian calendar described in
+section 2.2.
+
+The solution to problem 2) depended on the fact that it was felt that
+21 March was the proper day for vernal equinox (because 21 March was
+the date for vernal equinox during the Council of Nicaea in AD
+325). The Gregorian calendar was therefore calibrated to make that day
+vernal equinox.
+
+By 1582 vernal equinox had moved (1582-325)/128 days = approximately
+10 days backwards. So 10 days had to be dropped.
+
+
+
+2.2. What is the Gregorian calendar?
+------------------------------------
+
+The Gregorian calendar is the one commonly used today. It was proposed
+by Aloysius Lilius, a physician from Naples, and adopted by Pope
+Gregory XIII in accordance with instructions from the Council of Trent
+(1545-1563) to correct for errors in the older Julian Calendar. It was
+decreed by Pope Gregory XIII in a papal bull on 24 February 1582. This
+bull is named "Inter Gravissimas" after its first two words.
+
+In the Gregorian calendar, the tropical year is approximated as
+365 97/400 days = 365.2425 days. Thus it takes approximately 3300
+years for the tropical year to shift one day with respect to the
+Gregorian calendar.
+
+The approximation 365 97/400 is achieved by having 97 leap years
+every 400 years.
+
+
+2.2.1. What years are leap years?
+---------------------------------
+
+The Gregorian calendar has 97 leap years every 400 years:
+
+        Every year divisible by 4 is a leap year.
+        However, every year divisible by 100 is not a leap year.
+        However, every year divisible by 400 is a leap year after all.
+
+So, 1700, 1800, 1900, 2100, and 2200 are not leap years. But 1600,
+2000, and 2400 are leap years.
+
+(Destruction of a myth: There are no double leap years, i.e. no
+years with 367 days. See, however, the note on Sweden in section
+2.2.4.)
+
+
+2.2.2. Isn't there a 4000-year rule?
+------------------------------------
+
+It has been suggested (by the astronomer John Herschel (1792-1871)
+among others) that a better approximation to the length of the
+tropical year would be 365 969/4000 days = 365.24225 days. This would
+dictate 969 leap years every 4000 years, rather than the 970 leap
+years mandated by the Gregorian calendar. This could be achieved by
+dropping one leap year from the Gregorian calendar every 4000 years,
+which would make years divisible by 4000 non-leap years.
+
+This rule has, however, not been officially adopted.
+
+
+2.2.3. Don't the Greek do it differently?
+-----------------------------------------
+
+When the Orthodox church in Greece finally decided to switch to the
+Gregorian calendar in the 1920s, they tried to improve on the
+Gregorian leap year rules, replacing the "divisible by 400" rule by
+the following:
+
+        Every year which when divided by 900 leaves a remainder of 200
+        or 600 is a leap year.
+
+This makes 1900, 2100, 2200, 2300, 2500, 2600, 2700, 2800 non-leap
+years, whereas 2000, 2400, and 2900 are leap years. This will not
+create a conflict with the rest of the world until the year 2800.
+
+This rule gives 218 leap years every 900 years, which gives us an
+average year of 365 218/900 days = 365.24222 days, which is certainly
+more accurate than the official Gregorian number of 365.2425 days.
+
+However, this rule is *not* official in Greece.
+
+
+2.2.4. When did country X change from the Julian to the Gregorian calendar?
+---------------------------------------------------------------------------
+
+The papal bull of February 1582 decreed that 10 days should be dropped
+from October 1582 so that 15 October should follow immediately after
+4 October, and from then on the reformed calendar should be used.
+
+This was observed in Italy, Poland, Portugal, and Spain. Other Catholic
+countries followed shortly after, but Protestant countries were
+reluctant to change, and the Greek orthodox countries didn't change
+until the start of the 1900s.
+
+
+
+Changes in the 1500s required 10 days to be dropped.
+Changes in the 1600s required 10 days to be dropped.
+Changes in the 1700s required 11 days to be dropped.
+Changes in the 1800s required 12 days to be dropped.
+Changes in the 1900s required 13 days to be dropped.
+
+(Exercise for the reader: Why is the error in the 1600s the same as
+in the 1500s.)
+
+The following list contains the dates for changes in a number of
+countries. It is very strange that in many cases there seems to be
+some doubt among authorities about what the correct days are.
+Different sources give very different dates in some cases. The list
+below does not include all the different opinions about when the
+change took place.
+
+Albania:        December 1912
+
+Austria: Different regions on different dates
+         Brixen, Salzburg and Tyrol:
+                 5 Oct 1583 was followed by 16 Oct 1583
+         Carinthia and Styria:
+                14 Dec 1583 was followed by 25 Dec 1583
+         See also Czechoslovakia and Hungary
+
+Belgium: See the Netherlands
+
+Bulgaria:       31 Mar 1916 was followed by 14 Apr 1916
+
+Canada: Different areas changed at different times.
+        Newfoundland and Hudson Bay coast:
+                2 Sep 1752 was followed by 14 Sep 1752
+        Mainland Nova Scotia:
+                Gregorian 1605 - 13 Oct 1710
+                Julian 2 Oct 1710 - 2 Sep 1752
+                Gregorian since 14 Sep 1752
+        Rest of Canada:
+                Gregorian from first European settlement
+
+China:          The Gregorian calendar replaced the Chinese calendar
+                in 1912, but the Gregorian calendar was not used
+                throughout the country until the communist revolution
+                of 1949.
+                               
+Czechoslovakia (i.e. Bohemia and Moravia):
+                 6 Jan 1584 was followed by 17 Jan 1584
+
+Denmark (including Norway):
+                18 Feb 1700 was followed by 1 Mar 1700
+
+Egypt:          1875
+
+Estonia:        31 Jan 1918 was followed by 14 Feb 1918
+
+Finland: Then part of Sweden. (Note, however, that Finland later
+                became part of Russia, which then still used the
+                Julian calendar. The Gregorian calendar remained
+                official in Finland, but some use of the Julian 
+                calendar was made.)
+
+France:         9 Dec 1582 was followed by 20 Dec 1582
+                Alsace: 5 Feb 1682 was followed by 16 Feb 1682
+                Lorraine: 16 Feb 1760 was followed by 28 Feb 1760
+                Strasbourg: February 1682
+
+Germany: Different states on different dates:
+                Catholic states on various dates in 1583-1585
+                Prussia: 22 Aug 1610 was followed by 2 Sep 1610
+                Protestant states: 18 Feb 1700 was followed by 1 Mar 1700
+                (Many local variations)
+
+Great Britain and Dominions:
+                2 Sep 1752 was followed by 14 Sep 1752
+
+Greece:         9 Mar 1924 was followed by 23 Mar 1924
+                (Some sources say 1916 and 1920)
+
+Hungary:        21 Oct 1587 was followed by 1 Nov 1587
+
+Ireland: See Great Britain
+
+Italy:          4 Oct 1582 was followed by 15 Oct 1582
+
+Japan:          The Gregorian calendar was introduced to supplement the
+                traditional Japanese calendar on 1 Jan 1873.
+
+Latvia:         During German occupation 1915 to 1918
+
+Lithuania:      1915
+
+Luxemburg:      14 Dec 1582 was followed by 25 Dec 1582
+
+Netherlands (including Belgium):
+        Zeeland, Brabrant, and the "Staten Generaal":
+                14 Dec 1582 was followed by 25 Dec 1582
+        Holland:
+                1 Jan 1583 was followed by 12 Jan 1583   
+        Limburg and the southern provinces (currently Belgium):
+                   20 Dec 1582 was followed by 31 Dec 1582
+                or
+                   21 Dec 1582 was followed by 1 Jan 1583
+        Groningen:
+                10 Feb 1583 was followed by 21 Feb 1583
+                Went back to Julian in the summer of 1594
+                31 Dec 1700 was followed by 12 Jan 1701
+        Gelderland:
+                30 Jun 1700 was followed by 12 Jul 1700
+        Utrecht and Overijssel:
+                30 Nov 1700 was followed by 12 Dec 1700
+        Friesland:
+                31 Dec 1700 was followed by 12 Jan 1701
+        Drenthe:
+                30 Apr 1701 was followed by 12 May 1701
+
+Norway: Then part of Denmark.
+
+Poland:         4 Oct 1582 was followed by 15 Oct 1582
+
+Portugal:       4 Oct 1582 was followed by 15 Oct 1582
+
+Romania:        31 Mar 1919 was followed by 14 Apr 1919
+                (The Greek Orthodox parts of the country may have
+                changed later)
+
+Russia:         31 Jan 1918 was followed by 14 Feb 1918
+                (In the eastern parts of the country the change may
+                not have occured until 1920)
+
+Scotland: Much confusion exists regarding Scotland's change. Different
+          authorities disagree about whether Scotland changed together
+          with the rest of Great Britain, or if they had changed
+          earlier.
+
+Spain:          4 Oct 1582 was followed by 15 Oct 1582
+
+Sweden (including Finland):
+                17 Feb 1753 was followed by 1 Mar 1753 (see note below)
+
+Switzerland:
+        Catholic cantons: 1583, 1584 or 1597
+        Protestant cantons:
+                31 Dec 1700 was followed by 12 Jan 1701
+        (Many local variations)
+
+Turkey:         Gregorian calendar introduced 1 Jan 1927
+
+United States: Different areas changed at different times.
+        Along the Eastern seaboard: With Great Britain in 1752.
+        Mississippi valley: With France in 1582.
+        Texas, Florida, California, Nevada, Arizona, New Mexico:
+          With Spain in 1582
+        Washington, Oregon: With Britain in 1752.
+        Alaska: October 1867 when Alaska became part of the USA.
+
+Wales: See Great Britain
+
+Yugoslavia:     1919
+
+Sweden has a curious history. Sweden decided to make a gradual change
+from the Julian to the Gregorian calendar. By dropping every leap year
+from 1700 through 1740 the eleven superfluous days would be omitted
+and from 1 Mar 1740 they would be in sync with the Gregorian
+calendar. (But in the meantime they would be in sync with nobody!)
+
+So 1700 (which should have been a leap year in the Julian calendar)
+was not a leap year in Sweden. However, by mistake 1704 and 1708
+became leap years. This left Sweden out of synchronisation with both
+the Julian and the Gregorian world, so they decided to go *back* to
+the Julian calendar. In order to do this, they inserted an extra day
+in 1712, making that year a double leap year! So in 1712, February had
+30 days in Sweden.
+
+Later, in 1753, Sweden changed to the Gregorian calendar by dropping 11
+days like everyone else.
+
+
+2.3. What day is the leap day?
+------------------------------
+
+It is 24 February!
+
+Weird? Yes! The explanation is related to the Roman calendar and is
+found in section 2.7.1.
+
+From a numerical point of view, of course 29 February is the extra
+day. But from the point of view of celebration of feast days, the
+following correspondence between days in leap years and non-leap
+years has traditionally been used:
+
+        Non-leap year           Leap year
+        -------------           ----------
+        22 February             22 February
+        23 February             23 February
+                                24 February (extra day)
+        24 February             25 February
+        25 February             26 February
+        26 February             27 February
+        27 February             28 February
+        28 February             29 February
+
+For example, the feast of St. Leander has been celebrated on 27
+February in non-leap years and on 28 February in leap years.
+
+Many countries are gradually changing the leap day from the 24th to
+the 29th. This affects countries such as Sweden and Austria that
+celebrate "name days" (i.e. each day is associated with a name).
+
+
+2.4. What is the Solar Cycle?
+-----------------------------
+
+In the Julian calendar the relationship between the days of the week
+and the dates of the year is repeated in cycles of 28 years. In the
+Gregorian calendar this is still true for periods that do not cross
+years that are divisible by 100 but not by 400.
+
+A period of 28 years is called a Solar Cycle. The "Solar Number" of a
+year is found as:
+
+        Solar Number = (year + 8) mod 28 + 1
+
+In the Julian calendar there is a one-to-one relationship between the
+Solar Number and the day on which a particular date falls.
+
+(The leap year cycle of the Gregorian calendar is 400 years, which is
+146,097 days, which curiously enough is a multiple of 7. So in the
+Gregorian calendar the equivalent of the "Solar Cycle" would be 400
+years, not 7*400=2800 years as one might be tempted to believe.)
+
+
+2.5. What day of the week was 2 August 1953?
+--------------------------------------------
+
+To calculate the day on which a particular date falls, the following
+algorithm may be used (the divisions are integer divisions, in which
+remainders are discarded):
+
+a = (14 - month) / 12
+y = year - a
+m = month + 12*a - 2
+For Julian calendar: d = (5 + day + y + y/4 + (31*m)/12) mod 7
+For Gregorian calendar: d = (day + y + y/4 - y/100 + y/400 + (31*m)/12) mod 7
+
+The value of d is 0 for a Sunday, 1 for a Monday, 2 for a Tuesday, etc.
+
+Example: On what day of the week was the author born?
+
+My birthday is 2 August 1953 (Gregorian, of course).
+
+a = (14 - 8) / 12 = 0
+y = 1953 - 0 = 1953
+m = 8 + 12*0 - 2 = 6
+d = (2 + 1953 + 1953/4 - 1953/100 + 1953/400 + (31*6)/12) mod 7
+  = (2 + 1953 +  488   -    19    +     4    +    15    ) mod 7
+  = 2443 mod 7
+  = 0
+
+I was born on a Sunday.
+
+
+2.6. When can I reuse my 1992 calendar?
+---------------------------------------
+
+Let us first assume that you are only interested in which dates fall
+on which days of the week; you are not interested in the dates for
+Easter and other irregular holidays.
+
+Let us further confine ourselves to the years 1901-2099.
+
+With these restrictions, the answer is as follows:
+
+  - If year X is a leap year, you can reuse its calendar in year X+28.
+
+  - If year X is the first year after a leap year, you can reuse its
+    calendar in years X+6, X+17, and X+28.
+
+  - If year X is the second year after a leap year, you can reuse its
+    calendar in years X+11, X+17, and X+28.
+
+  - If year X is the third year after a leap year, you can reuse its
+    calendar in years X+11, X+22, and X+28.
+
+Note that the expression X+28 occurs in all four items above. So you
+can always reuse your calendar every 28 years.
+
+
+2.7. What is the Roman calendar?
+--------------------------------
+
+Before Julius Caesar introduced the Julian calendar in 45 BC, the
+Roman calendar was a mess, and much of our so-called "knowledge" about
+it seems to be little more than guesswork.
+
+Originally, the year started on 1 March and consisted of only 304 days
+or 10 months (Martius, Aprilis, Maius, Junius, Quintilis, Sextilis,
+September, October, November, and December). These 304 days were
+followed by an unnamed and unnumbered winter period. The Roman king
+Numa Pompilius (c. 715-673 BC, although his historicity is disputed)
+allegedly introduced February and January (in that order) between
+December and March, increasing the length of the year to 354 or 355
+days. In 450 BC, February was moved to its current position between
+January and March.
+
+In order to make up for the lack of days in a year, an extra month,
+Intercalaris or Mercedonius, (allegedly with 22 or 23 days though some
+authorities dispute this) was introduced in some years. In an 8 year
+period the length of the years were:
+        1: 12 months or 355 days
+        2: 13 months or 377 days
+        3: 12 months or 355 days
+        4: 13 months or 378 days
+        5: 12 months or 355 days
+        6: 13 months or 377 days
+        7: 12 months or 355 days
+        8: 13 months or 378 days
+A total of 2930 days corresponding to a year of 366 1/4 days. This
+year was discovered to be too long, and therefore 7 days were later
+dropped from the 8th year, yielding 365.375 days per year.
+
+This is all theory. In practice it was the duty of the priesthood to
+keep track of the calendars, but they failed miserably, partly due to
+ignorance, partly because they were bribed to make certain years long
+and other years short. Furthermore, leap years were considered unlucky
+and were therefore avoided in time of crisis, such as the Second Punic
+War.
+
+In order to clean up this mess, Julius Caesar made his famous calendar
+reform in 45 BC. We can make an educated guess about the length of the
+months in the years 47 and 46 BC:
+
+                47 BC          46 BC
+January          29             29
+February         28             24
+Intercalaris                    27
+March            31             31
+April            29             29
+May              31             31
+June             29             29
+Quintilis        31             31
+Sextilis         29             29
+September        29             29
+October          31             31
+November         29             29
+Undecember                      33
+Duodecember                     34
+December         29             29
+                ---            ---
+Total           355            445
+
+The length of the months from 45 BC onward were the same as the ones
+we know today.
+
+Occasionally one reads the following story:
+        "Julius Caesar made all odd numbered months 31 days long, and
+        all even numbered months 30 days long (with February having 29
+        days in non-leap years). In 44 BC Quintilis was renamed
+        'Julius' (July) in honour of Julius Caesar, and in 8 BC
+        Sextilis became 'Augustus' in honour of emperor Augustus. When
+        Augustus had a month named after him, he wanted his month to
+        be a full 31 days long, so he removed a day from February and
+        shifted the length of the other months so that August would
+        have 31 days."
+This story, however, has no basis in actual fact. It is a fabrication
+possibly dating back to the 14th century.
+
+
+2.7.1. How did the Romans number days?
+--------------------------------------
+
+The Romans didn't number the days sequentially from 1. Instead they
+had three fixed points in each month:
+        "Kalendae" (or "Calendae"), which was the first day of the month.
+        "Idus", which was the 13th day of January, February, April,
+                June, August, September, November, and December, or
+                the 15th day of March, May, July, or October.
+        "Nonae", which was the 9th day before Idus (counting Idus
+                 itself as the 1st day).
+
+The days between Kalendae and Nonae were called "the 5th day before
+Nonae", "the 4th day before Nonae", "the 3rd day before Nonae", and
+"the day before Nonae". (There was no "2nd day before Nonae". This was
+because of the inclusive way of counting used by the Romans: To them,
+Nonae itself was the first day, and thus "the 2nd day before" and "the
+day before" would mean the same thing.)
+
+Similarly, the days between Nonae and Idus were called "the Xth day
+before Idus", and the days after Idus were called "the Xth day before
+Kalendae (of the next month)".
+
+Julius Caesar decreed that in leap years the "6th day before Kalendae
+of March" should be doubled. So in contrast to our present system, in
+which we introduce an extra date (29 February), the Romans had the
+same date twice in leap years. The doubling of the 6th day before
+Kalendae of March is the origin of the word "bissextile".  If we
+create a list of equivalences between the Roman days and our current
+days of February in a leap year, we get the following:
+
+        7th day before Kalendae of March        23 February
+        6th day before Kalendae of March        24 February
+        6th day before Kalendae of March        25 February
+        5th day before Kalendae of March        26 February
+        4th day before Kalendae of March        27 February
+        3rd day before Kalendae of March        28 February
+        the day before Kalendae of March        29 February
+        Kalendae of March                        1 March
+
+You can see that the extra 6th day (going backwards) falls on what is
+today 24 February. For this reason 24 February is still today
+considered the "extra day" in leap years (see section 2.3). However,
+at certain times in history the second 6th day (25 Feb) has been
+considered the leap day.
+
+Why did Caesar choose to double the 6th day before Kalendae of March?
+It appears that the leap month Intercalaris/Mercedonius of the
+pre-reform calendar was not placed after February, but inside it,
+namely between the 7th and 6th day before Kalendae of March. It was
+therefore natural to have the leap day in the same position.
+
+
+2.8. What is the proleptic calendar?
+------------------------------------
+
+The Julian calendar was introduced in 45 BC, but when historians date
+events prior to that year, they normally extend the Julian calendar
+backward in time. This extended calendar is known as the "Julian
+Proleptic Calendar".
+
+Similarly, it is possible to extend the Gregorian calendar backward in
+time before 1582. However, this "Gregorian Proleptic Calendar" is
+rarely used.
+
+If someone refers to, for example, 15 March 429 BC, they are probably
+using the Julian proleptic calendar.
+
+In the Julian proleptic calendar, year X BC is a leap year, if X-1 is
+divisble by 4. This is the natural extension of the Julian leap year
+rules.
+
+
+2.9. Has the year always started on 1 January?
+----------------------------------------------
+
+For the man in the street, yes. When Julius Caesar introduced his
+calendar in 45 BC, he made 1 January the start of the year, and it was
+always the date on which the Solar Number and the Golden Number (see
+section 2.12.3) were incremented.
+
+However, the church didn't like the wild parties that took place at
+the start of the new year, and in AD 567 the council of Tours declared
+that having the year start on 1 January was an ancient mistake that
+should be abolished.
+
+Through the middle ages various New Year dates were used. If an
+ancient document refers to year X, it may mean any of 7 different
+periods in our present system:
+
+- 1 Mar X to 28/29 Feb X+1
+- 1 Jan X to 31 Dec X
+- 1 Jan X-1 to 31 Dec X-1
+- 25 Mar X-1 to 24 Mar X
+- 25 Mar X to 24 Mar X+1
+- Saturday before Easter X to Friday before Easter X+1
+- 25 Dec X-1 to 24 Dec X
+
+Choosing the right interpretation of a year number is difficult, so
+much more as one country might use different systems for religious and
+civil needs.
+
+The Byzantine Empire used a year starting on 1 Sep, but they didn't
+count years since the birth of Christ, instead they counted years
+since the creation of the world which they dated to 1 September 5509 BC.
+
+Since about 1600 most countries have used 1 January as the first day
+of the year. Italy and England, however, did not make 1 January official
+until around 1750.
+
+In England (but not Scotland) three different years were used:
+- The historical year, which started on 1 January.
+- The liturgical year, which started on the first Sunday in advent.
+- The civil year, which
+        from the 7th to the 12th century started on 25 December,
+        from the 12th century until 1751 started on 25 March,
+        from 1752 started on 1 January.
+
+
+2.10. Then what about leap years?
+---------------------------------
+
+If the year started on, for example, 1 March, two months later than
+our present year, when was the leap day inserted?
+
+[The following information is to the best of my knowledge true. If
+anyone can confirm or refute it, please let me know.]
+
+When it comes to choosing a leap year, a year starting on 1 January
+has always been used. So, in a country using a year starting on 1 March,
+1439 would have been a leap year, because their February 1439 would
+correspond to February 1440 in the January-based reckoning, and 1440
+is divisible by 4.
+
+
+2.11. What is the origin of the names of the months?
+---------------------------------------------------
+
+A lot of languages, including English, use month names based on Latin.
+Their meaning is listed below. However, some languages (Czech and
+Polish, for example) use quite different names.
+
+January     Latin: Januarius. Named after the god Janus.
+February    Latin: Februarius. Named after Februa, the purification
+            festival.
+March       Latin: Martius. Named after the god Mars.
+April       Latin: Aprilis. Named either after the goddess Aphrodite or
+            the Latin word "aperire", to open.
+May         Latin: Maius. Probably named after the goddess Maia.
+June        Latin: Junius. Probably named after the goddess Juno.
+July        Latin: Julius. Named after Julius Caesar in 44 BC. Prior
+            to that time its name was Quintilis from the word
+            "quintus", fifth, because it was the 5th month in the old
+            Roman calendar.
+August      Latin: Augustus. Named after emperor Augustus in 8
+            BC. Prior to that time the name was Sextilis from the
+            word "sextus", sixth, because it was the 6th month in the
+            old Roman calendar.
+September   Latin: September. From the word "septem", seven, because
+            it was the 7th month in the old Roman calendar.
+October     Latin: October. From the word "octo", eight, because it
+            was the 8th month in the old Roman calendar.
+November    Latin: November. From the word "novem", nine, because it
+            was the 9th month in the old Roman calendar.
+December    Latin: December. From the word "decem", ten, because it
+            was the 10th month in the old Roman calendar.
+
+
+2.12. What is Easter?
+---------------------
+
+In the Christian world, Easter (and the days immediately preceding it)
+is the celebration of the death and resurrection of Jesus in
+(approximately) AD 30.
+
+
+2.12.1. When is Easter? (Short answer)
+--------------------------------------
+
+Easter Sunday is the first Sunday after the first full moon after
+vernal equinox.
+
+
+2.12.2. When is Easter? (Long answer)
+-------------------------------------
+
+The calculation of Easter is complicated because it is linked to (an
+inaccurate version of) the Hebrew calendar.
+
+Jesus was crucified immediately before the Jewish Passover, which is a
+celebration of the Exodus from Egypt under Moses. Celebration of
+Passover started on the 14th or 15th day of the (spring) month of
+Nisan. Jewish months start when the moon is new, therefore the 14th or
+15th day of the month must be immediately after a full moon.
+
+It was therefore decided to make Easter Sunday the first Sunday after
+the first full moon after vernal equinox. Or more precisely: Easter
+Sunday is the first Sunday after the *official* full moon on or after
+the *official* vernal equinox.
+
+The official vernal equinox is always 21 March.
+
+The official full moon may differ from the *real* full moon by one or
+two days.
+
+(Note, however, that historically, some countries have used the *real*
+(astronomical) full moon instead of the official one when calculating
+Easter. This was the case, for example, of the German Protestant states,
+which used the astronomical full moon in the years 1700-1776. A
+similar practice was used Sweden in the years 1740-1844 and in Denmark
+in the 1700s.)
+
+The full moon that precedes Easter is called the Paschal full
+moon. Two concepts play an important role when calculating the Paschal
+full moon: The Golden Number and the Epact. They are described in the
+following sections.
+
+The following sections give details about how to calculate the date
+for Easter. Note, however, that while the Julian calendar was in use,
+it was customary to use tables rather than calculations to determine
+Easter. The following sections do mention how to calcuate Easter under
+the Julian calendar, but the reader should be aware that this is an
+attempt to express in formulas what was originally expressed in
+tables. The formulas can be taken as a good indication of when Easter
+was celebrated in the Western Church from approximately the 6th
+century.
+
+
+2.12.3. What is the Golden Number?
+----------------------------------
+
+Each year is associated with a Golden Number.
+
+Considering that the relationship between the moon's phases and the
+days of the year repeats itself every 19 years (as described in
+section 1), it is natural to associate a number between 1 and 19
+with each year. This number is the so-called Golden Number. It is
+calculated thus:
+        GoldenNumber = (year mod 19)+1
+
+In years which have the same Golden Number, the new moon will fall on
+(approximately) the same date.
+
+
+2.12.4. What is the Epact?
+--------------------------
+
+Each year is associated with an Epact.
+
+The Epact is a measure of the age of the moon (i.e. the number of days
+that have passed since an "official" new moon) on a particular date.
+
+In the Julian calendar, 8 + the Epact is the age of the moon at the
+start of the year.  
+In the Gregorian calendar, the Epact is the age of the moon at the
+start of the year.
+
+The Epact is linked to the Golden Number in the following manner:
+
+Under the Julian calendar, 19 years were assumed to be exactly an
+integral number of synodic months, and the following relationship
+exists between the Golden Number and the Epact:
+
+        Epact = (11 * (GoldenNumber-1)) mod 30 
+
+If this formula yields zero, the Epact is by convention frequently
+designated by the symbol * and its value is said to be 30. Weird?
+Maybe, but people didn't like the number zero in the old days.
+
+Since there are only 19 possible golden numbers, the Epact can have
+only 19 different values: 1, 3, 4, 6, 7, 9, 11, 12, 14, 15, 17, 18, 20,
+22, 23, 25, 26, 28, and 30.
+
+
+The Julian system for calculating full moons was inaccurate, and under
+the Gregorian calendar, some modifications are made to the simple
+relationship between the Golden Number and the Epact.
+
+In the Gregorian calendar the Epact should be calculated thus (the
+divisions are integer divisions, in which remainders are discarded):
+        
+1) Use the Julian formula:
+      Epact = (11 * (GoldenNumber-1)) mod 30
+
+2) Adjust the Epact, taking into account the fact that 3 out of 4
+   centuries have one leap year less than a Julian century:
+        Epact = Epact - (3*century)/4
+
+   (For the purpose of this calculation century=20 is used for the
+   years 1900 through 1999, and similarly for other centuries,
+   although this contradicts the rules in section 2.13.3.)
+
+3) Adjust the Epact, taking into account the fact that 19 years is not
+   exactly an integral number of synodic months:
+        Epact = Epact + (8*century + 5)/25
+
+   (This adds one to the Epact 8 times every 2500 years.)
+
+4) Add 8 to the Epact to make it the age of the moon on 1 January:
+        Epact = Epact + 8
+
+5) Add or subtract 30 until the Epact lies between 1 and 30.
+
+In the Gregorian calendar, the Epact can have any value from 1 to 30.
+
+Example: What was the Epact for 1992?
+
+GoldenNumber = 1992 mod 19 + 1 = 17
+1) Epact = (11 * (17-1)) mod 30 = 26
+2) Epact = 26 - (3*20)/4 = 11
+3) Epact = 11 + (8*20 + 5)/25 = 17
+4) Epact = 17 + 8 = 25
+5) Epact = 25
+
+The Epact for 1992 was 25.
+
+
+2.12.5. How does one calculate Easter then?
+-------------------------------------------
+
+To find Easter the following algorithm is used:
+
+1) Calculate the Epact as described in the previous section.
+
+2) For the Julian calendar: Add 8 to the Epact. (For the Gregorian
+   calendar, this has already been done in step 4 of the calculation of
+   the Epact). Subtract 30 if the sum exceeds 30.
+
+3) Look up the Epact (as possibly modified in step 2) in this table to
+   find the date for the Paschal full moon:
+
+     Epact   Full moon     Epact   Full moon     Epact   Full moon
+     -----------------     -----------------     -----------------
+        1    12 April        11     2 April        21    23 March
+        2    11 April        12     1 April        22    22 March
+        3    10 April        13    31 March        23    21 March
+        4     9 April        14    30 March        24    18 April
+        5     8 April        15    29 March        25    18 or 17 April
+        6     7 April        16    28 March        26    17 April
+        7     6 April        17    27 March        27    16 April
+        8     5 April        18    26 March        28    15 April
+        9     4 April        19    25 March        29    14 April
+       10     3 April        20    24 March        30    13 April
+
+4) Easter Sunday is the first Sunday following the above full moon
+   date. If the full moon falls on a Sunday, Easter Sunday is the
+   following Sunday.
+
+
+An Epact of 25 requires special treatment, as it has two dates in the
+above table. There are two equivalent methods for choosing the correct
+full moon date:
+
+A) Choose 18 April, unless the current century contains years with an
+   epact of 24, in which case 17 April should be used.
+
+B) If the Golden Number is > 11 choose 17 April, otherwise choose 18 April.
+
+The proof that these two statements are equivalent is left as an
+exercise to the reader. (The frustrated ones may contact me for the
+proof.)
+
+Example: When was Easter in 1992?
+
+In the previous section we found that the Golden Number for 1992 was
+17 and the Epact was 25. Looking in the table, we find that the
+Paschal full moon was either 17 or 18 April. By rule B above, we
+choose 17 April because the Golden Number > 11.
+
+17 April 1992 was a Friday. Easter Sunday must therefore have been
+19 April.
+
+
+2.12.6. Isn't there a simpler way to calculate Easter?
+------------------------------------------------------
+
+This is an attempt to boil down the information given in the previous
+sections (the divisions are integer divisions, in which remainders are
+discarded):
+
+G = year mod 19
+
+For the Julian calendar:
+    I = (19*G + 15) mod 30
+    J = (year + year/4 + I) mod 7
+
+For the Gregorian calendar:
+    C = year/100
+    H = (C - C/4 - (8*C+13)/25 + 19*G + 15) mod 30
+    I = H - (H/28)*(1 - (H/28)*(29/(H + 1))*((21 - G)/11))
+    J = (year + year/4 + I + 2 - C + C/4) mod 7
+
+Thereafter, for both calendars:
+L = I - J
+EasterMonth = 3 + (L + 40)/44
+EasterDay = L + 28 - 31*(EasterMonth/4)
+
+
+This algorithm is based in part on the algorithm of Oudin (1940) as
+quoted in "Explanatory Supplement to the Astronomical Almanac",
+P. Kenneth Seidelmann, editor.
+
+People who want to dig into the workings of this algorithm, may be
+interested to know that
+    G is the Golden Number-1
+    H is 23-Epact (modulo 30)
+    I is the number of days from 21 March to the Paschal full moon
+    J is the weekday for the Paschal full moon (0=Sunday, 1=Monday,
+      etc.)
+    L is the number of days from 21 March to the Sunday on or before
+      the Paschal full moon (a number between -6 and 28)
+
+
+2.12.7. Is there a simple relationship between two consecutive Easters?
+-----------------------------------------------------------------------
+
+Suppose you know the Easter date of the current year, can you easily
+find the Easter date in the next year? No, but you can make a
+qualified guess.
+
+If Easter Sunday in the current year falls on day X and the next year
+is not a leap year, Easter Sunday of next year will fall on one of the
+following days: X-15, X-8, X+13 (rare), or X+20.
+
+If Easter Sunday in the current year falls on day X and the next year
+is a leap year, Easter Sunday of next year will fall on one of the
+following days: X-16, X-9, X+12 (extremely rare), or X+19. (The jump
+X+12 occurs only once in the period 1800-2200, namely when going from
+2075 to 2076.)
+
+If you combine this knowledge with the fact that Easter Sunday never
+falls before 22 March and never falls after 25 April, you can
+narrow the possibilities down to two or three dates.
+
+
+2.12.8. How frequently are the dates for Easter repeated?
+---------------------------------------------------------
+
+The sequence of Easter dates repeats itself every 532 years in the
+Julian calendar. The number 532 is the product of the following
+numbers:
+
+        19 (the Metonic cycle or the cycle of the Golden Number)
+        28 (the Solar cycle, see section 2.4)
+
+The sequence of Easter dates repeats itself every 5,700,000 years in
+the Gregorian calendar. Calculating this is not as simple as for the
+Julian calendar, but the number 5,700,000 turns out to be the product
+of the following numbers:
+
+        19 (the Metonic cycle or the cycle of the Golden Number)
+        400 (the Gregorian equivalent of the Solar cycle, see section 2.4)
+        25 (the cycle used in step 3 when calculating the Epact)
+        30 (the number of different Epact values)
+
+
+2.12.9. What about Greek Easter?
+--------------------------------
+
+The Greek Orthodox Church does not always celebrate Easter on the same
+day as the Catholic and Protestant countries. The reason is that the
+Orthodox Church uses the Julian calendar when calculating Easter. This
+is case even in the churches that otherwise use the Gregorian
+calendar.
+
+When the Greek Orthodox Church in 1923 decided to change to the
+Gregorian calendar (or rather: a Revised Julian Calendar), they chose
+to use the astronomical full moon as the basis for calculating Easter,
+rather than the "official" full moon described in the previous
+sections. And they chose the meridian of Jerusalem to serve as
+definition of when a Sunday starts. However, except for some sporadic
+use the 1920s, this system was never adopted in practice.
+
+
+2.12.10. Will the Easter dates change after 2001?
+-------------------------------------------------
+
+No.
+
+At at meeting in Aleppo, Syria (5-10 March 1997), organised by the
+World Council of Churches and the Middle East Council of Churches,
+representatives of several churches and Christian world communions
+suggested that the discrepancies between Easter calculations in the
+Western and the Eastern churches could be resolved by adopting
+astronomically accurate calculations of the vernal equinox and the
+full moon, instead of using the algorithm presented in section 2.12.5.
+The meridian of Jerusalem should be used for the astronomical
+calculations.
+
+The new method for calculating Easter should take effect from the year
+2001. In that year the Julian and Gregorian Easter dates coincide (on
+15 April Gregorian/2 April Julian), and it would therefore be a
+reasonable starting point for the new system.
+
+However, the Eastern churches (especially the Russian Orthodox Church)
+are reluctant to change, having already experienced a schism in the
+calendar question. So nothing will happen in the near future.
+
+If the new system were introduced, churches using the Gregorian
+calendar will hardly notice the change. Only once during the period
+2001-2025 would these churches note a difference: In 2019 the
+Gregorian method gives an Easter date of 21 April, but the proposed
+new method gives 24 March.
+
+Note that the new method makes an Easter date of 21 March possible.
+This date was not possible under the Julian or Gregorian algorithms.
+(Under the new method, Easter will fall on 21 March in the year 2877.
+You're all invited to my house on that date!)
+
+
+2.13. How does one count years?
+-------------------------------
+
+In about AD 523, the papal chancellor, Bonifatius, asked a monk by the
+name of Dionysius Exiguus to devise a way to implement the rules from
+the Nicean council (the so-called "Alexandrine Rules") for general
+use.
+
+Dionysius Exiguus (in English known as Denis the Little) was a monk
+from Scythia, he was a canon in the Roman curia, and his assignment
+was to prepare calculations of the dates of Easter. At that time it
+was customary to count years since the reign of emperor Diocletian;
+but in his calculations Dionysius chose to number the years since the
+birth of Christ, rather than honour the persecutor Diocletian.
+
+Dionysius (wrongly) fixed Jesus' birth with respect to Diocletian's
+reign in such a manner that it falls on 25 December 753 AUC (ab urbe
+condita, i.e. since the founding of Rome), thus making the current era
+start with AD 1 on 1 January 754 AUC.
+
+How Dionysius established the year of Christ's birth is not known (see
+section 2.13.1 for a couple of theories). Jesus was born under the
+reign of king Herod the Great, who died in 750 AUC, which means that
+Jesus could have been born no later than that year. Dionysius'
+calculations were disputed at a very early stage.
+
+When people started dating years before 754 AUC using the term "Before
+Christ", they let the year 1 BC immediately precede AD 1 with no
+intervening year zero. 
+
+Note, however, that astronomers frequently use another way of
+numbering the years BC. Instead of 1 BC they use 0, instead of 2 BC
+they use -1, instead of 3 BC they use -2, etc.
+
+See also section 2.13.2.
+
+It is sometimes claimed that it was the Venerable Bede (673-735) who
+introduced BC dating. Although Bede seems to have used the term on at
+least one occasion, it is generally believed that BC dates were not
+used until the middle of the 17th century.
+
+In this section I have used AD 1 = 754 AUC. This is the most likely
+equivalence between the two systems. However, some authorities state
+that AD 1 = 753 AUC or 755 AUC. This confusion is not a modern one, it
+appears that even the Romans were in some doubt about how to count
+the years since the founding of Rome.
+
+
+2.13.1. How did Dionysius date Christ's birth?
+----------------------------------------------
+
+There are quite a few theories about this. And many of the theories
+are presented as if they were indisputable historical fact.
+
+Here are two theories that I personally consider likely:
+
+1. According to the Gospel of Luke (3:1 & 3:23) Jesus was "about
+   thirty years old" shortly after "the fifteenth year of the reign of
+   Tiberius Caesar". Tiberius became emperor in AD 14. If you combine
+   these numbers you reach a birthyear for Jesus that is strikingly
+   close to the beginning of our year reckoning. This may have been
+   the basis for Dionysius' calculations.
+
+2. Dionysius' original task was to calculate an Easter table. In the
+   Julian calendar, the dates for Easter repeat every 532 years (see
+   section 2.12.8). The first year in Dionysius' Easter tables is AD
+   532. Is it a coincidence that the number 532 appears twice here? Or
+   did Dionysius perhaps fix Jesus' birthyear so that his own Easter
+   tables would start exactly at the beginning of the second Easter
+   cycle after Jesus' birth?
+
+
+2.13.2. Was Jesus born in the year 0?
+-------------------------------------
+
+No.
+
+There are two reasons for this:
+        - There is no year 0.
+        - Jesus was born before 4 BC.
+
+The concept of a year "zero" is a modern myth (but a very popular one).
+Roman numerals do not have a figure designating zero, and treating zero
+as a number on an equal footing with other numbers was not common in
+the 6th century when our present year reckoning was established by
+Dionysius Exiguus (see section 2.13). Dionysius let the year AD 1
+start one week after what he believed to be Jesus' birthday.
+
+Therefore, AD 1 follows immediately after 1 BC with no intervening
+year zero. So a person who was born in 10 BC and died in AD 10,
+would have died at the age of 19, not 20.
+
+Furthermore, Dionysius' calculations were wrong. The Gospel of
+Matthew tells us that Jesus was born under the reign of king Herod the
+Great, and he died in 4 BC. It is likely that Jesus was actually born
+around 7 BC. The date of his birth is unknown; it may or may not be 25
+December.
+
+
+2.13.3. When does the 3rd millennium start?
+-------------------------------------------
+
+The first millennium started in AD 1, so the millennia are counted in
+this manner:
+
+1st millennium:    1-1000
+2nd millennium: 1001-2000
+3rd millennium: 2001-3000
+
+Thus, the 3rd millennium and, similarly, the 21st century start on
+1 Jan 2001.
+
+This is the cause of some heated debate, especially since some
+dictionaries and encyclopaedias say that a century starts in years
+that end in 00. Furthermore, the change 1999/2000 is obviously much
+more spectacular than the change 2000/2001.
+
+Let me propose a few compromises:
+
+Any 100-year period is a century. Therefore the period from 23 June 2002
+to 22 June 2102 is a century. So please feel free to celebrate the
+start of a century any day you like!
+
+Although the 20th century started in 1901, the 1900s started in 1900.
+Similarly, we celebrated the start of the 2000s in 2000 and we can
+celebrate the start of the 21st century in 2001.
+
+
+2.13.4. What do AD, BC, CE, and BCE stand for?
+----------------------------------------------
+
+Years before the birth of Christ are in English traditionally
+identified using the abbreviation BC ("Before Christ").
+
+Years after the birth of Christ are traditionally identified using the
+Latin abbreviation AD ("Anno Domini", that is, "In the Year of the
+Lord").
+
+Some people, who want to avoid the reference to Christ that is implied
+in these terms, prefer the abbreviations BCE ("Before the Common Era"
+or "Before the Christian Era") and CE ("Common Era" or "Christian Era").
+
+
+2.14. What is the Indiction?
+----------------------------
+
+The Indiction was used in the middle ages to specify the position of a
+year in a 15 year taxation cycle. It was introduced by emperor
+Constantine the Great on 1 September 312 and ceased to be used in
+1806.
+
+The Indiction may be calculated thus:
+        Indiction = (year + 2) mod 15 + 1
+
+The Indiction has no astronomical significance.
+
+The Indiction did not always follow the calendar year. Three different
+Indictions may be identified:
+
+1) The Pontifical or Roman Indiction, which started on New Year's Day
+   (being either 25 December, 1 January, or 25 March).
+2) The Greek or Constantinopolitan Indiction, which started on 1 September.
+3) The Imperial Indiction or Indiction of Constantine, which started
+   on 24 September.
+
+
+2.15. What is the Julian Period?
+--------------------------------
+
+The Julian period (and the Julian day number) must not be confused
+with the Julian calendar. 
+
+The French scholar Joseph Justus Scaliger (1540-1609) was interested
+in assigning a positive number to every year without having to worry
+about BC/AD. He invented what is today known as the "Julian Period".
+
+The Julian Period probably takes its name from the Julian calendar,
+although it has been claimed that it is named after Scaliger's father,
+the Italian scholar Julius Caesar Scaliger (1484-1558).
+
+Scaliger's Julian period starts on 1 January 4713 BC (Julian calendar)
+and lasts for 7980 years. AD 2000 is thus year 6713 in the Julian
+period. After 7980 years the number starts from 1 again.
+
+Why 4713 BC and why 7980 years? Well, in 4713 BC the Indiction (see
+section 2.14), the Golden Number (see section 2.12.3) and the Solar
+Number (see section 2.4) were all 1. The next times this happens is
+15*19*28=7980 years later, in AD 3268.
+
+Astronomers have used the Julian period to assign a unique number to
+every day since 1 January 4713 BC. This is the so-called Julian Day
+(JD). JD 0 designates the 24 hours from noon UTC on 1 January 4713 BC
+to noon UTC on 2 January 4713 BC.
+
+This means that at noon UTC on 1 January AD 2000, JD 2,451,545
+started.
+
+This can be calculated thus:
+        From 4713 BC to AD 2000 there are 6712 years.
+        In the Julian calendar, years have 365.25 days, so 6712 years
+        correspond to 6712*365.25=2,451,558 days. Subtract from this
+        the 13 days that the Gregorian calendar is ahead of the Julian
+        calendar, and you get 2,451,545.
+
+Often fractions of Julian day numbers are used, so that 1 January AD
+2000 at 15:00 UTC is referred to as JD 2,451,545.125.
+
+Note that some people use the term "Julian day number" to refer to any
+numbering of days. NASA, for example, uses the term to denote the
+number of days since 1 January of the current year.
+
+
+2.15.1. Is there a formula for calculating the Julian day number?
+-----------------------------------------------------------------
+
+Try this one (the divisions are integer divisions, in which remainders
+are discarded):
+
+   a = (14-month)/12
+   y = year+4800-a
+   m = month + 12*a - 3
+
+  For a date in the Gregorian calendar:
+   JD = day + (153*m+2)/5 + y*365 + y/4 - y/100 + y/400 - 32045
+
+  For a date in the Julian calendar:
+   JD = day + (153*m+2)/5 + y*365 + y/4 - 32083
+
+
+JD is the Julian day number that starts at noon UTC on the specified
+date.
+
+The algorithm works fine for AD dates. If you want to use it for BC
+dates, you must first convert the BC year to a negative year (e.g.,
+10 BC = -9). The algorithm works correctly for all dates after 4800 BC,
+i.e. at least for all positive Julian day numbers.
+
+
+To convert the other way (i.e., to convert a Julian day number, JD,
+to a day, month, and year) these formulas can be used (again, the
+divisions are integer divisions):
+
+  For the Gregorian calendar:
+     a = JD + 32044
+     b = (4*a+3)/146097
+     c = a - (b*146097)/4
+
+  For the Julian calendar:
+     b = 0
+     c = JD + 32082
+
+  Then, for both calendars:
+     d = (4*c+3)/1461
+     e = c - (1461*d)/4
+     m = (5*e+2)/153
+
+     day   = e - (153*m+2)/5 + 1
+     month = m + 3 - 12*(m/10)
+     year  = b*100 + d - 4800 + m/10
+
+
+2.15.2. What is the modified Julian day number?
+-----------------------------------------------
+
+Sometimes a modified Julian day number (MJD) is used which is
+2,400,000.5 less than the Julian day number. This brings the numbers
+into a more manageable numeric range and makes the day numbers change
+at midnight UTC rather than noon.
+
+MJD 0 thus started on 17 Nov 1858 (Gregorian) at 00:00:00 UTC.
+
+
+2.16. What is the correct way to write dates?
+---------------------------------------------
+
+The answer to this question depends on what you mean by "correct".
+Different countries have different customs.
+
+Most countries use a day-month-year format, such as:
+   25.12.1998   25/12/1998   25/12-1998   25.XII.1998
+
+In the U.S.A. a month-day-year format is common:
+   12/25/1998   12-25-1998
+
+International standard ISO-8601 mandates a year-month-day format,
+namely either 1998-12-25 or 19981225.
+
+In all of these systems, the first two digits of the year are
+frequently omitted:
+   25.12.98   12/25/98   98-12-25   
+
+This confusion leads to misunderstandings. What is 02-03-04? To most
+people it is 2 Mar 2004; to an American it is 3 Feb 2004; and to a
+person using the international standard it would be 4 Mar 2002.
+
+If you want to be sure that people understand you, I recommend that
+you
+  * write the month with letters instead of numbers, and
+  * write the years as 4-digit numbers.
+
+
+3. The Hebrew Calendar
+----------------------
+
+The current definition of the Hebrew calendar is generally said to
+have been set down by the Sanhedrin president Hillel II in
+approximately AD 359. The original details of his calendar are,
+however, uncertain.
+
+The Hebrew calendar is used for religious purposes by Jews all over
+the world, and it is the official calendar of Israel.
+
+The Hebrew calendar is a combined solar/lunar calendar, in that it
+strives to have its years coincide with the tropical year and its
+months coincide with the synodic months. This is a complicated goal,
+and the rules for the Hebrew calendar are correspondingly
+fascinating.
+
+
+3.1. What does a Hebrew year look like?
+---------------------------------------
+
+An ordinary (non-leap) year has 353, 354, or 355 days.
+A leap year has 383, 384, or 385 days.
+The three lengths of the years are termed, "deficient", "regular",
+and "complete", respectively.
+
+An ordinary year has 12 months, a leap year has 13 months.
+
+Every month starts (approximately) on the day of a new moon.
+
+The months and their lengths are:
+
+          Length in a      Length in a     Length in a
+Name      deficient year   regular year    complete year
+-------   --------------   ------------    -------------
+Tishri          30              30              30
+Heshvan         29              29              30
+Kislev          29              30              30
+Tevet           29              29              29
+Shevat          30              30              30
+(Adar I         30              30              30)
+Adar II         29              29              29
+Nisan           30              30              30
+Iyar            29              29              29
+Sivan           30              30              30
+Tammuz          29              29              29
+Av              30              30              30
+Elul            29              29              29
+-------   --------------   ------------    -------------
+Total:      353 or 383      354 or 384      355 or 385
+
+The month Adar I is only present in leap years. In non-leap years
+Adar II is simply called "Adar".
+
+Note that in a regular year the numbers 30 and 29 alternate; a
+complete year is created by adding a day to Heshvan, whereas a
+deficient year is created by removing a day from Kislev.
+
+The alteration of 30 and 29 ensures that when the year starts with a
+new moon, so does each month.
+
+
+3.2. What years are leap years?
+-------------------------------
+
+A year is a leap year if the number 'year mod 19' is one of the
+following: 0, 3, 6, 8, 11, 14, or 17.
+
+The value for year in this formula is the "Anno Mundi" described in
+section 3.8.
+
+
+3.3. What years are deficient, regular, and complete?
+-----------------------------------------------------
+
+That is the wrong question to ask. The correct question to ask is: When
+does a Hebrew year begin? Once you have answered that question (see
+section 3.6), the length of the year is the number of days between
+1 Tishri in one year and 1 Tishri in the following year.
+
+
+3.4. When is New Year's day?
+----------------------------
+
+That depends. Jews have 4 different days to choose from:
+
+1 Tishri:  "Rosh HaShanah". This day is a celebration of the creation
+           of the world and marks the start of a new calendar
+           year. This will be the day we shall base our calculations on
+           in the following sections.
+
+15 Shevat: "Tu B'shevat". The new year for trees, when fruit tithes
+           should be brought.
+
+1 Nisan:   "New Year for Kings". Nisan is considered the first month,
+           although it occurs 6 or 7 months after the start of the
+           calendar year.
+
+1 Elul:    "New Year for Animal Tithes (Taxes)".
+
+Only the first two dates are celebrated nowadays.
+
+
+3.5. When does a Hebrew day begin?
+----------------------------------
+
+A Hebrew-calendar day does not begin at midnight, but at either sunset
+or when three medium-sized stars should be visible, depending on the
+religious circumstance.
+
+Sunset marks the start of the 12 night hours, whereas sunrise marks the
+start of the 12 day hours. This means that night hours may be longer
+or shorter than day hours, depending on the season.
+
+
+3.6. When does a Hebrew year begin?
+-----------------------------------
+
+The first day of the calendary year, Rosh HaShanah, on 1 Tishri is
+determined as follows:
+
+1) The new year starts on the day of the new moon that occurs about
+   354 days (or 384 days if the previous year was a leap year) after
+   1 Tishri of the previous year
+
+2) If the new moon occurs after noon on that day, delay the new year
+   by one day. (Because in that case the new crescent moon will not be
+   visible until the next day.)
+
+3) If this would cause the new year to start on a Sunday, Wednesday,
+   or Friday, delay it by one day. (Because we want to avoid that
+   Yom Kippur (10 Tishri) falls on a Friday or Sunday, and that
+   Hoshanah Rabba (21 Tishri) falls on a Sabbath (Saturday)).
+
+4) If two consecutive years start 356 days apart (an illegal year
+   length), delay the start of the first year by two days.
+
+5) If two consecutive years start 382 days apart (an illegal year
+   length), delay the start of the second year by one day.
+
+
+Note: Rule 4 can only come into play if the first year was supposed
+to start on a Tuesday. Therefore a two day delay is used rather that a
+one day delay, as the year must not start on a Wednesday as stated in
+rule 3.
+
+
+3.7. When is the new moon?
+--------------------------
+
+A calculated new moon is used. In order to understand the
+calculations, one must know that an hour is subdivided into 1080
+"parts".
+
+The calculations are as follows:
+
+The new moon that started the year AM 1, occurred 5 hours and 204
+parts after sunset (i.e. just before midnight on Julian date 6 October
+3761 BC).
+
+The new moon of any particular year is calculated by extrapolating
+from this time, using a synodic month of 29 days 12 hours and 793
+parts.
+
+Note that 18:00 Jerusalem time (15:39 UTC) is used instead of sunset in 
+all these calculations.
+
+
+3.8. How does one count years?
+------------------------------
+
+Years are counted since the creation of the world, which is assumed to
+have taken place in 3761 BC. In that year, AM 1 started (AM = Anno
+Mundi = year of the world).
+
+In the year AD 2000 we will witness the start of Hebrew year AM 5761.
+
+
+4. The Islamic Calendar
+-----------------------
+
+The Islamic calendar (or Hijri calendar) is a purely lunar
+calendar. It contains 12 months that are based on the motion of the
+moon, and because 12 synodic months is only 12*29.53=354.36 days, the
+Islamic calendar is consistently shorter than a tropical year, and
+therefore it shifts with respect to the Christian calendar.
+
+The calendar is based on the Qur'an (Sura IX, 36-37) and its proper
+observance is a sacred duty for Muslims.
+
+The Islamic calendar is the official calendar in countries around the
+Gulf, especially Saudi Arabia. But other Muslim countries use the
+Gregorian calendar for civil purposes and only turn to the Islamic
+calendar for religious purposes.
+
+
+4.1. What does an Islamic year look like?
+-----------------------------------------
+
+The names of the 12 months that comprise the Islamic year are:
+
+1. Muharram                          7. Rajab
+2. Safar                             8. Sha'ban
+3. Rabi' al-awwal (Rabi' I)          9. Ramadan
+4. Rabi' al-thani (Rabi' II)        10. Shawwal
+5. Jumada al-awwal (Jumada I)       11. Dhu al-Qi'dah
+6. Jumada al-thani (Jumada II)      12. Dhu al-Hijjah
+
+(Due to different transliterations of the Arabic alphabet, other
+spellings of the months are possible.)
+
+Each month starts when the lunar crescent is first seen (by an actual
+human being) after a new moon.
+
+Although new moons may be calculated quite precisely, the actual
+visibility of the crescent is much more difficult to predict. It
+depends on factors such as weather, the optical properties of the
+atmosphere, and the location of the observer. It is therefore very
+difficult to give accurate information in advance about when a new
+month will start.
+
+Furthermore, some Muslims depend on a local sighting of the moon,
+whereas others depend on a sighting by authorities somewhere in the
+Muslim world. Both are valid Islamic practices, but they may lead to
+different starting days for the months.
+
+
+4.2. So you can't print an Islamic calendar in advance?
+-------------------------------------------------------
+
+Not a reliable one. However, calendars are printed for planning
+purposes, but such calendars are based on estimates of the visibility
+of the lunar crescent, and the actual month may start a day earlier or
+later than predicted in the printed calendar.
+
+Different methods for estimating the calendars are used.
+
+Some sources mention a crude system in which all odd numbered months
+have 30 days and all even numbered months have 29 days with an extra
+day added to the last month in "leap years" (a concept otherwise
+unknown in the calendar). Leap years could then be years in which the
+number 'year mod 30' is one of the following: 2, 5, 7, 10, 13, 16, 18,
+21, 24, 26, or 29. (This is the algorithm used in the calendar program
+of the Gnu Emacs editor.)
+
+Such a calendar would give an average month length of 29.53056 days,
+which is quite close to the synodic month of 29.53059 days, so *on the
+average* it would be quite accurate, but in any given month it is
+still just a rough estimate.
+
+Better algorithms for estimating the visibility of the new moon have
+been devised. You may want to check out the following web site (and
+the pages it refers to) for information about Islamic calendar
+predictions:
+        http://www.ummah.org.uk/ildl
+
+
+4.3. How does one count years?
+------------------------------
+
+Years are counted since the Hijra, that is, Mohammed's flight to
+Medina, which is assumed to have taken place 16 July AD 622 (Julian
+calendar). On that date AH 1 started (AH = Anno Hegirae = year of the
+Hijra).
+
+In the year AD 2000 we have witnessed the start of Islamic year AH 1421.
+
+Note that although only 2000-622=1378 years have passed in the
+Christian calendar, 1420 years have passed in the Islamic calendar,
+because its year is consistently shorter (by about 11 days) than the
+tropical year used by the Christian calendar.
+
+
+4.4. When will the Islamic calendar overtake the Gregorian calendar?
+--------------------------------------------------------------------
+
+As the year in the Islamic calendar is about 11 days shorter than the
+year in the Christian calendar, the Islamic years are slowly gaining
+in on the Chistian years. But it will be many years before the two
+coincide. The 1st day of the 5th month of AD 20874 in the Gregorian
+calendar will also be (approximately) the 1st day of the 5th month of
+AH 20874 of the Islamic calendar.
+
+
+
+5. The Week
+-----------
+
+The Christian, the Hebrew, and the Islamic calendars all have a 7-day
+week.
+
+
+5.1. What is the origin of the 7-day week?
+------------------------------------------
+
+Digging into the history of the 7-day week is a very complicated
+matter. Authorities have very different opinions about the history of
+the week, and they frequently present their speculations as if they
+were indisputable facts. The only thing we seem to know for certain
+about the origin of the 7-day week is that we know nothing for
+certain.
+
+The first pages of the Bible explain how God created the world in six
+days and rested on the seventh. This seventh day became the Jewish
+day of rest, the sabbath, Saturday.
+
+Extra-biblical locations sometimes mentioned as the birthplace of the
+7-day week include: Babylon, Persia, and several others. The week was
+known in Rome before the advent of Christianity.
+
+
+5.2. What do the names of the days of the week mean?
+----------------------------------------------------
+
+An answer to this question is necessarily closely linked to the
+language in question. Whereas most languages use the same names for
+the months (with a few Slavonic languages as notable exceptions),
+there is great variety in names that various languages use for the
+days of the week. A few examples will be given here.
+
+Except for the sabbath, Jews simply number their week days.
+
+A related method is partially used in Portuguese and Russian:
+
+   English    Portuguese      Russian        Meaning of Russian name
+   -------    ----------      -------        -----------------------
+   Monday     segunda-feira   ponedelnik     After "do-nothing"
+   Tuesday    terca-feira     vtornik        Second
+   Wednesday  quarta-feira    sreda          Middle
+   Thursday   quinta-feira    chetverg       Fourth
+   Friday     sexta-feira     pyatnitsa      Fifth
+   Saturday   sabado          subbota        Sabbath
+   Sunday     domingo         voskresenye    Resurrection
+
+Most Latin-based languages connect each day of the week with one of
+the seven "planets" of the ancient times: Sun, Moon, Mercury, Venus,
+Mars, Jupiter, and Saturn. French, for example, uses:
+
+   English     French         "Planet"
+   -------     ------         --------
+   Monday      lundi          Moon
+   Tuesday     mardi          Mars
+   Wednesday   mercredi       Mercury
+   Thursday    jeudi          Jupiter
+   Friday      vendredi       Venus
+   Saturday    samedi         Saturn
+   Sunday      dimanche       (Sun)
+
+The link with the sun has been broken in French, but Sunday was
+called "dies solis" (day of the sun) in Latin.
+
+It is interesting to note that also some Asiatic languages (for
+example, Hindi, Japanese, and Korean) have a similar relationship
+between the week days and the planets.
+
+English has retained the original planets in the names for Saturday,
+Sunday, and Monday. For the four other days, however, the names of
+Anglo-Saxon or Nordic gods have replaced the Roman gods that gave
+name to the planets. Thus, Tuesday is named after Tiw, Wednesday is
+named after Woden, Thursday is named after Thor, and Friday is named
+after Freya.
+
+
+5.3. What is the system behind the planetary day names?
+-------------------------------------------------------
+
+As we saw in the previous section, the planets have given the week
+days their names following this order:
+
+   Moon, Mars, Mercury, Jupiter, Venus, Saturn, Sun
+
+Why this particular order?
+
+One theory goes as follows: If you order the "planets" according to
+either their presumed distance from Earth (assuming the Earth to be
+the center of the universe) or their period of revolution around the
+Earth, you arrive at this order:
+
+   Moon, Mercury, Venus, Sun, Mars, Jupiter, Saturn
+
+Now, assign (in reverse order) these planets to the hours of the day:
+
+   1=Saturn, 2=Jupiter, 3=Mars, 4=Sun, 5=Venus, 6=Mercury, 7=Moon,
+   8=Saturn, 9=Jupiter, etc., 23=Jupiter, 24=Mars
+
+Then next day will then continue where the old day left off:
+
+  1=Sun, 2=Venus, etc., 23=Venus, 24=Mercury
+
+And the next day will go
+
+  1=Moon, 2=Saturn, etc.
+
+If you look at the planet assigned to the first hour of each day, you
+will note that the planets come in this order:
+
+   Saturn, Sun, Moon, Mars, Mercury, Jupiter, Venus
+
+This is exactly the order of the associated week days.
+
+Coincidence? Maybe.
+
+
+5.4. Has the 7-day week cycle ever been interrupted?
+----------------------------------------------------
+
+There is no record of the 7-day week cycle ever having been broken.
+Calendar changes and reform have never interrupted the 7-day cycles.
+It very likely that the week cycles have run uninterrupted at least
+since the days of Moses (c. 1400 BC), possibly even longer.
+
+Some sources claim that the ancient Jews used a calendar in which an
+extra Sabbath was occasionally introduced. But this is probably not
+true.
+
+
+5.5. Which day is the day of rest?
+----------------------------------
+
+For the Jews, the Sabbath (Saturday) is the day of rest and
+worship. On this day God rested after creating the world.
+
+Most Christians have made Sunday their day of rest and worship,
+because Jesus rose from the dead on a Sunday.
+
+Muslims use Friday as their day of rest and worship. The Qur'an
+calls Friday a holy day, the "king of days".
+
+
+5.6. What is the first day of the week?
+---------------------------------------
+
+The Bible clearly makes Saturday (the Sabbath) the last day of the
+week. Therefore it is common Jewish and Christian practice to regard
+Sunday as the first day of the week (as is also evident from the
+Portuguese names for the week days mentioned in section 5.2). However,
+the fact that, for example, Russian uses the name "second" for
+Tuesday, indicates that some nations regard Monday as the first day.
+
+In international standard ISO-8601 the International Organization for
+Standardization has decreed that Monday shall be the first day of the
+week.
+
+
+5.7. What is the week number?
+-----------------------------
+
+International standard ISO-8601 (mentioned in section 5.6) assigns a
+number to each week of the year. A week that lies partly in one year
+and partly in another is assigned a number in the year in which most
+of its days lie. This means that
+
+        Week 1 of any year is the week that contains 4 January,
+
+or equivalently
+
+        Week 1 of any year is the week that contains the first
+        Thursday in January.
+
+Most years have 52 weeks, but years that start on a Thursday and leap
+years that start on a Wednesday have 53 weeks.
+
+Note: This standard is not used in the United States.
+
+
+5.8. How can I calculate the week number?
+-----------------------------------------
+
+If you know the date, how do you calculate the corresponding week
+number (as defined in ISO-8601)?
+
+1) Using the formulas in section 2.15.1, calculate the Julian Day
+   Number, J.
+
+2) Perform the following calculations (in which the divisions are
+   integer divisions in which the remainder is discarded):
+
+   d4 = (J+31741 - (J mod 7)) mod 146097 mod 36524 mod 1461
+   L  = d4/1460
+   d1 = ((d4-L) mod 365) + L
+   WeekNumber = d1/7+1
+
+(I am very grateful to Stefan Potthast for this algorithm.)
+
+ 
+5.9. Do weeks of different lengths exist?
+-----------------------------------------
+
+If you define a "week" as a 7-day period, obviously the answer is
+no. But if you define a "week" as a named interval that is greater
+than a day and smaller than a month, the answer is yes.
+
+The ancient Egyptians used a 10-day "week", as did the French
+Revolutionary calendar (see section 6.1).
+
+The Maya calendar uses a 13 and a 20-day "week" (see section 7.2).
+
+The Soviet Union has used both a 5-day and a 6-day week. In 1929-30
+the USSR gradually introduced a 5-day week. Every worker had one day
+off every week, but there was no fixed day of rest. On 1 September
+1931 this was replaced by a 6-day week with a fixed day of rest,
+falling on the 6th, 12th, 18th, 24th, and 30th day of each month (1
+March was used instead of the 30th day of February, and the last day
+of months with 31 days was considered an extra working day outside
+the normal 6-day week cycle). A return to the normal 7-day week was
+decreed on 26 June 1940.
+
+
+6. The French Revolutionary Calendar
+------------------------------------
+
+The French Revolutionary Calendar (or Republican Calendar) was
+introduced in France on 24 November 1793 and abolished on 1 January
+1806. It was used again briefly during under the Paris Commune in
+1871.
+
+
+6.1. What does a Republican year look like?
+-------------------------------------------
+
+A year consists of 365 or 366 days, divided into 12 months of 30 days
+each, followed by 5 or 6 additional days. The months were:
+
+1. Vendemiaire           7. Germinal
+2. Brumaire              8. Floreal
+3. Frimaire              9. Prairial
+4. Nivose               10. Messidor
+5. Pluviose             11. Thermidor
+6. Ventose              12. Fructidor
+
+(The second e in Vendemiaire and the e in Floreal carry an acute
+accent. The o's in Nivose, Pluviose, and Ventose carry a circumflex
+accent.)
+
+The year was not divided into weeks, instead each month was divided
+into three "decades" of 10 days, of which the final day was a day of
+rest. This was an attempt to de-Christianize the calendar, but it was
+an unpopular move, because now there were 9 work days between each day
+of rest, whereas the Gregorian Calendar had only 6 work days between
+each Sunday.
+
+The ten days of each decade were called, respectively, Primidi, Duodi,
+Tridi, Quartidi, Quintidi, Sextidi, Septidi, Octidi, Nonidi, Decadi.
+
+The 5 or 6 additional days followed the last day of Fructidor and were
+called:
+        1. Jour de la vertu (Virtue Day)
+        2. Jour du genie (Genius Day)
+        3. Jour du travail (Labour Day)
+        4. Jour de l'opinion (Reason Day)
+        5. Jour des recompenses (Rewards Day)
+        6. Jour de la revolution (Revolution Day)  (the leap day)
+
+Each year was supposed to start on autumnal equinox (around 22
+September), but this created problems as will be seen in section 6.3.
+
+
+6.2. How does one count years?
+------------------------------
+
+Years are counted since the establishment of the first French Republic
+on 22 September 1792. That day became 1 Vendemiaire of the year 1 of
+the Republic. (However, the Revolutionary Calendar was not introduced
+until 24 November 1793.)
+
+
+6.3. What years are leap years?
+-------------------------------
+
+Leap years were introduced to keep New Year's Day on autumnal
+equinox. But this turned out to be difficult to handle, because
+equinox is not completely simple to predict.
+
+In fact, the first decree implementing the calendar (5 Oct 1793)
+contained two contradictory rules, as it stated that:
+  - the first day of each year would be that of the autmunal equinox
+  - every 4th year would be a leap year
+
+In practice, the first calendars were based on the equinoxial
+condition.
+
+To remove the confusion, a rule similar to the one used in the
+Gregorian Calendar (including a 4000 year rule as descibed in section
+2.2.2) was proposed by the calendar's author, Charles Rommes, but his
+proposal ran into political problems.
+
+In short, during the time when the French Revolutionary Calendar was
+in use, the the following years were leap years: 3, 7, and 11.
+
+
+6.4. How does one convert a Republican date to a Gregorian one?
+---------------------------------------------------------------
+
+The following table lists the Gregorian date on which each year of the
+Republic started:
+
+Year  1: 22 Sep 1792            Year  8: 23 Sep 1799
+Year  2: 22 Sep 1793            Year  9: 23 Sep 1800
+Year  3: 22 Sep 1794            Year 10: 23 Sep 1801
+Year  4: 23 Sep 1795            Year 11: 23 Sep 1802
+Year  5: 22 Sep 1796            Year 12: 24 Sep 1803
+Year  6: 22 Sep 1797            Year 13: 23 Sep 1804
+Year  7: 22 Sep 1798            Year 14: 23 Sep 1805
+
+
+7. The Maya Calendar
+--------------------
+
+(I am very grateful to Chris Carrier for providing most of the
+information about the Maya calendar.)
+
+Among their other accomplishments, the ancient Mayas invented a
+calendar of remarkable accuracy and complexity. The Maya calendar was
+adopted by the other Mesoamerican nations, such as the Aztecs and the
+Toltec, which adopted the mechanics of the calendar unaltered but
+changed the names of the days of the week and the months.
+
+The Maya calendar uses three different dating systems in parallel, the
+"Long Count", the "Tzolkin" (divine calendar), and the "Haab" (civil
+calendar).  Of these, only the Haab has a direct relationship to the
+length of the year.
+
+A typical Mayan date looks like this: 12.18.16.2.6, 3 Cimi 4 Zotz.
+
+12.18.16.2.6 is the Long Count date.
+3 Cimi is the Tzolkin date.
+4 Zotz is the Haab date.
+
+
+7.1. What is the Long Count?
+----------------------------
+
+The Long Count is really a mixed base-20/base-18 representation of a
+number, representing the number of days since the start of the Mayan
+era. It is thus akin to the Julian Day Number (see section 2.15).
+
+The basic unit is the "kin" (day), which is the last component of the
+Long Count. Going from right to left the remaining components are:
+
+   uinal  (1 uinal = 20 kin = 20 days)
+   tun    (1 tun = 18 uinal = 360 days = approx. 1 year)
+   katun  (1 katun = 20 tun = 7,200 days = approx. 20 years)
+   baktun (1 baktun = 20 katun = 144,000 days = approx. 394 years)
+
+The kin, tun, and katun are numbered from 0 to 19.
+The uinal are numbered from 0 to 17.
+The baktun are numbered from 1 to 13.
+
+Although they are not part of the Long Count, the Mayas had names for
+larger time spans. The following names are sometimes quoted, although
+they are not ancient Maya terms:
+
+   1 pictun = 20 baktun = 2,880,000 days = approx. 7885 years
+   1 calabtun = 20 pictun = 57,600,000 days = approx. 158,000 years
+   1 kinchiltun = 20 calabtun = 1,152,000,000 days = approx. 3 million years
+   1 alautun = 20 kinchiltun = 23,040,000,000 days = approx. 63 million years
+
+The alautun is probably the longest named period in any calendar.
+
+
+7.1.1. When did the Long Count start?
+-------------------------------------
+
+Logically, the first date in the Long Count should be 0.0.0.0.0, but
+as the baktun (the first component) are numbered from 1 to 13 rather
+than 0 to 12, this first date is actually written 13.0.0.0.0.
+
+The authorities disagree on what 13.0.0.0.0 corresponds to in our
+calendar. I have come across three possible equivalences:
+
+13.0.0.0.0 =  8 Sep 3114 BC (Julian) = 13 Aug 3114 BC (Gregorian)
+13.0.0.0.0 =  6 Sep 3114 BC (Julian) = 11 Aug 3114 BC (Gregorian)
+13.0.0.0.0 = 11 Nov 3374 BC (Julian) = 15 Oct 3374 BC (Gregorian)
+
+Assuming one of the first two equivalences, the Long Count will again
+reach 13.0.0.0.0 on 21 or 23 December AD 2012 - a not too distant future.
+
+The date 13.0.0.0.0 may have been the Mayas' idea of the date of the
+creation of the world.
+
+
+7.2. What is the Tzolkin?
+-------------------------
+
+The Tzolkin date is a combination of two "week" lengths.
+
+While our calendar uses a single week of seven days, the Mayan
+calendar used two different lengths of week:
+   - a numbered week of 13 days, in which the days were numbered from
+     1 to 13
+   - a named week of 20 days, in which the names of the days were:
+
+        0. Ahau         5. Chicchan     10. Oc          15. Men
+        1. Imix         6. Cimi         11. Chuen       16. Cib
+        2. Ik           7. Manik        12. Eb          17. Caban
+        3. Akbal        8. Lamat        13. Ben         18. Etznab
+        4. Kan          9. Muluc        14. Ix          19. Caunac
+
+As the named week is 20 days and the smallest Long Count digit is 20
+days, there is synchrony between the two; if, for example, the last
+digit of today's Long Count is 0, today must be Ahau; if it is 6, it
+must be Cimi. Since the numbered and the named week were both "weeks",
+each of their name/number change daily; therefore, the day after 3
+Cimi is not 4 Cimi, but 4 Manik, and the day after that, 5 Lamat. The
+next time Cimi rolls around, 20 days later, it will be 10 Cimi instead
+of 3 Cimi. The next 3 Cimi will not occur until 260 (or 13*20) days
+have passed. This 260-day cycle also had good-luck or bad-luck
+associations connected with each day, and for this reason, it became
+known as the "divinatory year."
+
+The "years" of the Tzolkin calendar are not counted.
+
+
+7.2.1. When did the Tzolkin start?
+----------------------------------
+
+Long Count 13.0.0.0.0 corresponds to 4 Ahau. The authorities agree on
+this.
+
+
+7.3. What is the Haab?
+----------------------
+
+The Haab was the civil calendar of the Mayas. It consisted of 18
+"months" of 20 days each, followed by 5 extra days, known as
+"Uayeb". This gives a year length of 365 days.
+
+The names of the month were:
+        1. Pop           7. Yaxkin      13. Mac
+        2. Uo            8. Mol         14. Kankin
+        3. Zip           9. Chen        15. Muan
+        4. Zotz         10. Yax         16. Pax
+        5. Tzec         11. Zac         17. Kayab
+        6. Xul          12. Ceh         18. Cumku
+        
+In contrast to the Tzolkin dates, the Haab month names changed every
+20 days instead of daily; so the day after 4 Zotz would be 5 Zotz,
+followed by 6 Zotz ... up to 19 Zotz, which is followed by 0 Tzec.
+
+The days of the month were numbered from 0 to 19. This use of a 0th
+day of the month in a civil calendar is unique to the Maya system; it
+is believed that the Mayas discovered the number zero, and the uses to
+which it could be put, centuries before it was discovered in Europe or
+Asia.
+
+The Uayeb days acquired a very derogatory reputation for bad luck;
+known as "days without names" or "days without souls," and were
+observed as days of prayer and mourning. Fires were extinguished and
+the population refrained from eating hot food. Anyone born on those
+days was "doomed to a miserable life."
+
+The years of the Haab calendar are not counted.
+
+The length of the Tzolkin year was 260 days and the length of the Haab
+year was 365 days. The smallest number that can be divided evenly by
+260 and 365 is 18,980, or 365*52; this was known as the Calendar
+Round. If a day is, for example, "4 Ahau 8 Cumku," the next day
+falling on "4 Ahau 8 Cumku" would be 18,980 days or about 52 years
+later.  Among the Aztec, the end of a Calendar Round was a time of
+public panic as it was thought the world might be coming to an
+end. When the Pleaides crossed the horizon on 4 Ahau 8 Cumku, they
+knew the world had been granted another 52-year extension.
+
+
+7.3.1. When did the Haab start?
+-------------------------------
+
+Long Count 13.0.0.0.0 corresponds to 8 Cumku. The authorities agree on
+this.
+
+
+7.4. Did the Mayas think a year was 365 days?
+---------------------------------------------
+
+Although there were only 365 days in the Haab year, the Mayas were
+aware that a year is slightly longer than 365 days, and in fact, many
+of the month-names are associated with the seasons; Yaxkin, for
+example, means "new or strong sun" and, at the beginning of the Long
+Count, 1 Yaxkin was the day after the winter solstice, when the sun
+starts to shine for a longer period of time and higher in the
+sky. When the Long Count was put into motion, it was started at
+7.13.0.0.0, and 0 Yaxkin corresponded with Midwinter Day, as it did at
+13.0.0.0.0 back in 3114 B.C. The available evidence indicates that the
+Mayas estimated that a 365-day year precessed through all the seasons
+twice in 7.13.0.0.0 or 1,101,600 days.
+
+We can therefore derive a value for the Mayan estimate of the year by
+dividing 1,101,600 by 365, subtracting 2, and taking that number and
+dividing 1,101,600 by the result, which gives us an answer of
+365.242036 days, which is slightly more accurate than the 365.2425
+days of the Gregorian calendar.
+
+(This apparent accuracy could, however, be a simple coincidence. The
+Mayas estimated that a 365-day year precessed through all the seasons
+*twice* in 7.13.0.0.0 days. These numbers are only accurate to 2-3
+digits. Suppose the 7.13.0.0.0 days had corresponded to 2.001 cycles
+rather than 2 cycles of the 365-day year, would the Mayas have noticed?)
+
+
+
+8. The Chinese Calendar
+-----------------------
+
+Although the People's Republic of China uses the Gregorian calendar
+for civil purposes, a special Chinese calendar is used for determining
+festivals. Various Chinese communities around the world also use this
+calendar.
+
+The beginnings of the Chinese calendar can be traced back to the 14th
+century BC. Legend has it that the Emperor Huangdi invented the
+calendar in 2637 BC.
+
+The Chinese calendar is based on exact astronomical observations of
+the longitude of the sun and the phases of the moon. This means that
+principles of modern science have had an impact on the Chinese
+calendar.
+
+I can recommend visiting Helmer Aslaksen's web site
+(http://www.math.nus.edu.sg/aslaksen/calendar/chinese.shtml) for more
+information about the Chinese calendar.
+
+
+8.1. What does the Chinese year look like?
+------------------------------------------
+
+The Chinese calendar - like the Hebrew - is a combined solar/lunar
+calendar in that it strives to have its years coincide with the
+tropical year and its months coincide with the synodic months. It is
+not surprising that a few similarities exist between the Chinese and
+the Hebrew calendar:
+
+   * An ordinary year has 12 months, a leap year has 13 months.
+   * An ordinary year has 353, 354, or 355 days, a leap year has 383,
+     384, or 385 days.
+
+When determining what a Chinese year looks like, one must make a
+number of astronomical calculations:
+
+First, determine the dates for the new moons. Here, a new moon is the
+completely "black" moon (that is, when the moon is in conjunction with
+the sun), not the first visible crescent used in the Islamic and
+Hebrew calendars. The date of a new moon is the first day of a new
+month.
+
+Secondly, determine the dates when the sun's longitude is a multiple
+of 30 degrees. (The sun's longitude is 0 at Vernal Equinox, 90 at
+Summer Solstice, 180 at Autumnal Equinox, and 270 at Winter Solstice.)
+These dates are called the "Principal Terms" and are used to determine
+the number of each month:
+
+Principal Term 1 occurs when the sun's longitude is 330 degrees.
+Principal Term 2 occurs when the sun's longitude is 0 degrees.
+Principal Term 3 occurs when the sun's longitude is 30 degrees.
+etc.
+Principal Term 11 occurs when the sun's longitude is 270 degrees.
+Principal Term 12 occurs when the sun's longitude is 300 degrees.
+
+Each month carries the number of the Principal Term that occurs in
+that month.
+
+In rare cases, a month may contain two Principal Terms; in this case
+the months numbers may have to be shifted. Principal Term 11 (Winter
+Solstice) must always fall in the 11th month.
+
+All the astronomical calculations are carried out for the meridian 120
+degrees east of Greenwich. This roughly corresponds to the east coast
+of China.
+
+Some variations in these rules are seen in various Chinese
+communities.
+
+
+8.2. What years are leap years?
+-------------------------------
+
+Leap years have 13 months. To determine if a year is a leap year,
+calculate the number of new moons between the 11th month in one year
+(i.e, the month containing the Winter Solstice) and the 11th month in
+the following year. If there are 13 months from the start of the 11th
+month in the first year to the start of the 11th month in the second
+year, a leap month must be inserted.
+
+In leap years, at least one month does not contain a Principal Term.
+The first such month is the leap month. It carries the same number as
+the previous month, with the additional note that it is the leap
+month.
+
+
+8.3. How does one count years?
+------------------------------
+
+Unlike most other calendars, the Chinese calendar does not count years
+in an infinite sequence. Instead years have names that are repeated
+every 60 years.
+
+(Historically, years used to be counted since the accession of an
+emperor, but this was abolished after the 1911 revolution.)
+
+Within each 60-year cycle, each year is assigned name consisting of
+two components:
+
+The first component is a "Celestial Stem":
+
+        1. jia          6. ji
+        2. yi           7. geng
+        3. bing         8. xin
+        4. ding         9. ren
+        5. wu          10. gui
+
+These words have no English equivalent.
+
+The second component is a "Terrestrial Branch":
+
+        1. zi (rat)             7. wu (horse)
+        2. chou (ox)            8. wei (sheep)
+        3. yin (tiger)          9. shen (monkey)
+        4. mao (hare, rabbit)  10. you (rooster)
+        5. chen (dragon)       11. xu (dog)
+        6. si (snake)          12. hai (pig)
+
+The names of the corresponding animals in the zodiac cycle of 12
+animals are given in parentheses.
+
+Each of the two components is used sequentially. Thus, the 1st year of
+the 60-year cycle becomes jia-zi, the 2nd year is yi-chou, the 3rd
+year is bing-yin, etc. When we reach the end of a component, we start
+from the beginning: The 10th year is gui-you, the 11th year is jia-xu
+(restarting the Celestial Stem), the 12th year is yi-hai, and the 13th
+year is bing-zi (restarting the Terrestrial Branch). Finally, the 60th
+year becomes gui-hai.
+
+This way of naming years within a 60-year cycle goes back
+approximately 2000 years. A similar naming of days and months has
+fallen into disuse, but the date name is still listed in calendars.
+
+It is customary to number the 60-year cycles since 2637 BC, when the
+calendar was supposedly invented. In that year the first 60-year cycle
+started.
+
+
+8.4. What is the current year in the Chinese calendar?
+------------------------------------------------------
+
+The current 60-year cycle started on 2 Feb 1984. That date bears the name
+bing-yin in the 60-day cycle, and the first month of that first year
+bears the name gui-chou in the 60-month cycle.
+
+This means that the year geng-chen, the 17th year in the 78th cycle,
+started on 5 Feb 2000.
+
+
+
+9. Frequently Asked Questions about this FAQ
+--------------------------------------------
+
+This chapter does not answer questions about calendars. Instead it
+answers questions that I am often asked about this document.
+
+
+9.1. Why doesn't the FAQ describe calendar X?
+---------------------------------------------
+
+I am frequently asked to add a chapter describing the Persian calendar,
+the Japanese calendar, the Ethiopian calendar, the Hindu calendar, etc. 
+
+But I have to stop somewhere. I have discovered that the more calendars
+I include in the FAQ, the more difficult it becomes to ensure that the
+information given is correct. I want to work on the quality rather
+than the quantity of information in this document. It is therefore not
+likely that other calendars will be added in the near future.
+
+
+9.2. Why doesn't the FAQ contain information X?
+-----------------------------------------------
+
+Obviously, I cannot include everything. So I have to prioritize. The
+things that are most likely to be omitted from the FAQ are:
+
+- Information that is relevant to a single country only.
+- Views that are controversial and not supported by recognized
+  authorities.
+
+
+9.3. Why don't you reply to my e-mail?
+--------------------------------------
+
+I try to reply to all the e-mail I receive. But occasionally the
+amount of mail I receive is so large that I have to ignore some
+letters. If this has caused your letter to be lost, I apologize.
+
+But please don't let this stop you from writing to me. I enjoy
+receiving letters, even if I can't answer them all.
+
+
+9.4. How do I know that I can trust your information?
+-----------------------------------------------------
+
+I have tried to be accurate in everything I have described. If you are
+unsure about something that I write, I suggest that you try to verify
+the information yourself. If you come across a recognized authority
+that contradicts something that I've written, please let me know.
+
+
+9.5. Can you recommend any good books about calendars?
+------------------------------------------------------
+
+I'd rather not. Many of the sources I have used are Danish. Unless you
+understand Danish, they won't be of much use to you.
+
+
+9.6. Do you know a web site where I can find information about X?
+-----------------------------------------------------------------
+
+Probably not.
+
+Good places to start your calendar search include:
+
+   http://www.calendarzone.com
+   http://personal.ecu.edu/mccartyr/calendar-reform.html
+
+
+
+10. Date
+--------
+
+This version 2.3 of this document was finished on
+
+        Monday after the 14th Sunday after Trinity, the 25th of September
+        anno ab Incarnatione Domini MM, indict. VIII, epacta XXIV,
+        luna XXVI, anno post Margaretam Reginam Daniae natam LX, on
+        the feast of Saint Cadoc.
+       
+        The 25th day of Elul, Anno Mundi 5760.
+
+        The 25th day of Jumada II, Anno Hegirae 1421.
+
+        The 28th day of the 8th month of the year geng-chen of the 78th
+        cycle.
+
+        Julian Day 2,451,813.
+
+
