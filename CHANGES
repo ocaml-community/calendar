@@ -1,4 +1,3 @@
-* add module Version
 * add the optional parameter ?month to Date.days_in_year
 	(Richard Jones' suggestion)
 * add Date.nth_weekday_of_month (Richard Jones' suggestion)

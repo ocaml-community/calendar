@@ -11,7 +11,7 @@
 #  
 #  See the GNU Library General Public License version 2 for more details
 #
-# $Id: Makefile.in,v 1.42 2004-10-29 17:24:50 signoles Exp $
+# $Id: Makefile.in,v 1.43 2004-11-13 18:27:42 signoles Exp $
 
 # Used programs
 ###############
@@ -44,7 +44,7 @@ DIRS	= src
 
 SRC	= time_Zone.mli time_Zone.ml period.mli \
 	time.mli time.ml date.mli date.ml calendar.mli calendar.ml \
-	printer.mli printer.ml version.mli version.ml
+	printer.mli printer.ml
 SRC	:= $(addprefix src/, $(SRC))
 
 ML	= $(filter %.ml, $(SRC))
@@ -54,9 +54,7 @@ CMO	= $(ML:.ml=.cmo)
 CMX	= $(CMO:.cmo=.cmx)
 CMI	= $(MLI:.mli=.cmi)
 
-CMO_NOVERSION= $(filter-out src/version.cmo, $(CMO))
-
-GENERATED= src/version.ml
+GENERATED=
 
 # Libs and flags
 ################
@@ -77,14 +75,6 @@ src/$(NAME).cma: $(CMO)
 
 src/$(NAME).a src/$(NAME).cmxa: $(CMX)
 	$(CAMLFIND) ocamlopt $(OPTFLAGS) -a -o $@ $^
-
-src/version.ml: $(CMO_NOVERSION) $(CMO_NOVERSION:.cmo=.cmx) Makefile
-	if test -e $@; then chmod a+w $@; fi		
-	echo "let version = \"$(VERSION)\"" > $@
-	echo "let compile_at = Calendar.now ()" >> $@
-	chmod a-w $@
-
-src/version.cmo: src/version.cmi
 
 META: Makefile
 	if test -e $@; then chmod a+w $@; fi		
