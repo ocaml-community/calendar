@@ -13,7 +13,7 @@
  * See the GNU Library General Public License version 2 for more details
  *)
 
-(*i $Id: time.mli,v 1.10 2003-08-31 07:06:27 signoles Exp $ i*)
+(*i $Id: time.mli,v 1.11 2003-09-18 07:03:14 signoles Exp $ i*)
 
 (*S Introduction.
 
@@ -42,6 +42,9 @@ type field = [ `Hour | `Minute | `Second ]
 
 (* [make hour minute second] makes the time hour-minute-second. *)
 val make : int -> int -> int -> t
+
+(* Labelled version of [make]. The default value is [0] for each argument. *)
+val lmake : ?hour:int -> ?minute:int -> ?second:int -> unit -> t
 
 (* The current time based on [Time_Zone.current ()]. *)
 val now : unit -> t
@@ -161,6 +164,9 @@ module Period : sig
 
   (* [make hour minute second] makes a period of the specified length. *)
   val make : int -> int -> int -> t
+
+  (* Labelled version of [make]. The default value is [0] for each argument. *)
+  val lmake : ?hour:int -> ?minute:int -> ?second:int -> unit -> t
 
   (* [hour n] makes a period of [n] hours. *)
   val hour : int -> t

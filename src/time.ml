@@ -13,7 +13,7 @@
  * See the GNU Library General Public License version 2 for more details
  *)
 
-(*i $Id: time.ml,v 1.10 2003-08-31 07:06:27 signoles Exp $ i*)
+(*i $Id: time.ml,v 1.11 2003-09-18 07:03:14 signoles Exp $ i*)
 
 (*S Introduction.
 
@@ -47,6 +47,8 @@ let normalize t =
 (*S Constructors. *)
 
 let make h m s = to_gmt (h * 3600 + m * 60 + s)
+
+let lmake ?(hour = 0) ?(minute = 0) ?(second = 0) () = make hour minute second
 
 let midnight () = to_gmt 0
 
@@ -101,6 +103,9 @@ module Period = struct
   type t = int
 
   let make h m s = h * 3600 + m * 60 + s
+
+  let lmake ?(hour = 0) ?(minute = 0) ?(second = 0) () = 
+    make hour minute second
 
   let length x = x
 

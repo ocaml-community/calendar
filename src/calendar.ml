@@ -13,7 +13,7 @@
  * See the GNU Library General Public License version 2 for more details
  *)
 
-(*i $Id: calendar.ml,v 1.10 2003-08-31 07:50:47 signoles Exp $ i*)
+(*i $Id: calendar.ml,v 1.11 2003-09-18 07:03:13 signoles Exp $ i*)
 
 (*S Introduction.
 
@@ -70,6 +70,9 @@ let create d t =
 let make y m d h mn s = 
   let x = create (Date.make y m d) (Time.make h mn s) in
   if is_valid x then x else raise Date.Out_of_bounds
+
+let lmake ~year ?(month=1) ?(day=1) ?(hour=0) ?(minute=0) ?(second=0) () =
+  make year month day hour minute second
 
 let now () = 
   let now = Unix.gmtime (Unix.gettimeofday ()) in
@@ -181,6 +184,10 @@ module Period = struct
 
   let make y m d h mn s = 
     normalize { d = Date.Period.make y m d; t = Time.Period.make h mn s }
+
+  let lmake ?(year=0) ?(month=0) ?(day=0) ?(hour=0) ?(minute=0) ?(second=0) 
+    () =
+    make year month day hour minute second
 
   let year x = { empty with d = Date.Period.year x }
 

@@ -13,7 +13,7 @@
  * See the GNU Library General Public License version 2 for more details
  *)
 
-(*i $Id: date.ml,v 1.12 2003-09-17 14:22:37 signoles Exp $ i*)
+(*i $Id: date.ml,v 1.13 2003-09-18 07:03:14 signoles Exp $ i*)
 
 (*S Introduction.
 
@@ -73,6 +73,8 @@ let make y m d =
       d + (153 * m' + 2) / 5 + y' * 365 + y' / 4 - 32083
     else raise Undefined
   else raise Out_of_bounds
+
+let lmake ~year ?(month = 1) ?(day = 1) () = make year month day
 
 let from_unixtm x =
   make (x.Unix.tm_year + 1900) (x.Unix.tm_mon + 1) x.Unix.tm_mday
@@ -187,6 +189,8 @@ module Period = struct
   let empty = { y = 0; m = 0; d = 0 }
 
   let make y m d = { y = y; m = m; d = d }
+
+  let lmake ?(year = 0) ?(month = 0) ?(day = 0) () = make year month day
 
   let day n = { empty with d = n }
 

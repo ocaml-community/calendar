@@ -13,7 +13,7 @@
  * See the GNU Library General Public License version 2 for more details
  *)
 
-(*i $Id: date.mli,v 1.11 2003-09-17 14:22:37 signoles Exp $ i*)
+(*i $Id: date.mli,v 1.12 2003-09-18 07:03:14 signoles Exp $ i*)
 
 (*S Introduction. 
 
@@ -68,6 +68,10 @@ exception Undefined
    E.g. the years (5 BC) and (1 BC) respectively correspond to the years 
    (-4) and 0. *)
 val make : int -> int -> int -> t
+
+(* Labelled version of [make]. 
+   The default value of [month] and [day] is [1]. *)
+val lmake : year:int -> ?month:int -> ?day:int -> unit -> t
 
 (* Date of the current day (based on [Time_Zone.current ()]). *)
 val today : unit -> t
@@ -280,6 +284,9 @@ module Period : sig
 
   (* [make year month day] makes a period of the specified lenght. *)
   val make : int -> int -> int -> t
+
+  (* Labelled version of [make]. The default value of each argument is [0]. *)
+  val lmake : ?year:int -> ?month:int -> ?day:int -> unit -> t
 
   (* [year n] makes a period of [n] years. *)
   val year : int -> t

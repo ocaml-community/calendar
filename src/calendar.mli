@@ -13,7 +13,7 @@
  * See the GNU Library General Public License version 2 for more details
  *)
 
-(*i $Id: calendar.mli,v 1.12 2003-09-01 07:44:41 signoles Exp $ i*)
+(*i $Id: calendar.mli,v 1.13 2003-09-18 07:03:13 signoles Exp $ i*)
 
 (*S Introduction. 
 
@@ -51,6 +51,13 @@ type field = [ Date.field | Time.field ]
 (* [make year month day hour minute second] makes the calendar
    "year-month-day; hour-minute-second". *)
 val make : int -> int -> int -> int -> int -> int -> t
+
+(* Labelled version of [make]. 
+   The default value of [month] and [day] (resp. of [hour], [minute] 
+   and [second]) is [1] (resp. [0]). *)
+val lmake : 
+  year:int -> ?month:int -> ?day:int -> 
+  ?hour:int -> ?minute:int -> ?second:int -> unit -> t
 
 (* [create d t] creates a calendar from the given date and time. *)
 val create : Date.t -> Time.t -> t
@@ -162,6 +169,11 @@ module Period : sig
   (* [make year month day hour minute second] makes a period of the specified
      length. *)
   val make : int -> int -> int -> int -> int -> int -> t
+
+  (* Labelled version of [make]. The default value of each argument is [0]. *)
+  val lmake : 
+    ?year:int -> ?month:int -> ?day:int -> 
+      ?hour:int -> ?minute:int -> ?second:int -> unit -> t
 
   (* Those functions have the same behavious as those defined in [Date]. *)
 
