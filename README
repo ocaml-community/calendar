@@ -29,7 +29,7 @@ configure	  Script generating Makefile
 configure.in	  Script generating configure (with autoconf)
 calendar_faq.txt  FAQ frow which some algorithms come
 calendar.ps.gz	  Source files documentation
-html		  HTML version of the .mli files
+doc		  HTML documentation of the API
 src		  Source files directory
 tests		  Test files directory
 
@@ -76,10 +76,12 @@ or
 6- Documentation
 ----------------
 
-The definitions provided by this library are fully commented in the
-.mli files. The html directory contains an html version of those .mli files.
+The doc directory contains an html documentation of the .mli files.
+This documentation is available online at 
 
-The file calendar.ps.gz is a more user friendly documentation.
+	http://www.lri.fr/~signoles/prog/calendar/doc/index.html
+
+The file calendar.ps.gz is the source code documentation.
 
 7- Makefile
 -----------
@@ -98,12 +100,12 @@ Produce the source file documentation. You need ocamlweb (**).
 iv. calendar.ps.gz
 Same as above. Moreover the documentation is zipped.
 
-v. mli2html
-Produce the html files in the html directory. You need caml2html (***).
+v. doc
+Produce the documentation of the API. You need ocamldoc (***).
 
 (*)   ocamlwc is available at http://www.lri.fr/~filliatr/software.en.html
 (**)  ocamlweb is available at http://www.lri.fr/~filliatr/ocamlweb
-(***) caml2html is available at http://perso.wanadoo.fr/sebastien.ailleret/caml
+(***) ocamldoc is included with Objective Caml
 
 8- Contact the developper
 -------------------------

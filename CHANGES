@@ -2,6 +2,7 @@ version 1.07, 2004-03-22:
 =========================
 * compile even if no ocaml native compiler is available
 	(from a patch of Stefano Zacchiroli)
+* documentation of the API with ocamldoc
 
 version 1.06, 2003-12-05:
 =========================

@@ -27,7 +27,6 @@
 #   OCAMLDOC	  "ocamldoc" or "ocamldoc.opt" (not mandatory)
 #   OCAMLWEB      "ocamlweb" (not mandatory)
 #   OCAMLWC	  "ocamlwc" (not mandatory)
-#   CAML2HTML	  "caml2html" (not mandatory)
 #   OCAMLDOT	  "ocamldot" (not mandatory)
 #   OCAMLWIN32    "yes"/"no" depending on Sys.os_type = "Win32"
 #   EXE           ".exe" if OCAMLWIN32=yes, "" otherwise
@@ -128,8 +127,6 @@ AC_CHECK_PROG(OCAMLWEB,ocamlweb,ocamlweb,true)
 
 AC_CHECK_PROG(OCAMLWC,ocamlwc,ocamlwc,true)
 
-AC_CHECK_PROG(CAML2HTML,caml2html,caml2html,true)
-
 AC_CHECK_PROG(OCAMLDOT,ocamldot,ocamldot,true)
 
 # platform
@@ -154,7 +151,6 @@ AC_SUBST(OCAMLLIB)
 AC_SUBST(OCAMLDOC)
 AC_SUBST(OCAMLWEB)
 AC_SUBST(OCAMLWC)
-AC_SUBST(CAML2HTML)
 AC_SUBST(OCAMLDOT)
 AC_SUBST(OCAMLWIN32)
 AC_SUBST(EXE)
