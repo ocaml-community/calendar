@@ -1,5 +1,5 @@
 (*
- * Date
+ * Calendar library
  * Copyright (C) 2003 Julien SIGNOLES
  * 
  * This software is free software; you can redistribute it and/or
@@ -13,7 +13,7 @@
  * See the GNU Library General Public License version 2 for more details
  *)
 
-(*i $Id: date.ml,v 1.1 2003-07-04 07:11:07 signoles Exp $ i*)
+(*i $Id: date.ml,v 1.2 2003-07-04 12:15:52 signoles Exp $ i*)
 
 (*S Introduction.
 
@@ -36,6 +36,8 @@ module Period = struct
   let make y m d = { y = y; m = m; d = d }
 
   let day n = { empty with d = n }
+
+  let week n = { empty with d = 7 * n }
 
   let month n = { empty with m = n }
 

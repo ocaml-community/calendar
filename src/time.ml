@@ -13,7 +13,7 @@
  * See the GNU Library General Public License version 2 for more details
  *)
 
-(*i $Id: time.ml,v 1.1 2003-07-04 07:11:07 signoles Exp $ i*)
+(*i $Id: time.ml,v 1.2 2003-07-04 12:15:52 signoles Exp $ i*)
 
 type t = int (*r GMT time *)
 
@@ -47,8 +47,8 @@ end
 
 module type S = sig
   val convert : t -> Time_Zone.t -> t
-(*  val to_gmt : t -> t
-  val from_gmt : t -> t*)
+  val to_gmt : t -> t
+  val from_gmt : t -> t
   val midnight : unit -> t
   val midday : unit -> t
   val hour : t -> int
@@ -64,11 +64,13 @@ module type S = sig
   val is_am : t -> bool
 end
 
+let normalize t = t mod 86400, t / 86400
+
 let convert t tz = t + 3600 * Time_Zone.gap Time_Zone.GMT tz
 
-let to_gmt x = x + 3600 * Time_Zone.gap (Time_Zone.value ()) Time_Zone.GMT
+let to_gmt x = x + 3600 * Time_Zone.gap (Time_Zone.current ()) Time_Zone.GMT
 
-let from_gmt x = convert x (Time_Zone.value ())
+let from_gmt x = convert x (Time_Zone.current ())
 
 let midnight () = to_gmt 0
 

@@ -4,7 +4,7 @@
 #                                                                            #
 #                      Copyright (C) 2002 Julien SIGNOLES                    #
 #                                                                            #
-#       $Id: Makefile.in,v 1.1 2003-07-04 07:11:07 signoles Exp $       #
+#       $Id: Makefile.in,v 1.2 2003-07-04 12:15:52 signoles Exp $       #
 #                                                                            #
 ##############################################################################
 
@@ -79,6 +79,15 @@ src/$(NAME).cmxa: src/others/unix.cmx src/others/str.cmx $(CMX)
 
 .ml.cmx:
 	$(CAMLOPT) $(OPTFLAGS) -c $<
+
+# Test
+######
+
+test: src/calendar.cma
+	ocamlc -o tests/test_date -I src $< tests/test_date.ml
+	ocamlc -o tests/test_time -I src $< tests/test_time.ml
+	ocamlc -o tests/test_calendar -I src $< tests/test_calendar.ml
+	ocamlc -o tests/test_timezone -I src $< tests/test_timezone.ml
 
 # Documentation
 ###############

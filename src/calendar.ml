@@ -19,18 +19,22 @@ let from_date x = float_of_int (to_jd x)
 let to_date x = from_jd (int_of_float x)
 
 (* return a number in [0 .. 1] *)
-let from_time x = float_of_int (to_seconds ((*from_gmt*) x)) /. 86400.
+let from_time x = 
+  let x = from_gmt x in float_of_int (to_seconds x) /. 86400.
 
 let to_time x = 
   let t, _ = modf x in 
   let f, i = modf (t *. 86400.) in
-  Printf.printf "%f\n" f;
-  (*from_gmt*) (from_seconds (int_of_float i))
+  let i = if f < 0.5 then int_of_float i else int_of_float i + 1 in
+  from_gmt (from_seconds i)
 
 let build d t = from_date d +. from_time t
 
-let make y m d h mn s = 
-  build (Date.make y m d) (Time.make h mn s)
+let build_in d t = 
+  let from_time x = float_of_int (to_seconds x) /. 86400. in
+  from_date d +. from_time t
+
+let make y m d h mn s = build_in (Date.make y m d) (to_gmt (Time.make h mn s))
 
 let now () = build (Date.today ()) (Time.now ())
 
@@ -43,22 +47,34 @@ let next x f =
 let prev x f = next (-. x) f
 
 module Period = struct
-  type t = int
-  let make _ = assert false
-  let year _ = assert false
-  let month _ = assert false
-  let week _ = assert false
-  let day _ = assert false
-  let hour h = h * 3600
-  let minut m = m * 60
-  let second s = s
-  let empty = 0
-  let add = (+)
-  let sub = (-)
-  let mul = ( * )
-  let div = (/)
-  let opp x = - x
-  let compare = (-)
+  type t = { d : Date.Period.t; t : Time.Period.t }
+
+  let empty = { d = Date.Period.empty; t = Time.Period.empty }
+
+  let make y m d h mn s = 
+    { d = Date.Period.make y m d; t = Time.Period.make h mn s }
+
+  let year x = { empty with d = Date.Period.year x }
+
+  let month x = { empty with d = Date.Period.month x }
+
+  let week x = { empty with d = Date.Period.week x }
+
+  let day x = { empty with d = Date.Period.day x }
+
+  let hour x = { empty with t = Time.Period.hour x }
+
+  let minut x = { empty with t = Time.Period.minut x }
+
+  let second x = { empty with t = Time.Period.second x }
+
+  let add _ = assert false
+  let sub _ = assert false
+  let mul _ = assert false
+  let div _ = assert false
+  let opp x = assert false
+
+  let compare = Pervasives.compare
 end
 
 let rem _ = assert false
@@ -67,7 +83,7 @@ let add _ = assert false
 
 let from_string s =
   match Str.split (Str.regexp "; ") s with
-    | [ d; t ] -> build (Date.from_string d) (Time.from_string t)
+    | [ d; t ] -> build_in (Date.from_string d) (to_gmt (Time.from_string t))
     | _ -> raise (Invalid_argument (s ^ " is not a calendar"))
 
 let to_string x = 

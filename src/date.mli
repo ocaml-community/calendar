@@ -1,5 +1,5 @@
 (*
- * Date
+ * Calendar library
  * Copyright (C) 2003 Julien SIGNOLES
  * 
  * This software is free software; you can redistribute it and/or
@@ -13,7 +13,7 @@
  * See the GNU Library General Public License version 2 for more details
  *)
 
-(*i $Id: date.mli,v 1.1 2003-07-04 07:11:07 signoles Exp $ i*)
+(*i $Id: date.mli,v 1.2 2003-07-04 12:15:52 signoles Exp $ i*)
 
 (*S Introduction. 
 
@@ -57,6 +57,8 @@ module Period : sig
   val day : int -> t
 
   val month : int -> t
+
+  val week : int -> t
 
   val year : int -> t
 end
