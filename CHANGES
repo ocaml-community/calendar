@@ -1,4 +1,4 @@
-version 1.09.1, 2004-17-13:
+version 1.09.1, 2004-11-17:
 ===========================
 * bug fixed in Calendar.to/from_unixfloat with time zones <> UTC
 * add @since in the API documentation
