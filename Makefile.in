@@ -11,7 +11,7 @@
 #  
 #  See the GNU Library General Public License version 2 for more details
 #
-# $Id: Makefile.in,v 1.31 2003-09-18 16:15:10 signoles Exp $
+# $Id: Makefile.in,v 1.32 2003-10-28 12:37:29 signoles Exp $
 
 # Used programs
 ###############
@@ -30,7 +30,7 @@ CAML2HTML= @CAML2HTML@
 #########
 
 NAME	= calendar
-VERSION	= 1.04
+VERSION	= 1.05
 
 LIBS	= src/$(NAME).cma src/$(NAME).cmxa
 
@@ -74,6 +74,7 @@ html/touch-html:
 
 mli2html: $(patsubst src/%.mli, html/%.html, $(filter %.mli, $(SRC)))
 
+.PHONY: META
 META: 
 	echo "description = \"$(NAME) library\"" > $@
 	echo "version = \"$(VERSION)\"" >> $@
