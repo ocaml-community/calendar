@@ -1,3 +1,7 @@
+version 1.02, 2003-08-18:
+=========================
+* bug fixed in configure.in (calendar now works with caml version > 3.06)
+
 version 1.01, 2003-07-16:
 =========================
 * change "minut" by "minute"
