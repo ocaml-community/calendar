@@ -11,7 +11,7 @@
 #  
 #  See the GNU Library General Public License version 2 for more details
 #
-# $Id: Makefile.in,v 1.36 2004-03-22 12:41:24 signoles Exp $
+# $Id: Makefile.in,v 1.37 2004-05-18 15:00:51 signoles Exp $
 
 # Used programs
 ###############
@@ -30,7 +30,7 @@ CAMLFIND= @OCAMLFIND@
 #########
 
 NAME	= calendar
-VERSION	= 1.07
+VERSION	= 1.08
 
 ifeq ($(CAMLOPT),no)
 LIBS	= src/$(NAME).cma
