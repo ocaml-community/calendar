@@ -11,7 +11,7 @@
 #  
 #  See the GNU Library General Public License version 2 for more details
 #
-# $Id: Makefile.in,v 1.15 2003-07-09 07:17:57 signoles Exp $
+# $Id: Makefile.in,v 1.16 2003-07-11 14:48:40 signoles Exp $
 
 # Used programs
 ###############
@@ -23,7 +23,8 @@ CAMLWEB	= @OCAMLWEB@
 CAMLWC	= @OCAMLWC@
 CAMLDOT	= @OCAMLDOT@
 CAMLLIB	= @OCAMLLIB@
-CAML2HTML= caml2html
+CAMLFIND= @OCAMLFIND@
+CAML2HTML= @CAML2HTML@
 
 # Project
 #########
@@ -31,7 +32,7 @@ CAML2HTML= caml2html
 NAME	= calendar
 VERSION	= 1.0
 
-LIBS	= src/$(NAME).a src/$(NAME).cma src/$(NAME).cmxa
+LIBS	= src/$(NAME).cma src/$(NAME).cmxa
 
 DIRS	= src
 
@@ -44,7 +45,7 @@ MLI	= $(filter %.mli, $(SRC))
 
 CMO	= $(ML:.ml=.cmo)
 CMX	= $(CMO:.cmo=.cmx)
-CMI	= $(MLI:.mli=.cmi) # ok with those source files
+CMI	= $(MLI:.mli=.cmi)
 
 # Libs and flags
 ################
@@ -53,24 +54,32 @@ CAMLIBS	= -I $(DIRS)
 
 CAMLFLAGS= $(CAMLIBS)
 BYTEFLAGS= $(CAMLFLAGS)
-OPTFLAGS = $(CAMLFLAGS) -noassert -I src/others
+OPTFLAGS = $(CAMLFLAGS) -noassert
 
 # Main rules
 ############
 
-all: $(LIBS)
+all: $(LIBS) META
 
 src/$(NAME).cma: $(CMO)
-	$(CAMLC) $(BYTEFLAGS) -a -o $@ unix.cma str.cma $^
+	$(CAMLFIND) ocamlc $(BYTEFLAGS) -a -o $@ $^
 
-src/$(NAME).a src/$(NAME).cmxa: src/others/unix.cmx src/others/str.cmx $(CMX)
-	$(CAMLOPT) $(OPTFLAGS) -a -o $@ -cclib -lunix -cclib -lstr $^
+src/$(NAME).a src/$(NAME).cmxa: $(CMX)
+	$(CAMLFIND) ocamlopt $(OPTFLAGS) -a -o $@ $^
 
 html/touch-html:
 	mkdir html
 	touch $@
 
 mli2html: $(patsubst src/%.mli, html/%.html, $(filter %.mli, $(SRC)))
+
+META: 
+	rm -f META
+	echo "description = \"calendar library\"" > $@
+	echo "version = \"$(VERSION)\"" >> $@
+	echo "archive(byte) = \"calendar.cma\"" >> $@
+	echo "archive(native) = \"calendar.cmxa\"" >> $@
+	echo "requires = \"unix str\"" >> $@
 
 # Generic rules
 ###############
@@ -127,11 +136,12 @@ $(NAME).ps: $(SRC)
 # Install
 #########
 
-install:
-	cp -f $(LIBS) $(CMI) $(CMO) $(CMX) $(CAMLLIB)
+install: all
+	if test -d $(CAMLLIB)/site-lib/$(NAME); then $(MAKE) uninstall; fi
+	$(CAMLFIND) install $(NAME) $(LIBS) src/$(NAME).a $(MLI) $(CMI) META
 
 uninstall:
-	rm -f $(addprefix $(CAMLLIB)/, $(notdir $(LIBS) $(CMI) $(CMO) $(CMX)))
+	$(CAMLFIND) remove $(NAME)
 
 # Exporting
 ###########
@@ -174,8 +184,8 @@ TAGS: $(SRC)
 ##########
 
 clean:
-	rm -f TAGS $(TESTS) tests/test
-	for i in . src src/others tests; do \
+	rm -f TAGS META $(TESTS) tests/test
+	for i in . src tests; do \
 	  rm -f $$i/*~ $$i/\#* $$i/*.cm[iox] $$i/*.*a $$i/*.o $$i/a.out; \
 	done
 
@@ -190,8 +200,11 @@ clean-configure: dist-clean
 
 depend:
 	rm -f .depend
-	for i in src src/others tests; do \
+	for i in src tests; do \
 	  $(CAMLDEP) $(CAMLIBS) $$i/*.ml $$i/*.mli; \
 	done > .depend
+
+view-depend:
+	$(CAMLDOT) .depend | dot -Tps | gv -
 
 include .depend

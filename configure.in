@@ -21,12 +21,12 @@
 #   OCAMLBEST     either "byte" if no native compiler was found, 
 #                 or "opt" otherwise
 #   OCAMLDEP      "ocamldep"
-#   OCAMLLEX      "ocamllex" (or "ocamllex.opt" if present)
-#   OCAMLYACC     "ocamlyac"
 #   OCAMLLIB      the path to the ocaml standard library
+#   OCAMLFIND	  "ocamlfind"
 #   OCAMLVERSION  the ocaml version number
 #   OCAMLWEB      "ocamlweb" (not mandatory)
 #   OCAMLWC	  "ocamlwc" (not mandatory)
+#   CAML2HTML	  "caml2html" (not mandatory)
 #   OCAMLDOT	  "ocamldot" (not mandatory)
 #   OCAMLWIN32    "yes"/"no" depending on Sys.os_type = "Win32"
 #   EXE           ".exe" if OCAMLWIN32=yes, "" otherwise
@@ -72,58 +72,23 @@ else
         fi
 fi
 
-# checking for ocamlc.opt
-AC_CHECK_PROG(OCAMLCDOTOPT,ocamlc.opt,ocamlc.opt,no)
-if test "$OCAMLCDOTOPT" != no ; then
-        AC_MSG_CHECKING(ocamlc.opt version)
-        TMPVERSION=`$OCAMLCDOTOPT -v | sed -n -e 's|.*version *\(.*\)$|\1|p' `
-        if test "$TMPVERSION" != "$OCAMLVERSION" ; then
-            AC_MSG_RESULT(differs from ocamlc; ocamlc.opt discarded.)
-        else
-            AC_MSG_RESULT(ok)
-            OCAMLC=$OCAMLCDOTOPT
-        fi
-fi
-
-# checking for ocamlopt.opt
-if test "$OCAMLOPT" != no ; then
-    AC_CHECK_PROG(OCAMLOPTDOTOPT,ocamlopt.opt,ocamlopt.opt,no)
-    if test "$OCAMLOPTDOTOPT" != no ; then
-        AC_MSG_CHECKING(ocamlc.opt version)
-        TMPVER=`$OCAMLOPTDOTOPT -v | sed -n -e 's|.*version *\(.*\)$|\1|p' `
-        if test "$TMPVER" != "$OCAMLVERSION" ; then
-            AC_MSG_RESULT(differs from ocamlc; ocamlopt.opt discarded.)
-        else
-            AC_MSG_RESULT(ok)
-            OCAMLOPT=$OCAMLOPTDOTOPT
-        fi
-    fi
-fi
-
-# ocamldep, ocamllex and ocamlyacc should also be present in the path
+# ocamldep and ocamlfind should also be present in the path
 AC_CHECK_PROG(OCAMLDEP,ocamldep,ocamldep,no)
 if test "$OCAMLDEP" = no ; then
         AC_MSG_ERROR(Cannot find ocamldep.)
 fi
 
-AC_CHECK_PROG(OCAMLLEX,ocamllex,ocamllex,no)
-if test "$OCAMLLEX" = no ; then
-    AC_MSG_ERROR(Cannot find ocamllex.)
-else
-    AC_CHECK_PROG(OCAMLLEXDOTOPT,ocamllex.opt,ocamllex.opt,no)
-    if test "$OCAMLLEXDOTOPT" != no ; then
-        OCAMLLEX=$OCAMLLEXDOTOPT
-    fi
+AC_CHECK_PROG(OCAMLFIND,ocamlfind,ocamlfind,no)
+if test "$OCAMLFIND" = no ; then
+    AC_MSG_ERROR(Cannot find ocamlfind.)
 fi
 
-AC_CHECK_PROG(OCAMLYACC,ocamlyacc,ocamlyacc,no)
-if test "$OCAMLYACC" = no ; then
-        AC_MSG_ERROR(Cannot find ocamlyacc.)
-fi
-
+# Not mandatory tools
 AC_CHECK_PROG(OCAMLWEB,ocamlweb,ocamlweb,true)
 
 AC_CHECK_PROG(OCAMLWC,ocamlwc,ocamlwc,true)
+
+AC_CHECK_PROG(CAML2HTML,caml2html,caml2html,true)
 
 AC_CHECK_PROG(OCAMLDOT,ocamldot,ocamldot,true)
 
@@ -142,13 +107,13 @@ fi
 AC_SUBST(OCAMLC)
 AC_SUBST(OCAMLOPT)
 AC_SUBST(OCAMLDEP)
-AC_SUBST(OCAMLLEX)
-AC_SUBST(OCAMLYACC)
+AC_SUBST(OCAMLFIND)
 AC_SUBST(OCAMLBEST)
 AC_SUBST(OCAMLVERSION)
 AC_SUBST(OCAMLLIB)
 AC_SUBST(OCAMLWEB)
 AC_SUBST(OCAMLWC)
+AC_SUBST(CAML2HTML)
 AC_SUBST(OCAMLDOT)
 AC_SUBST(OCAMLWIN32)
 AC_SUBST(EXE)
