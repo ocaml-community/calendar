@@ -13,7 +13,7 @@
  * See the GNU Library General Public License version 2 for more details
  *)
 
-(*i $Id: calendar.mli,v 1.18 2004-10-25 15:16:28 signoles Exp $ i*)
+(*i $Id: calendar.mli,v 1.19 2004-11-15 16:36:55 signoles Exp $ i*)
 
 (** Calendar operations.
 
@@ -32,48 +32,50 @@
 
 (** {1 Datatypes} *)
 
-(** Type of a date refined with a time, so called a calendar. *)
 type t
+  (** Type of a date refined with a time, so called a calendar. *)
 
-(** Days of the week. *)
 type day = Date.day = Sun | Mon | Tue | Wed | Thu | Fri | Sat
+    (** Days of the week. *)
 
-(** Months of the year. *)
 type month = Date.month =
     Jan | Feb | Mar | Apr | May | Jun | Jul | Aug | Sep | Oct | Nov | Dec
+	(** Months of the year. *)
 
-(** Year as an int *)
 type year = Date.year
+    (** Year as an int *)
 
-(** The different fields of a calendar. *)
 type field = [ Date.field | Time.field ]
+    (** The different fields of a calendar. *)
 
 (** {1 Constructors} *)
 
 val make : int -> int -> int -> int -> int -> int -> t
-(** [make year month day hour minute second] makes the calendar
-  "year-month-day; hour-minute-second". *)
+  (** [make year month day hour minute second] makes the calendar
+    "year-month-day; hour-minute-second". *)
 
 val lmake : 
   year:int -> ?month:int -> ?day:int -> 
   ?hour:int -> ?minute:int -> ?second:int -> unit -> t
-(** Labelled version of [make]. 
-  The default value of [month] and [day] (resp. of [hour], [minute] 
-  and [second]) is [1] (resp. [0]). *)
+    (** Labelled version of [make]. 
+      The default value of [month] and [day] (resp. of [hour], [minute] 
+      and [second]) is [1] (resp. [0]). 
+      @since 1.05 *)
 
 val create : Date.t -> Time.t -> t
-(** [create d t] creates a calendar from the given date and time. *)
+  (** [create d t] creates a calendar from the given date and time. *)
 
 val now : unit -> t
-(** [now ()] returns the current date and time (in the current time zone). *)
+  (** [now ()] returns the current date and time (in the current time zone). *)
 
 val from_jd : float -> t
-(** Return the Julian day. 
-  More precise than [Date.from_jd]: the fractional part represents the time. *)
+  (** Return the Julian day. 
+    More precise than [Date.from_jd]: the fractional part represents the 
+    time. *)
 
-(** Return the Modified Julian day.
-  It is [Julian day - 2 400 000.5] (more precise than [Date.from_mjd]). *)
 val from_mjd : float -> t
+  (** Return the Modified Julian day.
+    It is [Julian day - 2 400 000.5] (more precise than [Date.from_mjd]). *)
 
 (** {1 Conversions} *)
 
@@ -110,8 +112,8 @@ val second : t -> int
 (** {1 Boolean operations on calendars} *)
 
 val equal : t -> t -> bool
-(** Equality function between two calendars.
-  [equal] should be used instead of [(=)]. *)
+  (** Equality function between two calendars.
+    [equal] should be used instead of [(=)]. *)
 
 (** Those functions have the same behavious as those defined in [Date]. *)
 
@@ -128,30 +130,35 @@ val is_am : t -> bool
 (** {1 Coercions} *)
 
 val to_unixtm : t -> Unix.tm
-(** Convert a calendar into the [unix.tm] type.
-  The field [isdst] is always [false]. More precise than [Date.to_unixtm]. *)
+  (** Convert a calendar into the [unix.tm] type.
+    The field [isdst] is always [false]. More precise than [Date.to_unixtm]. 
+    @since 1.01 *)
 
 val from_unixtm : Unix.tm -> t
-(** Inverse of [to_unixtm]. *)
+  (** Inverse of [to_unixtm]. 
+    @since 1.01 *)
 
 val to_unixfloat : t -> float
-(** Convert a calendar to a float such than 
-  [to_unixfloat (make 1970 1 1 0 0 0)] returns [0.0] at UTC. 
-  So such a float is convertible with those of the [Unix] module. 
-  More precise than [Date.to_unixfloat]. *)
+  (** Convert a calendar to a float such than 
+    [to_unixfloat (make 1970 1 1 0 0 0)] returns [0.0] at UTC. 
+    So such a float is convertible with those of the [Unix] module. 
+    More precise than [Date.to_unixfloat]. 
+    @since 1.01 *)
 
 val from_unixfloat : float -> t
-(** Inverse of [from_unixfloat]. *)
+  (** Inverse of [from_unixfloat]. 
+    @since 1.01 *)
 
 val from_date : Date.t -> t
-(** Convert a date to a calendar. 
-  The time is midnight in the current time zone. *)
+  (** Convert a date to a calendar. 
+    The time is midnight in the current time zone. *)
 
 val to_date : t -> Date.t
-(** Convert a calendar to a date. Time part of the calendar is ignored. *)
+  (** Convert a calendar to a date. Time part of the calendar is ignored. *)
 
 val to_time : t -> Time.t
-(** Convert a calendar to a time. Date part of the calendar is ignored. *)
+  (** Convert a calendar to a time. Date part of the calendar is ignored. 
+    @since 1.03 *)
 
 (** {1 Period} *)
 
@@ -190,17 +197,19 @@ module Period : sig
   (** {2 Coercions} *)
 
   val from_date : Date.Period.t -> t
-  (** Convert a date period to a calendar period. *)
+    (** Convert a date period to a calendar period. *)
 
   val from_time : Time.Period.t -> t
-  (** Convert a time period to a calendar period. *)
+    (** Convert a time period to a calendar period. *)
 
   val to_date : t -> Date.Period.t
-  (** Convert a calendar period to a date period. 
-    The fractional time period is ignored. 
-    E.g. [to_date (hour 60)] is equivalent to [Date.Period.days 2]. *)
+    (** Convert a calendar period to a date period. 
+      The fractional time period is ignored. 
+      E.g. [to_date (hour 60)] is equivalent to [Date.Period.days 2]. *)
 
-  exception Not_computable (** [= Date.Period.Not_computable] *)
+  exception Not_computable 
+    (** [= Date.Period.Not_computable].
+      @since 1.04 *)
 
   val to_time : t -> Time.Period.t
     (** Convert a calendar period to a date period. 
@@ -208,13 +217,15 @@ module Period : sig
       E.g. [to_time (day 6)] and [to_time (second 30)] respectively return a
       time period of [24 * 3600 * 6 = 518400] seconds and a time period of [30]
       seconds but [to_time (year 1)] throws [Not_computable] because a year is
-      not a constant number of days. *)
+      not a constant number of days. 
+      @since 1.04 *)
 
   val ymds: t -> int * int * int * int
     (** Number of years, months, days and seconds in a period.
       E.g. [ymds (make 1 2 3 1 2 3)] returns [1, 2, 3, 3723] and
       [ymds (make (-1) (-2) (-3) (-1) (-2) (-3)] returns
-      [-1, -2, -4, 82677]. *)
+      [-1, -2, -4, 82677]. 
+      @since 1.09.0 *)
     
 end
 

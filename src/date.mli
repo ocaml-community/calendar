@@ -13,7 +13,7 @@
  * See the GNU Library General Public License version 2 for more details
  *)
 
-(*i $Id: date.mli,v 1.20 2004-11-13 20:14:07 signoles Exp $ i*)
+(*i $Id: date.mli,v 1.21 2004-11-15 16:36:55 signoles Exp $ i*)
 
 (** Date operations.
 
@@ -75,7 +75,8 @@ val make : year -> int -> int -> t
 
 val lmake : year:year -> ?month:int -> ?day:int -> unit -> t
   (** Labelled version of [make]. 
-    The default value of [month] and [day] is [1]. *)
+    The default value of [month] and [day] is [1]. 
+    @since 1.05 *)
 
 val today : unit -> t
   (** Date of the current day (based on [Time_Zone.current ()]). *)
@@ -134,7 +135,8 @@ val compare : t -> t -> int
     Same behavior as [Pervasives.compare]. *)
 
 val equal: t -> t -> bool
-  (** Equality function between two dates. Same behavior as [(=)]. *)
+  (** Equality function between two dates. Same behavior as [(=)]. 
+    @since 1.09.0 *)
 
 val is_leap_day : t -> bool
   (** Return [true] if a date is a leap day
@@ -153,29 +155,35 @@ val is_julian : t -> bool
 val to_unixtm : t -> Unix.tm
   (** Convert a date into the [Unix.tm] type. 
     The field [is_isdst] is always [false]. The fields [Unix.tm_sec], 
-    [Unix.tm_min] and [Unix.tm_hour] are irrelevant. *)
+    [Unix.tm_min] and [Unix.tm_hour] are irrelevant. 
+    @since 1.01 *)
 
 val from_unixtm : Unix.tm -> t
-  (** Inverse of [to_unixtm]. *)
+  (** Inverse of [to_unixtm]. 
+    @since 1.01 *)
 
 val to_unixfloat : t -> float
   (** Convert a date to a float such than [to_unixfloat (make 1970 1 1)] 
     returns [0.0]. So such a float is convertible with those of the [Unix] 
-    module. The fractional part of the result is always [0]. *)
+    module. The fractional part of the result is always [0]. 
+    @since 1.01 *)
 
 val from_unixfloat : float -> t
-  (** Inverse of [to_unixfloat]. Ignore the fractional part of the argument. *)
+  (** Inverse of [to_unixfloat]. Ignore the fractional part of the argument. 
+    @since 1.01 *)
 
 val to_business: t -> year * int * day
   (** Return the "business week" and the day in this week respecting ISO 8601.
     Notice that business weeks at the beginning and end of the year
-    can sometimes have year numbers which don't match the real year. *)
+    can sometimes have year numbers which don't match the real year. 
+    @since 1.09.0 *)
 
 val from_business: year -> int -> day -> t
   (** Inverse of [to_business] respecting ISO-8601.
     Raise [Invalid_argument] if the week is bad.
     Notice that business weeks at the beginning and end of the year
-    can sometimes have year numbers which don't match the real year. *)
+    can sometimes have year numbers which don't match the real year. 
+    @since 1.09.0 *)
 
 val int_of_day : day -> int
   (** Convert a day to an integer respecting ISO-8601.
@@ -226,16 +234,19 @@ module Period : sig
   (** {2 Getters} *)
     
   exception Not_computable
+    (** @since 1.04 *)
 
   val nb_days : t -> int
     (** Number of days in a period. Throw [Not_computable] 
       if the number of days is not computable. 
       E.g. [nb_days (day 6)] returns [6] but [nb_days (year 1)] throws
-      [Not_computable] because a year is not a constant number of days. *)
+      [Not_computable] because a year is not a constant number of days. 
+      @since 1.04 *)
 
   val ymd: t -> int * int * int
     (** Number of years, months and days in a period.
-      E.g. [ymd (make 1 2 3)] returns [1, 2, 3]. *)
+      E.g. [ymd (make 1 2 3)] returns [1, 2, 3]. 
+      @since 1.09.0 *)
 
 end
 
@@ -283,11 +294,13 @@ val weeks_in_year: year -> int
   (** Number of weeks in a year. *)
 
 val week_first_last: int -> year -> t * t
-  (** Return the first and last days of a week in a year. *)
+  (** Return the first and last days of a week in a year. 
+    @since 1.08 *)
 
 val nth_weekday_of_month: year -> month -> day -> int -> t
   (** [nth_weekday_of_month y m d n] returns the [n]-th day [d] in the month
-    [m] of the year [y] (for instance the 3rd Thursday of the month). *)
+    [m] of the year [y] (for instance the 3rd Thursday of the month). 
+    @since 1.09.0 *)
 
 val century : year -> int
   (** Century of a year. 
@@ -334,34 +347,45 @@ val easter : year -> t
     AD 30. *)
 
 val carnaval: year -> t
-  (** Carnaval Monday. [carnaval y] is [easter y - 48]. *)
+  (** Carnaval Monday. [carnaval y] is [easter y - 48].
+    @since 1.09.0 *)
 
 val mardi_gras: year -> t
-  (** Mardi Gras. [mardi_gras y] is [easter y - 47]. *)
+  (** Mardi Gras. [mardi_gras y] is [easter y - 47].
+    @since 1.09.0 *)
 
 val ash: year -> t
-  (** Ash Wednesday. [ash y] is [easter y - 46]. *)
+  (** Ash Wednesday. [ash y] is [easter y - 46].
+    @since 1.09.0 *)
 
 val palm: year -> t
-  (** Palm Sunday. [palm y] is [easter y - 7]. *)
+  (** Palm Sunday. [palm y] is [easter y - 7].
+    @since 1.09.0 *)
 
 val easter_friday: year -> t
-  (** Easter Friday. [easter_friday y] is [easter y - 2]. *)
+  (** Easter Friday. [easter_friday y] is [easter y - 2].
+    @since 1.09.0 *)
 
 val easter_saturday: year -> t
-  (** Easter Saturday. [easter_saturday y] is [easter y - 1]. *)
+  (** Easter Saturday. [easter_saturday y] is [easter y - 1].
+    @since 1.09.0 *)
 
 val easter_monday: year -> t
-  (** Easter Monday. [easter_monday y] is [easter y + 1]. *)
+  (** Easter Monday. [easter_monday y] is [easter y + 1].
+    @since 1.09.0 *)
 
 val ascension: year -> t
-  (** Ascension. [ascension y] is [easter y + 39]. *)
+  (** Ascension. [ascension y] is [easter y + 39].
+    @since 1.09.0 *)
 
 val withsunday: year -> t
-  (** Withsunday. [withsunday y] is [easter y + 49]. *)
+  (** Withsunday. [withsunday y] is [easter y + 49].
+    @since 1.09.0 *)
 
 val withmonday: year -> t
-  (** Withmonday. [withmonday y] is [easter y + 50]. *)
+  (** Withmonday. [withmonday y] is [easter y + 50].
+    @since 1.09.0 *)
 
 val corpus_christi: year -> t
-  (** Feast of Corpus Christi. [corpus_christi y] is [easter + 60]. *)
+  (** Feast of Corpus Christi. [corpus_christi y] is [easter + 60]. 
+    @since 1.09.0 *)

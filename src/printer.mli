@@ -13,7 +13,7 @@
  * See the GNU Library General Public License version 2 for more details
  *)
 
-(*i $Id: printer.mli,v 1.8 2004-10-25 14:12:51 signoles Exp $ i*)
+(*i $Id: printer.mli,v 1.9 2004-11-15 16:36:55 signoles Exp $ i*)
 
 (** Pretty printing.
 
@@ -70,7 +70,9 @@
   - a possible output of [%D] is [01/06/03];
   - a possible output of [the date is %B, the %-dth] is 
   [the date is January, the 6th] is matched by ;
-  - a possible output of [%c] is [Thu Sep 18 14:10:51 2003]. *)
+  - a possible output of [%c] is [Thu Sep 18 14:10:51 2003]. 
+
+  @since 1.05 *)
 
 (** {1 Internationalization} 
 

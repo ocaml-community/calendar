@@ -1,3 +1,4 @@
+* add @since in the API documentation
 * META file is now writable
 
 version 1.09.0, 2004-11-13:
