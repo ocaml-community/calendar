@@ -13,7 +13,7 @@
  * See the GNU Library General Public License version 2 for more details
  *)
 
-(*i $Id: time.mli,v 1.9 2003-07-16 09:04:30 signoles Exp $ i*)
+(*i $Id: time.mli,v 1.10 2003-08-31 07:06:27 signoles Exp $ i*)
 
 (*S Introduction.
 
@@ -170,6 +170,22 @@ module Period : sig
 
   (* [second n] makes a period of [n] seconds. *)
   val second : int -> t
+
+  (* Getters.\\ *)
+
+  (* Number of seconds of a period. 
+   E.g. [to_seconds (make 1 2 3)] returns [3600 + 120 + 3 = 3723]. *)
+  val to_seconds : t -> int
+
+  (* Number of minutes of a period. The resulting fractional part represents 
+     seconds.\\
+     E.g. [to_minutes (make 1 2 3)] returns [60 + 2 + 0.05 = 62.05]. *)
+  val to_minutes : t -> float
+
+  (* Number of hours of a period. The resulting fractional part represents 
+     minutes and seconds.
+     E.g. [to_hours (make 1 3 0)] returns [1 + 0.05 = 1.05]. *)
+  val to_hours : t -> float
 end
 
 (*S Arithmetic operations on times and periods. *)

@@ -13,7 +13,7 @@
  * See the GNU Library General Public License version 2 for more details
  *)
 
-(*i $Id: time.ml,v 1.9 2003-07-16 09:04:30 signoles Exp $ i*)
+(*i $Id: time.ml,v 1.10 2003-08-31 07:06:27 signoles Exp $ i*)
 
 (*S Introduction.
 
@@ -132,6 +132,12 @@ module Period = struct
     match List.map int_of_string (Str.split (Str.regexp "-") s) with
       | [ h; m; s ] -> make h m s
       | _ -> raise (Invalid_argument (s ^ " is not a time"))
+
+  let to_seconds x = x
+
+  let to_minutes x = float_of_int x /. 60.
+
+  let to_hours x = float_of_int x /. 3600.
 end
 
 (*S Arithmetic operations on times and periods. *)
