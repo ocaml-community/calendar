@@ -13,7 +13,7 @@
  * See the GNU Library General Public License version 2 for more details
  *)
 
-(*i $Id: calendar.ml,v 1.14 2003-09-18 14:34:01 signoles Exp $ i*)
+(*i $Id: calendar.ml,v 1.15 2004-03-22 12:08:26 signoles Exp $ i*)
 
 (*S Introduction.
 
@@ -36,6 +36,8 @@ type day = Date.day = Sun | Mon | Tue | Wed | Thu | Fri | Sat
 
 type month = Date.month =
     Jan | Feb | Mar | Apr | May | Jun | Jul | Aug | Sep | Oct | Nov | Dec
+
+type year = int
 
 type field = [ Date.field | Time.field ]
 

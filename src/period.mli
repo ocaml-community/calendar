@@ -13,30 +13,32 @@
  * See the GNU Library General Public License version 2 for more details
  *)
 
-(*i $Id: period.mli,v 1.7 2003-09-18 14:34:01 signoles Exp $ i*)
+(*i $Id: period.mli,v 1.8 2004-03-22 12:08:26 signoles Exp $ i*)
 
-(* A period represents the time passed between two events (a date, a time...). 
-   Only an interface defining arithmetic operations on periods is defined here.
-   An implementation of this interface depends on the kind of an event. *)
+(** A period represents the time passed between two events (a date, a time...).
+  Only an interface defining arithmetic operations on periods is defined here.
+  An implementation of this interface depends on the kind of an event (see
+  module [Time.Period], [Date.Period] and [Calendar.Period]). *)
 
 module type S = sig
 
-  (* Type of a period. *)
   type t
+    (** Type of a period. *)
 
-  (* The empty period. *)
   val empty : t
+    (** The empty period. *)
 
-  (* Addition of periods. *)
   val add : t -> t -> t
+    (** Addition of periods. *)
 
-  (* Substraction of periods. *)
   val sub : t -> t -> t
+    (** Substraction of periods. *)
 
-  (* Opposite of a period. *)
   val opp : t -> t
+    (** Opposite of a period. *)
 
-  (* Comparaison function between two periods.
-     Same behaviour than [Pervasives.compare]. *)
   val compare : t -> t -> int
+    (** Comparaison function between two periods.
+      Same behaviour than [Pervasives.compare]. *)
+
 end

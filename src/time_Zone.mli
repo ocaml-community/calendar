@@ -13,32 +13,33 @@
  * See the GNU Library General Public License version 2 for more details
  *)
 
-(*i $Id: time_Zone.mli,v 1.6 2003-07-16 09:04:30 signoles Exp $ i*)
+(*i $Id: time_Zone.mli,v 1.7 2004-03-22 12:08:26 signoles Exp $ i*)
 
-(* [Time_Zone] manages the time zone by side effects:
-   there is a [current] time zone in the program you can [change].\\ *)
+(** Time zone management.
 
-(* Type of a time zone. *)
+  You can [change] the [current] time zone in your program by side effect. *)
+
+(** Type of a time zone. *)
 type t = 
-  | UTC             (*r Greenwich Meridian Time              *)
-  | Local           (*r Local Time                           *)
-  | UTC_Plus of int (*r Another time zone specified from UTC *)
+  | UTC             (** Greenwich Meridian Time              *)
+  | Local           (** Local Time                           *)
+  | UTC_Plus of int (** Another time zone specified from UTC *)
 
-(* Return the current time zone. It is [UTC] before any change. *)
 val current : unit -> t
+(** Return the current time zone. It is [UTC] before any change. *)
 
-(* Change the current time zone by another one. 
-   Raise [Invalid_argument] if the specified time zone is [UTC_Plus x] with
-   $x < -12$ or $x > 11$ *)
 val change : t -> unit
+(** Change the current time zone by another one. 
+  Raise [Invalid_argument] if the specified time zone is [UTC_Plus x] with
+  x < -12 or x > 11 *)
 
-(* Return the gap between two time zone. 
-   E.g. [gap UTC (UTC_Plus 5)] returns 5 and, at Paris in summer,
-   [gap Local UTC] returns -2. *)
 val gap : t -> t -> int
+(** Return the gap between two time zone. 
+  E.g. [gap UTC (UTC_Plus 5)] returns 5 and, at Paris in summer,
+  [gap Local UTC] returns -2. *)
 
-(* [from_gmt ()] is equivalent to [gap UTC (current ())]. *)
 val from_gmt : unit  -> int
+(** [from_gmt ()] is equivalent to [gap UTC (current ())]. *)
 
-(* [to_gmt ()] is equivalent to [gap (current ()) UTC]. *)
 val to_gmt : unit -> int
+(** [to_gmt ()] is equivalent to [gap (current ()) UTC]. *)

@@ -11,7 +11,7 @@
 #  
 #  See the GNU Library General Public License version 2 for more details
 #
-# $Id: Makefile.in,v 1.34 2004-03-22 09:49:48 signoles Exp $
+# $Id: Makefile.in,v 1.35 2004-03-22 12:08:26 signoles Exp $
 
 # Used programs
 ###############
@@ -19,6 +19,7 @@
 CAMLC	= @OCAMLC@
 CAMLOPT	= @OCAMLOPT@
 CAMLDEP	= @OCAMLDEP@
+CAMLDOC	= @OCAMLDOC@
 CAMLWEB	= @OCAMLWEB@
 CAMLWC	= @OCAMLWC@
 CAMLDOT	= @OCAMLDOT@
@@ -139,6 +140,12 @@ wc: $(SRC)
 
 $(NAME).ps: $(SRC)
 	$(CAMLWEB) --ps -o $@ $^
+
+.PHONY: doc
+doc: $(CMO)
+	mkdir -p doc
+	rm -f doc/*
+	$(CAMLDOC) -I src -d doc -html $(MLI) $(ML)
 
 # Install
 #########

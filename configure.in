@@ -24,6 +24,7 @@
 #   OCAMLLIB      the path to the ocaml standard library
 #   OCAMLFIND	  "ocamlfind"
 #   OCAMLVERSION  the ocaml version number
+#   OCAMLDOC	  "ocamldoc" or "ocamldoc.opt" (not mandatory)
 #   OCAMLWEB      "ocamlweb" (not mandatory)
 #   OCAMLWC	  "ocamlwc" (not mandatory)
 #   CAML2HTML	  "caml2html" (not mandatory)
@@ -112,6 +113,17 @@ if test "$OCAMLFIND" = no ; then
 fi
 
 # Not mandatory tools
+
+AC_CHECK_PROG(OCAMLDOC,ocamldoc,ocamldoc,true)
+if test "$OCAMLDOC" = true ; then
+    AC_MSG_WARN(Cannot find ocamldoc)
+else
+    AC_CHECK_PROG(OCAMLDOCOPT,ocamldoc.opt,ocamldoc.opt,no)
+    if test "$OCAMLDOCOPT" != no ; then
+	OCAMLDOC=$OCAMLDOCOPT
+    fi
+fi
+
 AC_CHECK_PROG(OCAMLWEB,ocamlweb,ocamlweb,true)
 
 AC_CHECK_PROG(OCAMLWC,ocamlwc,ocamlwc,true)
@@ -139,6 +151,7 @@ AC_SUBST(OCAMLFIND)
 AC_SUBST(OCAMLBEST)
 AC_SUBST(OCAMLVERSION)
 AC_SUBST(OCAMLLIB)
+AC_SUBST(OCAMLDOC)
 AC_SUBST(OCAMLWEB)
 AC_SUBST(OCAMLWC)
 AC_SUBST(CAML2HTML)
