@@ -13,7 +13,7 @@
  * See the GNU Library General Public License version 2 for more details
  *)
 
-(*i $Id: date.mli,v 1.15 2004-05-18 14:58:44 signoles Exp $ i*)
+(*i $Id: date.mli,v 1.16 2004-05-18 15:20:00 signoles Exp $ i*)
 
 (** Date operations.
 
@@ -112,9 +112,6 @@ val week : t -> int
   (** Week. 
     E.g. [week (make 2003 1 5)] returns [1]
     and [week (make 2003 12 28)] returns [52]. *)
-
-val week_first_last : int -> year -> t * t
-  (** Return the first and last days of a week in a year *)
 
 val month : t -> month
   (** Month. E.g. [month (make 2003 6 26)] returns [Jun]. *)
@@ -262,6 +259,9 @@ val days_in_year : year -> int
 
 val weeks_in_year : year -> int
   (** Number of weeks in a year. *)
+
+val week_first_last : int -> year -> t * t
+  (** Return the first and last days of a week in a year *)
 
 val century : year -> int
   (** Century of a year. 

@@ -13,7 +13,7 @@
  * See the GNU Library General Public License version 2 for more details
  *)
 
-(*i $Id: date.ml,v 1.17 2004-05-18 14:58:44 signoles Exp $ i*)
+(*i $Id: date.ml,v 1.18 2004-05-18 15:20:00 signoles Exp $ i*)
 
 (*S Introduction.
 
@@ -165,12 +165,6 @@ let week d =
   let l = d4 / 1460 in
   (((d4 - l) mod 365) + l) / 7 + 1
 
-let week_first_last w y =
-  let d = make y 1 1 in
-  let d = d - d mod 7 in
-  let b = d + 7 * (w - 1) in
-  b, 6 + b
-
 let days_in_month d =
   match month d with
     | Jan | Mar | May | Jul | Aug | Oct | Dec -> 31
@@ -267,6 +261,12 @@ let weeks_in_year y =
     | Tue -> if is_leap_year y then 52 else 53
     | Wed -> if is_leap_year y then 53 else 52
     | _   -> 52
+
+let week_first_last w y =
+  let d = make y 1 1 in
+  let d = d - d mod 7 in
+  let b = d + 7 * (w - 1) in
+  b, 6 + b
 
 let century y = if y mod 100 = 0 then y / 100 else y / 100 + 1
 
