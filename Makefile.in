@@ -11,7 +11,7 @@
 #  
 #  See the GNU Library General Public License version 2 for more details
 #
-# $Id: Makefile.in,v 1.18 2003-07-16 09:04:30 signoles Exp $
+# $Id: Makefile.in,v 1.19 2003-07-16 09:13:09 signoles Exp $
 
 # Used programs
 ###############
@@ -158,9 +158,9 @@ export: $(NAME).ps.gz mli2html
 	   gzip -f --best $(NAME)-$(VERSION).tar; \
 	   rm -rf $(NAME)-$(VERSION); \
 	   mv $(NAME)-$(VERSION).tar.gz $(EXPORT_DIR))
-	cd $(EXPORT_DIR); \
-	  (rm -f prog.fr.tex prog.en.tex; \
-	   $(MAKE) -C ../.. VERSION=$(VERSION))
+	cd $(EXPORT_DIR)/../..; \
+	  (rm -f prog.fr.html prog.en.html prog.fr.tex prog.en.tex; \
+	   $(MAKE) VERSION=$(VERSION))
 
 # Rebuilding Makefile
 #####################
