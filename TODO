@@ -12,3 +12,4 @@ Mettre alors en place des conversions inter-calendrier (de grégorien vers julien
 * ajouter module Printer.Date, .Time et .Calendar (déprécier les 3 autres)
 * ajouter tag example dans la doc (voir manuel ocamldoc)
 * changer le script de tests pour n'afficher que les tests faux
+* ajouter check_date (suggestion Richard Jones, code dans un mail de R.J.)
