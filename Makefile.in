@@ -11,7 +11,7 @@
 #  
 #  See the GNU Library General Public License version 2 for more details
 #
-# $Id: Makefile.in,v 1.45 2004-12-15 09:59:20 signoles Exp $
+# $Id: Makefile.in,v 1.46 2004-12-15 10:11:50 signoles Exp $
 
 # Used programs
 ###############
@@ -159,10 +159,10 @@ uninstall:
 
 EXPORT_DIR= $$HOME/WWW/prog/calendar
 
-export: $(NAME).ps.gz doc
+export: doc #$(NAME).ps.gz
 	cvs export -d /tmp/$(NAME)-$(VERSION) -D now $(NAME)
 	rm -rf $(EXPORT_DIR)/doc
-	cp -rf .depend configure $(NAME).ps.gz doc /tmp/$(NAME)-$(VERSION)
+	cp -rf .depend configure doc /tmp/$(NAME)-$(VERSION)
 	cp -rf $(NAME).ps.gz CHANGES doc $(EXPORT_DIR)
 	cd /tmp; \
 	  (rm -f $(NAME)-$(VERSION)/html/touch-html \
