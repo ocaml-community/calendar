@@ -1,7 +1,7 @@
 version 1.04, 2003-08-31:
 =========================
 * add getters in Time.Period, Date.Period and Calendar.Period
-	(from a suggestion of Christopher Bauer)
+	(from a suggestion of Christoph Bauer)
 
 version 1.03, 2003-08-25:
 =========================
