@@ -13,7 +13,7 @@
  * See the GNU Library General Public License version 2 for more details
  *)
 
-(*i $Id: date.ml,v 1.10 2003-08-31 07:50:47 signoles Exp $ i*)
+(*i $Id: date.ml,v 1.11 2003-09-16 15:44:26 signoles Exp $ i*)
 
 (*S Introduction.
 
@@ -299,16 +299,155 @@ let easter y =
   let m = 3 + (l + 40) / 44 in
   make y m (l + 28 - 31 * (m / 4))
 
-(*S Exported Coercions. *)
+(*S Pretty pritting and string coercions. *)
 
-let to_string d = 
-  string_of_int (year d) ^ "-" ^ string_of_int (int_month d) 
-  ^ "-" ^ string_of_int (day_of_month d)
+let day_name = 
+  ref (function
+	 | Sun -> "Sunday"
+	 | Mon -> "Monday"
+	 | Tue -> "Tuesday"
+	 | Wed -> "Wednesday"
+	 | Thu -> "Thurday"
+	 | Fri -> "Friday"
+	 | Sat -> "Saturday")
+
+let short_day_name =
+  ref (function
+	 | Sun -> "Sun"
+	 | Mon -> "Mon"
+	 | Tue -> "Tue"
+	 | Wed -> "Wed"
+	 | Thu -> "Thu"
+	 | Fri -> "Fri"
+	 | Sat -> "Sat")
+
+let month_name =
+  ref (function
+	 | Jan -> "January"
+	 | Feb -> "February"
+	 | Mar -> "Mars"
+	 | Apr -> "April"
+	 | May -> "May"
+	 | Jun -> "June"
+	 | Jul -> "July"
+	 | Aug -> "August"
+	 | Sep -> "September"
+	 | Oct -> "October"
+	 | Nov -> "November"
+	 | Dec -> "December")
+
+let short_month_name =
+  ref (function
+	 | Jan -> "Jan"
+	 | Feb -> "Feb"
+	 | Mar -> "Mar"
+	 | Apr -> "Apr"
+	 | May -> "May"
+	 | Jun -> "Jun"
+	 | Jul -> "Jul"
+	 | Aug -> "Aug"
+	 | Sep -> "Sep"
+	 | Oct -> "Oct"
+	 | Nov -> "Nov"
+	 | Dec -> "Dec")
+
+type pad =
+  | Zero
+  | Blank
+  | Empty
+
+let rec print_number fmt pad k n =
+  let fill fmt = function
+    | Zero -> Format.pp_print_int fmt 0
+    | Blank -> Format.pp_print_char fmt ' '
+    | Empty -> ()
+  in
+  if k = 0 then Format.pp_print_int fmt n
+  else begin
+    if n < k then fill fmt pad;
+    print_number fmt pad (k mod 10) n
+  end
+
+let fprint f fmt d =
+  let weekday, sweekday, day_of_week =
+    let dow = day_of_week d in
+    !day_name dow, !short_day_name dow, int_of_day dow in
+  let month_name, smonth_name =
+    let m = month d in
+    !month_name m, !short_month_name m in
+  let day_of_month = day_of_month d in
+  let day_of_year = day_of_year d in
+  let week = week d in
+  let int_month = int_month d in
+  let year = year d in
+  let syear = year mod 100 in
+  let len = String.length f in
+  let rec parse_option i pad = 
+    assert (i <= len);
+    if i = len then raise (Invalid_argument "Bad date format")
+    else begin 
+      (match f.[i] with
+	 | '%' -> Format.pp_print_char fmt '%'
+	 | 'a' -> Format.pp_print_string fmt sweekday
+	 | 'A' -> Format.pp_print_string fmt weekday
+	 | 'b' | 'h' -> Format.pp_print_string fmt smonth_name
+	 | 'B' -> Format.pp_print_string fmt month_name
+	 | 'd' -> print_number fmt pad 10 day_of_month
+	 | 'D' -> 
+	     print_number fmt Zero 10 int_month;
+	     Format.pp_print_char fmt '/';
+	     print_number fmt Zero 10 day_of_month;
+	     Format.pp_print_char fmt '/';
+	     print_number fmt Zero 10 syear
+	 | 'e' -> print_number fmt Blank 10 day_of_month
+	 | 'j' -> print_number fmt pad 100 day_of_year
+	 | 'm' -> print_number fmt pad 10 int_month
+	 | 'n' -> Format.pp_print_char fmt '\n'
+	 | 't' -> Format.pp_print_char fmt '\t'
+	 | 'V' | 'W' -> print_number fmt pad 10 week	     
+	 | 'w' -> Format.pp_print_int fmt day_of_week
+	 | 'y' -> print_number fmt pad 10 syear
+	 | 'Y' -> print_number fmt pad 1000 year
+	 | '-' -> 
+	     if pad <> Zero then raise (Invalid_argument "Bad date format")
+	     else parse_option (i + 1) Empty
+	 | '_' -> 
+	     if pad <> Zero then raise (Invalid_argument "Bad date format")
+	     else parse_option (i + 1) Blank
+	 | _   -> raise (Invalid_argument "Bad date format"));
+      parse_format (i + 1) Zero
+    end
+ and parse_format i pad =
+   assert (i <= len && pad = Zero);
+   if i = len then ()
+   else match f.[i] with
+     | '%' -> parse_option (i + 1) Zero
+     | c   -> 
+	 Format.pp_print_char fmt c;
+	 parse_format (i + 1) Zero
+ in parse_format 0 Zero
+
+let print f = fprint f Format.std_formatter
+
+let dprint = print "%Y-%m-%d"
+
+let sprint f d = 
+  let buf = Buffer.create 15 in
+  let fmt = Format.formatter_of_buffer buf in
+  fprint f fmt d;
+  Format.pp_print_flush fmt ();
+  Buffer.contents buf
+
+let from_fstring f s = assert false
+
+let to_string = sprint "%Y-%m-%d"
 
 let from_string s = 
   match List.map int_of_string (Str.split (Str.regexp "-") s) with
     | [ y; m; d ] -> make (if s.[0] = '-' then - y else y) m d
     | _ -> raise (Invalid_argument (s ^ " is not a date"))
+
+(*S Exported Coercions. *)
 
 let to_unixtm d =
   { Unix.tm_sec = 0; Unix.tm_min = 0; Unix.tm_hour = 0;

@@ -13,7 +13,7 @@
  * See the GNU Library General Public License version 2 for more details
  *)
 
-(*i $Id: date.mli,v 1.9 2003-08-31 07:50:47 signoles Exp $ i*)
+(*i $Id: date.mli,v 1.10 2003-09-16 15:44:26 signoles Exp $ i*)
 
 (*S Introduction. 
 
@@ -142,13 +142,6 @@ val is_julian : t -> bool
 
 (*S Coercions. *)
 
-(* Convert a date to a string with the format "y-m-d". *)
-val to_string : t -> string
-
-(* Inverse of [to_string]. 
-   Raise [Invalid_argument] if the string format is bad. *)
-val from_string : string -> t
-
 (* Convert a date into the [Unix.tm] type. 
    The field [is_isdst] is always [false]. The fields [Unix.tm_sec], 
    [Unix.tm_min] and [Unix.tm_hour] are irrelevant. *)
@@ -180,6 +173,58 @@ val int_of_month : month -> int
 (* Inverse of [int_of_month]. 
    Raise [Invalid_argument] if the argument $\notin [1; 12]$. *)
 val month_of_int : int -> month
+
+(*S Pretty pritting and string coercions. *)
+
+val day_name : (day -> string) ref
+
+val short_day_name : (day -> string) ref
+
+val month_name : (month -> string) ref
+
+val short_month_name : (month -> string) ref
+
+(*
+%%     a literal %
+%a     locale's abbreviated weekday name (Sun..Sat)
+%A     locale's full weekday name, variable  length  (Sunday..Saturday)
+%b     locale's abbreviated month name (Jan..Dec)
+%B     locale's	full  month  name,  variable length (January..December)
+%d     day of month (01..31)
+%D     date (mm/dd/yy)
+%e     day of month, blank padded ( 1..31)
+%h     same as %b
+%j     day of year (001..366)
+%m     month (01..12)
+%n     a newline
+%t     a horizontal tab
+%V     week  number  of	year  with Monday as first day of week (01..53)
+%w     day of week (0..6);  0 represents Sunday
+%W     week number of year with Monday as first day of week (00..53)
+%y     last two digits of year (00..99)
+%Y     year (1970...)
+
+By default, date pads numeric fields with zeroes. 
+GNU date recognizes the following modifiers between `%' and a numeric directive
+
+`-' (hyphen) do not pad the field `_' (underscore) pad the field with spaces *)
+
+val fprint : string -> Format.formatter -> t -> unit
+
+val print : string -> t -> unit
+
+val dprint : t -> unit
+
+val sprint : string -> t -> string
+
+val from_fstring : string -> string -> t
+
+(* Convert a date to a string with the format "y-m-d". *)
+val to_string : t -> string
+
+(* Inverse of [to_string]. 
+   Raise [Invalid_argument] if the string format is bad. *)
+val from_string : string -> t
 
 (*S Period. 
 
