@@ -13,7 +13,7 @@
  * See the GNU Library General Public License version 2 for more details
  *)
 
-(*i $Id: date.ml,v 1.21 2004-10-29 13:49:09 signoles Exp $ i*)
+(*i $Id: date.ml,v 1.22 2004-10-29 15:31:11 signoles Exp $ i*)
 
 (*S Introduction.
 
@@ -222,6 +222,7 @@ module Period = struct
   let nb_days p = if p.y <> 0 || p.m <> 0 then raise Not_computable else p.d
 
   let ymd p = p.y, p.m, p.d
+
 end
 
 (*S Arithmetic operations on dates and periods. *)
