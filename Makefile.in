@@ -11,7 +11,7 @@
 #  
 #  See the GNU Library General Public License version 2 for more details
 #
-# $Id: Makefile.in,v 1.24 2003-08-20 12:27:10 signoles Exp $
+# $Id: Makefile.in,v 1.25 2003-08-20 12:30:05 signoles Exp $
 
 # Used programs
 ###############
@@ -74,7 +74,6 @@ html/touch-html:
 mli2html: $(patsubst src/%.mli, html/%.html, $(filter %.mli, $(SRC)))
 
 META: 
-	rm -f META
 	echo "description = \"$(NAME) library\"" > $@
 	echo "version = \"$(VERSION)\"" >> $@
 	echo "archive(byte) = \"$(NAME).cma\"" >> $@
