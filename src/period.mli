@@ -1,8 +1,27 @@
-(* A period is the time passed between two events. *)
+(*
+ * Calendar library
+ * Copyright (C) 2003 Julien SIGNOLES
+ * 
+ * This software is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Library General Public
+ * License version 2, as published by the Free Software Foundation.
+ * 
+ * This software is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * 
+ * See the GNU Library General Public License version 2 for more details
+ *)
+
+(*i $Id: period.mli,v 1.2 2003-07-04 12:27:33 signoles Exp $ i*)
+
+(* A period represents the time passed between two events (a date, a time...). 
+   Only an interface defining arithmetic operations on periods is defined here.
+   An implementation of this interface depends on the kind of an event. *)
 
 module type S = sig
 
-  (* Type of a period *)
+  (* Type of a period. *)
   type t
 
   (* The empty period. *)
@@ -24,6 +43,7 @@ module type S = sig
   (* Opposite of a period. *)
   val opp : t -> t
 
-  (* Comparaison function between two periods. *)
+  (* Comparaison function between two periods
+     (same behaviour than [Pervasives.compare]). *)
   val compare : t -> t -> int
 end
