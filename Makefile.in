@@ -11,7 +11,7 @@
 #  
 #  See the GNU Library General Public License version 2 for more details
 #
-# $Id: Makefile.in,v 1.27 2003-08-31 07:06:27 signoles Exp $
+# $Id: Makefile.in,v 1.28 2003-08-31 07:56:48 signoles Exp $
 
 # Used programs
 ###############
@@ -151,9 +151,10 @@ export: $(NAME).ps.gz mli2html
 	cvs export -d /tmp/$(NAME)-$(VERSION) -D now $(NAME)
 	cp -rf .depend configure $(NAME).ps.gz html /tmp/$(NAME)-$(VERSION)
 	cp -f $(NAME).ps.gz html/*.html CHANGES $(EXPORT_DIR)
-	rm -f /tmp/$(NAME)-$(VERSION)/html/touch-html
 	cd /tmp; \
-	  (tar cvf $(NAME)-$(VERSION).tar $(NAME)-$(VERSION); \
+	  (rm -f $(NAME)-$(VERSION)/html/touch-html \
+		$(NAME)-$(VERSION)/.cvsignore; \
+	   tar cvf $(NAME)-$(VERSION).tar $(NAME)-$(VERSION); \
 	   gzip -f --best $(NAME)-$(VERSION).tar; \
 	   rm -rf $(NAME)-$(VERSION); \
 	   mv $(NAME)-$(VERSION).tar.gz $(EXPORT_DIR))
