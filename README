@@ -1,0 +1,83 @@
+Summary
+-------
+
+1- Introduction
+2- Contents
+3- Copyright
+4- Installation
+5- Documentation
+6- Makefile
+7- Contact the developper
+
+1- Introduction 
+---------------
+
+The Calendar library is a library providing a set of operations over dates and times.
+This library is written with and for the version 3.06 of Objective Caml.
+This library was not tested with any older version of Objective Caml.
+
+2- Contents
+-----------
+
+COPYING		  Information about copyright
+LGPL		  Information about LGPL
+README		  This file
+Makefile.in	  Makefile used by configure
+configure	  Script generating Makefile
+configure.in	  Script generating configure (with autoconf)
+calendar_faq.txt  FAQ frow which some algorithms come
+calendar.ps.gz	  Source files documentation
+src		  Source files directory
+tests		  Test files directory
+
+3- Copyright
+------------
+
+This program is distributed under the GNU LGPL. 
+See the enclosed file COPYING for more details.
+
+4- Installation
+---------------
+
+You need Objective Caml >= 3.06 to compile the sources.
+
+	1. Configure with ./configure.
+	2. Compile with make.
+	3. Install with make install (you may need superuser permissions).
+	4. Clean the directory with make clean.
+
+You can remove files installed by "make install" at any time with :
+
+	make uninstall (you may need superuser permissions)
+
+5- Documentation
+----------------
+
+The definitions provided by this library are fully commented in the
+.mli files.
+
+The file calendar.ps.gz is a more user friendly documentation.
+
+6- Makefile
+-----------
+
+A description of some Makefile entries follows :
+
+i. tests
+Execute some tests
+
+ii. wc 
+Give informations about the size of the source files. You need ocamlwc (*). 
+
+iii. calendar.ps.gz
+Produce the source file documentation. You need ocamlweb (**).
+
+(*)  ocamlwc is available at http://www.lri.fr/~filliatr/software.en.html
+(**) ocamlweb is available at http://www.lri.fr/~filliatr/ocamlweb
+
+7- Contact the developper
+-------------------------
+
+You can report bugs and/or give feedbacks by e-mail to :
+
+	Julien.Signoles@lri.fr

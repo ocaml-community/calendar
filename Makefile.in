@@ -4,7 +4,7 @@
 #                                                                            #
 #                      Copyright (C) 2002 Julien SIGNOLES                    #
 #                                                                            #
-#       $Id: Makefile.in,v 1.4 2003-07-04 15:03:52 signoles Exp $            #
+#       $Id: Makefile.in,v 1.5 2003-07-05 06:39:31 signoles Exp $            #
 #                                                                            #
 ##############################################################################
 
@@ -22,13 +22,9 @@ CAMLLIB	= @OCAMLLIB@
 # Project
 #########
 
-# Project name
 NAME	= calendar
+DIRS	= src/$(NAME).cma src/$(NAME).cmxa
 
-# Directories containing the source files
-DIRS	= src
-
-# Ocaml files
 SRC	= time_Zone.mli time_Zone.ml period.mli \
 	time.mli time.ml date.mli date.ml calendar.mli calendar.ml
 SRC	:= $(addprefix src/, $(SRC))
@@ -42,19 +38,16 @@ CMX	= $(CMO:.cmo=.cmx)
 # Libs and flags
 ################
 
-# Included directories
 CAMLIBS	= -I $(DIRS)
 
 CAMLFLAGS= $(CAMLIBS)
-# Flags for ocamlc
 BYTEFLAGS= $(CAMLFLAGS)
-# Flags for ocamlopt
 OPTFLAGS = $(CAMLFLAGS) -noassert -I src/others
 
 # Main rules
 ############
 
-all: src/$(NAME).cma src/$(NAME).cmxa
+all: $(LIBS)
 
 src/$(NAME).cma: $(CMO)
 	$(CAMLC) $(BYTEFLAGS) -a -o $@ unix.cma str.cma $^
@@ -83,7 +76,7 @@ src/$(NAME).cmxa: src/others/unix.cmx src/others/str.cmx $(CMX)
 # Tests
 #######
 
-tests/%: src/calendar.cma tests/%.cmo
+tests/%: src/$(NAME).cma tests/%.cmo
 	$(CAMLC) -o $@ -I src $^
 
 tests: tests/test_timezone tests/test_date tests/test_time tests/test_calendar
@@ -97,6 +90,15 @@ wc: $(SRC)
 $(NAME).ps.gz: $(SRC)
 	$(CAMLWEB) --ps -o $(basename $@) $^
 	gzip -f --best $(basename $@)
+
+# Install
+#########
+
+install:
+	cp -f $(LIBS) $(CAMLLIB)
+
+uninstall:
+	rm -f $(patsubst src/, $(CAMLLIB), $(LIBS))
 
 # Exporting
 ###########
@@ -123,9 +125,10 @@ TAGS: $(SRC)
 ##########
 
 clean:
-	rm -f TAGS
+	rm -f TAGS $(NAME).ps.gz
+	rm -f tests/test_timezone tests/test_date tests/test_time tests/test_calendar
 	for i in . src src/others tests; do \
-	  rm -f $$i/*~ $$i/\#* $$i/*.cm[iox] $$i/*.*a $$i/*.o; \
+	  rm -f $$i/*~ $$i/\#* $$i/*.cm[iox] $$i/*.*a $$i/*.o $$i/a.out; \
 	done
 
 # Depend
