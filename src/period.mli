@@ -13,7 +13,7 @@
  * See the GNU Library General Public License version 2 for more details
  *)
 
-(*i $Id: period.mli,v 1.8 2004-03-22 12:08:26 signoles Exp $ i*)
+(*i $Id: period.mli,v 1.9 2004-10-25 14:12:51 signoles Exp $ i*)
 
 (** A period represents the time passed between two events (a date, a time...).
   Only an interface defining arithmetic operations on periods is defined here.
@@ -40,5 +40,8 @@ module type S = sig
   val compare : t -> t -> int
     (** Comparaison function between two periods.
       Same behaviour than [Pervasives.compare]. *)
+
+  val equal: t -> t -> bool
+    (** Equality function between two periods. Same behaviour than [(=)]. *)
 
 end

@@ -1,3 +1,9 @@
+* Printer: add the format string %i corresponding to the ISO-8601 notation
+* Printer: ISO-8601 notation is now the default format
+* add [equal] in all the modules
+* Calendar.Period: bug fixed with negative period
+* Date: add some Christian dates
+
 version 1.08, 2004-05-18:
 =========================
 * add [week_first_last] computing the first and last days of a week in a year

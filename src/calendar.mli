@@ -13,7 +13,7 @@
  * See the GNU Library General Public License version 2 for more details
  *)
 
-(*i $Id: calendar.mli,v 1.16 2004-03-22 12:08:26 signoles Exp $ i*)
+(*i $Id: calendar.mli,v 1.17 2004-10-25 14:12:51 signoles Exp $ i*)
 
 (** Calendar operations.
 
@@ -110,7 +110,8 @@ val second : t -> int
 (** {1 Boolean operations on calendars} *)
 
 val equal : t -> t -> bool
-(** [equal] should be used instead of [(=)]. *)
+(** Equality function between two calendars.
+  [equal] should be used instead of [(=)]. *)
 
 (** Those functions have the same behavious as those defined in [Date]. *)
 

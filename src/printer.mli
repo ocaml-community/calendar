@@ -13,7 +13,7 @@
  * See the GNU Library General Public License version 2 for more details
  *)
 
-(*i $Id: printer.mli,v 1.7 2004-03-22 12:08:26 signoles Exp $ i*)
+(*i $Id: printer.mli,v 1.8 2004-10-25 14:12:51 signoles Exp $ i*)
 
 (** Pretty printing.
 
@@ -43,6 +43,7 @@
   - [%h]: same as [%b]
   - [%H]: hour (00..23)
   - [%I]: hour (01..12)
+  - [%i]: shortcut for [%Y-%m-%d]: ISO-8601 notation
   - [%j]: day of year (001..366)
   - [%k]: same as [%_H]
   - [%l]: same as [%_I]
@@ -158,7 +159,7 @@ end
   The specifications which use time functionalities are not available 
   on this printer.
 
-  The default format is [%D]. *)
+  The default format is [%i]. *)
 module DatePrinter : S with type t = Date.t
 
 (** Time printer.
@@ -170,5 +171,5 @@ module TimePrinter : S with type t = Time.t
 
 (** Calendar printer.
 
-  The default format is [%D; %T]. *)
+  The default format is [%i %T]. *)
 module CalendarPrinter : S with type t = Calendar.t

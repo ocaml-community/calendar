@@ -13,7 +13,7 @@
  * See the GNU Library General Public License version 2 for more details
  *)
 
-(*i $Id: date.mli,v 1.16 2004-05-18 15:20:00 signoles Exp $ i*)
+(*i $Id: date.mli,v 1.17 2004-10-25 14:12:51 signoles Exp $ i*)
 
 (** Date operations.
 
@@ -132,6 +132,9 @@ val to_mjd : t -> int
 val compare : t -> t -> int
   (** Comparison function between two dates. 
     Same behavior as [Pervasives.compare]. *)
+
+val equal: t -> t -> bool
+  (** Equality function between two dates. Same behavior as [(=)]. *)
 
 val is_leap_day : t -> bool
   (** Return [true] if a date is a leap day
@@ -301,8 +304,42 @@ val epact : year -> int
     that have passed since an "official" new moon) on a particular date. *)
 
 val easter : year -> t
-  (** Date of Easter. 
+  (** Easter Sunday. 
 
     In the Christian world, Easter (and the days immediately preceding it) is 
     the celebration of the death and resurrection of Jesus in (approximately) 
     AD 30. *)
+
+val carnaval: year -> t
+  (** Carnaval Monday. [carnaval y] is [easter y - 48]. *)
+
+val mardi_gras: year -> t
+  (** Mardi Gras. [mardi_gras y] is [easter y - 47]. *)
+
+val ash: year -> t
+  (** Ash Wednesday. [ash y] is [easter y - 46]. *)
+
+val palm: year -> t
+  (** Palm Sunday. [palm y] is [easter y - 7]. *)
+
+val easter_friday: year -> t
+  (** Easter Friday. [easter_friday y] is [easter y - 2]. *)
+
+val easter_saturday: year -> t
+  (** Easter Saturday. [easter_saturday y] is [easter y - 1]. *)
+
+val easter_monday: year -> t
+  (** Easter Monday. [easter_monday y] is [easter y + 1]. *)
+
+val ascension: year -> t
+  (** Ascension. [ascension y] is [easter y + 39]. *)
+
+val withsunday: year -> t
+  (** Withsunday. [withsunday y] is [easter y + 49]. *)
+
+val withmonday: year -> t
+  (** Withmonday. [withmonday y] is [easter y + 50]. *)
+
+val corpus_christi: year -> t
+  (** Feast of Corpus Christi. [corpus_christi y] is [easter + 60]. *)
+

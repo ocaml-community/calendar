@@ -1,4 +1,4 @@
-(*i $Id: test_calendar.ml,v 1.11 2003-09-18 16:15:11 signoles Exp $ i*)
+(*i $Id: test_calendar.ml,v 1.12 2004-10-25 14:12:51 signoles Exp $ i*)
 
 Printf.printf "\nTests of Calendar:\n\n";;
 
@@ -33,10 +33,22 @@ test (Period.compare
 test 
   (add (make 1 2 3 4 5 6) (Period.make 9 8 7 6 5 4) = make 10 10 10 10 10 10) 
   "add 1-2-3-4-5-6 9-8-7-6-5-4";;
-test (rem (make 9 8 7 6 5 4) (Period.make 1 2 3 4 5 6) = make 8 6 4 1 59 58) 
+test 
+  (add (make 3 1 1 0 0 0) (Period.make 0 0 0 (-25) 0 (-1)) =
+  make 2 12 30 22 59 59)
+  "add 3-1-1-0-0-0 0-0-0-(-25)-0-(-1)";;
+
+test 
+  (equal (rem (make 9 8 7 6 5 4) (Period.make 1 2 3 4 5 6)) 
+     (make 8 6 4 1 59 58))
   "rem 9-8-7-6-5-4 1-2-3-4-5-6";;
 test (sub (make 0 0 7 6 5 4) (make 0 0 3 54 5 6) = Period.make 0 0 1 23 59 58) 
   "sub 0-0-7-6-5-4 0-0-3-54-5-6";;
+
+test (Period.equal 
+	(Period.opp (Period.make 0 0 2 3 0 0)) 
+	(Period.make 0 0 (-2) (-3) 0 0))
+  "period opp";;
 
 (* Date *)
 

@@ -13,7 +13,7 @@
  * See the GNU Library General Public License version 2 for more details
  *)
 
-(*i $Id: time.ml,v 1.13 2003-09-18 16:07:58 signoles Exp $ i*)
+(*i $Id: time.ml,v 1.14 2004-10-25 14:12:51 signoles Exp $ i*)
 
 (*S Introduction.
 
@@ -74,7 +74,9 @@ let to_seconds t = from_gmt t
 
 (*S Boolean operations. *)
 
-let compare = (-)
+let compare = compare
+
+let equal = (==)
 
 let is_pm t = let t, _ = normalize t in t < midday ()
 
@@ -118,7 +120,9 @@ module Period = struct
 
   let opp x = - x
 
-  let compare = (-)
+  let compare = compare
+
+  let equal = (==)
 
   let to_seconds x = x
 

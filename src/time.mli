@@ -13,7 +13,7 @@
  * See the GNU Library General Public License version 2 for more details
  *)
 
-(*i $Id: time.mli,v 1.13 2004-03-22 12:08:26 signoles Exp $ i*)
+(*i $Id: time.mli,v 1.14 2004-10-25 14:12:51 signoles Exp $ i*)
 
 (** Time operations. *)
 
@@ -111,6 +111,9 @@ val to_hours : t -> float
 val compare : t -> t -> int
 (** Comparison function between two times.
   Same behaviour as [Pervasives.compare]. *)
+
+val equal: t -> t -> bool
+(** Equality function between two times. Same behaviour as [(=)] *)
 
 val is_pm : t -> bool
 (** Return [true] is the time is before midday; [false] otherwise. 

@@ -13,7 +13,7 @@
  * See the GNU Library General Public License version 2 for more details
  *)
 
-(*i $Id: calendar.ml,v 1.15 2004-03-22 12:08:26 signoles Exp $ i*)
+(*i $Id: calendar.ml,v 1.16 2004-10-25 14:12:51 signoles Exp $ i*)
 
 (*S Introduction.
 
@@ -161,14 +161,16 @@ let is_am x = Time.is_am (to_time x)
 module Period = struct
   type t = { d : Date.Period.t; t : Time.Period.t }
 
-  let split x = 
-    let f, days = modf (float_of_int (Time.Period.length x.t) /. 86400.) in
-    let seconds, days = round (f *. 86400.), int_of_float days in
-    let seconds, days = 
-      if seconds < 0 then seconds + 86400, days - 1 else seconds, days
+  let split x =
+    let rec aux s =
+      if s < 86400 then 0, s else let d, s = aux (s - 86400) in d + 1, s
     in
-    assert (seconds >= 0 && seconds < 86400);
-    Date.Period.day days, Time.Period.second seconds
+    let s = Time.Period.length x.t in
+    let d, s =
+      if s >= 0 then aux s else let d, s = aux (- s) in - (d + 1), - s + 86400
+    in
+    assert (s >= 0 && s < 86400);
+    Date.Period.day d, Time.Period.second s
 
   let normalize x =
     let days, seconds = split x in
@@ -179,8 +181,8 @@ module Period = struct
   let make y m d h mn s = 
     normalize { d = Date.Period.make y m d; t = Time.Period.make h mn s }
 
-  let lmake ?(year=0) ?(month=0) ?(day=0) ?(hour=0) ?(minute=0) ?(second=0) 
-    () =
+  let lmake 
+    ?(year=0) ?(month=0) ?(day=0) ?(hour=0) ?(minute=0) ?(second=0) () =
     make year month day hour minute second
 
   let year x = { empty with d = Date.Period.year x }
@@ -203,11 +205,13 @@ module Period = struct
   let sub x y = 
     normalize { d = Date.Period.sub x.d y.d; t = Time.Period.sub x.t y.t }
 
-  let opp x = { d = Date.Period.opp x.d; t = Time.Period.opp x.t }
+  let opp x = normalize { d = Date.Period.opp x.d; t = Time.Period.opp x.t }
 
   (* Lexicographical order over the fields of the type [t].
      Yep, [Pervasives.compare] correctly works. *)
   let compare = Pervasives.compare
+
+  let equal = (=)
 
   let to_date x = x.d
 

@@ -13,7 +13,7 @@
  * See the GNU Library General Public License version 2 for more details
  *)
 
-(*i $Id: printer.ml,v 1.9 2004-03-10 14:27:38 signoles Exp $ i*)
+(*i $Id: printer.ml,v 1.10 2004-10-25 14:12:51 signoles Exp $ i*)
 
 module type S = sig
   type t
@@ -87,7 +87,7 @@ let print_number fmt pad k n =
   if n < 0 then Format.pp_print_char fmt '-';
   aux k (abs n)
 
-let bad_format () = raise (Invalid_argument "bad format")
+let bad_format s = raise (Invalid_argument ("bad format: " ^ s))
 
 let not_match f s = 
   raise (Invalid_argument (s ^ " does not match the format " ^ f))
@@ -165,6 +165,12 @@ struct
 	      print_int pad 10 syear
 	  | 'e' -> print_int Blank 10 day_of_month
 	  | 'H' -> print_int pad 10 hour;
+	  | 'i' ->
+	      print_int pad 1000 year;
+	      print_char '-';
+	      print_int pad 10 int_month;
+	      print_char '-';
+	      print_int pad 10 day_of_month
 	  | 'I' -> print_number fmt pad 10 (Lazy.force hour mod 12)
 	  | 'j' -> print_int pad 100 day_of_year
 	  | 'k' -> print_int Blank 10 hour
@@ -184,19 +190,19 @@ struct
 	  | 'w' -> print_int Empty 1 day_of_week
 	  | 'y' -> print_int pad 10 syear
 	  | 'Y' -> print_int pad 1000 year
-	  | _  -> bad_format ()
+	  | c  -> bad_format ("%" ^ String.make 1 c)
 	end;
 	parse_format (i + 1)
       in
       assert (i <= len);
-      if i = len then bad_format ();
+      if i = len then bad_format f;
       (* else *)
       match f.[i] with
 	| '-' -> 
-	    if pad <> Zero then bad_format ();
+	    if pad <> Zero then bad_format f;
 	    (* else *) parse_option (i + 1) Empty
 	| '_' -> 
-	    if pad <> Zero then bad_format ();
+	    if pad <> Zero then bad_format f;
 	    (* else *) parse_option (i + 1) Blank
 	| c  -> parse_char c
     and parse_format i =
@@ -245,7 +251,7 @@ struct
     in
     let rec parse_option i = 
       assert (i <= lenf);
-      if i = lenf then bad_format ();
+      if i = lenf then bad_format f;
       (* else *)
       (match f.[i] with
 	 | '%' -> read_char '%'
@@ -257,6 +263,12 @@ struct
 	     read_char '/';
 	     year := read_number 2 + 1900
 	 | 'H' -> hour := read_number 2
+	 | 'i' ->
+	     year := read_number 4;
+	     read_char '-';
+	     month := read_number 2;
+	     read_char '-';
+	     day := read_number 2
 	 | 'm' -> month := read_number 2
 	 | 'M' -> minute := read_number 2
 	 | 'S' -> second := read_number 2
@@ -268,7 +280,7 @@ struct
 	     second := read_number 2
 	 | 'y' -> year := read_number 2 + 1900
 	 | 'Y' -> year := read_number 4
-	 | _  -> bad_format ());
+	 | c  -> bad_format ("%" ^ String.make 1 c));
       parse_format (i + 1)
     and parse_format i =
       assert (i <= lenf);
@@ -295,10 +307,10 @@ module DatePrinter =
 	 let make y m d _ _ _ =
 	   cannot_create_event "date" [ y; m; d ];
 	   make y m d
-	 let default_format = "%D"
-	 let hour _ = bad_format ()
-	 let minute _ = bad_format ()
-	 let second _ = bad_format ()
+	 let default_format = "%i"
+	 let hour _ = bad_format "hour"
+	 let minute _ = bad_format "minute"
+	 let second _ = bad_format "second"
        end)
 
 module TimePrinter = 
@@ -308,13 +320,13 @@ module TimePrinter =
 	   cannot_create_event "time" [ h; m; s ];
 	   make h m s
 	 let default_format = "%T"
-	 let day_of_week _ = bad_format ()
-	 let day_of_month _ = bad_format ()
-	 let day_of_year _ = bad_format ()
-	 let week _ = bad_format ()
-	 let month _ = bad_format ()
-	 let int_month _ = bad_format ()
-	 let year _ = bad_format ()
+	 let day_of_week _ = bad_format "day_of_week"
+	 let day_of_month _ = bad_format "day_of_month"
+	 let day_of_year _ = bad_format "day_of_year"
+	 let week _ = bad_format "week"
+	 let month _ = bad_format "month"
+	 let int_month _ = bad_format "int_month"
+	 let year _ = bad_format "year"
        end)
 
 module CalendarPrinter = 
@@ -323,5 +335,5 @@ module CalendarPrinter =
 	 let make y m d h mn s =
 	   cannot_create_event "calendar" [ y; m; d; h; mn; s ];
 	   make y m d h mn s
-	 let default_format = "%D; %T"
+	 let default_format = "%i %T"
        end)

@@ -13,7 +13,7 @@
  * See the GNU Library General Public License version 2 for more details
  *)
 
-(*i $Id: date.ml,v 1.18 2004-05-18 15:20:00 signoles Exp $ i*)
+(*i $Id: date.ml,v 1.19 2004-10-25 14:12:51 signoles Exp $ i*)
 
 (*S Introduction.
 
@@ -117,7 +117,9 @@ let is_leap_year y =
 
 (*S Boolean operations on dates. *)
 
-let compare = (-)
+let compare = compare
+
+let equal = (==)
 
 let is_julian d = d < 2299161
 
@@ -212,6 +214,8 @@ module Period = struct
      Yep, [Pervasives.compare] correctly works. *)
   let compare = Pervasives.compare
 
+  let equal = (=)
+
   exception Not_computable
 
   let nb_days p = if p.y <> 0 || p.m <> 0 then raise Not_computable else p.d
@@ -302,6 +306,18 @@ let easter y =
   let l = i - j in
   let m = 3 + (l + 40) / 44 in
   make y m (l + 28 - 31 * (m / 4))
+
+let carnaval y = easter y - 48
+let mardi_gras y = easter y - 47
+let ash y = easter y - 46
+let palm y = easter y - 7
+let easter_friday y = easter y - 2
+let easter_saturday y = easter y - 1
+let easter_monday y = easter y + 1
+let ascension y = easter y + 39
+let withsunday y = easter y + 49
+let withmonday y = easter y + 50
+let corpus_christi y = easter y + 60
 
 (*S Exported Coercions. *)
 
