@@ -58,7 +58,11 @@ You can remove files installed by "make install" at any time with :
 5- How to use
 -------------
 
-(a) Simply link calendar with your files using ocamlfind.
+(a) Use the GODI package of calendar !
+
+	see: http://godi.ocaml-programming.de
+
+(b) Or: simply link calendar with your files using ocamlfind.
 
 For example, if you have a file foo_using_calendar.ml, compile it as follow:
 
@@ -66,7 +70,7 @@ For example, if you have a file foo_using_calendar.ml, compile it as follow:
 or
 	ocamlfind ocamlopt -package calendar -linkpkg foo_using_calendar.ml
 
-(b) Alternatively, do not use ocamlfind, link calendar with unix and str and
+(c) Or: do not use ocamlfind, link calendar with unix and str and
 specify the directory containing calendar:
 
 	ocamlc -I /usr/local/lib/ocaml/site-lib/calendar unix.cma calendar.cma foo_using_calendar.ml
