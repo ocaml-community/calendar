@@ -13,7 +13,7 @@
  * See the GNU Library General Public License version 2 for more details
  *)
 
-(*i $Id: calendar.ml,v 1.11 2003-09-18 07:03:13 signoles Exp $ i*)
+(*i $Id: calendar.ml,v 1.12 2003-09-18 10:29:27 signoles Exp $ i*)
 
 (*S Introduction.
 
@@ -115,7 +115,7 @@ let minute x = Time.minute (to_time x)
 let second x = Time.second (to_time x)
 
 (*S Coercions. *)
-
+(*
 let from_string s =
   match Str.split (Str.regexp "; ") s with
     | [ d; t ] -> create (Date.from_string d) (Time.from_string t)
@@ -123,7 +123,7 @@ let from_string s =
 
 let to_string x = 
   Date.to_string (to_date x) ^ "; " ^ Time.to_string (to_time x)
-
+*)
 let from_unixtm x = 
   make 
     (x.Unix.tm_year + 1900) (x.Unix.tm_mon + 1) x.Unix.tm_mday
@@ -145,7 +145,7 @@ let to_unixfloat x = x -. jan_1_1970
 
 (*S Boolean operations on dates. *)
 
-let equal x y = to_string x = to_string y
+let equal x y = int_of_float (x *. 100000.) = int_of_float (y *. 100000.)
 
 let compare x y = 
   if equal x y then 0 
