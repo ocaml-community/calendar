@@ -13,7 +13,7 @@
  * See the GNU Library General Public License version 2 for more details
  *)
 
-(*i $Id: date.mli,v 1.22 2004-12-15 09:59:20 signoles Exp $ i*)
+(*i $Id: date.mli,v 1.23 2005-01-17 13:43:17 signoles Exp $ i*)
 
 (** Date operations.
 
@@ -111,8 +111,9 @@ val day_of_year : t -> int
 
 val week : t -> int
   (** Week. 
-    E.g. [week (make 2003 1 5)] returns [1]
-    and [week (make 2003 12 28)] returns [52]. *)
+    E.g. [week (make 2000 1 3)] returns [1] and [week (make 2000 1 2)] returns
+    [52]. [week (make 2003 12 28)] returns [52] and [week (make 2003 12 29)]
+    returns [1]. *)
 
 val month : t -> month
   (** Month. E.g. [month (make 2003 6 26)] returns [Jun]. *)
@@ -175,8 +176,12 @@ val from_unixfloat : float -> t
 
 val to_business: t -> year * int * day
   (** Return the "business week" and the day in this week respecting ISO 8601.
-    Notice that business weeks at the beginning and end of the year
-    can sometimes have year numbers which don't match the real year. 
+    Notice that business weeks at the beginning and end of the year can
+    sometimes have year numbers which don't match the real year.
+    E.g. [to_business (make 2000 1 3)] returns [2000, 1, Mon] and [to_business
+    (make 2000 1 2)] returns [1999, 52, Sun].  [to_business (make 2003 12 28)]
+    returns [2003, 52, Sun] and [to_business (make 2003 12 29)] returns [2004,
+    1, Mon]. *)
     @since 1.09.0 *)
 
 val from_business: year -> int -> day -> t
