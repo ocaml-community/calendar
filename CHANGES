@@ -1,8 +1,9 @@
 * add module Version
 * add the optional parameter ?month to Date.days_in_year
-* add Date.nth_weekday_of_month
+	(Richard Jones' suggestion)
+* add Date.nth_weekday_of_month (Richard Jones' suggestion)
+* Date: add some Christian dates (Richard Jones' suggestion)
 * add Date.Period.ymd and Calendar.Period.ymds
-* Date: add some Christian dates
 * Printer: add the format string %i corresponding to the ISO-8601 notation
 * Printer: ISO-8601 notation is now the default format
 * add [equal] in all the modules
