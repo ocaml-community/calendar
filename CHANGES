@@ -1,3 +1,5 @@
+version 1.09.1, 2004-17-13:
+===========================
 * bug fixed in Calendar.to/from_unixfloat with time zones <> UTC
 * add @since in the API documentation
 * META file is now writable
