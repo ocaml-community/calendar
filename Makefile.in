@@ -11,7 +11,7 @@
 #  
 #  See the GNU Library General Public License version 2 for more details
 #
-# $Id: Makefile.in,v 1.30 2003-09-18 14:34:01 signoles Exp $
+# $Id: Makefile.in,v 1.31 2003-09-18 16:15:10 signoles Exp $
 
 # Used programs
 ###############
@@ -107,7 +107,7 @@ html/%.html: src/%.mli html/touch-html
 # Tests
 #######
 
-TESTS	= test_timezone test_time test_date test_calendar
+TESTS	= test_timezone test_time test_date test_calendar test_printer
 TESTS	:= $(addprefix tests/, $(TESTS))
 
 TESTS_CMO= $(addsuffix .cmo, $(TESTS))

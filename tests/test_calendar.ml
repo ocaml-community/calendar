@@ -1,4 +1,4 @@
-(*i $Id: test_calendar.ml,v 1.10 2003-09-18 14:34:01 signoles Exp $ i*)
+(*i $Id: test_calendar.ml,v 1.11 2003-09-18 16:15:11 signoles Exp $ i*)
 
 Printf.printf "\nTests of Calendar:\n\n";;
 
@@ -30,8 +30,6 @@ test (Period.compare (Period.day 3) (Period.hour 60) > 0) "Period.compare >";;
 test (Period.compare 
 	(Period.add (Period.day 2) (Period.hour 12)) 
 	(Period.hour 60) = 0) "Period.compare =";;
-(*test (to_string (from_string "1-2-3; 4-5-6") = "1-2-3; 4-5-6") 
-  "to_string from_string = id";;*)
 test 
   (add (make 1 2 3 4 5 6) (Period.make 9 8 7 6 5 4) = make 10 10 10 10 10 10) 
   "add 1-2-3-4-5-6 9-8-7-6-5-4";;
@@ -43,10 +41,8 @@ test (sub (make 0 0 7 6 5 4) (make 0 0 3 54 5 6) = Period.make 0 0 1 23 59 58)
 (* Date *)
 
 let d = make 2003 12 31 12 24 48;;
-(*test (to_string (next d `Month) = "2004-1-31; 12-24-48") 
-  "2003-12-31 + 1 mois";;
-test (to_string (add d (Period.month 2)) = "2004-3-2; 12-24-48") 
-  "2003-12-31 + 2 mois";;*)
+test (next d `Month = make 2004 1 31 12 24 48) "2003-12-31 + 1 mois";;
+test (add d (Period.month 2) = make 2004 3 2 12 24 48) "2003-12-31 + 2 mois";;
 let d2 = make (-3000) 1 1 6 12 24;;
 test (equal (rem d (sub d d2)) d2) "rem x (sub x y) = y";;
 test (is_leap_day (make 2000 2 24 0 0 0)) "2000-2-24 leap day";;

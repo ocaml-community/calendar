@@ -1,8 +1,10 @@
 version 1.05, 2003-09-18:
 =========================
 * add module Printer (from a suggestion of Stefano Zacchiroli)
-* add lmake in Date, Date.Period, Time, Time.Period, Calendar, Calendar.Period
-* Calendar.equal is faster
+* remove to_string and from_string from Date, Time and Calendar
+(replaced by functions of Printer)
+* Str library is no longer necessary
+* add labelled version of make in Date, Time and Calendar
 
 version 1.04, 2003-08-31:
 =========================

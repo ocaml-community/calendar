@@ -13,7 +13,7 @@
  * See the GNU Library General Public License version 2 for more details
  *)
 
-(*i $Id: printer.ml,v 1.7 2003-09-18 16:07:58 signoles Exp $ i*)
+(*i $Id: printer.ml,v 1.8 2003-09-18 16:15:10 signoles Exp $ i*)
 
 module type S = sig
   type t
@@ -294,7 +294,6 @@ module DatePrinter =
 	 include Date
 	 let make y m d _ _ _ =
 	   cannot_create_event "date" [ y; m; d ];
-	   Printf.printf " ATT: %d %d %d\n" y m d;
 	   make y m d
 	 let default_format = "%D"
 	 let hour _ = bad_format ()

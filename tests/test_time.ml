@@ -1,4 +1,4 @@
-(*i $Id: test_time.ml,v 1.7 2003-08-31 07:06:27 signoles Exp $ i*)
+(*i $Id: test_time.ml,v 1.8 2003-09-18 16:15:11 signoles Exp $ i*)
 
 Printf.printf "\nTests of Time:\n\n";;
 
@@ -16,7 +16,6 @@ test (add (make 20 0 0) (Period.minute 70) = make 21 10 0) "add 20-0-0 70mn";;
 test (next (make 20 3 31) `Minute = make 20 4 31) "next 20-3-31 `Minute";
 test (prev (make 20 3 31) `Second = make 20 3 30) "prev 20-3-31 `Second";;
 test (sub (make 6 5 4) (make 4 5 6) = Period.make 1 59 58) "sub 6-5-4 4-5-6";;
-test (Period.to_string (Period.make 1 59 58) = "1-59-58") "Period.to_string";;
 test (convert (make 20 0 0) (Time_Zone.UTC_Plus 2) (Time_Zone.UTC_Plus 4) = 
 	make 22 0 0) "convert";;
 test (to_gmt (make 20 0 0) = make 10 0 0) "to_gmt";;
