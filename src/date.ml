@@ -2,18 +2,18 @@
  * Calendar library
  * Copyright (C) 2003 Julien SIGNOLES
  * 
- * This software is free software; you can redistribute it and/or
+ * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
  * License version 2, as published by the Free Software Foundation.
  * 
- * This software is distributed in the hope that it will be useful,
+ * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  * 
  * See the GNU Library General Public License version 2 for more details
  *)
 
-(*i $Id: date.ml,v 1.4 2003-07-04 15:03:52 signoles Exp $ i*)
+(*i $Id: date.ml,v 1.5 2003-07-07 17:34:56 signoles Exp $ i*)
 
 (*S Introduction.
 
@@ -22,99 +22,22 @@
   available at~:
   \begin{center}http://www.tondering.dk/claus/calendar.html\end{center} *)
 
+(*S Datatypes. *)
+
 type t = int (*r representing the Julian day *)
-
-(* The differents fields of a date. *)
-type field = [ `Year | `Month | `Week | `Day ]
-
-module Period = struct
-
-  (* Cannot use an [int] : periods on months and years have not a constant 
-     number of days. 
-     For example, if we add a "one year" period [p] to the date 2000-3-12,
-     [p] corresponds to 366 days (because 2000 is a leap year) and the 
-     resulting date is 2001-3-12 (yep, one year later). But if we add [p] to 
-     the date 1999-3-12, [p] corresponds to 365 days and the resulting date is
-     2000-3-12 (yep, one year later too). *)
-  type t = { y (* year *) : int; m (* month *) : int; d (* day *) : int }
-
-  let empty = { y = 0; m = 0; d = 0 }
-
-  let make y m d = { y = y; m = m; d = d }
-
-  let day n = { empty with d = n }
-
-  let week n = { empty with d = 7 * n }
-
-  let month n = { empty with m = n }
-
-  let year n = { empty with y = n }
-
-  let add x y = { y = x.y + y.y; m = x.m + y.m; d = x.d + y.d }
-
-  let sub x y = { y = x.y - y.y; m = x.m - y.m; d = x.d - y.d }
-
-  let mul x y = { y = x.y * y.y; m = x.m * y.m; d = x.d * y.d }
-
-  let div x y = { y = x.y / y.y; m = x.m / y.m; d = x.d / y.d }
-
-  let opp x = { y = - x.y; m = - x.m; d = - x.d }
-
-  (* Lexicographical order over the fields of the type [t].
-     Yep, [Pervasives.compare] correctly works. *)
-  let compare = compare 
-end
-
-(*S The signature [S]. *)
-
-module type S = sig
-  exception Out_of_bounds
-  exception Undefined
-  type day = Sun | Mon | Tue | Wed | Thu | Fri | Sat
-  type month = 
-      Jan | Feb | Mar | Apr | May | Jun | Jul | Aug | Sep | Oct | Nov | Dec
-  val today : unit -> t
-  val from_jd : int -> t
-  val from_mjd : int -> t
-  val days_in_month : t -> int
-  val day_of_week : t -> day
-  val day_of_month : t -> int
-  val day_of_year : t -> int
-  val week : t -> int
-  val month : t -> month
-  val year : t -> int
-  val to_jd : t -> int
-  val to_mjd : t -> int
-  val is_leap_day : t -> bool
-  val is_gregorian : t -> bool
-  val is_julian : t -> bool
-  val int_of_day : day -> int
-  val day_of_int : int -> day
-  val int_of_month : month -> int
-  val month_of_int : int -> month
-  val is_leap_year : int -> bool
-  val same_calendar : int -> int -> bool
-  val days_in_year : int -> int
-  val weeks_in_year : int -> int
-  val century : int -> int
-  val millenium : int -> int
-  val solar_number : int -> int
-  val indiction : int -> int
-  val golden_number : int -> int
-  val epact : int -> int
-  val easter : int -> t
-end
-
-(*S Datatypes and exceptions. *)
-
-exception Out_of_bounds
-
-exception Undefined
 
 type day = Sun | Mon | Tue | Wed | Thu | Fri | Sat
 
 type month = 
     Jan | Feb | Mar | Apr | May | Jun | Jul | Aug | Sep | Oct | Nov | Dec
+
+type field = [ `Year | `Month | `Week | `Day ]
+
+(*S Exceptions. *)
+
+exception Out_of_bounds
+
+exception Undefined
 
 (*S Locale coercions.
 
@@ -186,11 +109,11 @@ let is_leap_year y =
 
 (*S Boolean operations on dates. *)
 
+let compare = (-)
+
 let is_julian d = d < 2299161
 
 let is_gregorian d = d >= 2299161
-
-let compare = (-)
 
 (*S Getters. *)
 
@@ -240,8 +163,67 @@ let days_in_month d =
     | Apr | Jun | Sep | Nov -> 30
     | Feb -> if is_leap_year (year d) then 29 else 28
 
+(* Boolean operations (using some getters). *)
 let is_leap_day d = 
   is_leap_year (year d) && month d = Feb && day_of_month d = 24
+
+(*S Arithmetic operations on dates and periods. *)
+
+module Period = struct
+
+  (* Cannot use an [int] : periods on months and years have not a constant 
+     number of days. 
+     For example, if we add a "one year" period [p] to the date 2000-3-12,
+     [p] corresponds to 366 days (because 2000 is a leap year) and the 
+     resulting date is 2001-3-12 (yep, one year later). But if we add [p] to 
+     the date 1999-3-12, [p] corresponds to 365 days and the resulting date is
+     2000-3-12 (yep, one year later too). *)
+  type t = { y (* year *) : int; m (* month *) : int; d (* day *) : int }
+
+  let empty = { y = 0; m = 0; d = 0 }
+
+  let make y m d = { y = y; m = m; d = d }
+
+  let day n = { empty with d = n }
+
+  let week n = { empty with d = 7 * n }
+
+  let month n = { empty with m = n }
+
+  let year n = { empty with y = n }
+
+  let add x y = { y = x.y + y.y; m = x.m + y.m; d = x.d + y.d }
+
+  let sub x y = { y = x.y - y.y; m = x.m - y.m; d = x.d - y.d }
+
+  let opp x = { y = - x.y; m = - x.m; d = - x.d }
+
+  (* Lexicographical order over the fields of the type [t].
+     Yep, [Pervasives.compare] correctly works. *)
+  let compare = Pervasives.compare 
+end
+
+let add d p = 
+  make 
+    (year d         + p.Period.y) 
+    (int_month d    + p.Period.m) 
+    (day_of_month d + p.Period.d)
+
+let sub x y = { Period.empty with Period.d = x - y }
+
+let rem d p = add d (Period.opp p)
+
+let next d = function
+  | `Year  -> add d (Period.year 1)
+  | `Month -> add d (Period.month 1)
+  | `Week  -> add d (Period.day 7)
+  | `Day   -> add d (Period.day 1)
+
+let prev d = function
+  | `Year  -> add d (Period.year (- 1))
+  | `Month -> add d (Period.month (- 1))
+  | `Week  -> add d (Period.day (- 7))
+  | `Day   -> add d (Period.day (- 1))
 
 (*S Operations on years. *)
 
@@ -251,7 +233,7 @@ let same_calendar y1 y2 =
     if is_leap_year y1 then true
     else if is_leap_year (y1 - 1) then d mod 6 = 0 || d mod 17 = 0
     else if is_leap_year (y1 - 2) then d mod 11 = 0 || d mod 17 = 0
-    else if is_leap_year (y1 - 3) then d mod 11 = 0 || d mod 22 = 0
+    else if is_leap_year (y1 - 3) then d mod 11 = 0
     else false
   in d mod 28 = 0 || aux
 
@@ -298,30 +280,6 @@ let easter y =
   let l = i - j in
   let m = 3 + (l + 40) / 44 in
   make y m (l + 28 - 31 * (m / 4))
-
-(*S Arithmetic operations on dates and periods. *)
-
-let add d p = 
-  make 
-    (year d         + p.Period.y) 
-    (int_month d    + p.Period.m) 
-    (day_of_month d + p.Period.d)
-
-let sub x y = { Period.empty with Period.d = x - y }
-
-let rem d p = add d (Period.opp p)
-
-let next d = function
-  | `Year  -> add d (Period.year 1)
-  | `Month -> add d (Period.month 1)
-  | `Week  -> add d (Period.day 7)
-  | `Day   -> add d (Period.day 1)
-
-let prev d = function
-  | `Year  -> add d (Period.year (- 1))
-  | `Month -> add d (Period.month (- 1))
-  | `Week  -> add d (Period.day (- 7))
-  | `Day   -> add d (Period.day (- 1))
 
 (*S Exported Coercions. 
 

@@ -1,27 +1,10 @@
+(*i $Id: test_date.ml,v 1.4 2003-07-07 17:34:56 signoles Exp $ i*)
+
 Printf.printf "\nTests of Date:\n\n";;
 
-let ok, nb_ok =
-  let ok = ref 0 in
-  (fun () -> incr ok; "true"),
-  fun () -> !ok;;
-
-let bug, nb_bug =
-  let bug = ref 0 in
-  (fun () -> incr bug; "!!! FALSE !!!"),
-  fun () -> !bug;;
-
-let test x s = 
-  Printf.printf "%s : %s\n" s (if x then ok () else bug ());;
-
-let test_exn x s =
-  Printf.printf "%s : %s\n" 
-    s
-    (try 
-       ignore (Lazy.force x);
-       bug ()
-     with _ -> ok ());;
-
 open Date;;
+include Gen_test;;
+reset ();;
 
 test_exn (lazy (make (-4713) 1 1)) "make (-4713) 1 1";;
 test_exn (lazy (make 3268 1 23)) "make 3268 1 23";;
@@ -49,39 +32,26 @@ test (day_of_int 1 = Mon) "1 = Monday";;
 test (day_of_int 7 = Sun) "1 = Monday";;
 test (int_of_month Jan = 1) "January = 1";;
 test (month_of_int 12 = Dec) "12 = December";;
-
-
 test (not (is_leap_year 1999)) "1999 not leap year";;
 test (not (is_leap_year 1800)) "1800 not leap year";;
 test (is_leap_year 1996) "1996 leap year";;
 test (is_leap_year 1600) "1600 leap year";;
+test (same_calendar 1956 1900) "same calendar 1956 1900";;
+test (same_calendar 2001 2013) "same calendar 2001 2013";;
+test (same_calendar 1998 2009) "same calendar 1998 2009";;
+test (same_calendar 2003 2025) "same calendar 2003 2025";;
+test (days_in_year 2000 = 366) "days_in_year 2000";;
+test (days_in_year 1900 = 365) "days_in_year 1900";;
+test (weeks_in_year 2000 = 52) "weeks_in_year 2000";;
+test (weeks_in_year 2020 = 53) "weeks_in_year 2020";;
+test (weeks_in_year 1991 = 53) "weeks_in_year 1991";;
+test (weeks_in_year 1999 = 52) "weeks_in_year 1991";;
+test (century 2000 = 20) "century 2000";;
+test (century 2001 = 21) "century 2001";;
+test (millenium 2000 = 2) "millenium 2000";;
+test (millenium 2001 = 3) "millenium 2001";;
+test (easter 2003 = make 2003 4 20) "Paques 2003";;
 
-Printf.printf "\ntests ok : %d; tests ko : %d\n" (nb_ok ()) (nb_bug ());;
-
-(*
-let d = make 2003 6 26;;
-
-let print d = print_endline (to_string d);;
-
-print d;;
-print_newline ();;
-print (add d (Period.year 2));;
-print (add d (Period.month 2));;
-print (add d (Period.day 2));;
-print_newline ();;
-print (next d `Year);;
-print (next d `Month);;
-print (next d `Day);;
-print_newline ();;
-print (prev d `Year);;
-print (prev d `Month);;
-print (prev d `Day);;
-
-print_newline ();;
-let d2 = make 2008 5 24;;
-print (rem d2 (sub d2 d));;
-print_newline ();;
-try print (next (make 1582 9 10) `Month)
-with Undefined -> print_endline "Undefined";;
-print (add (make 2003 12 31) (Period.month 2))
-*)
+let ok = nb_ok ();;
+let bug = nb_bug ();;
+Printf.printf "\ntests ok : %d; tests ko : %d\n" ok bug;;

@@ -21,17 +21,19 @@
 #   OCAMLBEST     either "byte" if no native compiler was found, 
 #                 or "opt" otherwise
 #   OCAMLDEP      "ocamldep"
+#   OCAMLLEX      "ocamllex" (or "ocamllex.opt" if present)
+#   OCAMLYACC     "ocamlyac"
 #   OCAMLLIB      the path to the ocaml standard library
 #   OCAMLVERSION  the ocaml version number
 #   OCAMLWEB      "ocamlweb" (not mandatory)
-#   OCAMLWC	  "ocamlwc"  (not mandatory)
+#   OCAMLWC	  "ocamlwc" (not mandatory)
 #   OCAMLDOT	  "ocamldot" (not mandatory)
 #   OCAMLWIN32    "yes"/"no" depending on Sys.os_type = "Win32"
 #   EXE           ".exe" if OCAMLWIN32=yes, "" otherwise
 
 # check for one particular file of the sources 
 # ADAPT THE FOLLOWING LINE TO YOUR SOURCES!
-AC_INIT(date.ml)
+AC_INIT(src/date.ml)
 
 # Check for Ocaml compilers
 
@@ -48,7 +50,7 @@ OCAMLLIB=`$OCAMLC -v | tail -1 | cut -f 4 -d " "`
 echo "ocaml library path is $OCAMLLIB"
 
 if test "$OCAMLVERSION" != 3.06; then
-	AC_MSG_ERROR(calendar needs ocaml version 3.06 or better)
+	AC_MSG_ERROR(ocamldefun needs ocaml version 3.06)
 fi
 
 # then we look for ocamlopt; if not present, we issue a warning
@@ -104,6 +106,21 @@ if test "$OCAMLDEP" = no ; then
         AC_MSG_ERROR(Cannot find ocamldep.)
 fi
 
+AC_CHECK_PROG(OCAMLLEX,ocamllex,ocamllex,no)
+if test "$OCAMLLEX" = no ; then
+    AC_MSG_ERROR(Cannot find ocamllex.)
+else
+    AC_CHECK_PROG(OCAMLLEXDOTOPT,ocamllex.opt,ocamllex.opt,no)
+    if test "$OCAMLLEXDOTOPT" != no ; then
+        OCAMLLEX=$OCAMLLEXDOTOPT
+    fi
+fi
+
+AC_CHECK_PROG(OCAMLYACC,ocamlyacc,ocamlyacc,no)
+if test "$OCAMLYACC" = no ; then
+        AC_MSG_ERROR(Cannot find ocamlyacc.)
+fi
+
 AC_CHECK_PROG(OCAMLWEB,ocamlweb,ocamlweb,true)
 
 AC_CHECK_PROG(OCAMLWC,ocamlwc,ocamlwc,true)
@@ -125,9 +142,11 @@ fi
 AC_SUBST(OCAMLC)
 AC_SUBST(OCAMLOPT)
 AC_SUBST(OCAMLDEP)
+AC_SUBST(OCAMLLEX)
+AC_SUBST(OCAMLYACC)
 AC_SUBST(OCAMLBEST)
-AC_SUBST(OCAMLLIB)
 AC_SUBST(OCAMLVERSION)
+AC_SUBST(OCAMLLIB)
 AC_SUBST(OCAMLWEB)
 AC_SUBST(OCAMLWC)
 AC_SUBST(OCAMLDOT)

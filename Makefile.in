@@ -1,12 +1,15 @@
-##############################################################################
-#                                                                            #
-#                       Basic Makefile using ocamldefun           	     #
-#                                                                            #
-#                      Copyright (C) 2002 Julien SIGNOLES                    #
-#                                                                            #
-#       $Id: Makefile.in,v 1.5 2003-07-05 06:39:31 signoles Exp $            #
-#                                                                            #
-##############################################################################
+#  Calendar library
+#  Copyright (C) 2003 Julien SIGNOLES
+#  
+#  This library is free software; you can redistribute it and/or
+#  modify it under the terms of the GNU Library General Public
+#  License version 2, as published by the Free Sofware Foundation.
+#  
+#  This library is distributed in the hope that it will be useful,
+#  but WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+#  
+#  See the GNU Library General Public License version 2 for more details
 
 # Used programs
 ###############
@@ -23,7 +26,10 @@ CAMLLIB	= @OCAMLLIB@
 #########
 
 NAME	= calendar
-DIRS	= src/$(NAME).cma src/$(NAME).cmxa
+
+LIBS	= src/$(NAME).cma src/$(NAME).cmxa
+
+DIRS	= src
 
 SRC	= time_Zone.mli time_Zone.ml period.mli \
 	time.mli time.ml date.mli date.ml calendar.mli calendar.ml
@@ -59,6 +65,12 @@ src/$(NAME).cmxa: src/others/unix.cmx src/others/str.cmx $(CMX)
 # Generic rules
 ###############
 
+%.tar: %
+	tar cvf $@ $<
+
+%.gz: %
+	gzip -f --best $<
+
 .SUFFIXES: .ml .mli .cmo .cmi .cmx
 
 .mli.cmi:
@@ -76,10 +88,22 @@ src/$(NAME).cmxa: src/others/unix.cmx src/others/str.cmx $(CMX)
 # Tests
 #######
 
-tests/%: src/$(NAME).cma tests/%.cmo
-	$(CAMLC) -o $@ -I src $^
+TESTS	= test_timezone test_time test_date test_calendar
+TESTS	:= $(addprefix tests/, $(TESTS))
 
-tests: tests/test_timezone tests/test_date tests/test_time tests/test_calendar
+TESTS_CMO= $(addsuffix .cmo, $(TESTS))
+
+$(TESTS_CMO): tests/gen_test.cmo
+tests/test.cmo: $(TESTS_CMO)
+
+tests/test: src/$(NAME).cma tests/test.cmo
+	$(CAMLC) -o $@ $(BYTEFLAGS) src/$(NAME).cma tests/gen_test.cmo \
+		$(TESTS_CMO) tests/test.cmo
+
+.PHONY: tests
+tests: BYTEFLAGS := $(BYTEFLAGS) -I tests
+tests: tests/test
+	./$<
 
 # Documentation
 ###############
@@ -87,21 +111,30 @@ tests: tests/test_timezone tests/test_date tests/test_time tests/test_calendar
 wc: $(SRC)
 	$(CAMLWC) -p $^
 
-$(NAME).ps.gz: $(SRC)
-	$(CAMLWEB) --ps -o $(basename $@) $^
-	gzip -f --best $(basename $@)
+$(NAME).ps: $(SRC)
+	$(CAMLWEB) --ps -o $@ $^
 
 # Install
 #########
 
 install:
-	cp -f $(LIBS) $(CAMLLIB)
+	cp -f $(LIBS) $(CMO) $(CMX) $(CAMLLIB)
 
 uninstall:
-	rm -f $(patsubst src/, $(CAMLLIB), $(LIBS))
+	rm -f $(patsubst src/, $(CAMLLIB), $(LIBS) $(CMO) $(CMX))
 
 # Exporting
 ###########
+
+EXPORT_DIR= $$HOME/WWW
+
+export:
+	cvs export -d /tmp/$(NAME) -D now $(NAME)
+	cd /tmp; \
+	  ($(MAKE) $(NAME).tar.gz; \
+	   rm -rf $(NAME); \
+	   mv $(NAME).tar.gz $(EXPORT_DIR))
+
 
 # Rebuilding Makefile
 #####################
@@ -125,18 +158,20 @@ TAGS: $(SRC)
 ##########
 
 clean:
-	rm -f TAGS $(NAME).ps.gz
-	rm -f tests/test_timezone tests/test_date tests/test_time tests/test_calendar
+	rm -f TAGS $(NAME).ps.gz $(TESTS)
 	for i in . src src/others tests; do \
 	  rm -f $$i/*~ $$i/\#* $$i/*.cm[iox] $$i/*.*a $$i/*.o $$i/a.out; \
 	done
+
+dist-clean: clean
+	rm -f Makefile configure config.*
 
 # Depend
 ########
 
 depend:
 	rm -f .depend
-	for i in src src/others; do \
+	for i in src src/others tests; do \
 	  $(CAMLDEP) $(CAMLIBS) $$i/*.ml $$i/*.mli; \
 	done > .depend
 

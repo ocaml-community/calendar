@@ -2,66 +2,124 @@
  * Calendar library
  * Copyright (C) 2003 Julien SIGNOLES
  * 
- * This software is free software; you can redistribute it and/or
+ * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
  * License version 2, as published by the Free Software Foundation.
  * 
- * This software is distributed in the hope that it will be useful,
+ * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  * 
  * See the GNU Library General Public License version 2 for more details
  *)
 
-(*i $Id: calendar.ml,v 1.3 2003-07-04 13:59:42 signoles Exp $ i*)
+(*i $Id: calendar.ml,v 1.4 2003-07-07 17:34:56 signoles Exp $ i*)
 
+(*S Datatypes. *)
+
+(* A calendar is representing by its (exact) Julian Day -. 0.5.
+   0.5 is because the Julian Period begins January first, 4713 BC at MIDDAY
+   (and then, this Julian day is 0.0). But, for us, the Julian day 0.0 is
+   January first, 4713 BC at MIDNIGHT (for implementation facilities). *)
 type t = float
 
+type day = Date.day = Sun | Mon | Tue | Wed | Thu | Fri | Sat
+
+type month = Date.month =
+    Jan | Feb | Mar | Apr | May | Jun | Jul | Aug | Sep | Oct | Nov | Dec
+
 type field = [ Date.field | Time.field ]
-    
-include (Date : sig 
-	   include Date.S
-	   val make : int -> int -> int -> Date.t
-	   val compare : Date.t -> Date.t -> int
-	 end)
 
-include (Time : sig
-	   include Time.S
-	   val make : int -> int -> int -> Time.t
-	   val compare : Time.t -> Time.t -> int
-	 end)
+(*S Conversions. *)
 
-let from_date x = float_of_int (to_jd x)
+let convert x t1 t2 = x +. float_of_int (Time_Zone.gap t1 t2) /. 24.
 
-let to_date x = from_jd (int_of_float x)
+let to_gmt x = convert x (Time_Zone.current ()) Time_Zone.GMT
 
-(* return a number in [0 .. 1] *)
-let from_time x = 
-  let x = from_gmt x in float_of_int (to_seconds x) /. 86400.
+let from_gmt x = convert x Time_Zone.GMT (Time_Zone.current ())
 
+(* Local [from_date]: ignore time part. *)
+let from_date x = float_of_int (Date.to_jd x)
+
+(* Return the integral part of [x] as a date. *)
+let to_date x = Date.from_jd (int_of_float (from_gmt x +. 0.5))
+
+let from_time x = to_gmt ((float_of_int (Time.to_seconds x)) /. 86400.) -. 0.5
+
+(* Return the fractional part of [x] as a time. *)
 let to_time x = 
-  let t, _ = modf x in 
+  let t, _ = modf (from_gmt (x +. 0.5)) in 
   let f, i = modf (t *. 86400.) in
   let i = if f < 0.5 then int_of_float i else int_of_float i + 1 in
-  from_gmt (from_seconds i)
+  Time.from_seconds i
 
-let build d t = from_date d +. from_time t
+let build d t = 
+  to_gmt (float_of_int (Date.to_jd d) +. 
+	    float_of_int (Time.to_seconds t) /. 86400.) -. 0.5
 
-let build_in d t = 
-  let from_time x = float_of_int (to_seconds x) /. 86400. in
-  from_date d +. from_time t
+(*S Constructors. *)
 
-let make y m d h mn s = build_in (Date.make y m d) (to_gmt (Time.make h mn s))
+let is_valid x = x >= 0. && x < 2914695.
+
+let make y m d h mn s = 
+  let x = build (Date.make y m d) (Time.make h mn s) in
+  if is_valid x then x else raise Date.Out_of_bounds
 
 let now () = build (Date.today ()) (Time.now ())
 
-let next x f = 
-  let t, d = modf x in
-  match f with
-    | #Date.field as f -> from_date (Date.next (to_date d) f) +. t
-    | #Time.field as f -> d +. from_time (Time.next (to_time t) f)
-      
-let prev x f = next (-. x) f
+let from_jd x = to_gmt x
+
+let from_mjd x = to_gmt x +. 2400000.5
+
+(*S Getters. *)
+
+let to_jd x = from_gmt x
+
+let to_mjd x = let x = from_gmt x -. 2400000.5 in Printf.printf "%f\n" x; x
+
+let days_in_month x = Date.days_in_month (to_date x)
+
+let day_of_week x = Date.day_of_week (to_date x)
+
+let day_of_month x = Date.day_of_month (to_date x)
+
+let day_of_year x = Date.day_of_year (to_date x)
+
+let week x = Date.week (to_date x)
+
+let month x = Date.month (to_date x)
+
+let year x = Date.year (to_date x)
+
+let hour x = Time.hour (to_time x)
+
+let minut x = Time.minut (to_time x)
+
+let second x = Time.second (to_time x)
+
+(*S Boolean operations on dates. *)
+
+let is_leap_day x = Date.is_leap_day (to_date x)
+
+let is_gregorian x = Date.is_gregorian (to_date x)
+
+let is_julian x = Date.is_julian (to_date x)
+
+let is_pm x = Time.is_pm (to_time x)
+
+let is_am x = Time.is_am (to_time x)
+
+(*S Coercions. *)
+
+let from_string s =
+  match Str.split (Str.regexp "; ") s with
+    | [ d; t ] -> build (Date.from_string d) (Time.from_string t)
+    | _ -> raise (Invalid_argument (s ^ " is not a calendar"))
+
+let to_string x = 
+  Date.to_string (to_date x) ^ "; " ^ Time.to_string (to_time x)
+
+(*S Periods. *)
 
 module Period = struct
   type t = { d : Date.Period.t; t : Time.Period.t }
@@ -85,25 +143,53 @@ module Period = struct
 
   let second x = { empty with t = Time.Period.second x }
 
-  let add _ = assert false
-  let sub _ = assert false
-  let mul _ = assert false
-  let div _ = assert false
-  let opp x = assert false
+  let add x y = { d = Date.Period.add x.d y.d; t = Time.Period.add x.t y.t }
+
+  let sub x y = { d = Date.Period.sub x.d y.d; t = Time.Period.sub x.t y.t }
+
+  let opp x = { d = Date.Period.opp x.d; t = Time.Period.opp x.t }
 
   let compare = Pervasives.compare
+
+  let to_date_period x = x.d
+
+  let from_date_period x = { empty with d = x }
+
+  let to_time_period x = x.t
+
+  let from_time_period x = { empty with t = x }
 end
 
-let rem _ = assert false
-let sub _ = assert false
-let add _ = assert false
+(*S Arithmetic operations on calendars and periods. *)
 
-let from_string s =
-  match Str.split (Str.regexp "; ") s with
-    | [ d; t ] -> build_in (Date.from_string d) (to_gmt (Time.from_string t))
-    | _ -> raise (Invalid_argument (s ^ " is not a calendar"))
+let add x p = 
+  from_date (Date.add (to_date x) p.Period.d) +. 
+    from_time (Time.add (to_time x) p.Period.t)
 
-let to_string x = 
-  Date.to_string (to_date x) ^ "; " ^ Time.to_string (to_time x)
+let rem x p = add x (Period.opp p)
 
-let compare = Pervasives.compare
+let sub x y = 
+  Period.add 
+    (Period.from_date_period (Date.sub (to_date x) (to_date y)))
+    (Period.from_time_period (Time.sub (to_time x) (to_time y)))
+
+let next x f = 
+  let t, d = modf x in
+  Printf.printf "time = %s\n" (to_string x);
+  match f with
+    | #Date.field as f -> 
+	let x = from_date (Date.next (to_date d) f) +. t in
+	Printf.printf "time_next = %s\n" (to_string x); x
+    | #Time.field as f -> d +. from_time (Time.next (to_time t) f)
+      
+let prev x f = next (-. x) f
+
+(* Exported [from_date]. *)
+let from_date x = to_gmt (from_date x) -. 0.5
+
+let egal x y = to_string x = to_string y
+
+let compare x y = 
+  if egal x y then 0 
+  else if x < y then -1
+  else 1
