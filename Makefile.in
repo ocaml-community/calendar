@@ -11,7 +11,7 @@
 #  
 #  See the GNU Library General Public License version 2 for more details
 #
-# $Id: Makefile.in,v 1.41 2004-10-29 14:39:21 signoles Exp $
+# $Id: Makefile.in,v 1.42 2004-10-29 17:24:50 signoles Exp $
 
 # Used programs
 ###############
@@ -83,6 +83,8 @@ src/version.ml: $(CMO_NOVERSION) $(CMO_NOVERSION:.cmo=.cmx) Makefile
 	echo "let version = \"$(VERSION)\"" > $@
 	echo "let compile_at = Calendar.now ()" >> $@
 	chmod a-w $@
+
+src/version.cmo: src/version.cmi
 
 META: Makefile
 	if test -e $@; then chmod a+w $@; fi		
@@ -221,7 +223,7 @@ clean-configure cleanconfig: dist-clean
 # Depend
 ########
 
-depend: $(GENERATED)
+depend:
 	rm -f .depend
 	for i in src tests; do \
 	  $(CAMLDEP) $(CAMLIBS) $$i/*.ml $$i/*.mli; \
