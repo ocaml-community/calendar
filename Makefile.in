@@ -170,7 +170,7 @@ TAGS: $(SRC)
 ##########
 
 clean:
-	rm -f TAGS $(NAME).ps.gz $(TESTS)
+	rm -f TAGS $(TESTS)
 	for i in . src src/others tests; do \
 	  rm -f $$i/*~ $$i/\#* $$i/*.cm[iox] $$i/*.*a $$i/*.o $$i/a.out; \
 	done
