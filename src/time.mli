@@ -13,7 +13,7 @@
  * See the GNU Library General Public License version 2 for more details
  *)
 
-(*i $Id: time.mli,v 1.14 2004-10-25 14:12:51 signoles Exp $ i*)
+(*i $Id: time.mli,v 1.15 2004-11-02 16:24:35 signoles Exp $ i*)
 
 (** Time operations. *)
 
@@ -192,7 +192,7 @@ end
 
 val add : t -> Period.t -> t
 (** [app t p] returns [t + p]. 
-  E.g. [add (make 20 0 0) (Period.minute 70)] returns the time 21-10-0. *)
+  E.g. [add (make 20 0 0) (Period.minute 70)] returns the time 21:10:0. *)
 
 val sub : t -> t -> Period.t
 (** [sub t1 t2] returns the period between [t1] and [t2]. *)
@@ -202,10 +202,10 @@ val rem : t -> Period.t -> t
 
 val next : t -> field -> t
 (** [next t f] returns the time corresponding to the next specified field.
-  E.g [next (make 20 3 31) `Minute] returns the time 20-4-31.
+  E.g [next (make 20 3 31) `Minute] returns the time 20:04:31.
   (i.e. one minute later). *)
 
 val prev : t -> field -> t
 (** [prev t f] returns the time corresponding to the previous specified field.
-  E.g [prev (make 20 3 31) `Second] returns the time 20-3-30.
+  E.g [prev (make 20 3 31) `Second] returns the time 20:03:30.
   (i.e. one second ago). *)

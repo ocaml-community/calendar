@@ -13,7 +13,7 @@
  * See the GNU Library General Public License version 2 for more details
  *)
 
-(*i $Id: calendar.ml,v 1.18 2004-10-25 15:22:48 signoles Exp $ i*)
+(*i $Id: calendar.ml,v 1.19 2004-11-02 16:24:35 signoles Exp $ i*)
 
 (*S Introduction.
 
@@ -259,5 +259,5 @@ let next x f =
   match f with
     | #Date.field as f -> unsplit (Date.next d f) t
     | #Time.field as f -> unsplit d (Time.next t f)
-      
+
 let prev x f = -. next (-. x) f

@@ -13,7 +13,7 @@
  * See the GNU Library General Public License version 2 for more details
  *)
 
-(*i $Id: time.ml,v 1.14 2004-10-25 14:12:51 signoles Exp $ i*)
+(*i $Id: time.ml,v 1.15 2004-11-02 16:24:35 signoles Exp $ i*)
 
 (*S Introduction.
 
@@ -93,50 +93,40 @@ let from_seconds t = to_gmt t
 (*S Period. *)
 
 module Period = struct
+
   type t = int
 
   let make h m s = h * 3600 + m * 60 + s
-
-  let lmake ?(hour = 0) ?(minute = 0) ?(second = 0) () = 
-    make hour minute second
+  let lmake ?(hour=0) ?(minute=0) ?(second=0) () = make hour minute second
 
   let length x = x
 
   let hour x = x * 3600
-
   let minute x = x * 60
-
   let second x = x
 
   let empty = 0
 
   let add = (+)
-
   let sub = (-)
-
   let mul = ( * )
-
   let div = (/)
 
   let opp x = - x
 
   let compare = compare
-
   let equal = (==)
 
   let to_seconds x = x
-
   let to_minutes x = float_of_int x /. 60.
-
   let to_hours x = float_of_int x /. 3600.
+
 end
 
 (*S Arithmetic operations on times and periods. *)
 
 let add = (+)
-
 let sub = (-)
-
 let rem = (-)
 
 let next x = function
