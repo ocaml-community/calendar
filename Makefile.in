@@ -11,7 +11,7 @@
 #  
 #  See the GNU Library General Public License version 2 for more details
 #
-# $Id: Makefile.in,v 1.40 2004-10-25 15:23:56 signoles Exp $
+# $Id: Makefile.in,v 1.41 2004-10-29 14:39:21 signoles Exp $
 
 # Used programs
 ###############
@@ -78,15 +78,13 @@ src/$(NAME).cma: $(CMO)
 src/$(NAME).a src/$(NAME).cmxa: $(CMX)
 	$(CAMLFIND) ocamlopt $(OPTFLAGS) -a -o $@ $^
 
-.PHONY	= src/version.ml
-src/version.ml:
+src/version.ml: $(CMO_NOVERSION) $(CMO_NOVERSION:.cmo=.cmx) Makefile
 	if test -e $@; then chmod a+w $@; fi		
 	echo "let version = \"$(VERSION)\"" > $@
 	echo "let compile_at = Calendar.now ()" >> $@
 	chmod a-w $@
 
-.PHONY: META
-META: 
+META: Makefile
 	if test -e $@; then chmod a+w $@; fi		
 	echo "description = \"$(NAME) library\"" > $@
 	echo "version = \"$(VERSION)\"" >> $@
@@ -153,7 +151,7 @@ doc: $(CMO)
 # Install
 #########
 
-install: $(LIBS) $(CLIBS)
+install: $(LIBS) $(CLIBS) META
 	@if [ "`sed -n -e 's/version = "\([0-9.]*\)"/\1/p' META`" = "$(VERSION)" ]; then \
 	  (if test -d $(CAMLLIB)/site-lib/$(NAME); then $(MAKE) uninstall; fi;\
 	  $(CAMLFIND) install $(NAME) $(LIBS) $(CLIBS) $(MLI) $(CMI) META\
