@@ -49,8 +49,8 @@ echo "ocaml version is $OCAMLVERSION"
 OCAMLLIB=`$OCAMLC -v | tail -1 | cut -f 4 -d " "`
 echo "ocaml library path is $OCAMLLIB"
 
-if test "$OCAMLVERSION" != 3.06; then
-	AC_MSG_ERROR(ocamldefun needs ocaml version 3.06)
+if [[[ "$OCAMLVERSION" < "3.06" ]]]; then
+	AC_MSG_ERROR(calendar needs ocaml version 3.06)
 fi
 
 # then we look for ocamlopt; if not present, we issue a warning
