@@ -13,7 +13,7 @@
  * See the GNU Library General Public License version 2 for more details
  *)
 
-(*i $Id: time.ml,v 1.16 2004-11-13 18:25:10 signoles Exp $ i*)
+(*i $Id: time.ml,v 1.17 2004-11-17 16:05:19 signoles Exp $ i*)
 
 (*S Introduction.
 
@@ -78,9 +78,15 @@ let compare = compare
 
 let equal = (==)
 
-let is_pm t = let t, _ = normalize t in t < midday ()
+let is_pm t = 
+  let t, _ = normalize t in 
+  let m, _ = normalize (midday ()) in
+  t < m
 
-let is_am t = let t, _ = normalize t in t >= midday ()
+let is_am t = 
+  let t, _ = normalize t in 
+  let m, _ = normalize (midday ()) in
+  t >= m
 
 (*S Coercions. *)
 

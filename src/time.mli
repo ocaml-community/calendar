@@ -13,7 +13,7 @@
  * See the GNU Library General Public License version 2 for more details
  *)
 
-(*i $Id: time.mli,v 1.16 2004-11-15 16:36:55 signoles Exp $ i*)
+(*i $Id: time.mli,v 1.17 2004-11-17 16:05:19 signoles Exp $ i*)
 
 (** Time operations. *)
 
@@ -117,11 +117,13 @@ val equal: t -> t -> bool
     @since 1.09.0 *)
 
 val is_pm : t -> bool
-  (** Return [true] is the time is before midday; [false] otherwise. 
+  (** Return [true] is the time is before midday in the current time zone;
+    [false] otherwise.
     E.g. both [is_pm (make 10 0 0)] and [is_pm (make 34 0 0)] return [true]. *)
-    
+
 val is_am : t -> bool
-  (** Return [true] is the time is after midday; [false] otherwise. 
+  (** Return [true] is the time is after midday in the current time zone; 
+    [false] otherwise. 
     E.g. both [is_am (make 20 0 0)] and [is_am (make 44 0 0)] return [true]. *)
 
 (** {1 Coercions} *)

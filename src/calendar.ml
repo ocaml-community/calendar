@@ -13,7 +13,7 @@
  * See the GNU Library General Public License version 2 for more details
  *)
 
-(*i $Id: calendar.ml,v 1.20 2004-11-13 18:25:10 signoles Exp $ i*)
+(*i $Id: calendar.ml,v 1.21 2004-11-17 16:05:18 signoles Exp $ i*)
 
 (*S Introduction.
 
@@ -56,7 +56,7 @@ let to_date x = Date.from_jd (int_of_float (from_gmt x +. 0.5))
 
 (* Return the fractional part of [x] as a time. *)
 let to_time x = 
-  let t, _ = modf (from_gmt (x +. 0.5)) in 
+  let t, _ = modf (from_gmt x +. 0.5) in 
   let i = round (t *. 86400.) in
   assert (i < 86400);
   Time.from_seconds i
@@ -118,8 +118,8 @@ let second x = Time.second (to_time x)
 
 (*S Coercions. *)
 
-let from_unixtm x = 
-  make 
+let from_unixtm x =
+  make
     (x.Unix.tm_year + 1900) (x.Unix.tm_mon + 1) x.Unix.tm_mday
     x.Unix.tm_hour x.Unix.tm_min x.Unix.tm_sec
 
@@ -133,9 +133,9 @@ let to_unixtm x =
 
 let jan_1_1970 = 2440587.5
 
-let from_unixfloat x = from_gmt (x /. 86400. +. jan_1_1970)
+let from_unixfloat x = to_gmt (x /. 86400. +. jan_1_1970)
 
-let to_unixfloat x = to_gmt ((x -. jan_1_1970) *. 86400.)
+let to_unixfloat x = (from_gmt x -. jan_1_1970) *. 86400.
 
 (*S Boolean operations on dates. *)
 

@@ -1,4 +1,4 @@
-(*i $Id: test_calendar.ml,v 1.14 2004-11-13 18:25:10 signoles Exp $ i*)
+(*i $Id: test_calendar.ml,v 1.15 2004-11-17 16:05:19 signoles Exp $ i*)
 
 Printf.printf "\nTests of Calendar:\n\n";;
 
@@ -66,7 +66,19 @@ test (not (is_julian (make 1583 1 1 0 0 0))) "1583-1-1 not julian";;
 
 (* Time *)
 
+test (let n = Unix.gmtime (Unix.time ()) in 
+      hour (from_unixtm n) = n.Unix.tm_hour) "from_unixtm invariant UTC";;
+test (let n = Unix.time () in 
+      hour (from_unixfloat n) = (Unix.gmtime n).Unix.tm_hour) 
+  "from_unixfloat invariant UTC";;
+
 Time_Zone.change (Time_Zone.UTC_Plus 10);;
+
+test (let n = Unix.gmtime (Unix.time ()) in 
+      hour (from_unixtm n) = n.Unix.tm_hour) "from_unixtm invariant +10";;
+test (let n = Unix.time () in 
+      hour (from_unixfloat n) = (Unix.gmtime n).Unix.tm_hour) 
+  "from_unixfloat invariant +10";;
 
 test (equal (add (make 0 0 0 10 0 0) (Period.hour 30)) (make 0 0 1 16 0 0))
   "add 0-0-0-20-0-0 30h";;
@@ -91,6 +103,12 @@ test (is_am (make 0 0 0 (- 34) 0 0)) "is_am (- 34) 0 0";;
 test (not (is_am (make 0 0 0 34 0 0))) "not (is_pm 34 0 0)";;
 
 Time_Zone.change Time_Zone.UTC;;
+
+test (let n = Unix.gmtime (Unix.time ()) in 
+      hour (from_unixtm n) = n.Unix.tm_hour) "from_unixtm invariant UTC2";;
+test (let n = Unix.time () in
+      hour (from_unixfloat n) = (Unix.gmtime n).Unix.tm_hour) 
+  "from_unixfloat invariant UTC2";;
 
 test (to_unixfloat (make 1970 1 1 0 0 0) = 0.) "to_unixfloat 1 Jan 1970";;
 test (from_unixfloat 0. = make 1970 1 1 0 0 0) "from_unixfloat 1 Jan 1970";;

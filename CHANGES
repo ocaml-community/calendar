@@ -1,3 +1,4 @@
+* bug fixed in Calendar.to/from_unixfloat
 * add @since in the API documentation
 * META file is now writable
 

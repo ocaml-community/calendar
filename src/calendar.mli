@@ -13,7 +13,7 @@
  * See the GNU Library General Public License version 2 for more details
  *)
 
-(*i $Id: calendar.mli,v 1.19 2004-11-15 16:36:55 signoles Exp $ i*)
+(*i $Id: calendar.mli,v 1.20 2004-11-17 16:05:18 signoles Exp $ i*)
 
 (** Calendar operations.
 
@@ -135,18 +135,22 @@ val to_unixtm : t -> Unix.tm
     @since 1.01 *)
 
 val from_unixtm : Unix.tm -> t
-  (** Inverse of [to_unixtm]. 
+  (** Inverse of [to_unixtm]. Assumes the current time zone. 
+    So, we have the following invariant:
+    [hour (from_unixtm u) = u.Unix.tm_hour].
     @since 1.01 *)
 
 val to_unixfloat : t -> float
   (** Convert a calendar to a float such than 
-    [to_unixfloat (make 1970 1 1 0 0 0)] returns [0.0] at UTC. 
+    [to_unixfloat (make 1970 1 1 0 0 0)] returns [0.0] at UTC.
     So such a float is convertible with those of the [Unix] module. 
-    More precise than [Date.to_unixfloat]. 
+    More precise than [Date.to_unixfloat].
     @since 1.01 *)
 
 val from_unixfloat : float -> t
-  (** Inverse of [from_unixfloat]. 
+  (** Inverse of [from_unixfloat]. Assumes the current time zone.
+    So, we have the following invariant:
+    [hour (from_unixfloat u) = (Unix.gmtime u).Unix.tm_hour].
     @since 1.01 *)
 
 val from_date : Date.t -> t
