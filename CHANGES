@@ -1,3 +1,5 @@
+* META file is now writable
+
 version 1.09.0, 2004-11-13:
 ===========================
 * add Date.to_business and Date.from_business (Richard Jone's suggestion)
