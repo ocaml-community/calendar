@@ -1,3 +1,5 @@
 * ajouter AC ou BC dans le printer
 * ajouter des tests du printer
 * améliorer commentaires printer
+* utiliser -pack
+* ajouter la version comme valeur de la librairie
