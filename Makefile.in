@@ -11,7 +11,7 @@
 #  
 #  See the GNU Library General Public License version 2 for more details
 #
-# $Id: Makefile.in,v 1.33 2003-12-05 13:34:22 signoles Exp $
+# $Id: Makefile.in,v 1.34 2004-03-22 09:49:48 signoles Exp $
 
 # Used programs
 ###############
@@ -30,9 +30,15 @@ CAML2HTML= @CAML2HTML@
 #########
 
 NAME	= calendar
-VERSION	= 1.06
+VERSION	= 1.07
 
+ifeq ($(CAMLOPT),no)
+LIBS	= src/$(NAME).cma
+CLIBS   =
+else
 LIBS	= src/$(NAME).cma src/$(NAME).cmxa
+CLIBS   = src/$(NAME).a
+endif
 
 DIRS	= src
 
@@ -137,10 +143,10 @@ $(NAME).ps: $(SRC)
 # Install
 #########
 
-install: $(LIBS)
+install: $(LIBS) $(CLIBS)
 	@if [ "`sed -n -e 's/version = "\([0-9.]*\)"/\1/p' META`" = "$(VERSION)" ]; then \
 	  (if test -d $(CAMLLIB)/site-lib/$(NAME); then $(MAKE) uninstall; fi;\
-	  $(CAMLFIND) install $(NAME) $(LIBS) src/$(NAME).a $(MLI) $(CMI) META\
+	  $(CAMLFIND) install $(NAME) $(LIBS) $(CLIBS) $(MLI) $(CMI) META\
 	)else \
 	  (echo; echo "Not the good version. Please, do :"; \
 	   echo "  make clean && make"; \

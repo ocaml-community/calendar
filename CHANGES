@@ -1,3 +1,8 @@
+version 1.07, 2003-22-03:
+=========================
+* compile even if no ocaml native compiler is available
+	(from a patch of Stefano Zacchiroli)
+
 version 1.06, 2003-12-05:
 =========================
 * compile with an optimized compiler (ocamlopt.opt or ocamlc.opt) if possible
