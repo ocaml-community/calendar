@@ -1,4 +1,4 @@
-(*i $Id: test_date.ml,v 1.13 2004-11-13 18:25:10 signoles Exp $ i*)
+(*i $Id: test_date.ml,v 1.14 2004-11-13 20:14:07 signoles Exp $ i*)
 
 Printf.printf "\nTests of Date:\n\n";;
 
@@ -47,8 +47,8 @@ test (days_in_year ~month:Jan 2000 = 31) "days_in_year Jan 2000";;
 test (days_in_year ~month:Mar 1900 = 90) "days_in_year Mar 1900";;
 test (weeks_in_year 2000 = 52) "weeks_in_year 2000";;
 test (weeks_in_year 2020 = 53) "weeks_in_year 2020";;
-test (weeks_in_year 1991 = 53) "weeks_in_year 1991";;
-test (weeks_in_year 1999 = 52) "weeks_in_year 1991";;
+test (weeks_in_year 1991 = 52) "weeks_in_year 1991";;
+test (weeks_in_year 1999 = 52) "weeks_in_year 1999";;
 test (century 2000 = 20) "century 2000";;
 test (century 2001 = 21) "century 2001";;
 test (millenium 2000 = 2) "millenium 2000";;
@@ -67,6 +67,23 @@ test (week_first_last 21 2004 = (make 2004 5 17, make 2004 5 23))
 test (Period.ymd (Period.make 1 2 3) = (1, 2, 3)) "Period.ymd";;
 test (nth_weekday_of_month 2004 Oct Thu 5 = make 2004 10 28) 
   "nth_weekday_of_month";;
+
+(* to_business *)
+test (to_business (make 2003 1 1) = (2003, 1, Wed)) "to_business 1";;
+test (to_business (make 2003 12 31) = (2004, 1, Wed)) "to_business 2";;
+test (to_business (make 2002 12 31) = (2003, 1, Tue)) "to_business 3";;
+test (to_business (make 2005 1 1) = (2004, 53, Sat)) "to_business 4";;
+test (to_business (make 2004 12 31) = (2004, 53, Fri)) "to_business 5";;
+test (to_business (make 2006 1 1) = (2005, 52, Sun)) "to_business 6";;
+(* from_business *)
+test (from_business 2003 1 Wed = make 2003 1 1) "from_business 1";;
+test (from_business 2004 1 Wed = make 2003 12 31) "from_business 2";;
+test (from_business 2003 1 Tue = make 2002 12 31) "from_business 3";;
+test (from_business 2004 53 Sat = make 2005 1 1) "from_business 4";;
+test (from_business 2004 53 Fri = make 2004 12 31) "from_business 5";;
+test (from_business 2005 52 Sun = make 2006 1 1) "from_business 6";;
+test_exn (lazy (from_business 2005 0 Sun)) "from_business_bad 1";;
+test_exn (lazy (from_business 2005 53 Sun)) "from_business_bad 2";;
 
 let ok = nb_ok ();;
 let bug = nb_bug ();;

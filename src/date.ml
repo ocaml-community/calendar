@@ -13,7 +13,7 @@
  * See the GNU Library General Public License version 2 for more details
  *)
 
-(*i $Id: date.ml,v 1.23 2004-11-13 18:25:10 signoles Exp $ i*)
+(*i $Id: date.ml,v 1.24 2004-11-13 20:14:07 signoles Exp $ i*)
 
 (*S Introduction.
 
@@ -271,7 +271,7 @@ let days_in_year =
 let weeks_in_year y =
   let first_day = day_of_week (make y 1 1) in
   match first_day with
-    | Tue -> if is_leap_year y then 52 else 53
+    | Thu -> 53
     | Wed -> if is_leap_year y then 53 else 52
     | _   -> 52
 
@@ -350,18 +350,38 @@ let to_unixfloat x = float_of_int (x - jan_1_1970) *. 86400.
 
 let from_unixfloat x = int_of_float (x /. 86400.) + jan_1_1970
 
+let to_business d =
+  let w = week d in
+  let y =
+    let y = year d in
+    match int_month d with
+      | 1 -> if w = 1 then y else y - 1
+      | 12 -> if w = 1 then y + 1 else y
+      | _ -> y
+  in
+  y, w, day_of_week d
+
+let int_of_day d = let n = int_of_day d in if n = 0 then 7 else n
+  (* Used by [from_business] *)
+
+let from_business y w d =
+  if w < 1 || w > weeks_in_year y then invalid_arg "from_business";
+  let first = make y 1 1 in
+  let first_day = int_day_of_week first in
+  let w = if first_day > 4 then w else w - 1 in
+  first + w * 7 + int_of_day d - first_day
+
 (* These coercions redefine those defined at the beginning of the module.
    They respect ISO-8601. *)
 
-let int_of_day d = let n = int_of_day d in if n = 0 then 7 else n
+let int_of_day = int_of_day
 
 let day_of_int n = 
-  if n > 0 && n < 7 then day_of_int n
-  else if n = 7 then day_of_int 0
-  else raise (Invalid_argument "Not a day")
+  if n > 0 && n < 7 then day_of_int n 
+  else if n = 7 then day_of_int 0 
+  else invalid_arg "Not a day"
 
 let int_of_month m = int_of_month m + 1
 
 let month_of_int n =
-  if n > 0 && n < 13 then month_of_int (n - 1) 
-  else raise (Invalid_argument "Not a month")
+  if n > 0 && n < 13 then month_of_int (n - 1) else invalid_arg "Not a month"

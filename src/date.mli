@@ -13,7 +13,7 @@
  * See the GNU Library General Public License version 2 for more details
  *)
 
-(*i $Id: date.mli,v 1.19 2004-10-29 13:49:09 signoles Exp $ i*)
+(*i $Id: date.mli,v 1.20 2004-11-13 20:14:07 signoles Exp $ i*)
 
 (** Date operations.
 
@@ -88,9 +88,9 @@ val from_mjd : int -> t
   (** Make a date from its modified Julian day (i.e. Julian day - 2 400 001).
     The Modified Julian day is more manageable than the Julian day.
     E.g. [from_mjd 0] returns the date 1858-11-17. *)
-    
+
 (** {1 Getters} *)
-  
+
 val days_in_month : t -> int
   (** Number of days in the month of a date.
     E.g [days_in_month (make 2003 6 26)] returns [30]. *)
@@ -165,6 +165,17 @@ val to_unixfloat : t -> float
 
 val from_unixfloat : float -> t
   (** Inverse of [to_unixfloat]. Ignore the fractional part of the argument. *)
+
+val to_business: t -> year * int * day
+  (** Return the "business week" and the day in this week respecting ISO 8601.
+    Notice that business weeks at the beginning and end of the year
+    can sometimes have year numbers which don't match the real year. *)
+
+val from_business: year -> int -> day -> t
+  (** Inverse of [to_business] respecting ISO-8601.
+    Raise [Invalid_argument] if the week is bad.
+    Notice that business weeks at the beginning and end of the year
+    can sometimes have year numbers which don't match the real year. *)
 
 val int_of_day : day -> int
   (** Convert a day to an integer respecting ISO-8601.
