@@ -1,4 +1,4 @@
-(*i $Id: test_date.ml,v 1.12 2004-10-29 13:49:09 signoles Exp $ i*)
+(*i $Id: test_date.ml,v 1.13 2004-11-13 18:25:10 signoles Exp $ i*)
 
 Printf.printf "\nTests of Date:\n\n";;
 
@@ -54,8 +54,10 @@ test (century 2001 = 21) "century 2001";;
 test (millenium 2000 = 2) "millenium 2000";;
 test (millenium 2001 = 3) "millenium 2001";;
 test (easter 2003 = make 2003 4 20) "Paques 2003";;
-test (to_unixfloat (make 1970 1 1) = 0.) "to_unixfloat";;
-test (from_unixfloat 0. = make 1970 1 1) "from_unixfloat";;
+test (to_unixfloat (make 1970 1 1) = 0.) "to_unixfloat 1 Jan 1970";;
+test (from_unixfloat 0. = make 1970 1 1) "from_unixfloat 1 Jan 1970";;
+test (to_unixfloat (make 2004 11 13) = 1100304000.) "to_unixfloat";;
+test (from_unixfloat 1100304000. = make 2004 11 13) "to_unixfloat";;
 test (from_unixtm (to_unixtm (make 2003 7 16)) = make 2003 7 16) 
   "from_unixtm to_unixtm = id";;
 test (Period.nb_days (Period.make 0 0 6) = 6) "Period.nb_days ok";;

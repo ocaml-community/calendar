@@ -13,7 +13,7 @@
  * See the GNU Library General Public License version 2 for more details
  *)
 
-(*i $Id: date.ml,v 1.22 2004-10-29 15:31:11 signoles Exp $ i*)
+(*i $Id: date.ml,v 1.23 2004-11-13 18:25:10 signoles Exp $ i*)
 
 (*S Introduction.
 
@@ -82,7 +82,7 @@ let from_unixtm x =
   make (x.Unix.tm_year + 1900) (x.Unix.tm_mon + 1) x.Unix.tm_mday
 
 let today () = 
-  let today = Unix.gmtime (Unix.gettimeofday ()) in
+  let today = Unix.gmtime (Unix.time ()) in
   let d = (* current day at GMT *) from_unixtm today in
   let hour = Time_Zone.from_gmt () + today.Unix.tm_hour in
   (* change the day according to the time zone *)
@@ -345,11 +345,12 @@ let to_unixtm d =
 
 let jan_1_1970 = 2440588
 
-let to_unixfloat x = float_of_int (x - jan_1_1970)
+let to_unixfloat x = float_of_int (x - jan_1_1970) *. 86400.
+  (* do not replace [*.] by [*]: the result is bigger than [max_int] ! *)
 
-let from_unixfloat x = int_of_float x + jan_1_1970
+let from_unixfloat x = int_of_float (x /. 86400.) + jan_1_1970
 
-(* These coercions redefined those defined at the beginning of the module.
+(* These coercions redefine those defined at the beginning of the module.
    They respect ISO-8601. *)
 
 let int_of_day d = let n = int_of_day d in if n = 0 then 7 else n

@@ -1,4 +1,4 @@
-(*i $Id: test_calendar.ml,v 1.13 2004-10-25 15:16:28 signoles Exp $ i*)
+(*i $Id: test_calendar.ml,v 1.14 2004-11-13 18:25:10 signoles Exp $ i*)
 
 Printf.printf "\nTests of Calendar:\n\n";;
 
@@ -92,8 +92,12 @@ test (not (is_am (make 0 0 0 34 0 0))) "not (is_pm 34 0 0)";;
 
 Time_Zone.change Time_Zone.UTC;;
 
-test (to_unixfloat (make 1970 1 1 0 0 0) = 0.) "to_unixfloat";;
-test (from_unixfloat 0. = make 1970 1 1 0 0 0) "from_unixfloat";;
+test (to_unixfloat (make 1970 1 1 0 0 0) = 0.) "to_unixfloat 1 Jan 1970";;
+test (from_unixfloat 0. = make 1970 1 1 0 0 0) "from_unixfloat 1 Jan 1970";;
+test (floor (to_unixfloat (make 2004 11 13 19 17 10)) = 1100373429.)
+  "to_unixfloat";;
+test (equal (from_unixfloat 1100373429.) (make 2004 11 13 19 17 09)) 
+  "from_unixfloat";;
 test (from_unixtm (to_unixtm (make 2003 7 16 23 22 21)) = 
 	make 2003 7 16 23 22 21) 
   "from_unixtm to_unixtm = id";;

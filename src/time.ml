@@ -13,7 +13,7 @@
  * See the GNU Library General Public License version 2 for more details
  *)
 
-(*i $Id: time.ml,v 1.15 2004-11-02 16:24:35 signoles Exp $ i*)
+(*i $Id: time.ml,v 1.16 2004-11-13 18:25:10 signoles Exp $ i*)
 
 (*S Introduction.
 
@@ -55,7 +55,7 @@ let midnight () = to_gmt 0
 let midday () = to_gmt 43200
 
 let now () =
-  let now = Unix.gmtime (Unix.gettimeofday ()) in
+  let now = Unix.gmtime (Unix.time ()) in
   3600 * now.Unix.tm_hour + 60 * now.Unix.tm_min + now.Unix.tm_sec
 
 (*S Getters. *)

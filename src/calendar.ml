@@ -13,7 +13,7 @@
  * See the GNU Library General Public License version 2 for more details
  *)
 
-(*i $Id: calendar.ml,v 1.19 2004-11-02 16:24:35 signoles Exp $ i*)
+(*i $Id: calendar.ml,v 1.20 2004-11-13 18:25:10 signoles Exp $ i*)
 
 (*S Introduction.
 
@@ -77,7 +77,7 @@ let lmake ~year ?(month=1) ?(day=1) ?(hour=0) ?(minute=0) ?(second=0) () =
   make year month day hour minute second
 
 let now () = 
-  let now = Unix.gmtime (Unix.gettimeofday ()) in
+  let now = Unix.gmtime (Unix.time ()) in
   from_gmt (make 
 	      (now.Unix.tm_year + 1900) 
 	      (now.Unix.tm_mon + 1) 
@@ -133,9 +133,9 @@ let to_unixtm x =
 
 let jan_1_1970 = 2440587.5
 
-let from_unixfloat x = x +. jan_1_1970
+let from_unixfloat x = from_gmt (x /. 86400. +. jan_1_1970)
 
-let to_unixfloat x = x -. jan_1_1970
+let to_unixfloat x = to_gmt ((x -. jan_1_1970) *. 86400.)
 
 (*S Boolean operations on dates. *)
 

@@ -8,6 +8,7 @@
 * Printer: ISO-8601 notation is now the default format
 * add [equal] in all the modules
 * Calendar.Period: bug fixed with negative period
+* bug fixed in Calendar/Date.to/from_unixfloat
 
 version 1.08, 2004-05-18:
 =========================
