@@ -13,7 +13,7 @@
  * See the GNU Library General Public License version 2 for more details
  *)
 
-(*i $Id: date.mli,v 1.8 2003-07-16 09:04:30 signoles Exp $ i*)
+(*i $Id: date.mli,v 1.9 2003-08-31 07:50:47 signoles Exp $ i*)
 
 (*S Introduction. 
 
@@ -204,6 +204,16 @@ module Period : sig
 
   (* [day n] makes a period of [n] days. *)
   val day : int -> t
+
+  (* Getters.\\ *)
+    
+  exception Not_computable
+
+  (* Number of days of a period. Throw [Not_computable] if the number of days
+     is not computable. 
+     E.g. [nb_days (day 6)] returns [6] but [nb_days (year 1)] throws
+     [Not_computable] because a year is not a constant number of days. *)
+  val nb_days : t -> int
 end
 
 (*S Arithmetic operations on dates and periods. *)

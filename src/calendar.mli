@@ -13,7 +13,7 @@
  * See the GNU Library General Public License version 2 for more details
  *)
 
-(*i $Id: calendar.mli,v 1.10 2003-08-25 15:54:12 signoles Exp $ i*)
+(*i $Id: calendar.mli,v 1.11 2003-08-31 07:50:47 signoles Exp $ i*)
 
 (*S Introduction. 
 
@@ -186,10 +186,18 @@ module Period : sig
   (* Convert a date period to a calendar period. *)
   val from_date : Date.Period.t -> t
 
-  (* Convert a time period to a calendar period. 
-     Note there is no [to_time] function because it is not possible to compute
-     such a time period from a date period. *)
+  (* Convert a time period to a calendar period. *)
   val from_time : Time.Period.t -> t
+
+  exception Not_computable (* = Date.Period.Not_computable *)
+
+  (* Convert a calendar period to a date period. Throw [Not_computable] if the
+     time period is not computable.
+     E.g. [to_time (day 6)] and [to_time (second 30)] respectively return a
+     time period of [24 * 3600 * 6 = 518400] seconds and a time period of [30]
+     seconds but [to_time (year 1)] throws [Not_computable] because a year is
+     not a constant number of days. *)
+  val to_time : t -> Time.Period.t
 end
 
 (*S Arithmetic operations on calendars and periods. *)

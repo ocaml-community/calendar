@@ -1,4 +1,4 @@
-(*i $Id: test_calendar.ml,v 1.8 2003-07-16 16:21:18 signoles Exp $ i*)
+(*i $Id: test_calendar.ml,v 1.9 2003-08-31 07:50:47 signoles Exp $ i*)
 
 Printf.printf "\nTests of Calendar:\n\n";;
 
@@ -89,6 +89,12 @@ test (from_unixfloat 0. = make 1970 1 1 0 0 0) "from_unixfloat";;
 test (from_unixtm (to_unixtm (make 2003 7 16 23 22 21)) = 
 	make 2003 7 16 23 22 21) 
   "from_unixtm to_unixtm = id";;
+
+test (Period.to_time (Period.second 30) = Time.Period.second 30) 
+  "Period.to_time second";;
+test (Period.to_time (Period.day 6) = Time.Period.second 518400) 
+  "Period.to_time day";;
+test_exn (lazy (Period.to_time (Period.year 1))) "Period.to_time year";;
 
 let ok = nb_ok ();;
 let bug = nb_bug ();;

@@ -13,7 +13,7 @@
  * See the GNU Library General Public License version 2 for more details
  *)
 
-(*i $Id: calendar.ml,v 1.9 2003-07-16 09:04:30 signoles Exp $ i*)
+(*i $Id: calendar.ml,v 1.10 2003-08-31 07:50:47 signoles Exp $ i*)
 
 (*S Introduction.
 
@@ -213,6 +213,11 @@ module Period = struct
   let from_date x = { empty with d = x }
 
   let from_time x = { empty with t = x }
+
+  exception Not_computable = Date.Period.Not_computable
+
+  let to_time x = 
+    Time.Period.add (Time.Period.hour (Date.Period.nb_days x.d * 24)) x.t
 
   let to_string x = 
     Date.Period.to_string x.d ^ "; " ^ Time.Period.to_string x.t

@@ -1,4 +1,4 @@
-(*i $Id: test_date.ml,v 1.6 2003-07-16 16:21:18 signoles Exp $ i*)
+(*i $Id: test_date.ml,v 1.7 2003-08-31 07:50:47 signoles Exp $ i*)
 
 Printf.printf "\nTests of Date:\n\n";;
 
@@ -55,6 +55,9 @@ test (to_unixfloat (make 1970 1 1) = 0.) "to_unixfloat";;
 test (from_unixfloat 0. = make 1970 1 1) "from_unixfloat";;
 test (from_unixtm (to_unixtm (make 2003 7 16)) = make 2003 7 16) 
   "from_unixtm to_unixtm = id";;
+
+test (Period.nb_days (Period.make 0 0 6) = 6) "Period.nb_days ok";;
+test_exn (lazy (Period.nb_days (Period.make 1 0 0))) "Period.nb_days ko";;
 
 let ok = nb_ok ();;
 let bug = nb_bug ();;
