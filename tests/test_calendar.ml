@@ -1,4 +1,4 @@
-(*i $Id: test_calendar.ml,v 1.12 2004-10-25 14:12:51 signoles Exp $ i*)
+(*i $Id: test_calendar.ml,v 1.13 2004-10-25 15:16:28 signoles Exp $ i*)
 
 Printf.printf "\nTests of Calendar:\n\n";;
 
@@ -103,6 +103,10 @@ test (Period.to_time (Period.second 30) = Time.Period.second 30)
 test (Period.to_time (Period.day 6) = Time.Period.second 518400) 
   "Period.to_time day";;
 test_exn (lazy (Period.to_time (Period.year 1))) "Period.to_time year";;
+test (Period.ymds (Period.make 1 2 3 1 2 3) = (1, 2, 3, 3723)) "Period.ymds";;
+test
+  (Period.ymds (Period.make (-1) (-2) (-3) (-1) (-2) (-3)) = (-1,-2,-4,82677))
+  "Period.ymds neg";;
 
 let ok = nb_ok ();;
 let bug = nb_bug ();;

@@ -13,7 +13,7 @@
  * See the GNU Library General Public License version 2 for more details
  *)
 
-(*i $Id: calendar.ml,v 1.16 2004-10-25 14:12:51 signoles Exp $ i*)
+(*i $Id: calendar.ml,v 1.17 2004-10-25 15:16:28 signoles Exp $ i*)
 
 (*S Introduction.
 
@@ -223,6 +223,11 @@ module Period = struct
 
   let to_time x = 
     Time.Period.add (Time.Period.hour (Date.Period.nb_days x.d * 24)) x.t
+
+  let ymds x =
+    let y, m, d = Date.Period.ymd x.d in
+    y, m, d, Time.Period.to_seconds x.t
+
 end
 
 (*S Arithmetic operations on calendars and periods. *)

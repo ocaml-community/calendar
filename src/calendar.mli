@@ -13,7 +13,7 @@
  * See the GNU Library General Public License version 2 for more details
  *)
 
-(*i $Id: calendar.mli,v 1.17 2004-10-25 14:12:51 signoles Exp $ i*)
+(*i $Id: calendar.mli,v 1.18 2004-10-25 15:16:28 signoles Exp $ i*)
 
 (** Calendar operations.
 
@@ -189,27 +189,33 @@ module Period : sig
 
   (** {2 Coercions} *)
 
-  val to_date : t -> Date.Period.t
-  (** Convert a calendar period to a date period. 
-    The fractional time period is ignored. 
-    E.g. [to_date (hour 60)] is equivalent to [Date.Period.days 2]. *)
-
   val from_date : Date.Period.t -> t
   (** Convert a date period to a calendar period. *)
 
   val from_time : Time.Period.t -> t
   (** Convert a time period to a calendar period. *)
 
+  val to_date : t -> Date.Period.t
+  (** Convert a calendar period to a date period. 
+    The fractional time period is ignored. 
+    E.g. [to_date (hour 60)] is equivalent to [Date.Period.days 2]. *)
+
   exception Not_computable (** [= Date.Period.Not_computable] *)
 
   val to_time : t -> Time.Period.t
-  (** Convert a calendar period to a date period. Throw [Not_computable] if the
-    time period is not computable.
-    E.g. [to_time (day 6)] and [to_time (second 30)] respectively return a
-    time period of [24 * 3600 * 6 = 518400] seconds and a time period of [30]
-    seconds but [to_time (year 1)] throws [Not_computable] because a year is
-    not a constant number of days. *)
+    (** Convert a calendar period to a date period. 
+      Throw [Not_computable] if the time period is not computable.
+      E.g. [to_time (day 6)] and [to_time (second 30)] respectively return a
+      time period of [24 * 3600 * 6 = 518400] seconds and a time period of [30]
+      seconds but [to_time (year 1)] throws [Not_computable] because a year is
+      not a constant number of days. *)
 
+  val ymds: t -> int * int * int * int
+    (** Number of years, months, days and seconds in a period.
+      E.g. [ymds (make 1 2 3 1 2 3)] returns [1, 2, 3, 3723] and
+      [ymds (make (-1) (-2) (-3) (-1) (-2) (-3)] returns
+      [-1, -2, -4, 82677]. *)
+    
 end
 
 (** {1 Arithmetic operations on calendars and periods} *)
