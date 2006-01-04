@@ -13,7 +13,7 @@
  * See the GNU Library General Public License version 2 for more details
  *)
 
-(*i $Id: date.mli,v 1.24 2005-01-17 13:43:55 signoles Exp $ i*)
+(*i $Id: date.mli,v 1.25 2006-01-04 15:23:16 signoles Exp $ i*)
 
 (** Date operations.
 
@@ -219,7 +219,7 @@ module Period : sig
   (** {2 Constructors} *)
 
   val make : int -> int -> int -> t
-    (** [make year month day] makes a period of the specified lenght. *)
+    (** [make year month day] makes a period of the specified length. *)
 
   val lmake : ?year:int -> ?month:int -> ?day:int -> unit -> t
     (** Labelled version of [make]. 
