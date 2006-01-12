@@ -13,7 +13,7 @@
  * See the GNU Library General Public License version 2 for more details
  *)
 
-(*i $Id: time_Zone.mli,v 1.7 2004-03-22 12:08:26 signoles Exp $ i*)
+(*i $Id: time_Zone.mli,v 1.8 2006-01-12 15:04:20 signoles Exp $ i*)
 
 (** Time zone management.
 
@@ -26,20 +26,28 @@ type t =
   | UTC_Plus of int (** Another time zone specified from UTC *)
 
 val current : unit -> t
-(** Return the current time zone. It is [UTC] before any change. *)
+  (** Return the current time zone. It is [UTC] before any change. *)
 
 val change : t -> unit
-(** Change the current time zone by another one. 
-  Raise [Invalid_argument] if the specified time zone is [UTC_Plus x] with
-  x < -12 or x > 11 *)
-
+  (** Change the current time zone by another one. 
+      Raise [Invalid_argument] if the specified time zone is [UTC_Plus x] with
+      x < -12 or x > 11 *)
+  
 val gap : t -> t -> int
-(** Return the gap between two time zone. 
-  E.g. [gap UTC (UTC_Plus 5)] returns 5 and, at Paris in summer,
-  [gap Local UTC] returns -2. *)
+  (** Return the gap between two time zone. 
+      E.g. [gap UTC (UTC_Plus 5)] returns 5 and, at Paris in summer,
+      [gap Local UTC] returns -2. *)
 
 val from_gmt : unit  -> int
-(** [from_gmt ()] is equivalent to [gap UTC (current ())]. *)
+  (** [from_gmt ()] is equivalent to [gap UTC (current ())]. *)
 
 val to_gmt : unit -> int
-(** [to_gmt ()] is equivalent to [gap (current ()) UTC]. *)
+  (** [to_gmt ()] is equivalent to [gap (current ()) UTC]. *)
+
+val is_dst : unit -> bool
+  (** [is_dst ()] checks if daylight saving time is in effect.
+      Only relevant in local time.
+      Returns alway [false] in another time zone. *)
+
+val hour_of_dst : unit -> int
+  (** [hour_of_dst ()] returns [1] if [is_dst ()] and [0] otherwise. *)

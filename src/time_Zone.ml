@@ -13,7 +13,7 @@
  * See the GNU Library General Public License version 2 for more details
  *)
 
-(*i $Id: time_Zone.ml,v 1.6 2003-07-16 09:04:30 signoles Exp $ i*)
+(*i $Id: time_Zone.ml,v 1.7 2006-01-12 15:04:20 signoles Exp $ i*)
 
 type t = 
   | UTC
@@ -25,6 +25,12 @@ let tz = ref UTC
 let out_of_bounds x = x < - 12 || x > 11
 
 let in_bounds x = not (out_of_bounds x)
+
+let make_in_bounds x =
+  let y = x mod 24 in
+  if y < -12 then y + 24
+  else if y > 11 then y - 24
+  else y
 
 let gap_gmt_local = 
   let t = Unix.time () in
@@ -46,14 +52,20 @@ let gap t1 t2 =
       | Local, UTC_Plus x      -> x - gap_gmt_local
       | UTC_Plus x, UTC_Plus y -> y - x
       | _                      -> assert false
-  in let res = 
+  in 
+  let res = 
     if t1 = t2 then 0
     else if t1 < t2 then aux t1 t2
     else - aux t2 t1
   in
-  assert (in_bounds res);
-  res
+  make_in_bounds res
 
 let from_gmt () = gap UTC (current ())
 
 let to_gmt () = gap (current ()) UTC
+
+let is_dst () = 
+  current () = Local && (Unix.localtime (Unix.time ())).Unix.tm_isdst
+
+let hour_of_dst () = if is_dst () then 1 else 0
+
