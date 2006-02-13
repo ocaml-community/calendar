@@ -13,7 +13,7 @@
  * See the GNU Library General Public License version 2 for more details
  *)
 
-(*i $Id: time_Zone.mli,v 1.8 2006-01-12 15:04:20 signoles Exp $ i*)
+(*i $Id: time_Zone.mli,v 1.9 2006-02-13 08:47:48 signoles Exp $ i*)
 
 (** Time zone management.
 
@@ -47,7 +47,9 @@ val to_gmt : unit -> int
 val is_dst : unit -> bool
   (** [is_dst ()] checks if daylight saving time is in effect.
       Only relevant in local time.
-      Returns alway [false] in another time zone. *)
+      Returns alway [false] in another time zone. 
+      @since 1.09.4 *)
 
 val hour_of_dst : unit -> int
-  (** [hour_of_dst ()] returns [1] if [is_dst ()] and [0] otherwise. *)
+  (** [hour_of_dst ()] returns [1] if [is_dst ()] and [0] otherwise. 
+      @since 1.09.4 *)
