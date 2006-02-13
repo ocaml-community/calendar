@@ -1,4 +1,7 @@
-* add Time_Zone.is_dst and Time_Zone.hour_of_dst (from suggestion of D. Peng)
+version 1.09.4, 2006-02-13:
+===========================
+* bug fixed in printer with %I, %l, %p and %r (patch of Jerry Charumilind)
+* add Time_Zone.is_dst and Time_Zone.hour_of_dst (from a suggestion of D. Peng)
 * bug fixed when checking bounds in Time_Zone (patch of Daniel Peng)
 
 version 1.09.3, 2005-01-17:

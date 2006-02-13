@@ -13,7 +13,7 @@
  * See the GNU Library General Public License version 2 for more details
  *)
 
-(*i $Id: printer.ml,v 1.10 2004-10-25 14:12:51 signoles Exp $ i*)
+(*i $Id: printer.ml,v 1.11 2006-02-13 08:36:23 signoles Exp $ i*)
 
 module type S = sig
   type t
@@ -110,6 +110,10 @@ module Make(X : sig
 struct
   type t = X.t
 
+  let short_interval h =
+    let h = Lazy.force h mod 12 in
+    if h = 0 then 12 else h
+
   let fprint f fmt x =
     let len = String.length f in
     let weekday = lazy (name_of_day (X.day_of_week x)) in
@@ -124,11 +128,10 @@ struct
     let year = lazy (X.year x) in
     let syear = lazy (Lazy.force year mod 100) in
     let hour = lazy (X.hour x) in
-    let shour = 
-      lazy (let h = Lazy.force hour in (if h = 0 then 24 else h) mod 12) in
+    let shour = lazy (short_interval hour) in
     let minute = lazy (X.minute x) in
     let second = lazy (X.second x) in
-    let apm = lazy (if Lazy.force hour < 12 then "AM" else "PM") in
+    let apm = lazy (if Lazy.force hour mod 24 < 12 then "AM" else "PM") in
     let print_char c = Format.pp_print_char fmt c in
     let print_int pad k n = print_number fmt pad k (Lazy.force n) in
     let print_string s = Format.pp_print_string fmt (Lazy.force s) in
@@ -171,10 +174,10 @@ struct
 	      print_int pad 10 int_month;
 	      print_char '-';
 	      print_int pad 10 day_of_month
-	  | 'I' -> print_number fmt pad 10 (Lazy.force hour mod 12)
+	  | 'I' -> print_number fmt pad 10 (short_interval hour)
 	  | 'j' -> print_int pad 100 day_of_year
 	  | 'k' -> print_int Blank 10 hour
-	  | 'l' -> print_number fmt Blank 10 (Lazy.force hour mod 12)
+	  | 'l' -> print_number fmt Blank 10 (short_interval hour)
 	  | 'm' -> print_int pad 10 int_month
 	  | 'M' -> print_int pad 10 minute
 	  | 'n' -> print_char '\n'

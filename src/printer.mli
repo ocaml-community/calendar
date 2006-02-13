@@ -13,7 +13,7 @@
  * See the GNU Library General Public License version 2 for more details
  *)
 
-(*i $Id: printer.mli,v 1.9 2004-11-15 16:36:55 signoles Exp $ i*)
+(*i $Id: printer.mli,v 1.10 2006-02-13 08:36:23 signoles Exp $ i*)
 
 (** Pretty printing.
 
@@ -60,7 +60,7 @@
   - [%W]: same as [%V]
   - [%y]: last two digits of year (00..99)
   - [%Y]: year (four digits)
-     
+
   By default, date pads numeric fields with zeroes. Two special modifiers 
   between [`%'] and a numeric directive are recognized:
   - ['-' (hyphen)]: do not pad the field
