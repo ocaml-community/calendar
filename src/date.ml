@@ -13,7 +13,7 @@
  * See the GNU Library General Public License version 2 for more details
  *)
 
-(*i $Id: date.ml,v 1.26 2005-01-17 13:27:36 signoles Exp $ i*)
+(*i $Id: date.ml,v 1.27 2006-04-26 13:07:22 signoles Exp $ i*)
 
 (*S Introduction.
 
@@ -286,8 +286,14 @@ let week_first_last w y =
   b, 6 + b
 
 let nth_weekday_of_month y m d n =
+(*  let first = make y (int_of_month m + 1) 1 in
+  first + int_of_day d - int_day_of_week first + (n - 1) * 7*)
   let first = make y (int_of_month m + 1) 1 in
-  first + int_of_day d - int_day_of_week first + (n - 1) * 7
+  let gap =
+    let diff = int_of_day d - int_day_of_week first in
+    if diff >= 0 then diff - 7 else diff 
+  in
+  first + 7 * n + gap
 
 let century y = if y mod 100 = 0 then y / 100 else y / 100 + 1
 

@@ -1,4 +1,4 @@
-(*i $Id: test_date.ml,v 1.16 2005-01-17 13:27:36 signoles Exp $ i*)
+(*i $Id: test_date.ml,v 1.17 2006-04-26 13:07:22 signoles Exp $ i*)
 
 Printf.printf "\nTests of Date:\n\n";;
 
@@ -59,7 +59,9 @@ test_exn (lazy (Period.nb_days (Period.make 1 0 0))) "Period.nb_days ko";;
 test (week_first_last 21 2004 = (make 2004 5 17, make 2004 5 23)) 
   "week_beggining_end";;
 test (Period.ymd (Period.make 1 2 3) = (1, 2, 3)) "Period.ymd";;
-test (nth_weekday_of_month 2004 Oct Thu 5 = make 2004 10 28) 
+test (nth_weekday_of_month 2004 Oct Thu 4 = make 2004 10 28) 
+  "nth_weekday_of_month";;
+test (nth_weekday_of_month 2006 Mar Fri 3 = make 2006 3 17) 
   "nth_weekday_of_month";;
 
 (* Unix *)

@@ -1,3 +1,7 @@
+version 1.09.5, 2006-05-26:
+===========================
+* bug fixed in nth_weekday_of_month
+
 version 1.09.4, 2006-02-13:
 ===========================
 * bug fixed in printers with %I, %l, %p and %r (patch of Jerry Charumilind)

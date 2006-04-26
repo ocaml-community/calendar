@@ -13,7 +13,7 @@
  * See the GNU Library General Public License version 2 for more details
  *)
 
-(*i $Id: calendar.ml,v 1.21 2004-11-17 16:05:18 signoles Exp $ i*)
+(*i $Id: calendar.ml,v 1.22 2006-04-26 13:07:22 signoles Exp $ i*)
 
 (*S Introduction.
 
@@ -81,10 +81,10 @@ let now () =
   from_gmt (make 
 	      (now.Unix.tm_year + 1900) 
 	      (now.Unix.tm_mon + 1) 
-	      (now.Unix.tm_mday) 
-	      (now.Unix.tm_hour) 
-	      (now.Unix.tm_min) 
-	      (now.Unix.tm_sec))
+	      now.Unix.tm_mday 
+	      now.Unix.tm_hour 
+	      now.Unix.tm_min 
+	      now.Unix.tm_sec)
 
 let from_jd x = to_gmt x
 
