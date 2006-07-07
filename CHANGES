@@ -1,3 +1,7 @@
+version 1.09.6, 2006-07-07:
+===========================
+* bug fixed in Date.to_business (on some dates in the last days of january)
+
 version 1.09.5, 2006-05-26:
 ===========================
 * bug fixed in nth_weekday_of_month

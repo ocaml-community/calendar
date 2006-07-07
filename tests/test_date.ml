@@ -1,4 +1,4 @@
-(*i $Id: test_date.ml,v 1.17 2006-04-26 13:07:22 signoles Exp $ i*)
+(*i $Id: test_date.ml,v 1.18 2006-07-07 13:48:10 signoles Exp $ i*)
 
 Printf.printf "\nTests of Date:\n\n";;
 
@@ -96,6 +96,8 @@ test (to_business (make 2005 1 1) = (2004, 53, Sat)) "to_business 4";;
 test (to_business (make 2004 12 31) = (2004, 53, Fri)) "to_business 5";;
 test (to_business (make 2006 1 1) = (2005, 52, Sun)) "to_business 6";;
 test (to_business (make 2005 1 17) = (2005, 3, Mon)) "to_business 7";;
+test (to_business (make 2006 1 31) = (2006, 5, Tue)) "to_business 8";;
+test (to_business (make 2005 1 31) = (2005, 5, Mon)) "to_business 9";;
 (* from_business *)
 test (from_business 2003 1 Wed = make 2003 1 1) "from_business 1";;
 test (from_business 2004 1 Wed = make 2003 12 31) "from_business 2";;
@@ -104,6 +106,8 @@ test (from_business 2004 53 Sat = make 2005 1 1) "from_business 4";;
 test (from_business 2004 53 Fri = make 2004 12 31) "from_business 5";;
 test (from_business 2005 52 Sun = make 2006 1 1) "from_business 6";;
 test (from_business 2005 3 Mon = make 2005 1 17) "from_business 7";;
+test (from_business 2006 5 Tue = make 2006 1 31) "from_business 8";;
+test (from_business 2005 5 Mon = make 2005 1 31) "from_business 9";;
 test_exn (lazy (from_business 2005 0 Sun)) "from_business_bad 1";;
 test_exn (lazy (from_business 2005 53 Sun)) "from_business_bad 2";;
 
