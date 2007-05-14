@@ -13,7 +13,7 @@
  * See the GNU Library General Public License version 2 for more details
  *)
 
-(*i $Id: printer.mli,v 1.12 2007-05-14 09:24:53 signoles Exp $ i*)
+(*i $Id: printer.mli,v 1.13 2007-05-14 10:49:36 signoles Exp $ i*)
 
 (** Pretty printing.
 
@@ -29,7 +29,7 @@
 
   A format string follows the unix date utility (with few modifications). 
   It is a string which contains two types of objects: plain characters and 
-  conversion specifications. Those specifications are introduced by 
+  conversion specifiers. Those specifiers are introduced by 
   a [%] character and their meanings are:
   - [%%]: a literal [%]
   - [%a]: short day name (by using a short version of [day_name])
@@ -91,23 +91,23 @@ val day_name : (Date.day -> string) ref
 
 val name_of_day : Date.day -> string
 (** [name_of_day d] is equivalent to [!day_name d]. 
-  Used by the specification [%A]. *)
+  Used by the specifier [%A]. *)
 
 val short_name_of_day : Date.day -> string
 (** [short_name_of_day d] returns the 3 first characters of [name_of_day d]. 
-  Used by the specification [%a]. *)
+  Used by the specifier [%a]. *)
 
 val month_name : (Date.month -> string) ref
 (** String representation of a month. *)
   
 val name_of_month : Date.month -> string
 (** [name_of_month m] is equivalent to [!day_month m]. 
-  Used by the specification [%B]. *)
+  Used by the specifier [%B]. *)
 
 val short_name_of_month : Date.month -> string
 (** [short_name_of_month d] returns the 3 first characters of 
    [name_of_month d]. 
-   Used by the specification [%b]. *)
+   Used by the specifier [%b]. *)
 
 val set_word_regexp: Str.regexp -> unit
   (** Set the regular expression used to recognize words in
@@ -146,7 +146,7 @@ module type S = sig
   (** [from_fstring format s] converts [s] to a date according to [format].
 
       Date padding (i.e. a special directive following ['%']) and
-      specifications [%e], [%k] and [%l] are not recognized. Specifications
+      specifiers [%e], [%k] and [%l] are not recognized. Specifiers
       [%a], [%A], [%j], [%v], [%w] and [%W] are recognized but mainly ignored:
       only the validity of the format is checked.
 
@@ -171,21 +171,15 @@ module type S = sig
 
 end
 
-(** Date printer.
-  The specifications which use time functionalities are not available 
-  on this printer.
-
-  The default format is [%i]. *)
+(** Date printer. Specifiers which use time functionalities are not available
+    on this printer.
+    Default format is [%i]. *)
 module DatePrinter : S with type t = Date.t
 
-(** Time printer.
-  The specifications which use date functionalities are not available 
-  on this printer.
-  
-  The default format is [%T]. *)
+(** Time printer. Specifiers which use date functionalities are not available
+    on this printer.
+    Default format is [%T]. *)
 module TimePrinter : S with type t = Time.t
 
-(** Calendar printer.
-
-  The default format is [%i %T]. *)
+(** Calendar printer. Default format is [%i %T]. *)
 module CalendarPrinter : S with type t = Calendar.t
