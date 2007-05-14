@@ -1,4 +1,3 @@
-* parsers (inverses des printers)
 * ajouter AC ou BC dans le printer
 * utiliser -pack
 * constructeurs safe et "unsafe" (pour Date, Time et Calendar)
