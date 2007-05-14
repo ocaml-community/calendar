@@ -13,7 +13,7 @@
  * See the GNU Library General Public License version 2 for more details
  *)
 
-(*i $Id: printer.ml,v 1.11 2006-02-13 08:36:23 signoles Exp $ i*)
+(*i $Id: printer.ml,v 1.12 2007-05-14 09:20:39 signoles Exp $ i*)
 
 module type S = sig
   type t
@@ -92,6 +92,32 @@ let bad_format s = raise (Invalid_argument ("bad format: " ^ s))
 let not_match f s = 
   raise (Invalid_argument (s ^ " does not match the format " ^ f))
 
+let gen_month_of_name f fmt name =
+  let rec aux i = 
+    if i = 0 then not_match fmt name
+    else if f (Date.month_of_int i) = name then i 
+    else aux (i-1)
+  in
+  aux 12
+
+let month_of_name = gen_month_of_name name_of_month "%b"
+let month_of_short_name = gen_month_of_name short_name_of_month "%B"
+
+let gen_day_of_name f fmt name =
+  let rec aux i = 
+    if i = 0 then not_match fmt name
+    else if f (Date.day_of_int i) = name then i 
+    else aux (i-1)
+  in
+  aux 7
+
+let day_of_name = gen_day_of_name name_of_day "%a"
+let day_of_short_name = gen_day_of_name short_name_of_day "%A"
+
+let word_regexp = ref (Str.regexp "[a-zA-Z]+")
+
+let set_word_regexp r = word_regexp := r
+
 (* [Make] creates a printer from a small set of functions. *)
 module Make(X : sig
 	      type t
@@ -108,6 +134,7 @@ module Make(X : sig
 	      val year : t -> int
 	    end) =
 struct
+
   type t = X.t
 
   let short_interval h =
@@ -234,7 +261,7 @@ struct
 
   let from_fstring f s = 
     let year, month, day = ref (-1), ref (-1), ref (-1) in
-    let hour, minute, second = ref (-1), ref (-1), ref (-1) in
+    let hour, minute, second, pm = ref (-1), ref (-1), ref (-1), ref 0 in
     let j = ref 0 in
     let lenf = String.length f in
     let lens = String.length s in
@@ -252,37 +279,102 @@ struct
       j := jn;
       res
     in
+    let read_word () = 
+      let jn = Str.search_forward !word_regexp s !j in
+      let w = Str.matched_string s in
+      j := jn + String.length w;
+      w
+    in
+    let parse_a () = ignore (day_of_short_name (read_word ())) in
+    let parse_b () = month := month_of_short_name (read_word ()) in
+    let parse_d () = day := read_number 2 in
+    let parse_H () = hour := read_number 2 in
+    let parse_I () = hour := read_number 2 in
+    let parse_m () = month := read_number 2 in
+    let parse_M () = minute := read_number 2 in
+    let parse_p () = 
+      match read_word () with
+      | "AM" -> pm := 0
+      | "PM" -> pm := 12
+      | s -> not_match "%p" "s"
+    in
+    let parse_S () = second := read_number 2 in
+    let parse_V fmt =
+      let n = read_number 2 in
+      if n < 1 || n > 53 then not_match fmt (string_of_int n)
+    in
+    let parse_y () = year := read_number 2 + 1900 in
+    let parse_Y () = year := read_number 4 in
     let rec parse_option i = 
       assert (i <= lenf);
       if i = lenf then bad_format f;
       (* else *)
       (match f.[i] with
 	 | '%' -> read_char '%'
-	 | 'd' -> day := read_number 2
+	 | 'a' -> parse_a ()
+	 | 'A' -> ignore (day_of_short_name (read_word ()))
+	 | 'b' -> parse_b ()
+	 | 'B' -> month := month_of_name (read_word ())
+	 | 'c' ->
+	     parse_a ();
+	     read_char ' ';
+	     parse_b ();
+	     read_char ' ';
+	     parse_d ();
+	     read_char ' ';
+	     parse_H ();
+	     read_char ':';
+	     parse_M ();
+	     read_char ':';
+	     parse_S ();
+	     read_char ' ';
+	     parse_Y ()
+	 | 'd' -> parse_d ()
 	 | 'D' -> 
-	     month := read_number 2;
+	     parse_m ();
 	     read_char '/';
-	     day := read_number 2;
+	     parse_d ();
 	     read_char '/';
-	     year := read_number 2 + 1900
-	 | 'H' -> hour := read_number 2
+	     parse_y ()
+	 | 'h' -> parse_b ()
+	 | 'H' -> parse_H ()
 	 | 'i' ->
-	     year := read_number 4;
+	     parse_Y ();
 	     read_char '-';
-	     month := read_number 2;
+	     parse_m ();
 	     read_char '-';
-	     day := read_number 2
-	 | 'm' -> month := read_number 2
-	 | 'M' -> minute := read_number 2
-	 | 'S' -> second := read_number 2
+	     parse_d ()
+	 | 'I' -> parse_I ()
+	 | 'j' ->
+	     let n = read_number 3 in
+	     if n < 1 || n > 366 then not_match "%j" (string_of_int n)
+	 | 'm' -> parse_m ()
+	 | 'M' -> parse_M ()
+	 | 'n' -> read_char '\n'
+	 | 'p' -> parse_p ()
+	 | 'r' ->
+	     parse_I ();
+	     read_char ':';
+	     parse_M ();
+	     read_char ':';
+	     parse_S ();
+	     read_char ' ';
+	     parse_p ()
+	 | 'S' -> parse_S ()
+	 | 't' -> read_char '\t'
 	 | 'T' ->
-	     hour := read_number 2;
+	     parse_H ();
 	     read_char ':';
-	     minute := read_number 2;
+	     parse_M ();
 	     read_char ':';
-	     second := read_number 2
-	 | 'y' -> year := read_number 2 + 1900
-	 | 'Y' -> year := read_number 4
+	     parse_S ()
+	 | 'V' -> parse_V "%V"
+	 | 'w' ->
+	     let n = read_number 1 in
+	     if n < 1 || n > 7 then not_match "%w" (string_of_int n)
+	 | 'W' -> parse_V "%W"
+	 | 'y' -> parse_y ()
+	 | 'Y' -> parse_Y  ()
 	 | c  -> bad_format ("%" ^ String.make 1 c));
       parse_format (i + 1)
     and parse_format i =
@@ -295,9 +387,10 @@ struct
 	    parse_format (i + 1)
     in 
     parse_format 0; 
-    X.make !year !month !day !hour !minute !second
+    X.make !year !month !day (!hour + !pm) !minute !second
 
   let from_string = from_fstring X.default_format
+
 end
 
 let cannot_create_event kind args =

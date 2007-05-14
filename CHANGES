@@ -1,3 +1,7 @@
+version 1.10, 2007-05-14:
+=========================
+* [from_fstring] in printers recognizes more formats. (Sean Seefried's suggestion)
+
 version 1.09.6, 2006-07-07:
 ===========================
 * bug fixed in Date.to_business (on some dates in the last days of january)

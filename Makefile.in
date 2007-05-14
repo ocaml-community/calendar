@@ -11,7 +11,7 @@
 #  
 #  See the GNU Library General Public License version 2 for more details
 #
-# $Id: Makefile.in,v 1.50 2006-07-07 13:48:10 signoles Exp $
+# $Id: Makefile.in,v 1.51 2007-05-14 09:20:39 signoles Exp $
 
 # Used programs
 ###############
@@ -30,7 +30,7 @@ CAMLFIND= @OCAMLFIND@
 #########
 
 NAME	= calendar
-VERSION	= 1.09.6
+VERSION	= 1.10
 
 ifeq ($(CAMLOPT),no)
 LIBS	= src/$(NAME).cma
@@ -81,7 +81,7 @@ META: Makefile
 	echo "version = \"$(VERSION)\"" >> $@
 	echo "archive(byte) = \"$(NAME).cma\"" >> $@
 	echo "archive(native) = \"$(NAME).cmxa\"" >> $@
-	echo "requires = \"unix\"" >> $@
+	echo "requires = \"unix str\"" >> $@
 
 # Generic rules
 ###############
@@ -115,7 +115,7 @@ $(TESTS_CMO): tests/gen_test.cmo
 tests/test.cmo: $(TESTS_CMO)
 
 tests/test: src/$(NAME).cma tests/test.cmo
-	$(CAMLC) -o $@ $(BYTEFLAGS) unix.cma src/$(NAME).cma \
+	$(CAMLC) -o $@ $(BYTEFLAGS) unix.cma str.cma src/$(NAME).cma \
 		tests/gen_test.cmo $(TESTS_CMO) tests/test.cmo
 
 .PHONY: tests

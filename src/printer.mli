@@ -13,7 +13,7 @@
  * See the GNU Library General Public License version 2 for more details
  *)
 
-(*i $Id: printer.mli,v 1.10 2006-02-13 08:36:23 signoles Exp $ i*)
+(*i $Id: printer.mli,v 1.11 2007-05-14 09:20:39 signoles Exp $ i*)
 
 (** Pretty printing.
 
@@ -109,6 +109,10 @@ val short_name_of_month : Date.month -> string
    [name_of_month d]. 
    Used by the specification [%b]. *)
 
+val set_word_regexp: Str.regexp -> unit
+  (** Set the regular expression used to recognize words in
+      [from_fstring]. Default is [[a-zA-Z]*]. *)
+
 (** {1 Printers} *)
 
 module type S = sig
@@ -139,18 +143,27 @@ module type S = sig
 
   val from_fstring : string -> string -> t
   (** [from_fstring format s] converts [s] to a date according to [format].
-    The only available specifications are [%%], [%d], [%D], [%m], [%M], [%S],
-    [%T], [%y] and [%Y].
-    When the format has only two digits for the year number, 1900 are added
-    to this number (see the example).
-    
-    Raise [Invalid_argument] if either the format is incorrect 
-    or the string does not match the format
-    or the event cannot be created (e.g. if you do not specify a year for
-    a date).
-    
-    For example [from_fstring "the date is %D" "the date is 01/06/03"] returns
-    a date equivalent to [Date.make 1903 1 6]. *)
+
+      Date padding (i.e. a special directive following ['%']) and
+      specifications [%e], [%k] and [%l] are not recognized. Specifications
+      [%a], [%A], [%j], [%v], [%w] and [%W] are recognized but mainly ignored:
+      only the validity of the format is checked.
+
+      In order to recognize words (used by [%a], [%A], [%b], [%B] and [%p]), a
+      regular expression is used which can be configured by
+      {!Printer.set_word_regexp}. When the format has only two digits for the
+      year number, 1900 are added to this number (see examples).
+      
+      Raise [Invalid_argument] if either the format is incorrect 
+      or the string does not match the format
+      or the event cannot be created (e.g. if you do not specify a year for
+      a date).
+      
+      For example, [from_fstring "the date is %D" "the date is 01/06/03"]
+      returns a date equivalent to [Date.make 1903 1 6] and [from_fstring "the
+      date is %B, the %dth %Y" "the date is May, the 14th 2007"] returns a date
+      equivalent to [Date.make 2007 5 14] (with the default
+      internationalization). *)
 
   val from_string : string -> t
     (** Same as [from_fstring d] where [d] is the default format. *)
