@@ -13,7 +13,7 @@
  * See the GNU Library General Public License version 2 for more details
  *)
 
-(*i $Id: printer.mli,v 1.13 2007-05-14 10:49:36 signoles Exp $ i*)
+(*i $Id: printer.mli,v 1.14 2007-05-14 10:53:50 signoles Exp $ i*)
 
 (** Pretty printing.
 
@@ -163,7 +163,7 @@ module type S = sig
       For example, [from_fstring "the date is %D" "the date is 01/06/03"]
       returns a date equivalent to [Date.make 1903 1 6] and [from_fstring "the
       date is %B, the %dth %Y" "the date is May, the 14th 2007"] returns a date
-      equivalent to [Date.make 2007 5 14] (with the default
+      equivalent to [Date.make 2007 5 14] (with default
       internationalization). *)
 
   val from_string : string -> t
