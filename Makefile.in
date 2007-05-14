@@ -11,7 +11,7 @@
 #  
 #  See the GNU Library General Public License version 2 for more details
 #
-# $Id: Makefile.in,v 1.52 2007-05-14 09:35:19 signoles Exp $
+# $Id: Makefile.in,v 1.53 2007-05-14 09:42:12 signoles Exp $
 
 # Used programs
 ###############
@@ -172,7 +172,7 @@ export: doc #$(NAME).ps.gz
 	   rm -rf $(NAME)-$(VERSION); \
 	   mv $(NAME)-$(VERSION).tar.gz $(EXPORT_DIR))
 	cd $(EXPORT_DIR)/../..; \
-	  (sed misc/bindings.pre.dat "s/_CALVERS_/$(VERSION)" \
+	  (sed -e "s/_CALVERS_/$(VERSION)/" misc/bindings.dat.pre \
 	      > misc/bindings.dat; \
 	   ./scripts/create_html.sh)
 
