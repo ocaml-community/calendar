@@ -13,7 +13,7 @@
  * See the GNU Library General Public License version 2 for more details
  *)
 
-(*i $Id: printer.mli,v 1.11 2007-05-14 09:20:39 signoles Exp $ i*)
+(*i $Id: printer.mli,v 1.12 2007-05-14 09:24:53 signoles Exp $ i*)
 
 (** Pretty printing.
 
@@ -111,7 +111,8 @@ val short_name_of_month : Date.month -> string
 
 val set_word_regexp: Str.regexp -> unit
   (** Set the regular expression used to recognize words in
-      [from_fstring]. Default is [[a-zA-Z]*]. *)
+      [from_fstring]. Default is [[a-zA-Z]*]. 
+      @since 1.10 *)
 
 (** {1 Printers} *)
 
