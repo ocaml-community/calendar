@@ -19,13 +19,14 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: period.mli,v 1.12 2008-01-31 09:02:33 signoles Exp $ i*)
+(*i $Id: period.mli,v 1.13 2008-01-31 10:16:40 signoles Exp $ i*)
 
 (** A period represents the time passed between two events (a date, a time...).
   Only an interface defining arithmetic operations on periods is defined here.
   An implementation of this interface depends on the kind of an event (see
   module [Time.Period], [Date.Period] and [Calendar.Period]). *)
 
+(** Common interface for all periods. *)
 module type S = sig
 
   type t

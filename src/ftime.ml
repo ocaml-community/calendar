@@ -19,7 +19,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: time.ml,v 1.19 2008-01-31 10:16:40 signoles Exp $ i*)
+(*i $Id: ftime.ml,v 1.1 2008-01-31 10:16:40 signoles Exp $ i*)
 
 (*S Introduction.
 
@@ -30,17 +30,20 @@
 
 (*S Datatypes. *)
 
-type t = int
+type t = float
 
-type second = int
+type second = float
 
 type field = [ `Hour | `Minute | `Second ]
 
 (*S Conversions. *)
 
-let one_day = 86400
+let int = int_of_float
 
-let convert t t1 t2 = t + 3600 * Time_Zone.gap t1 t2
+let one_day = 86400
+let fone_day = 86400.
+
+let convert t t1 t2 = t +. float (3600 * Time_Zone.gap t1 t2)
 
 let from_gmt t = convert t Time_Zone.UTC (Time_Zone.current ())
 
@@ -49,34 +52,38 @@ let to_gmt t = convert t (Time_Zone.current ()) Time_Zone.UTC
 (* Coerce [t] into the interval $[0; 86400[$ (i.e. a one day interval). *)
 let normalize t = 
   let t = from_gmt t in
-  let t_mod, t_div = to_gmt (t mod one_day), t / one_day in
-  if t < 0 then t_mod + one_day, t_div - 1 else t_mod, t_div
+  let t_mod, t_div = to_gmt (mod_float t fone_day), int t / one_day in
+  if t < 0. then t_mod +. fone_day, t_div - 1 else t_mod, t_div
 
 (*S Constructors. *)
 
-let make h m s = to_gmt (h * 3600 + m * 60 + s)
+let make h m s = to_gmt (float (h * 3600 + m * 60) +. s)
 
-let lmake ?(hour = 0) ?(minute = 0) ?(second = 0) () = make hour minute second
+let lmake ?(hour = 0) ?(minute = 0) ?(second = 0.) () = make hour minute second
 
-let midnight () = to_gmt 0
+let midnight () = to_gmt 0.
 
-let midday () = to_gmt 43200
+let midday () = to_gmt 43200.
 
 let now () =
-  let now = Unix.gmtime (Unix.time ()) in
-  3600 * now.Unix.tm_hour + 60 * now.Unix.tm_min + now.Unix.tm_sec
+  let now = Unix.gettimeofday () in
+  let gmnow = Unix.gmtime now in
+  let frac, _ = modf now in
+  float 
+    (3600 * gmnow.Unix.tm_hour + 60 * gmnow.Unix.tm_min + gmnow.Unix.tm_sec) 
+  +. frac
 
 (*S Getters. *)
 
-let hour t = from_gmt t / 3600
+let hour t = int (from_gmt t) / 3600
 
-let minute t = from_gmt t mod 3600 / 60
+let minute t = int (from_gmt t) mod 3600 / 60
 
-let second t = from_gmt t mod 60
+let second t =  mod_float (from_gmt t) 60.
 
-let to_hours t = float_of_int (from_gmt t) /. 3600.
+let to_hours t = from_gmt t /. 3600.
 
-let to_minutes t = float_of_int (from_gmt t) /. 60.
+let to_minutes t = from_gmt t /. 60.
 
 let to_seconds t = from_gmt t
 
@@ -84,7 +91,7 @@ let to_seconds t = from_gmt t
 
 let compare = compare
 
-let equal = (==)
+let equal = (=)
 
 let is_pm t = 
   let t, _ = normalize t in 
@@ -98,9 +105,9 @@ let is_am t =
 
 (*S Coercions. *)
 
-let from_hours t = to_gmt (int_of_float (t *. 3600.))
+let from_hours t = to_gmt (t *. 3600.)
 
-let from_minutes t = to_gmt (int_of_float (t *. 60.))
+let from_minutes t = to_gmt (t *. 60.)
 
 let from_seconds t = to_gmt t
 
@@ -108,47 +115,47 @@ let from_seconds t = to_gmt t
 
 module Period = struct
 
-  type t = int
+  type t = float
 
-  let make h m s = h * 3600 + m * 60 + s
-  let lmake ?(hour=0) ?(minute=0) ?(second=0) () = make hour minute second
+  let make h m s = float (h * 3600 + m * 60) +. s
+  let lmake ?(hour=0) ?(minute=0) ?(second=0.) () = make hour minute second
 
   let length x = x
 
-  let hour x = x * 3600
-  let minute x = x * 60
+  let hour x = float (x * 3600)
+  let minute x = float (x * 60)
   let second x = x
 
-  let empty = 0
+  let empty = 0.
 
-  let add = (+)
-  let sub = (-)
-  let mul = ( * )
-  let div = (/)
+  let add = (+.)
+  let sub = (-.)
+  let mul = ( *. )
+  let div = (/.)
 
-  let opp x = - x
+  let opp x = -. x
 
   let compare = compare
-  let equal = (==)
+  let equal = (=)
 
   let to_seconds x = x
-  let to_minutes x = float_of_int x /. 60.
-  let to_hours x = float_of_int x /. 3600.
+  let to_minutes x = x /. 60.
+  let to_hours x = x /. 3600.
 
 end
 
 (*S Arithmetic operations on times and periods. *)
 
-let add = (+)
-let sub = (-)
-let rem = (-)
+let add = (+.)
+let sub = (-.)
+let rem = (-.)
 
 let next x = function
-  | `Hour   -> x + 3600
-  | `Minute -> x + 60
-  | `Second -> x + 1
+  | `Hour   -> x +. 3600.
+  | `Minute -> x +. 60.
+  | `Second -> x +. 1.
 
 let prev x = function
-  | `Hour   -> x - 3600
-  | `Minute -> x - 60
-  | `Second -> x - 1
+  | `Hour   -> x -. 3600.
+  | `Minute -> x -. 60.
+  | `Second -> x -. 1.

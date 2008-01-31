@@ -19,8 +19,8 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: time.mli,v 1.19 2008-01-31 10:16:40 signoles Exp $ i*)
+(*i $Id: ftime.mli,v 1.1 2008-01-31 10:16:40 signoles Exp $ i*)
 
-(** Time implementation in which seconds are integers. *)
+(** Time implementation in which seconds are floats. *)
 
-include Time_sig.S with type second = int
+include Time_sig.S with type second = float

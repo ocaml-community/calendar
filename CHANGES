@@ -1,4 +1,7 @@
 * licence: now LGPLv2.1, compatible with LGPLv3 (see LGPL and header of files)
+* new signature Time_sig.S which abstracts the datatype of seconds.
+* new module Ftime (time implementation in which seconds are floats)
+  (Hezekiah M. Carty's suggestion)
 
 version 1.10, 2007-05-14:
 =========================

@@ -19,7 +19,7 @@
 #                                                                        #
 ##########################################################################
 
-# $Id: Makefile.in,v 1.54 2008-01-31 09:02:33 signoles Exp $
+# $Id: Makefile.in,v 1.55 2008-01-31 10:16:40 signoles Exp $
 
 # Used programs
 ###############
@@ -50,8 +50,9 @@ endif
 
 DIRS	= src
 
-SRC	= time_Zone.mli time_Zone.ml period.mli \
-	time.mli time.ml date.mli date.ml calendar.mli calendar.ml \
+SRC	= time_Zone.mli time_Zone.ml period.mli time_sig.mli \
+	time.mli time.ml ftime.mli ftime.ml date.mli date.ml \
+	calendar.mli calendar.ml \
 	printer.mli printer.ml
 SRC	:= $(addprefix src/, $(SRC))
 
