@@ -1,0 +1,6 @@
+# Objective Caml source
+| ".*\\.mly"      -> frame open:"/*" line:"*" close:"*/"
+| ".*\\.ml[il4]?.*" -> frame open:"(*" line:"*" close:"*)"
+# Misc
+| "configure.in" -> frame open:"#"  line:"#" close:"#"
+| "Makefile.in" -> frame open:"#"  line:"#" close:"#"

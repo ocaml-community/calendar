@@ -1,6 +1,9 @@
+* licence: now LGPLv2.1, compatible with LGPLv3 (see LGPL and header of files)
+
 version 1.10, 2007-05-14:
 =========================
-* [from_fstring] in printers recognizes more formats. (Sean Seefried's suggestion)
+* [from_fstring] in printers recognizes more formats. 
+  (Sean Seefried's suggestion)
 * add [Printer.set_word_regexp]
 
 version 1.09.6, 2006-07-07:
@@ -35,7 +38,7 @@ version 1.09.0, 2004-11-13:
 ===========================
 * add Date.to_business and Date.from_business (Richard Jone's suggestion)
 * add the optional parameter ?month to Date.days_in_year
-	(Richard Jones' suggestion)
+  (Richard Jones' suggestion)
 * add Date.nth_weekday_of_month (Richard Jones' suggestion)
 * Date: add some Christian dates (Richard Jones' suggestion)
 * add Date.Period.ymd and Calendar.Period.ymds
@@ -53,7 +56,7 @@ version 1.08, 2004-05-18:
 version 1.07, 2004-03-22:
 =========================
 * compile even if no ocaml native compiler is available
-	(from a patch of Stefano Zacchiroli)
+  (from a patch of Stefano Zacchiroli)
 * documentation of the API with ocamldoc
 
 version 1.06, 2003-12-05:
@@ -65,14 +68,14 @@ version 1.05, 2003-09-18:
 =========================
 * add module Printer (from a suggestion of Stefano Zacchiroli)
 * remove to_string and from_string from Date, Time and Calendar
-(replaced by functions of Printer)
+  (replaced by functions of Printer)
 * Str library is no longer necessary
 * add labelled version of make in Date, Time and Calendar
 
 version 1.04, 2003-08-31:
 =========================
 * add getters in Time.Period, Date.Period and Calendar.Period
-	(from a suggestion of Christoph Bauer)
+  (from a suggestion of Christoph Bauer)
 
 version 1.03, 2003-08-25:
 =========================
@@ -88,7 +91,7 @@ version 1.01, 2003-07-16:
 * change "egal" by "equal"
 * change "GMT" by "UTC"
 * add to_unixtm, from_unixtm, to_unixfloat and from_unixfloat in 
-	Date and Calendar
+  Date and Calendar
 
 (Thank's to Eric C. Cooper for those suggestions)
 
