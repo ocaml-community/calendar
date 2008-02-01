@@ -19,6 +19,13 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: calendar.ml,v 1.24 2008-02-01 10:48:33 signoles Exp $ i*)
+(*i $Id: fcalendar.mli,v 1.1 2008-02-01 10:48:33 signoles Exp $ i*)
 
-include Calendar_builder.Make(Date)(Time)
+(** Calendar implementation in which seconds are float.
+
+    This module uses floating point arithmetics. 
+    Then, egality over times may be erroneous (as egality over [float]).
+    You should better use functions [equal] and [compare] defined in this
+    module instead of [Pervasives.(=)] and [Pervasives.compare]. *)
+
+include Calendar_sig.S with module Date = Date and module Time = Ftime

@@ -1,7 +1,8 @@
-(*i $Id: test_timezone.ml,v 1.6 2003-07-16 16:21:18 signoles Exp $ i*)
+(*i $Id: test_timezone.ml,v 1.7 2008-02-01 10:48:33 signoles Exp $ i*)
 
-Printf.printf "\nTests of Time_Zone:\n\n";;
+Printf.printf "Tests of Time_Zone:\n";;
 
+open Calendar
 open Time_Zone;;
 include Gen_test;;
 reset ();;
@@ -22,5 +23,5 @@ test (to_gmt () = -4) "to_gmt () = -4";;
 
 let ok = nb_ok ();;
 let bug = nb_bug ();;
-Printf.printf "\ntests ok : %d; tests ko : %d\n" ok bug;;
+Printf.printf "tests ok : %d; tests ko : %d\n" ok bug;;
 flush stdout;;

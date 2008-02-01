@@ -19,7 +19,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: time_Zone.ml,v 1.8 2008-01-31 09:02:33 signoles Exp $ i*)
+(*i $Id: time_Zone.ml,v 1.9 2008-02-01 10:48:33 signoles Exp $ i*)
 
 type t = 
   | UTC
@@ -45,8 +45,7 @@ let gap_gmt_local =
 let current () = !tz
 
 let change = function
-  | UTC_Plus x when out_of_bounds x -> 
-      raise (Invalid_argument "Not a valid time zone")
+  | UTC_Plus x when out_of_bounds x -> invalid_arg "Not a valid time zone"
   | _ as t -> tz := t
 
 let gap t1 t2 =
@@ -67,11 +66,9 @@ let gap t1 t2 =
   make_in_bounds res
 
 let from_gmt () = gap UTC (current ())
-
 let to_gmt () = gap (current ()) UTC
 
 let is_dst () = 
   current () = Local && (Unix.localtime (Unix.time ())).Unix.tm_isdst
 
 let hour_of_dst () = if is_dst () then 1 else 0
-

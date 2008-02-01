@@ -19,6 +19,6 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: calendar.ml,v 1.24 2008-02-01 10:48:33 signoles Exp $ i*)
+(*i $Id: fcalendar.ml,v 1.1 2008-02-01 10:48:33 signoles Exp $ i*)
 
-include Calendar_builder.Make(Date)(Time)
+include Calendar_builder.Make(Date)(Ftime)

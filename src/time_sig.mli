@@ -19,7 +19,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: time_sig.mli,v 1.1 2008-01-31 10:16:40 signoles Exp $ i*)
+(*i $Id: time_sig.mli,v 1.2 2008-02-01 10:48:33 signoles Exp $ i*)
 
 (** Time interface. 
 
@@ -35,8 +35,34 @@
   If you want to express a time in another time zone (and do not affect 
   others times), use the [convert] function. *)
 
+(** Interface for seconds. 
+    @since 2.0 *)
+module type Second = sig
+
+  type t
+    (** Type of seconds 
+	@since 2.0 *)
+
+  val from_int: int -> t
+    (** Convert an integer to an equivalent number of seconds.
+	@since 2.0 *)
+
+  val from_float: float -> t
+    (** Convert a float to an equivalent number of seconds.
+	@since 2.0 *)
+
+  val to_int: t -> int
+    (** Inverse of [from_int].
+	@since 2.0 *)
+
+  val to_float: t -> float
+    (** Inverse of [from_float].
+	@since 2.0 *)
+
+end
+
 (** Common operations for all time representations. 
-    @since 1.11 (this signature was before inlined in interface of Time). *)
+    @since 2.0 (this signature was before inlined in interface of Time). *)
 module type S = sig
 
   (** {2 Datatypes} *)
@@ -44,12 +70,18 @@ module type S = sig
   type t
     (** Type of a time. *)
 
-  type second
-    (** Type of a second. 
-	@since 1.11 (was an integer in previous versions). *)
-
   type field = [ `Hour | `Minute | `Second ]
       (** The different fields of a time. *)
+
+  (** {2 Second} *)
+
+  type second
+    (** Type of a second. 
+	@since 2.0 (was an integer in previous versions). *)
+
+  (** Second implementation
+      @since 2.0 *)
+  module Second: Second with type t = second
 
   (** {2 Constructors} *)
       
@@ -143,13 +175,13 @@ module type S = sig
 
   (** {2 Coercions} *)
 
-  val from_seconds : second -> t
+  val from_seconds: second -> t
     (** Inverse of [to_seconds]. *)
 
-  val from_minutes : float -> t
+  val from_minutes: float -> t
     (** Inverse of [to_minutes]. *)
 
-  val from_hours : float -> t
+  val from_hours: float -> t
     (** Inverse of [to_hours]. *)
 
   (** {2 Period} *)
@@ -157,7 +189,7 @@ module type S = sig
   (** A period is the number of seconds between two times. *)
   module Period : sig
 
-    (** {2 Arithmetic operations} *)
+    (** {3 Arithmetic operations} *)
 
     include Period.S 
 
@@ -170,7 +202,7 @@ module type S = sig
     val div : t -> t -> t
       (** Division. *)
 
-    (** {2 Constructors} *)
+    (** {3 Constructors} *)
 
     val make : int -> int -> second -> t
       (** [make hour minute second] makes a period of the specified length. *)
@@ -188,7 +220,7 @@ module type S = sig
     val second : second -> t
       (** [second n] makes a period of [n] seconds. *)
 
-    (** {2 Getters} *)
+    (** {3 Getters} *)
 
     val to_seconds : t -> second
       (** Number of seconds of a period. 
@@ -213,7 +245,8 @@ module type S = sig
 
   val add : t -> Period.t -> t
     (** [app t p] returns [t + p]. 
-	E.g. [add (make 20 0 0) (Period.minute 70)] returns the time 21:10:0. *)
+	E.g. [add (make 20 0 0) (Period.minute 70)] returns the time
+	21:10:0. *)
 
   val sub : t -> t -> Period.t
     (** [sub t1 t2] returns the period between [t1] and [t2]. *)

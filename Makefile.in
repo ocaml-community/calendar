@@ -19,7 +19,7 @@
 #                                                                        #
 ##########################################################################
 
-# $Id: Makefile.in,v 1.55 2008-01-31 10:16:40 signoles Exp $
+# $Id: Makefile.in,v 1.56 2008-02-01 10:48:33 signoles Exp $
 
 # Used programs
 ###############
@@ -38,22 +38,26 @@ CAMLFIND= @OCAMLFIND@
 #########
 
 NAME	= calendar
-VERSION	= 1.10
+VERSION	= 2.0
 
-ifeq ($(CAMLOPT),no)
-LIBS	= src/$(NAME).cma
+LIBDIR	= target
+
+LIBS	= $(LIBDIR)/$(NAME).cmo
 CLIBS   =
-else
-LIBS	= src/$(NAME).cma src/$(NAME).cmxa
-CLIBS   = src/$(NAME).a
+ifneq ($(CAMLOPT),no)
+LIBS	:= $(LIBS) $(LIBDIR)/$(NAME).cmx
+CLIBS   := $(CLIBS)
 endif
 
 DIRS	= src
 
-SRC	= time_Zone.mli time_Zone.ml period.mli time_sig.mli \
-	time.mli time.ml ftime.mli ftime.ml date.mli date.ml \
-	calendar.mli calendar.ml \
-	printer.mli printer.ml
+SRC	= utils.mli utils.ml time_Zone.mli time_Zone.ml period.mli \
+	time_sig.mli time.mli time.ml ftime.mli ftime.ml \
+	date_sig.mli date.mli date.ml \
+	calendar_sig.mli calendar_builder.mli calendar_builder.ml \
+	calendar.mli calendar.ml fcalendar.mli fcalendar.ml \
+	printer.mli printer.ml \
+	version.mli version.ml
 SRC	:= $(addprefix src/, $(SRC))
 
 ML	= $(filter %.ml, $(SRC))
@@ -63,7 +67,7 @@ CMO	= $(ML:.ml=.cmo)
 CMX	= $(CMO:.cmo=.cmx)
 CMI	= $(MLI:.mli=.cmi)
 
-GENERATED=
+GENERATED= src/version.ml
 
 # Libs and flags
 ################
@@ -79,18 +83,37 @@ OPTFLAGS = $(CAMLFLAGS) -noassert
 
 all: $(LIBS) META
 
-src/$(NAME).cma: $(CMO)
-	$(CAMLFIND) ocamlc $(BYTEFLAGS) -a -o $@ $^
+$(LIBS): $(LIBDIR)
 
-src/$(NAME).a src/$(NAME).cmxa: $(CMX)
-	$(CAMLFIND) ocamlopt $(OPTFLAGS) -a -o $@ $^
+$(LIBDIR)/$(NAME).cmo: $(CMO)
+	$(CAMLFIND) ocamlc $(BYTEFLAGS) -pack -o $@ \
+		$(filter-out $(LIBDIR), $^)
+
+$(LIBDIR)/$(NAME).cma: $(CMO)
+	$(CAMLFIND) ocamlc $(BYTEFLAGS) -a -o $@ $(filter-out $(LIBDIR), $^)
+
+$(CMX):OPTFLAGS:=$(OPTFLAGS) -for-pack Calendar
+
+$(LIBDIR)/$(NAME).cmx: $(CMX)
+	$(CAMLFIND) ocamlopt $(OPTFLAGS) -pack -o $@ \
+		$(filter-out $(LIBDIR), $^)
+
+$(LIBDIR)/$(NAME).a $(LIBDIR)/$(NAME).cmxa: $(CMX)
+	$(CAMLFIND) ocamlopt $(OPTFLAGS) -a -o $@ $(filter-out $(LIBDIR), $^)
+
+$(LIBDIR):
+	mkdir -p $@
+
+src/version.ml:
+	@echo "let version = \"$(VERSION)\"" > $@
+	@echo "let date = \"`date`\"" >> $@
 
 META: Makefile
-	echo "description = \"$(NAME) library\"" > $@
-	echo "version = \"$(VERSION)\"" >> $@
-	echo "archive(byte) = \"$(NAME).cma\"" >> $@
-	echo "archive(native) = \"$(NAME).cmxa\"" >> $@
-	echo "requires = \"unix str\"" >> $@
+	@echo "description = \"$(NAME) library\"" > $@
+	@echo "version = \"$(VERSION)\"" >> $@
+	@echo "archive(byte) = \"$(NAME).cma\"" >> $@
+	@echo "archive(native) = \"$(NAME).cmxa\"" >> $@
+	@echo "requires = \"unix str\"" >> $@
 
 # Generic rules
 ###############
@@ -123,12 +146,12 @@ TESTS_CMO= $(addsuffix .cmo, $(TESTS))
 $(TESTS_CMO): tests/gen_test.cmo
 tests/test.cmo: $(TESTS_CMO)
 
-tests/test: src/$(NAME).cma tests/test.cmo
-	$(CAMLC) -o $@ $(BYTEFLAGS) unix.cma str.cma src/$(NAME).cma \
+tests/test: $(LIBDIR)/$(NAME).cmo tests/test.cmo
+	$(CAMLC) -o $@ $(BYTEFLAGS) unix.cma str.cma $(LIBDIR)/$(NAME).cmo \
 		tests/gen_test.cmo $(TESTS_CMO) tests/test.cmo
 
 .PHONY: tests
-tests: BYTEFLAGS := $(BYTEFLAGS) -I tests
+tests: BYTEFLAGS := -I tests -I target
 tests: tests/test
 	./$<
 
@@ -141,11 +164,14 @@ wc: $(SRC)
 $(NAME).ps: $(SRC)
 	$(CAMLWEB) --ps -o $@ $^
 
+utils/example.cmo: utils/example.ml
+	$(CAMLC) -I +ocamldoc -I utils -c $<
+
 .PHONY: doc
-doc: $(CMO)
+doc: $(CMO) utils/example.cmo
 	mkdir -p doc
 	rm -f doc/*
-	$(CAMLDOC) -I src -d doc -html $(MLI) $(ML)
+	$(CAMLDOC) -g utils/example.cmo -I src -d doc $(MLI) $(ML)
 
 # Headers
 #########
@@ -215,13 +241,13 @@ TAGS: $(SRC)
 ##########
 
 clean:
-	rm -f TAGS META $(TESTS) tests/test $(GENERATED)
+	rm -f TAGS META $(TESTS) tests/test $(GENERATED) 
 	for i in . src tests; do \
 	  rm -f $$i/*~ $$i/\#* $$i/*.cm[iox] $$i/*.*a $$i/*.o $$i/a.out; \
 	done
 
 dist-clean distclean: clean
-	rm -rf $(NAME).ps.gz doc
+	rm -rf $(NAME).ps.gz doc $(LIBDIR)
 
 clean-configure cleanconfig: dist-clean
 	rm -f Makefile configure config.*
@@ -229,7 +255,7 @@ clean-configure cleanconfig: dist-clean
 # Depend
 ########
 
-depend:
+.depend depend:
 	rm -f .depend
 	for i in src tests; do \
 	  $(CAMLDEP) $(CAMLIBS) $$i/*.ml $$i/*.mli; \

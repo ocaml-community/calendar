@@ -19,8 +19,13 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: ftime.mli,v 1.1 2008-01-31 10:16:40 signoles Exp $ i*)
+(*i $Id: ftime.mli,v 1.2 2008-02-01 10:48:33 signoles Exp $ i*)
 
-(** Time implementation in which seconds are floats. *)
+(** Time implementation in which seconds are floats. 
+
+    This module uses floating point arithmetics. 
+    Then, egality over times may be erroneous (as egality over [float]).
+    You should better use functions [equal] and [compare] defined in this
+    module instead of [Pervasives.(=)] and [Pervasives.compare] fu. *)
 
 include Time_sig.S with type second = float

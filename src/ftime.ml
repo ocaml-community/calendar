@@ -19,7 +19,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: ftime.ml,v 1.1 2008-01-31 10:16:40 signoles Exp $ i*)
+(*i $Id: ftime.ml,v 1.2 2008-02-01 10:48:33 signoles Exp $ i*)
 
 (*S Introduction.
 
@@ -76,22 +76,21 @@ let now () =
 (*S Getters. *)
 
 let hour t = int (from_gmt t) / 3600
-
 let minute t = int (from_gmt t) mod 3600 / 60
-
 let second t =  mod_float (from_gmt t) 60.
 
 let to_hours t = from_gmt t /. 3600.
-
 let to_minutes t = from_gmt t /. 60.
-
 let to_seconds t = from_gmt t
 
 (*S Boolean operations. *)
 
-let compare = compare
+let equal x y = abs_float (x -. y) < 1e-6
 
-let equal = (=)
+let compare x y = 
+  if equal x y then 0 
+  else if x < y then -1
+  else 1
 
 let is_pm t = 
   let t, _ = normalize t in 
@@ -106,16 +105,24 @@ let is_am t =
 (*S Coercions. *)
 
 let from_hours t = to_gmt (t *. 3600.)
-
 let from_minutes t = to_gmt (t *. 60.)
-
 let from_seconds t = to_gmt t
+
+(*S Seconds. *)
+
+module Second = struct
+  type t = second
+  let from_int = float
+  let to_int = int_of_float
+  let from_float x = x
+  let to_float x = x
+end
 
 (*S Period. *)
 
 module Period = struct
 
-  type t = float
+  include Utils.Float
 
   let make h m s = float (h * 3600 + m * 60) +. s
   let lmake ?(hour=0) ?(minute=0) ?(second=0.) () = make hour minute second
@@ -134,9 +141,6 @@ module Period = struct
   let div = (/.)
 
   let opp x = -. x
-
-  let compare = compare
-  let equal = (=)
 
   let to_seconds x = x
   let to_minutes x = x /. 60.

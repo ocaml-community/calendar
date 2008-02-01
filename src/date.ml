@@ -19,7 +19,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: date.ml,v 1.29 2008-01-31 09:02:33 signoles Exp $ i*)
+(*i $Id: date.ml,v 1.30 2008-02-01 10:48:33 signoles Exp $ i*)
 
 (*S Introduction.
 
@@ -30,7 +30,7 @@
 
 (*S Datatypes. *)
 
-type t = int (*r Representing the Julian day *)
+include Utils.Int (* the integer represents the Julian day *)
 
 type day = Sun | Mon | Tue | Wed | Thu | Fri | Sat
 
@@ -62,7 +62,8 @@ external int_of_month : month -> int = "%identity"
 
 (*S Constructors. *)
 
-let lt (d1 : int * int * int) (d2 : int * int * int) = compare d1 d2 < 0
+let lt (d1 : int * int * int) (d2 : int * int * int) = 
+  Pervasives.compare d1 d2 < 0
 
 (* [date_ok] returns [true] is the date belongs to the Julian period;
    [false] otherwise. *)
@@ -126,12 +127,7 @@ let is_leap_year y =
 
 (*S Boolean operations on dates. *)
 
-let compare = compare
-
-let equal = (==)
-
 let is_julian d = d < 2299161
-
 let is_gregorian d = d >= 2299161
 
 (*S Getters. *)
@@ -204,28 +200,22 @@ module Period = struct
   let empty = { y = 0; m = 0; d = 0 }
 
   let make y m d = { y = y; m = m; d = d }
-
   let lmake ?(year = 0) ?(month = 0) ?(day = 0) () = make year month day
 
   let day n = { empty with d = n }
-
   let week n = { empty with d = 7 * n }
-
   let month n = { empty with m = n }
-
   let year n = { empty with y = n }
 
   let add x y = { y = x.y + y.y; m = x.m + y.m; d = x.d + y.d }
-
   let sub x y = { y = x.y - y.y; m = x.m - y.m; d = x.d - y.d }
-
   let opp x = { y = - x.y; m = - x.m; d = - x.d }
 
   (* Lexicographical order over the fields of the type [t].
      Yep, [Pervasives.compare] correctly works. *)
   let compare = Pervasives.compare
-
-  let equal = (=)
+  let equal = Pervasives.(=)
+  let hash = Hashtbl.hash
 
   exception Not_computable
 
@@ -292,8 +282,6 @@ let week_first_last w y =
   b, 6 + b
 
 let nth_weekday_of_month y m d n =
-(*  let first = make y (int_of_month m + 1) 1 in
-  first + int_of_day d - int_day_of_week first + (n - 1) * 7*)
   let first = make y (int_of_month m + 1) 1 in
   let gap =
     let diff = int_of_day d - int_day_of_week first in

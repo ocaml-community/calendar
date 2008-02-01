@@ -1,7 +1,14 @@
 * licence: now LGPLv2.1, compatible with LGPLv3 (see LGPL and header of files)
-* new signature Time_sig.S which abstracts the datatype of seconds.
+* use -pack: calendar is packed inside a module Calendar 
+* new signature Time_sig.S, Date_sig.S and Calendar_sig.S
 * new module Ftime (time implementation in which seconds are floats)
   (Hezekiah M. Carty's suggestion)
+* new module Calendar_builder (generic calendar implementation)
+* new module Fcalendar (calendar implementation in which seconds are floats)
+* new module Utils
+* new module Version (information about version of calendar)
+* implementations now provide hash functions
+* add tag @example in the API documentation
 
 version 1.10, 2007-05-14:
 =========================
@@ -34,7 +41,7 @@ version 1.09.2, 2004-12-15:
 version 1.09.1, 2004-11-17:
 ===========================
 * bug fixed in Calendar.to/from_unixfloat with time zones <> UTC
-* add @since in the API documentation
+* add tag @since in the API documentation
 * META file is now writable
 
 version 1.09.0, 2004-11-13:

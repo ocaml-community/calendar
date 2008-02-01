@@ -1,7 +1,8 @@
-(*i $Id: test_time.ml,v 1.8 2003-09-18 16:15:11 signoles Exp $ i*)
+(*i $Id: test_time.ml,v 1.9 2008-02-01 10:48:33 signoles Exp $ i*)
 
-Printf.printf "\nTests of Time:\n\n";;
+Printf.printf "Tests of Time:\n";;
 
+open Calendar
 open Time;;
 include Gen_test;;
 reset ();;
@@ -48,5 +49,5 @@ test (Period.to_hours (Period.make 1 3 0) = 1.05) "Period.to_hours";;
 
 let ok = nb_ok ();;
 let bug = nb_bug ();;
-Printf.printf "\ntests ok : %d; tests ko : %d\n" ok bug;;
+Printf.printf "tests ok : %d; tests ko : %d\n" ok bug;;
 flush stdout;;

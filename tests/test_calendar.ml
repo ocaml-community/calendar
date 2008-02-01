@@ -1,7 +1,8 @@
-(*i $Id: test_calendar.ml,v 1.15 2004-11-17 16:05:19 signoles Exp $ i*)
+(*i $Id: test_calendar.ml,v 1.16 2008-02-01 10:48:33 signoles Exp $ i*)
 
-Printf.printf "\nTests of Calendar:\n\n";;
+Printf.printf "Tests of Calendar:\n";;
 
+open Calendar
 open Calendar;;
 include Gen_test;;
 reset ();;
@@ -132,5 +133,5 @@ test
 
 let ok = nb_ok ();;
 let bug = nb_bug ();;
-Printf.printf "\ntests ok : %d; tests ko : %d\n" ok bug;;
+Printf.printf "tests ok : %d; tests ko : %d\n" ok bug;;
 flush stdout;;

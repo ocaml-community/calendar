@@ -19,7 +19,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: time.ml,v 1.19 2008-01-31 10:16:40 signoles Exp $ i*)
+(*i $Id: time.ml,v 1.20 2008-02-01 10:48:33 signoles Exp $ i*)
 
 (*S Introduction.
 
@@ -41,9 +41,7 @@ type field = [ `Hour | `Minute | `Second ]
 let one_day = 86400
 
 let convert t t1 t2 = t + 3600 * Time_Zone.gap t1 t2
-
 let from_gmt t = convert t Time_Zone.UTC (Time_Zone.current ())
-
 let to_gmt t = convert t (Time_Zone.current ()) Time_Zone.UTC
 
 (* Coerce [t] into the interval $[0; 86400[$ (i.e. a one day interval). *)
@@ -55,7 +53,6 @@ let normalize t =
 (*S Constructors. *)
 
 let make h m s = to_gmt (h * 3600 + m * 60 + s)
-
 let lmake ?(hour = 0) ?(minute = 0) ?(second = 0) () = make hour minute second
 
 let midnight () = to_gmt 0
@@ -69,15 +66,11 @@ let now () =
 (*S Getters. *)
 
 let hour t = from_gmt t / 3600
-
 let minute t = from_gmt t mod 3600 / 60
-
 let second t = from_gmt t mod 60
 
-let to_hours t = float_of_int (from_gmt t) /. 3600.
-
-let to_minutes t = float_of_int (from_gmt t) /. 60.
-
+let to_hours t = float (from_gmt t) /. 3600.
+let to_minutes t = float (from_gmt t) /. 60.
 let to_seconds t = from_gmt t
 
 (*S Boolean operations. *)
@@ -99,16 +92,30 @@ let is_am t =
 (*S Coercions. *)
 
 let from_hours t = to_gmt (int_of_float (t *. 3600.))
-
 let from_minutes t = to_gmt (int_of_float (t *. 60.))
-
 let from_seconds t = to_gmt t
+
+(*S Seconds. *)
+
+module Second = struct
+
+  (* Round a float to the nearest int. *)
+  let round x =
+    let f, i = modf x in
+    int_of_float i + (if f < 0.5 then 0 else 1)
+
+  type t = second
+  let from_int x = x
+  let to_int x = x
+  let from_float = round
+  let to_float = float
+end
 
 (*S Period. *)
 
 module Period = struct
 
-  type t = int
+  include Utils.Int
 
   let make h m s = h * 3600 + m * 60 + s
   let lmake ?(hour=0) ?(minute=0) ?(second=0) () = make hour minute second
@@ -128,12 +135,9 @@ module Period = struct
 
   let opp x = - x
 
-  let compare = compare
-  let equal = (==)
-
   let to_seconds x = x
-  let to_minutes x = float_of_int x /. 60.
-  let to_hours x = float_of_int x /. 3600.
+  let to_minutes x = float x /. 60.
+  let to_hours x = float x /. 3600.
 
 end
 

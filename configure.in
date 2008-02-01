@@ -122,11 +122,12 @@ fi
 AC_CHECK_PROG(OCAMLDOC,ocamldoc,ocamldoc,true)
 if test "$OCAMLDOC" = true ; then
     AC_MSG_WARN(Cannot find ocamldoc)
-else
-    AC_CHECK_PROG(OCAMLDOCOPT,ocamldoc.opt,ocamldoc.opt,no)
-    if test "$OCAMLDOCOPT" != no ; then
-	OCAMLDOC=$OCAMLDOCOPT
-    fi
+# JS: documentation generator does not work with ocamldoc.opt :(
+#else
+#    AC_CHECK_PROG(OCAMLDOCOPT,ocamldoc.opt,ocamldoc.opt,no)
+#    if test "$OCAMLDOCOPT" != no ; then
+#	OCAMLDOC=$OCAMLDOCOPT
+#    fi
 fi
 
 AC_CHECK_PROG(OCAMLWEB,ocamlweb,ocamlweb,true)

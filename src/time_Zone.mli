@@ -19,7 +19,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: time_Zone.mli,v 1.10 2008-01-31 09:02:33 signoles Exp $ i*)
+(*i $Id: time_Zone.mli,v 1.11 2008-02-01 10:48:33 signoles Exp $ i*)
 
 (** Time zone management.
 
@@ -37,11 +37,11 @@ val current : unit -> t
 val change : t -> unit
   (** Change the current time zone by another one. 
       Raise [Invalid_argument] if the specified time zone is [UTC_Plus x] with
-      x < -12 or x > 11 *)
+      [x < -12] or [x > 11] *)
   
 val gap : t -> t -> int
-  (** Return the gap between two time zone. 
-      E.g. [gap UTC (UTC_Plus 5)] returns 5 and, at Paris in summer,
+  (** Return the gap between two time zone.
+      @example [gap UTC (UTC_Plus 5)] returns 5 and, at Paris in summer,
       [gap Local UTC] returns -2. *)
 
 val from_gmt : unit  -> int

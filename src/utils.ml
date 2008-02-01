@@ -19,6 +19,41 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: calendar.ml,v 1.24 2008-02-01 10:48:33 signoles Exp $ i*)
+(* $Id: utils.ml,v 1.1 2008-02-01 10:48:33 signoles Exp $ *)
 
-include Calendar_builder.Make(Date)(Time)
+module type Comparable = sig
+  type t
+  val equal: t -> t -> bool
+  val compare: t -> t -> int
+  val hash: t -> int
+end
+
+module Int = struct
+  type t = int
+  let equal = Pervasives.(=)
+  let compare = Pervasives.compare
+  let hash = Hashtbl.hash
+end
+
+module Float = struct
+
+  type t = float
+
+  let precision = ref 1e-6
+
+  let set_precision f = precision := f
+
+  let equal x y = abs_float (x -. y) < !precision
+
+  let compare x y = 
+    if equal x y then 0 
+    else if x < y then -1
+    else 1
+
+  let hash = Hashtbl.hash
+
+  let round x =
+    let f, i = modf x in
+    int_of_float i + (if f < 0.5 then 0 else 1)
+
+end

@@ -1,7 +1,8 @@
-(*i $Id: test_date.ml,v 1.18 2006-07-07 13:48:10 signoles Exp $ i*)
+(*i $Id: test_date.ml,v 1.19 2008-02-01 10:48:33 signoles Exp $ i*)
 
-Printf.printf "\nTests of Date:\n\n";;
+Printf.printf "Tests of Date:\n";;
 
+open Calendar;;
 open Date;;
 include Gen_test;;
 reset ();;
@@ -113,5 +114,5 @@ test_exn (lazy (from_business 2005 53 Sun)) "from_business_bad 2";;
 
 let ok = nb_ok ();;
 let bug = nb_bug ();;
-Printf.printf "\ntests ok : %d; tests ko : %d\n" ok bug;;
+Printf.printf "tests ok : %d; tests ko : %d\n" ok bug;;
 flush stdout;;

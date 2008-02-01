@@ -19,6 +19,12 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: calendar.ml,v 1.24 2008-02-01 10:48:33 signoles Exp $ i*)
+(*i $Id: version.mli,v 1.6 2008-02-01 10:48:33 signoles Exp $ i*)
 
-include Calendar_builder.Make(Date)(Time)
+(** Information about version of calendar. *)
+
+val version: string
+  (** Name of this version. *)
+
+val date: string
+  (** Date of compilation. *)
