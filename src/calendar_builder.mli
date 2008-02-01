@@ -19,14 +19,13 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: calendar_builder.mli,v 1.1 2008-02-01 10:48:33 signoles Exp $ i*)
+(*i $Id: calendar_builder.mli,v 1.2 2008-02-01 15:51:04 signoles Exp $ i*)
 
-(** Calendar implementation in which seconds are integer.
+(** Generic calendar implementation. *)
 
-    This module uses floating point arithmetics. 
-    Then, egality over times may be erroneous (as egality over [float]).
-    You should better use functions [equal] and [compare] defined in this
-    module instead of [Pervasives.(=)] and [Pervasives.compare]. *)
+(** Implement a calendar from a date implementation and a time implementation.
 
+    This module uses float. Then results may be very unprecise.
+    @since 2.0 *) 
 module Make(D:Date_sig.S)(T:Time_sig.S) 
   : Calendar_sig.S with module Date = D and module Time = T

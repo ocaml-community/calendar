@@ -19,7 +19,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: time.ml,v 1.20 2008-02-01 10:48:33 signoles Exp $ i*)
+(*i $Id: time.ml,v 1.21 2008-02-01 15:51:05 signoles Exp $ i*)
 
 (*S Introduction.
 
@@ -30,7 +30,7 @@
 
 (*S Datatypes. *)
 
-type t = int
+include Utils.Int
 
 type second = int
 
@@ -75,10 +75,6 @@ let to_seconds t = from_gmt t
 
 (*S Boolean operations. *)
 
-let compare = compare
-
-let equal = (==)
-
 let is_pm t = 
   let t, _ = normalize t in 
   let m, _ = normalize (midday ()) in
@@ -98,16 +94,10 @@ let from_seconds t = to_gmt t
 (*S Seconds. *)
 
 module Second = struct
-
-  (* Round a float to the nearest int. *)
-  let round x =
-    let f, i = modf x in
-    int_of_float i + (if f < 0.5 then 0 else 1)
-
   type t = second
   let from_int x = x
   let to_int x = x
-  let from_float = round
+  let from_float = Utils.Float.round
   let to_float = float
 end
 

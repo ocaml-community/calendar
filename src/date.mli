@@ -19,9 +19,8 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: date.mli,v 1.27 2008-02-01 10:48:33 signoles Exp $ i*)
+(*i $Id: date.mli,v 1.28 2008-02-01 15:51:05 signoles Exp $ i*)
 
 (** Date implementation. *)
 
 include Date_sig.S
-  

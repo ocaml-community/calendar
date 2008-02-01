@@ -19,7 +19,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: date.ml,v 1.30 2008-02-01 10:48:33 signoles Exp $ i*)
+(*i $Id: date.ml,v 1.31 2008-02-01 15:51:05 signoles Exp $ i*)
 
 (*S Introduction.
 
@@ -371,8 +371,11 @@ let int_of_day d = let n = int_of_day d in if n = 0 then 7 else n
   (* Used by [from_business] *)
 
 let from_business y w d =
-  if w < 1 || w > weeks_in_year y then invalid_arg "from_business";
-  let first = make y 1 1 in
+  if w < 1 || w > weeks_in_year y then invalid_arg "from_business: bad week";
+  let first = 
+    try make y 1 1 
+    with Out_of_bounds | Undefined -> invalid_arg "from_business: bad date"
+  in
   let first_day = int_day_of_week first in
   let w = if first_day > 4 then w else w - 1 in
   first + w * 7 + int_of_day d - first_day

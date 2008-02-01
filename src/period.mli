@@ -19,7 +19,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: period.mli,v 1.14 2008-02-01 10:48:33 signoles Exp $ i*)
+(*i $Id: period.mli,v 1.15 2008-02-01 15:51:05 signoles Exp $ i*)
 
 (** A period represents the time passed between two events (a date, a time...).
   Only an interface defining arithmetic operations on periods is defined here.
@@ -31,6 +31,8 @@ module type S = sig
 
   type t
     (** Type of a period. *)
+
+  (** {3 Period is an additive monoid} *)
 
   val empty : t
     (** The empty period. *)
@@ -44,16 +46,20 @@ module type S = sig
   val opp : t -> t
     (** Opposite of a period. *)
 
-  val compare : t -> t -> int
-    (** Comparison function between two periods.
-	Same behaviour than [Pervasives.compare]. *)
+  (** {3 Periods are comparable} *)
 
   val equal: t -> t -> bool
-    (** Equality function between two periods. Same behaviour than [(=)]. 
+    (** Equality function between two periods.
+	@see <Utils.Comparable.html#VALequal> Utils.Comparable.equal
 	@since 1.09.0 *)
+
+  val compare : t -> t -> int
+    (** Comparison function between two periods.
+ 	@see <Utils.Comparable.html#VALcompare> Utils.Comparable.compare *)
 
   val hash: t -> int
     (** Hash function for periods.
+	@see <Utils.Comparable.html#VALhash> Utils.Comparable.hash 
 	@since 2.0 *)
 
 end

@@ -19,7 +19,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: calendar_builder.ml,v 1.1 2008-02-01 10:48:33 signoles Exp $ i*)
+(*i $Id: calendar_builder.ml,v 1.2 2008-02-01 15:51:04 signoles Exp $ i*)
 
 (*S Introduction.
 
@@ -27,14 +27,9 @@
   This gap of 0.5 is because the Julian period begins 
   January first, 4713 BC at MIDDAY (and then, this Julian day is 0.0). 
   But, for implementation facilities, the Julian day 0.0 is coded as
-  January first, 4713 BC at MIDNIGHT.\\ *)
+  January first, 4713 BC at MIDNIGHT. *)
 
 module Make(D: Date_sig.S)(T: Time_sig.S) = struct
-
-  (* Round a float to the nearest int. *)
-  let round x =
-    let f, i = modf x in
-    int_of_float i + (if f < 0.5 then 0 else 1)
 
   (*S Datatypes. *)
 

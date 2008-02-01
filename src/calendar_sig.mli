@@ -19,12 +19,10 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: calendar_sig.mli,v 1.1 2008-02-01 10:48:33 signoles Exp $ i*)
+(*i $Id: calendar_sig.mli,v 1.2 2008-02-01 15:51:04 signoles Exp $ i*)
 
-(** Calendar interface.
-
-    A calendar combines a date and a time: it may be seen as a 6-uple (year,
-    month, day, hour, minute, second).
+(** Calendar interface. A calendar combines a date and a time: it may be seen
+    as a 6-uple (year, month, day, hour, minute, second).
 
     If you only need operations on dates, you should better use a date
     implementation (like module [Date]). But if you need to manage more precise
@@ -41,7 +39,12 @@ module type S = sig
     (** Type of a date refined with a time, so called a calendar. *)
     
   module Date: Date_sig.S
+    (** Date implementation used by this calendar.
+	@since 2.0 *)
+
   module Time: Time_sig.S
+    (** Time implementation used by this calendar.
+	@since 2.0 *)
 
   type day = Date.day = Sun | Mon | Tue | Wed | Thu | Fri | Sat
       (** Days of the week. *)
@@ -62,7 +65,10 @@ module type S = sig
 
   val make : int -> int -> int -> int -> int -> second -> t
     (** [make year month day hour minute second] makes the calendar
-	"year-month-day; hour-minute-second". *)
+	"year-month-day; hour-minute-second". 
+	@raise D.Out_of_bounds when a date is outside the Julian period.
+	@raise D.Undefined when a date belongs to [[October 5th, 1582; October
+	14th, 1582]]. *)
 
   val lmake : 
     year:int -> ?month:int -> ?day:int -> 
@@ -70,6 +76,9 @@ module type S = sig
     (** Labelled version of [make]. 
 	The default value of [month] and [day] (resp. of [hour], [minute] 
 	and [second]) is [1] (resp. [0]). 
+	@raise D.Out_of_bounds when a date is outside the Julian period.
+	@raise D.Undefined when a date belongs to [[October 5th, 1582; October
+	14th, 1582]].
 	@since 1.05 *)
 
   val create : Date.t -> Time.t -> t
@@ -90,60 +99,104 @@ module type S = sig
 
   (** {2 Conversions} *)
 
-  (**  Those functions have the same behaviour as those defined in [Time]. *)
+  (**  Those functions have the same behaviour as those defined in
+       {!Time_sig.S}. *)
 
   val convert : t -> Time_Zone.t -> Time_Zone.t -> t
+    (** @see <Time_sig.S.html#VALconvert> Time_sig.S.convert *)
+
   val to_gmt : t -> t
+    (** @see <Time_sig.S.html#VALto_gmt> Time_sig.S.to_gmt *)
+
   val from_gmt : t -> t
+    (** @see <Time_sig.S.html#VALfrom_gmt> Time_sig.S.from_gmt *)
 
   (** {2 Getters} *)
 
-  (** Those functions have the same behavious as those defined in [Date]. *)
+  (** Those functions have the same behavious as those defined in
+      {!Date_sig.S}. *)
   
   val days_in_month : t -> int
-  val day_of_week : t -> day
-  val day_of_month : t -> int
-  val day_of_year : t -> int
-  val week : t -> int
-  val month : t -> month
-  val year : t -> int
+    (** @see <Date_sig.S.html#VALdays_in_month> Date_sig.S.days_in_month *)
 
-  (** [to_jd] and [to_mjd] are more precise than [Date.to_jd] and 
-      [Date.to_mjd]. *)
+  val day_of_week : t -> day
+    (** @see <Date_sig.S.html#VALdays_of_week> Date_sig.S.days_of_week *)
+
+  val day_of_month : t -> int
+    (** @see <Date_sig.S.html#VALdays_of_month> Date_sig.S.days_of_month *)
+
+  val day_of_year : t -> int
+    (** @see <Date_sig.S.html#VALdays_of_year> Date_sig.S.days_of_year *)
+
+  val week : t -> int
+    (** @see <Date_sig.S.html#VALweek> Date_sig.S.week *)
+
+  val month : t -> month
+    (** @see <Date_sig.S.html#VALmonth> Date_sig.S.month *)
+
+  val year : t -> int
+    (** @see <Date_sig.S.html#VALyear> Date_sig.S.year *)
+
+  (** [to_jd] and [to_mjd] are more precise than {!Date_sig.S.to_jd} and 
+      {!Date_sig.S.to_mjd}. *)
     
   val to_jd : t -> float
   val to_mjd : t -> float
 
-  (** Those functions have the same behavious as those defined in [Time]. *)
+  (** Those functions have the same behavious as those defined in
+      {!Time_sig.S}. *)
 
   val hour : t -> int
+    (** @see <Time_sig.S.html#VALhour> Time_sig.S.hour *)
+
   val minute : t -> int
+    (** @see <Time_sig.S.html#VALminute> Time_sig.S.minute *)
+
   val second : t -> second
+    (** @see <Time_sig.S.html#VALsecond> Time_sig.S.second *)
 
-  (** {2 Boolean operations on calendars} *)
+  (** {2 Calendars are comparable} *)
 
-  val equal : t -> t -> bool
+  val equal: t -> t -> bool
     (** Equality function between two calendars.
-	[equal] should be used instead of [(=)]. *)
+	@see <Utils.Comparable.html#VALequal> Utils.Comparable.equal. *)
 
-  (** Those functions have the same behavious as those defined in [Date]. *)
+  val compare: t -> t -> int
+    (** Comparison function between two calendars.
+	@see <Utils.Comparable.html#VALcompare> Utils.Comparable.compare. *)
 
-  val compare : t -> t -> int
+  val hash: t -> int
+    (** Hash function for calendars.
+	@see <Utils.Comparable.html#VALhash> Utils.Comparable.hash. 
+	@since 2.0 *)
+
+  (** Those functions have the same behavious as those defined in
+      {!Date_sig.S}. *)
+
   val is_leap_day : t -> bool
-  val is_gregorian : t -> bool
-  val is_julian : t -> bool
+    (** @see <Date_sig.S.html#VALis_leap_day> Date_sig.S.is_leap_day *)
 
-  (** Those functions have the same behavious as those defined in [Time]. *)
+  val is_gregorian : t -> bool
+    (** @see <Date_sig.S.html#VALis_gregorian> Date_sig.S.is_gregorian *)
+
+  val is_julian : t -> bool
+    (** @see <Date_sig.S.html#VALis_julian> Date_sig.S.is_julian *)
+
+  (** Those functions have the same behavious as those defined in
+      {!Time_sig.S}. *)
 
   val is_pm : t -> bool
+    (** @see <Time_sig.S.html#VALis_pm> Time_sig.S.is_pm *)
+
   val is_am : t -> bool
+    (** @see <Time_sig.S.html#VALis_am> Time_sig.S.is_am *)
 
   (** {2 Coercions} *)
 
   val to_unixtm : t -> Unix.tm
     (** Convert a calendar into the [unix.tm] type.
 	The field [isdst] is always [false]. More precise than
-	[Date.to_unixtm].
+	{!Date_sig.S.to_unixtm}.
 	@since 1.01 *)
 
   val from_unixtm : Unix.tm -> t
@@ -155,13 +208,13 @@ module type S = sig
   val to_unixfloat : t -> float
     (** Convert a calendar to a float such than 
 	[to_unixfloat (make 1970 1 1 0 0 0)] returns [0.0] at UTC.
-	So such a float is convertible with those of the [Unix] module. 
-	More precise than [Date.to_unixfloat].
+	So such a float is convertible with those of the module [Unix]. 
+	More precise than {!Date_sig.S.to_unixfloat}.
 	@since 1.01 *)
     
   val from_unixfloat : float -> t
     (** Inverse of [to_unixfloat]. Assumes the current time zone.
-	So, we have the following invariant:
+	So, the following invariant holds:
 	[hour (from_unixfloat u) = (Unix.gmtime u).Unix.tm_hour].
 	@since 1.01 *)
 
@@ -197,18 +250,32 @@ module type S = sig
       (** Labelled version of [make]. 
 	  The default value of each argument is [0]. *)
 
-    (** Those functions have the same behavious as those defined in [Date]. *)
+    (** Those functions have the same behavious as those defined in
+	{!Date_sig.S.Period}. *)
 
     val year : int -> t
-    val month : int -> t
-    val week : int -> t
-    val day : int -> t
+      (** @see <Date_sig.S.Period.html#VALyear> Date_sig.S.Period.year *)
 
-    (** Those functions have the same behavious as those defined in [Time]. *)
+    val month : int -> t
+      (** @see <Date_sig.S.Period.html#VALmonth> Date_sig.S.Period.month *)
+
+    val week : int -> t
+      (** @see <Date_sig.S.Period.html#VALweek> Date_sig.S.Period.week *)
+
+    val day : int -> t
+      (** @see <Date_sig.S.Period.html#VALday> Date_sig.S.Period.day *)
+
+    (** Those functions have the same behavious as those defined in
+	{Time_sig.S.Period}. *)
 
     val hour : int -> t
+      (** @see <Time_sig.S.Period.html#VALhour> Time_sig.S.Period.hour *)
+
     val minute : int -> t
+      (** @see <Time_sig.S.Period.html#VALminute> Time_sig.S.Period.minute *)
+
     val second : second -> t
+      (** @see <Time_sig.S.Period.html#VALsecond> Time_sig.S.Period.second *)
 
     (** {3 Coercions} *)
       
@@ -221,25 +288,26 @@ module type S = sig
     val to_date : t -> Date.Period.t
       (** Convert a calendar period to a date period. 
 	  The fractional time period is ignored. 
-	  E.g. [to_date (hour 60)] is equivalent to [Date.Period.days 2]. *)
+	  @example [to_date (hour 60)] is equivalent to [Date.Period.days 2]. *)
 
-    exception Not_computable 
+    exception Not_computable
       (** [= Date.Period.Not_computable].
 	  @since 1.04 *)
 
     val to_time : t -> Time.Period.t
       (** Convert a calendar period to a date period. 
-	  Throw [Not_computable] if the time period is not computable.
-	  E.g. [to_time (day 6)] and [to_time (second 30)] respectively return a
-	  time period of [24 * 3600 * 6 = 518400] seconds and a time period of
-	  [30]  seconds but [to_time (year 1)] throws [Not_computable] because
+	  @raise Not_computable if the time period is not computable.
+	  @example [to_time (day 6)] returns a time period of [24 * 3600 * 6 =
+	  518400] seconds
+	  @example [to_time (second 30)] returns a time period of [30] seconds
+	  @example [to_time (year 1)] raises [Not_computable] because
 	  a year is not a constant number of days. 
 	  @since 1.04 *)
 
     val ymds: t -> int * int * int * second
       (** Number of years, months, days and seconds in a period.
-	  E.g. [ymds (make 1 2 3 1 2 3)] returns [1, 2, 3, 3723] and
-	  [ymds (make (-1) (-2) (-3) (-1) (-2) (-3)] returns
+	  @example [ymds (make 1 2 3 1 2 3)] returns [1, 2, 3, 3723] 
+	  @example [ymds (make (-1) (-2) (-3) (-1) (-2) (-3)] returns
 	  [-1, -2, -4, 82677]. 
 	  @since 1.09.0 *)
     
@@ -247,12 +315,22 @@ module type S = sig
 
   (** {2 Arithmetic operations on calendars and periods} *)
 
-  (** Those functions have the same behavious as those defined in [Date]. *)
+  (** Those functions have the same behavious as those defined in
+      {!Date_sig.S}. *)
 
   val add : t -> Period.t -> t
+    (** @see <Date_sig.S.html#VALadd> Date_sig.S.add *)
+
   val sub : t -> t -> Period.t
+    (** @see <Date_sig.S.html#VALsub> Date_sig.S.sub *)
+
   val rem : t -> Period.t -> t
+    (** @see <Date_sig.S.html#VALrem> Date_sig.S.rem *)
+
   val next : t -> field -> t
+    (** @see <Date_sig.S.html#VALnext> Date_sig.S.next *)
+
   val prev : t -> field -> t
+    (** @see <Date_sig.S.html#VALprev> Date_sig.S.prev *)
 
 end

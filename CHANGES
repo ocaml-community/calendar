@@ -1,14 +1,19 @@
-* licence: now LGPLv2.1, compatible with LGPLv3 (see LGPL and header of files)
-* use -pack: calendar is packed inside a module Calendar 
+version 2.0, 2008-02-04:
+=========================
+* use -pack: all modules of the library are packed inside a module Calendar
 * new signature Time_sig.S, Date_sig.S and Calendar_sig.S
 * new module Ftime (time implementation in which seconds are floats)
   (Hezekiah M. Carty's suggestion)
 * new module Calendar_builder (generic calendar implementation)
-* new module Fcalendar (calendar implementation in which seconds are floats)
+* new module Fcalendar (calendar implementation using Ftime)
+* hash functions are provided
+* new modules Printer.Ftime and Printer.Fcalendar
+* modules Printer.Date, Printer.Time and Printer.Calendar respectively replace
+  Printer.DatePrinter, Printer.TimePrinter and Printer.CalendarPrinter.
+  These last modules still exist but are deprecated.
 * new module Utils
 * new module Version (information about version of calendar)
-* implementations now provide hash functions
-* add tag @example in the API documentation
+* add tags @example, @raise and @see in the API documentation
 
 version 1.10, 2007-05-14:
 =========================

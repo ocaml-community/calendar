@@ -19,7 +19,7 @@
 #                                                                        #
 ##########################################################################
 
-# $Id: Makefile.in,v 1.56 2008-02-01 10:48:33 signoles Exp $
+# $Id: Makefile.in,v 1.57 2008-02-01 15:51:04 signoles Exp $
 
 # Used programs
 ###############
@@ -138,7 +138,8 @@ META: Makefile
 # Tests
 #######
 
-TESTS	= test_timezone test_time test_date test_calendar test_printer
+TESTS	= test_timezone test_time test_ftime test_date \
+	test_calendar test_fcalendar test_printer
 TESTS	:= $(addprefix tests/, $(TESTS))
 
 TESTS_CMO= $(addsuffix .cmo, $(TESTS))
@@ -150,8 +151,9 @@ tests/test: $(LIBDIR)/$(NAME).cmo tests/test.cmo
 	$(CAMLC) -o $@ $(BYTEFLAGS) unix.cma str.cma $(LIBDIR)/$(NAME).cmo \
 		tests/gen_test.cmo $(TESTS_CMO) tests/test.cmo
 
+$(TESTS_CMO) tests/test.cmo: BYTEFLAGS := -I tests -I target
+
 .PHONY: tests
-tests: BYTEFLAGS := -I tests -I target
 tests: tests/test
 	./$<
 
@@ -171,7 +173,8 @@ utils/example.cmo: utils/example.ml
 doc: $(CMO) utils/example.cmo
 	mkdir -p doc
 	rm -f doc/*
-	$(CAMLDOC) -g utils/example.cmo -I src -d doc $(MLI) $(ML)
+	$(CAMLDOC) -g utils/example.cmo -colorize-code -I src -d doc \
+		$(MLI) $(ML)
 
 # Headers
 #########
@@ -258,7 +261,7 @@ clean-configure cleanconfig: dist-clean
 .depend depend:
 	rm -f .depend
 	for i in src tests; do \
-	  $(CAMLDEP) $(CAMLIBS) $$i/*.ml $$i/*.mli; \
+	  $(CAMLDEP) $(CAMLIBS) -I tests $$i/*.ml $$i/*.mli; \
 	done > .depend
 
 view-depend:

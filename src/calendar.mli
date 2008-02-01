@@ -19,13 +19,11 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: calendar.mli,v 1.23 2008-02-01 10:48:33 signoles Exp $ i*)
+(*i $Id: calendar.mli,v 1.24 2008-02-01 15:51:04 signoles Exp $ i*)
 
 (** Calendar implementation in which seconds are integer.
 
-    This module uses floating point arithmetics. 
-    Then, egality over times may be erroneous (as egality over [float]).
-    You should better use functions [equal] and [compare] defined in this
-    module instead of [Pervasives.(=)] and [Pervasives.compare]. *)
+    This module uses float. Then results may be unprecise, especially
+    comparison if times are similar. *)
 
 include Calendar_sig.S with module Date = Date and module Time = Time

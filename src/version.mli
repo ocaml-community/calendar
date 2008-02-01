@@ -19,9 +19,10 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: version.mli,v 1.6 2008-02-01 10:48:33 signoles Exp $ i*)
+(*i $Id: version.mli,v 1.7 2008-02-01 15:51:05 signoles Exp $ i*)
 
-(** Information about version of calendar. *)
+(** Information about version of calendar. 
+    @since 2.0 *)
 
 val version: string
   (** Name of this version. *)

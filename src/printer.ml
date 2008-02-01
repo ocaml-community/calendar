@@ -19,7 +19,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: printer.ml,v 1.13 2008-01-31 09:02:33 signoles Exp $ i*)
+(*i $Id: printer.ml,v 1.14 2008-02-01 15:51:05 signoles Exp $ i*)
 
 module type S = sig
   type t
@@ -403,7 +403,7 @@ let cannot_create_event kind args =
   if List.exists ((=) (-1)) args then
     raise (Invalid_argument ("Cannot create the " ^ kind))
 
-module DatePrinter = 
+module Date = 
   Make(struct 
 	 include Date
 	 let make y m d _ _ _ =
@@ -415,7 +415,9 @@ module DatePrinter =
 	 let second _ = bad_format "second"
        end)
 
-module TimePrinter = 
+module DatePrinter = Date
+
+module Time = 
   Make(struct
 	 include Time
 	 let make _ _ _ h m s =
@@ -431,11 +433,42 @@ module TimePrinter =
 	 let year _ = bad_format "year"
        end)
 
-module CalendarPrinter = 
+module TimePrinter = Time
+
+module Ftime = 
+  Make(struct
+	 include Ftime
+	 let make _ _ _ h m s =
+	   cannot_create_event "time" [ h; m; s ];
+	   make h m (Second.from_int s)
+	 let second x = Second.to_int (second x)
+	 let default_format = "%T"
+	 let day_of_week _ = bad_format "day_of_week"
+	 let day_of_month _ = bad_format "day_of_month"
+	 let day_of_year _ = bad_format "day_of_year"
+	 let week _ = bad_format "week"
+	 let month _ = bad_format "month"
+	 let int_month _ = bad_format "int_month"
+	 let year _ = bad_format "year"
+       end)
+
+module Calendar = 
   Make(struct
 	 include Calendar
 	 let make y m d h mn s =
 	   cannot_create_event "calendar" [ y; m; d; h; mn; s ];
 	   make y m d h mn s
+	 let default_format = "%i %T"
+       end)
+
+module CalendarPrinter = Calendar
+
+module Fcalendar = 
+  Make(struct
+	 include Fcalendar
+	 let make y m d h mn s =
+	   cannot_create_event "calendar" [ y; m; d; h; mn; s ];
+	   make y m d h mn (Time.Second.from_int s)
+	 let second s = Time.Second.to_int (second s)
 	 let default_format = "%i %T"
        end)

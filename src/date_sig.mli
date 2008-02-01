@@ -19,11 +19,9 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: date_sig.mli,v 1.1 2008-02-01 10:48:33 signoles Exp $ i*)
+(*i $Id: date_sig.mli,v 1.2 2008-02-01 15:51:05 signoles Exp $ i*)
 
-(** Date interface.
-
-  A date is a triple (year, month, day). 
+(** Date interface. A date may be seen as a triple (year, month, day). 
   
   All the dates should belong to 
   [[January, 1st 4713 BC; January 22th, 3268 AC]] (called the Julian period).
@@ -78,12 +76,19 @@ module type S = sig
 
   val make : year -> int -> int -> t
     (** [make year month day] makes the date year-month-day. A BC year [y]
-	corresponds to the year [-(y+1)].  E.g. the years (5 BC) and (1 BC)
-	respectively correspond to the years (-4) and 0. *)
+	corresponds to the year [-(y+1)].  
+	@example years (5 BC) and (1 BC) respectively correspond to years
+	(-4) and 0. 
+	@raise Out_of_bounds when a date is outside the Julian period.
+	@raise Undefined when a date belongs to [[October 5th, 1582; October
+	14th, 1582]]. *) 
 
   val lmake : year:year -> ?month:int -> ?day:int -> unit -> t
     (** Labelled version of [make]. 
 	The default value of [month] and [day] is [1]. 
+	@raise Out_of_bounds when a date is outside the Julian period.
+	@raise Undefined when a date belongs to [[October 5th, 1582; October
+	14th, 1582]].
 	@since 1.05 *)
 
   val today : unit -> t
@@ -91,61 +96,73 @@ module type S = sig
 
   val from_jd : int -> t
     (** Make a date from its Julian day. 
-	E.g. [from_jd 0] returns the date 4713 BC-1-1. *)
+	@example [from_jd 0] returns the date 4713 BC-1-1. *)
 
   val from_mjd : int -> t
     (** Make a date from its modified Julian day (i.e. Julian day - 2 400 001).
 	The Modified Julian day is more manageable than the Julian day.
-	E.g. [from_mjd 0] returns the date 1858-11-17. *)
+	@example [from_mjd 0] returns the date 1858-11-17. *)
 
   (** {2 Getters} *)
 
   val days_in_month : t -> int
     (** Number of days in the month of a date.
-	E.g [days_in_month (make 2003 6 26)] returns [30]. *)
+	@example [days_in_month (make 2003 6 26)] returns [30]. *)
 
   val day_of_week : t -> day
   (** Day of the week. 
-      E.g. [day_of_week (make 2003 6 26)] returns [Thu]. *)
+      @example [day_of_week (make 2003 6 26)] returns [Thu]. *)
     
   val day_of_month : t -> int
     (** Day of the month. 
-	E.g. [day_of_month (make 2003 6 26)] returns [26]. *)
+	@example [day_of_month (make 2003 6 26)] returns [26]. *)
 
   val day_of_year : t -> int
     (** Day of the year.
-	E.g. [day_of_year (make 2003 1 5)] returns [5]
-	and [day_of_year (make 2003 12 28)] returns [362]. *)
+	@example [day_of_year (make 2003 1 5)] returns [5]
+	@example [day_of_year (make 2003 12 28)] returns [362]. *)
 
   val week : t -> int
     (** Week. 
-	E.g. [week (make 2000 1 3)] returns [1] and [week (make 2000 1 2)]
-	returns [52]. [week (make 2003 12 28)] returns [52] and [week (make
-	2003 12 29)] returns [1]. *)
+	@example [week (make 2000 1 3)] returns [1].
+	@example [week (make 2000 1 2)] returns [52].
+	@example [week (make 2003 12 28)] returns [52].
+	@example [week (make 2003 12 29)] returns [1]. *)
 
   val month : t -> month
-    (** Month. E.g. [month (make 2003 6 26)] returns [Jun]. *)
+    (** Month. 
+	@example [month (make 2003 6 26)] returns [Jun]. *)
 
   val year : t -> year
-    (** Year. E.g. [year (make 2003 6 26)] returns [2003]. *)
+    (** Year. 
+	@example [year (make 2003 6 26)] returns [2003]. *)
 
   val to_jd : t -> int
-    (** Julian day. E.g. [to_jd (make (-4712) 1 1)] returns 0. *)
+    (** Julian day.
+	@example [to_jd (make (-4712) 1 1)] returns 0. *)
   
   val to_mjd : t -> int
     (** Modified Julian day (i.e. Julian day - 2 400 001).
 	The Modified Julian day is more manageable than the Julian day. 
-	E.g. [to_mjd (make 1858 11 17)] returns 0. *)
+	@example [to_mjd (make 1858 11 17)] returns 0. *)
 
-  (** {2 Boolean operations on dates} *)
+  (** {2 Dates are comparable} *)
+    
+  val equal: t -> t -> bool
+    (** Equality function between two dates.
+	@see <Utils.Comparable.html#VALequal> Utils.Comparable.equal
+	@since 1.09.0 *)
 
   val compare : t -> t -> int
-    (** Comparison function between two dates. 
-	Same behavior as [Pervasives.compare]. *)
+    (** Comparison function between two dates.
+ 	@see <Utils.Comparable.html#VALcompare> Utils.Comparable.compare *)
 
-  val equal: t -> t -> bool
-    (** Equality function between two dates. Same behavior as [(=)]. 
-	@since 1.09.0 *)
+  val hash: t -> int
+    (** Hash function for dates.
+	@see <Utils.Comparable.html#VALhash> Utils.Comparable.hash 
+	@since 2.0 *)
+
+  (** {2 Boolean operations on dates} *)
 
   val is_leap_day : t -> bool
     (** Return [true] if a date is a leap day
@@ -186,17 +203,17 @@ module type S = sig
     (** Return the "business week" and the day in this week respecting ISO 8601.
 	Notice that business weeks at the beginning and end of the year can
 	sometimes have year numbers which don't match the real year.
-	E.g. [to_business (make 2000 1 3)] returns [2000, 1, Mon] and
-	[to_business (make 2000 1 2)] returns [1999, 52, Sun].  [to_business
-	(make 2003 12 28)] returns [2003, 52, Sun] and [to_business (make 2003
-	12 29)] returns [2004, 1, Mon].
+	@example [to_business (make 2000 1 3)] returns [2000, 1, Mon] 
+	@example [to_business (make 2000 1 2)] returns [1999, 52, Sun]
+	@example [to_business (make 2003 12 28)] returns [2003, 52, Sun] 
+	@example [to_business (make 2003 12 29)] returns [2004, 1, Mon].
 	@since 1.09.0 *)
 
   val from_business: year -> int -> day -> t
     (** Inverse of [to_business] respecting ISO-8601.
-	Raise [Invalid_argument] if the week is bad.
 	Notice that business weeks at the beginning and end of the year
 	can sometimes have year numbers which don't match the real year. 
+	@raise Invalid_argument if the date is bad.
 	@since 1.09.0 *)
 
   val int_of_day : day -> int
@@ -205,7 +222,7 @@ module type S = sig
     
   val day_of_int : int -> day
     (** Inverse of [int_of_day]. 
-	Raise [Invalid_argument] if the argument does not belong to [1; 7]. *)
+	@raise Invalid_argument if the argument does not belong to [1; 7]. *)
 
   val int_of_month : month -> int
     (** Convert a month to an integer respecting ISO-8601.
@@ -213,7 +230,7 @@ module type S = sig
 
   val month_of_int : int -> month
     (** Inverse of [int_of_month]. 
-	Raise [Invalid_argument] if the argument does not belong to [1; 12]. *)
+	@raise Invalid_argument if the argument does not belong to [1; 12]. *)
 
   (** {2 Period} *)
 
@@ -251,15 +268,16 @@ module type S = sig
       (** @since 1.04 *)
       
     val nb_days : t -> int
-      (** Number of days in a period. Throw [Not_computable] 
-	  if the number of days is not computable. 
-	  E.g. [nb_days (day 6)] returns [6] but [nb_days (year 1)] throws
-	  [Not_computable] because a year is not a constant number of days. 
+      (** Number of days in a period. 
+	  @raise Not_computable if the number of days is not computable. 
+	  @example [nb_days (day 6)] returns [6] 
+	  @example [nb_days (year 1)] raises [Not_computable] because a year is
+	  not a constant number of days.
 	  @since 1.04 *)
 
     val ymd: t -> int * int * int
       (** Number of years, months and days in a period.
-	  E.g. [ymd (make 1 2 3)] returns [1, 2, 3]. 
+	  @example [ymd (make 1 2 3)] returns [1, 2, 3]. 
 	  @since 1.09.0 *)
 
   end
@@ -268,25 +286,42 @@ module type S = sig
 
   val add : t -> Period.t -> t
     (** [add d p] returns [d + p].
-	E.g. [add (make 2003 12 31) (Period.month 1)] returns the date 
-	2004-1-31 and [add (make 2003 12 31) (Period.month 2)] returns the date 
+	@raise Out_of_bounds when the resulting date is outside the Julian
+	period.
+	@raise Undefined when the resulting date belongs to [[October 5th,
+	1582; October 14th, 1582]].
+	@example [add (make 2003 12 31) (Period.month 1)] returns the date 
+	2004-1-31
+	@example [add (make 2003 12 31) (Period.month 2)] returns the date 
 	2004-3-2 (following the coercion rule describes in the introduction). *)
 
   val sub : t -> t -> Period.t
     (** [sub d1 d2] returns the period between [d1] and [d2]. *)
 
   val rem : t -> Period.t -> t
-    (** [rem d p] is equivalent to [add d (Period.opp p)]. *)
+    (** [rem d p] is equivalent to [add d (Period.opp p)]. 
+	@raise Out_of_bounds when the resulting date is outside the Julian
+	period.
+	@raise Undefined when the resulting date belongs to [[October 5th,
+	1582; October 14th, 1582]]. *)
 
   val next : t -> field -> t
-    (** [next d f] returns the date corresponding to the next specified field.\\
-	E.g [next (make 2003 12 31) `Month] returns the date 2004-1-31
+    (** [next d f] returns the date corresponding to the next specified field.
+	@raise Out_of_bounds when the resulting date is outside the Julian
+	period.
+	@raise Undefined when the resulting date belongs to [[October 5th,
+	1582; October 14th, 1582]].
+	@example [next (make 2003 12 31) `Month] returns the date 2004-1-31
 	(i.e. one month later). *)
 
   val prev : t -> field -> t
     (** [prev d f] returns the date corresponding to the previous specified 
 	field.
-	E.g [prev (make 2003 12 31) `Year] returns the date 2002-12-31
+	@raise Out_of_bounds when the resulting date is outside the Julian
+	period.
+	@raise Undefined when the resulting date belongs to [[October 5th,
+	1582; October 14th, 1582]].
+	@example [prev (make 2003 12 31) `Year] returns the date 2002-12-31
 	(i.e. one year ago). *)
 
   (** {2 Operations on years} *)
@@ -295,14 +330,15 @@ module type S = sig
     (** Return [true] if a year is a leap year; [false] otherwise. *)
 
   val same_calendar : year -> year -> bool
-    (** Return [true] if two years have the same calendar; [false] otherwise. *)
+    (** Return [true] if two years have the same calendar; [false]
+	otherwise. *)
 
   val days_in_year : ?month:month -> year -> int
     (** Number of days in a year. 
 
-	[days_in_year ~month y] returns the number of days in the year [y] up to
-	the end of the given month. Thus [days_in_year ~month:Dec y] is the same
-	as [days_in_year y]. *)
+	[days_in_year ~month y] returns the number of days in the year [y] up
+	to the end of the given month. Thus [days_in_year ~month:Dec y] is the
+	same as [days_in_year y]. *)
 
   val weeks_in_year: year -> int
     (** Number of weeks in a year. *)
@@ -318,11 +354,13 @@ module type S = sig
 
   val century : year -> int
     (** Century of a year. 
-	E.g. [century 2000] returns 20 and [century 2001] returns 21. *)
+	@example [century 2000] returns 20
+	@example [century 2001] returns 21. *)
 
   val millenium : year -> int
     (** Millenium of a year.
-	E.g. [millenium 2000] returns 2 and [millenium 2001] returns 3. *)
+	@example [millenium 2000] returns 2
+	@example [millenium 2001] returns 3. *)
 
   val solar_number : year -> int
     (** Solar number. 

@@ -19,7 +19,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: ftime.ml,v 1.2 2008-02-01 10:48:33 signoles Exp $ i*)
+(*i $Id: ftime.ml,v 1.3 2008-02-01 15:51:05 signoles Exp $ i*)
 
 (*S Introduction.
 
@@ -30,7 +30,7 @@
 
 (*S Datatypes. *)
 
-type t = float
+include Utils.Float
 
 type second = float
 
@@ -38,21 +38,18 @@ type field = [ `Hour | `Minute | `Second ]
 
 (*S Conversions. *)
 
-let int = int_of_float
-
 let one_day = 86400
 let fone_day = 86400.
 
 let convert t t1 t2 = t +. float (3600 * Time_Zone.gap t1 t2)
 
 let from_gmt t = convert t Time_Zone.UTC (Time_Zone.current ())
-
 let to_gmt t = convert t (Time_Zone.current ()) Time_Zone.UTC
 
 (* Coerce [t] into the interval $[0; 86400[$ (i.e. a one day interval). *)
 let normalize t = 
   let t = from_gmt t in
-  let t_mod, t_div = to_gmt (mod_float t fone_day), int t / one_day in
+  let t_mod, t_div = to_gmt (mod_float t fone_day), int_of_float t / one_day in
   if t < 0. then t_mod +. fone_day, t_div - 1 else t_mod, t_div
 
 (*S Constructors. *)
@@ -75,8 +72,8 @@ let now () =
 
 (*S Getters. *)
 
-let hour t = int (from_gmt t) / 3600
-let minute t = int (from_gmt t) mod 3600 / 60
+let hour t = int_of_float (from_gmt t) / 3600
+let minute t = int_of_float (from_gmt t) mod 3600 / 60
 let second t =  mod_float (from_gmt t) 60.
 
 let to_hours t = from_gmt t /. 3600.
@@ -84,13 +81,6 @@ let to_minutes t = from_gmt t /. 60.
 let to_seconds t = from_gmt t
 
 (*S Boolean operations. *)
-
-let equal x y = abs_float (x -. y) < 1e-6
-
-let compare x y = 
-  if equal x y then 0 
-  else if x < y then -1
-  else 1
 
 let is_pm t = 
   let t, _ = normalize t in 
