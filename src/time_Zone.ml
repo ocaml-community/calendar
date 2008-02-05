@@ -5,9 +5,8 @@
 (*  Copyright (C) 2003-2008 Julien Signoles                               *)
 (*                                                                        *)
 (*  you can redistribute it and/or modify it under the terms of the GNU   *)
-(*  Lesser General Public License as published by the Free Software       *)
-(*  Foundation, either version 2.1 of the Licence, or (at your option)    *)
-(*  version 3.                                                            *)
+(*  Lesser General Public License version 2.1 as published by the         *)
+(*  Free Software Foundation.                                             *)
 (*                                                                        *)
 (*  It is distributed in the hope that it will be useful,                 *)
 (*  but WITHOUT ANY WARRANTY; without even the implied warranty of        *)
@@ -19,7 +18,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: time_Zone.ml,v 1.9 2008-02-01 10:48:33 signoles Exp $ i*)
+(*i $Id: time_Zone.ml,v 1.10 2008-02-05 15:36:21 signoles Exp $ i*)
 
 type t = 
   | UTC
@@ -72,3 +71,14 @@ let is_dst () =
   current () = Local && (Unix.localtime (Unix.time ())).Unix.tm_isdst
 
 let hour_of_dst () = if is_dst () then 1 else 0
+
+let on f tz x =
+  let old = current () in
+  change tz;
+  try
+    let res = f x in
+    change old;
+    res
+  with exn ->
+    change old;
+    raise exn

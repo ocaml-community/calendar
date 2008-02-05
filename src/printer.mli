@@ -5,9 +5,8 @@
 (*  Copyright (C) 2003-2008 Julien Signoles                               *)
 (*                                                                        *)
 (*  you can redistribute it and/or modify it under the terms of the GNU   *)
-(*  Lesser General Public License as published by the Free Software       *)
-(*  Foundation, either version 2.1 of the Licence, or (at your option)    *)
-(*  version 3.                                                            *)
+(*  Lesser General Public License version 2.1 as published by the         *)
+(*  Free Software Foundation.                                             *)
 (*                                                                        *)
 (*  It is distributed in the hope that it will be useful,                 *)
 (*  but WITHOUT ANY WARRANTY; without even the implied warranty of        *)
@@ -19,7 +18,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: printer.mli,v 1.16 2008-02-01 15:51:05 signoles Exp $ i*)
+(*i $Id: printer.mli,v 1.17 2008-02-05 15:36:21 signoles Exp $ i*)
 
 (** Pretty printing. In the following, an "event" is either a date or a time or
     a calendar.
@@ -199,12 +198,22 @@ module TimePrinter : S with type t = Time.t
     @since 2.0 *)
 module Ftime: S with type t = Ftime.t
 
+(** Precise Calendar printer. Default format is [%i %T]. 
+    @since 2.0 *)
+module Precise_Calendar: S with type t = Calendar.Precise.t
+
 (** Calendar printer. Default format is [%i %T]. 
     @since 2.0 *)
 module Calendar: S with type t = Calendar.t
 
 (** @deprecated Replaced by {!Printer.Calendar}. *)
 module CalendarPrinter: S with type t = Calendar.t
+
+(** Precise Fcalendar printer. 
+    Seconds are rounded to integers before pretty printing.
+    Default format is [%i %T]. 
+    @since 2.0 *)
+module Precise_Fcalendar: S with type t = Fcalendar.Precise.t
 
 (** Fcalendar printer. Seconds are rounded to integers before pretty printing.
     Default format is [%i %T]. 

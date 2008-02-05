@@ -1,9 +1,9 @@
-(*i $Id: test_fcalendar.ml,v 1.2 2008-02-05 15:36:21 signoles Exp $ i*)
+(*i $Id: test_fpcalendar.ml,v 1.1 2008-02-05 15:36:21 signoles Exp $ i*)
 
-Printf.printf "Tests of Fcalendar:\n";;
+Printf.printf "Tests of FPcalendar:\n";;
 
 open Calendar
-open Fcalendar;;
+open Fcalendar.Precise;;
 include Gen_test;;
 reset ();;
 
@@ -100,14 +100,9 @@ test (equal
 	   (Time_Zone.UTC_Plus 4))
 	(make 0 0 1 1 0 0.1234)) "convert";;
 
-(* Loss of precision *)
-test (hour (make 0 0 0 20 0 0.) = 19) "hour";;
-test (hour (make 0 0 0 20 0 0.2) = 20) "hour";;
-
+test (hour (make 0 0 0 20 0 0.) = 20) "hour";;
 test (minute (make 0 0 0 20 10 0.2) = 10) "minute";;
-
-(* Loss of precision *)
-test (Utils.Float.equal (second (make 0 0 0 20 10 5.123)) 5.123004) "second";;
+test (Utils.Float.equal (second (make 0 0 0 20 10 5.123)) 5.123) "second";;
 
 test (is_pm (make 0 0 0 10 0 0.1)) "is_pm 10-0-0";;
 test (is_pm (make 0 0 0 34 0 0.)) "is_pm 34-0-0";;
@@ -126,15 +121,14 @@ test (let n = Unix.time () in
 
 test (to_unixfloat (make 1970 1 1 0 0 0.) = 0.) "to_unixfloat 1 Jan 1970";;
 test (from_unixfloat 0. = make 1970 1 1 0 0 0.) "from_unixfloat 1 Jan 1970";;
-test (Utils.Float.equal (to_unixfloat (make 2004 11 13 19 17 9.)) 1100373429.)
+test (floor (to_unixfloat (make 2004 11 13 19 17 10.)) = 1100373429.)
   "to_unixfloat";;
-test (equal (from_unixfloat 1100373429.) (make 2004 11 13 19 17 9.)) 
+test (equal (from_unixfloat 1100373429.) (make 2004 11 13 19 17 09.)) 
   "from_unixfloat";;
 
-(* Loss of precision *)
 test (equal
 	(from_unixtm (to_unixtm (make 2003 7 16 23 22 21.)))
-	(make 2003 7 16 23 22 20.)) 
+	(make 2003 7 16 23 22 21.)) 
   "from_unixtm to_unixtm = id";;
 
 test (Period.to_time (Period.second 30.12) = Time.Period.second 30.12) 

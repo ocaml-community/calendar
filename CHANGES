@@ -1,16 +1,19 @@
 version 2.0, 2008-02-04:
 =========================
+* license changes from LGPLv2 to LGPLv2.1
 * use -pack: all modules of the library are packed inside a module Calendar
-* new signature Time_sig.S, Date_sig.S and Calendar_sig.S
+* new modules Time_sig, Date_sig and Calendar_sig
 * new module Ftime (time implementation in which seconds are floats)
   (Hezekiah M. Carty's suggestion)
 * new module Calendar_builder (generic calendar implementation)
 * new module Fcalendar (calendar implementation using Ftime)
+* new module Calendar.Precise (calendar with a best precision on small times)
 * hash functions are provided
 * new modules Printer.Ftime and Printer.Fcalendar
 * modules Printer.Date, Printer.Time and Printer.Calendar respectively replace
   Printer.DatePrinter, Printer.TimePrinter and Printer.CalendarPrinter.
   These last modules still exist but are deprecated.
+* new function Time_Zone.on
 * new module Utils
 * new module Version (information about version of calendar)
 * add tags @example, @raise and @see in the API documentation

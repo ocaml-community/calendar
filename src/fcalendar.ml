@@ -5,9 +5,8 @@
 (*  Copyright (C) 2003-2008 Julien Signoles                               *)
 (*                                                                        *)
 (*  you can redistribute it and/or modify it under the terms of the GNU   *)
-(*  Lesser General Public License as published by the Free Software       *)
-(*  Foundation, either version 2.1 of the Licence, or (at your option)    *)
-(*  version 3.                                                            *)
+(*  Lesser General Public License version 2.1 as published by the         *)
+(*  Free Software Foundation.                                             *)
 (*                                                                        *)
 (*  It is distributed in the hope that it will be useful,                 *)
 (*  but WITHOUT ANY WARRANTY; without even the implied warranty of        *)
@@ -19,6 +18,8 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: fcalendar.ml,v 1.1 2008-02-01 10:48:33 signoles Exp $ i*)
+(*i $Id: fcalendar.ml,v 1.2 2008-02-05 15:36:21 signoles Exp $ i*)
 
 include Calendar_builder.Make(Date)(Ftime)
+
+module Precise = Calendar_builder.Make_Precise(Date)(Ftime)

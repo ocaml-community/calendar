@@ -5,9 +5,8 @@
 (*  Copyright (C) 2003-2008 Julien Signoles                               *)
 (*                                                                        *)
 (*  you can redistribute it and/or modify it under the terms of the GNU   *)
-(*  Lesser General Public License as published by the Free Software       *)
-(*  Foundation, either version 2.1 of the Licence, or (at your option)    *)
-(*  version 3.                                                            *)
+(*  Lesser General Public License version 2.1 as published by the         *)
+(*  Free Software Foundation.                                             *)
 (*                                                                        *)
 (*  It is distributed in the hope that it will be useful,                 *)
 (*  but WITHOUT ANY WARRANTY; without even the implied warranty of        *)
@@ -19,7 +18,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: calendar_builder.ml,v 1.2 2008-02-01 15:51:04 signoles Exp $ i*)
+(*i $Id: calendar_builder.ml,v 1.3 2008-02-05 15:36:21 signoles Exp $ i*)
 
 (*S Introduction.
 
@@ -54,7 +53,6 @@ module Make(D: Date_sig.S)(T: Time_sig.S) = struct
   let convert x t1 t2 = x +. float (Time_Zone.gap t1 t2) /. 24.
 
   let to_gmt x = convert x (Time_Zone.current ()) Time_Zone.UTC
-
   let from_gmt x = convert x Time_Zone.UTC (Time_Zone.current ())
 
   let from_date x = to_gmt (float (D.to_jd x)) -. 0.5
@@ -252,3 +250,237 @@ module Make(D: Date_sig.S)(T: Time_sig.S) = struct
   let prev x f = -. next (-. x) f
 
 end
+
+(* ************************************************************************* *)
+(* ************************************************************************* *)
+(* ************************************************************************* *)
+
+module Make_Precise(D: Date_sig.S)(T: Time_sig.S) = struct
+
+  module Date = D
+  module Time = T
+
+  type t = { date: D.t; time: T.t }
+      
+  type day = D.day = Sun | Mon | Tue | Wed | Thu | Fri | Sat
+
+  type month = D.month =
+      Jan | Feb | Mar | Apr | May | Jun | Jul | Aug | Sep | Oct | Nov | Dec
+	  
+  type year = int
+
+  type second = T.second
+
+  type field = [ D.field | T.field ]
+
+  (*S Comparison *)
+
+  let equal x y = D.equal x.date y.date && T.equal x.time y.time
+
+  let compare x y =
+    let n = D.compare x.date y.date in
+    if n = 0 then T.compare x.time y.time else n
+
+  let hash = Hashtbl.hash
+
+  (*S Conversions. *)
+      
+  let normalize d t =
+    let t, days = T.normalize t in
+    { date = D.add d (D.Period.day days); time = t }
+
+  let convert x t1 t2 = 
+    let gap = T.Period.hour (Time_Zone.gap t1 t2) in
+    normalize x.date (T.add x.time gap)
+
+  let to_gmt x = convert x (Time_Zone.current ()) Time_Zone.UTC
+  let from_gmt x = convert x Time_Zone.UTC (Time_Zone.current ())
+
+  let from_date d = to_gmt { date = d; time = T.make 0 0 (T.Second.from_int 0) }
+  let to_date x = (from_gmt x).date
+  let to_time x = (from_gmt x).time
+
+  (*S Constructors. *)
+
+  let create d t = to_gmt { date = d; time = t }
+
+  let lower_bound, upper_bound = 
+    let compute () =
+      let midday = T.midday () in
+      let low, up = 
+	create (D.make (-4712) 1 1) midday, create (D.make 3268 1 22) midday
+      in
+      low, up
+    in
+    Time_Zone.on compute Time_Zone.UTC ()
+
+  let is_valid x = compare x lower_bound >= 0 && compare x upper_bound <= 0
+
+  let make y m d h mn s = 
+    let x = create (D.make y m d) (T.make h mn s) in
+    if is_valid x then x else raise D.Out_of_bounds
+
+  let lmake ~year ?(month=1) ?(day=1) ?(hour=0) ?(minute=0)
+      ?(second=T.Second.from_int 0) () =
+    make year month day hour minute second
+
+  let now () = 
+    let now = Unix.gettimeofday () in
+    let gmnow = Unix.gmtime now in
+    let frac, _ = modf now in
+    from_gmt (make 
+		(gmnow.Unix.tm_year + 1900) 
+		(gmnow.Unix.tm_mon + 1) 
+		gmnow.Unix.tm_mday 
+		gmnow.Unix.tm_hour 
+		gmnow.Unix.tm_min 
+		(T.Second.from_float (float gmnow.Unix.tm_sec +. frac)))
+
+  let from_jd x =
+    let frac, intf = modf x in
+    to_gmt 
+      { date = D.from_jd (int_of_float intf); 
+	time = T.from_seconds (T.Second.from_float (frac *. 86400. +. 43200.)) }
+
+  let from_mjd x = from_jd (x +. 2400000.5)
+
+  (*S Getters. *)
+
+  let to_jd x =
+    let x = from_gmt x in
+    float (D.to_jd x.date) +. T.Second.to_float (T.to_seconds x.time) /. 86400. 
+    -. 0.5
+
+  let to_mjd x = to_jd x -. 2400000.5
+
+  let days_in_month x = D.days_in_month (to_date x)
+  let day_of_week x = D.day_of_week (to_date x)
+  let day_of_month x = D.day_of_month (to_date x)
+  let day_of_year x = D.day_of_year (to_date x)
+
+  let week x = D.week (to_date x)
+  let month x = D.month (to_date x)
+  let year x = D.year (to_date x)
+
+  let hour x = T.hour (to_time x)
+  let minute x = T.minute (to_time x)
+  let second x = T.second (to_time x)
+
+  (*S Coercions. *)
+
+  let from_unixtm x =
+    make
+      (x.Unix.tm_year + 1900) (x.Unix.tm_mon + 1) x.Unix.tm_mday
+      x.Unix.tm_hour x.Unix.tm_min (T.Second.from_int x.Unix.tm_sec)
+
+  let to_unixtm x =
+    let tm = D.to_unixtm (to_date x)
+    and t = to_time x in
+    { tm with 
+	Unix.tm_sec = T.Second.to_int (T.second t); 
+	Unix.tm_min = T.minute t; 
+	Unix.tm_hour = T.hour t }
+
+  let jan_1_1970 = 2440587.5
+  let from_unixfloat x = from_jd (x /. 86400. +. jan_1_1970)
+  let to_unixfloat x = (to_jd x -. jan_1_1970) *. 86400.
+
+  (*S Boolean operations on dates. *)
+
+  let is_leap_day x = D.is_leap_day (to_date x)
+  let is_gregorian x = D.is_gregorian (to_date x)
+  let is_julian x = D.is_julian (to_date x)
+
+  let is_pm x = T.is_pm (to_time x)
+  let is_am x = T.is_am (to_time x)
+
+  (*S Period. *)
+    
+  module Period = struct
+
+    type t = { d : D.Period.t; t : T.Period.t }
+
+    let split x =
+      let rec aux s =
+	if s < 86400. then 0, s else let d, s = aux (s -. 86400.) in d + 1, s
+      in
+      let s = T.Second.to_float (T.Period.length x.t) in
+      let d, s =
+	if s >= 0. then aux s 
+	else let d, s = aux (-. s) in - (d + 1), -. s +. 86400.
+      in
+      assert (s >= 0. && s < 86400.);
+      D.Period.day d, T.Period.second (T.Second.from_float s)
+
+    let normalize x =
+      let days, seconds = split x in
+      { d = D.Period.add x.d days; t = seconds }
+
+    let empty = { d = D.Period.empty; t = T.Period.empty }
+
+    let make y m d h mn s = 
+      normalize { d = D.Period.make y m d; t = T.Period.make h mn s }
+
+    let lmake ?(year=0) ?(month=0) ?(day=0) ?(hour=0) ?(minute=0) 
+	?(second=T.Second.from_int 0) () =
+      make year month day hour minute second
+
+    let year x = { empty with d = D.Period.year x }
+    let month x = { empty with d = D.Period.month x }
+    let week x = { empty with d = D.Period.week x }
+    let day x = { empty with d = D.Period.day x }
+
+    let hour x = normalize { empty with t = T.Period.hour x }
+    let minute x = normalize { empty with t = T.Period.minute x }
+    let second x = normalize { empty with t = T.Period.second x }
+
+    let add x y = 
+      normalize { d = D.Period.add x.d y.d; t = T.Period.add x.t y.t }
+
+    let sub x y = 
+      normalize { d = D.Period.sub x.d y.d; t = T.Period.sub x.t y.t }
+
+    let opp x = normalize { d = D.Period.opp x.d; t = T.Period.opp x.t }
+
+    let compare x y = 
+      let n = D.Period.compare x.d y.d in
+      if n = 0 then T.Period.compare x.t y.t else n
+
+    let equal x y = D.Period.equal x.d y.d && T.Period.equal x.t y.t
+
+    let hash = Hashtbl.hash
+
+    let to_date x = x.d
+    let from_date x = { empty with d = x }
+    let from_time x = { empty with t = x }
+
+    exception Not_computable = D.Period.Not_computable
+
+    let to_time x = 
+      T.Period.add (T.Period.hour (D.Period.nb_days x.d * 24)) x.t
+
+    let ymds x =
+      let y, m, d = D.Period.ymd x.d in
+      y, m, d, T.Period.to_seconds x.t
+
+  end
+
+  (*S Arithmetic operations on calendars and periods. *)
+
+  let add x p = normalize (D.add x.date p.Period.d) (T.add x.time p.Period.t)
+  let rem x p = add x (Period.opp p)
+
+  let sub x y = 
+    Period.normalize 
+      { Period.d = D.sub x.date y.date; Period.t = T.sub x.time y.time }
+
+  let next x = function
+    | #D.field as f -> normalize (D.next x.date f) x.time
+    | #T.field as f -> normalize x.date (T.next x.time f)
+
+  let prev x = function
+    | #D.field as f -> normalize (D.prev x.date f) x.time
+    | #T.field as f -> normalize x.date (T.prev x.time f)
+
+end
+

@@ -1,9 +1,9 @@
-(*i $Id: test_calendar.ml,v 1.17 2008-02-05 15:36:21 signoles Exp $ i*)
+(*i $Id: test_pcalendar.ml,v 1.1 2008-02-05 15:36:21 signoles Exp $ i*)
 
-Printf.printf "Tests of Calendar:\n";;
+Printf.printf "Tests of Precise Calendar:\n";;
 
 open Calendar
-open Calendar;;
+open Calendar.Precise;;
 include Gen_test;;
 reset ();;
 
@@ -31,6 +31,7 @@ test (Period.compare (Period.day 3) (Period.hour 60) > 0) "Period.compare >";;
 test (Period.compare 
 	(Period.add (Period.day 2) (Period.hour 12)) 
 	(Period.hour 60) = 0) "Period.compare =";;
+
 test 
   (add (make 1 2 3 4 5 6) (Period.make 9 8 7 6 5 4) = make 10 10 10 10 10 10) 
   "add 1-2-3-4-5-6 9-8-7-6-5-4";;
@@ -87,6 +88,7 @@ test (equal (next (make 1999 12 31 23 59 59) `Second) (make 2000 1 1 0 0 0))
   "next 1999-31-12-23-59-59 `Second";;
 let n = now ();;
 test (equal (prev (next n `Minute) `Minute) n) "prev next = id";;
+
 test (equal 
 	(convert 
 	   (make 0 0 0 23 0 0) 

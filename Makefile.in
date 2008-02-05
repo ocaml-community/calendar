@@ -5,9 +5,8 @@
 #  Copyright (C) 2003-2008 Julien Signoles                               #
 #                                                                        #
 #  you can redistribute it and/or modify it under the terms of the GNU   #
-#  Lesser General Public License as published by the Free Software       #
-#  Foundation, either version 2.1 of the Licence, or (at your option)    #
-#  version 3.                                                            #
+#  Lesser General Public License version 2.1 as published by the         #
+#  Free Software Foundation.                                             #
 #                                                                        #
 #  It is distributed in the hope that it will be useful,                 #
 #  but WITHOUT ANY WARRANTY; without even the implied warranty of        #
@@ -19,7 +18,7 @@
 #                                                                        #
 ##########################################################################
 
-# $Id: Makefile.in,v 1.57 2008-02-01 15:51:04 signoles Exp $
+# $Id: Makefile.in,v 1.58 2008-02-05 15:36:21 signoles Exp $
 
 # Used programs
 ###############
@@ -105,15 +104,15 @@ $(LIBDIR):
 	mkdir -p $@
 
 src/version.ml:
-	@echo "let version = \"$(VERSION)\"" > $@
-	@echo "let date = \"`date`\"" >> $@
+	echo "let version = \"$(VERSION)\"" > $@
+	echo "let date = \"`date`\"" >> $@
 
 META: Makefile
-	@echo "description = \"$(NAME) library\"" > $@
-	@echo "version = \"$(VERSION)\"" >> $@
-	@echo "archive(byte) = \"$(NAME).cma\"" >> $@
-	@echo "archive(native) = \"$(NAME).cmxa\"" >> $@
-	@echo "requires = \"unix str\"" >> $@
+	echo "description = \"$(NAME) library\"" > $@
+	echo "version = \"$(VERSION)\"" >> $@
+	echo "archive(byte) = \"$(NAME).cma\"" >> $@
+	echo "archive(native) = \"$(NAME).cmxa\"" >> $@
+	echo "requires = \"unix str\"" >> $@
 
 # Generic rules
 ###############
@@ -139,7 +138,8 @@ META: Makefile
 #######
 
 TESTS	= test_timezone test_time test_ftime test_date \
-	test_calendar test_fcalendar test_printer
+	test_calendar test_fcalendar test_pcalendar test_fpcalendar \
+	test_printer
 TESTS	:= $(addprefix tests/, $(TESTS))
 
 TESTS_CMO= $(addsuffix .cmo, $(TESTS))
@@ -155,7 +155,7 @@ $(TESTS_CMO) tests/test.cmo: BYTEFLAGS := -I tests -I target
 
 .PHONY: tests
 tests: tests/test
-	./$<
+	time ./$<
 
 # Documentation
 ###############
@@ -258,7 +258,7 @@ clean-configure cleanconfig: dist-clean
 # Depend
 ########
 
-.depend depend:
+.depend depend: $(GENERATED)
 	rm -f .depend
 	for i in src tests; do \
 	  $(CAMLDEP) $(CAMLIBS) -I tests $$i/*.ml $$i/*.mli; \

@@ -5,9 +5,8 @@
 (*  Copyright (C) 2003-2008 Julien Signoles                               *)
 (*                                                                        *)
 (*  you can redistribute it and/or modify it under the terms of the GNU   *)
-(*  Lesser General Public License as published by the Free Software       *)
-(*  Foundation, either version 2.1 of the Licence, or (at your option)    *)
-(*  version 3.                                                            *)
+(*  Lesser General Public License version 2.1 as published by the         *)
+(*  Free Software Foundation.                                             *)
 (*                                                                        *)
 (*  It is distributed in the hope that it will be useful,                 *)
 (*  but WITHOUT ANY WARRANTY; without even the implied warranty of        *)
@@ -19,7 +18,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: utils.mli,v 1.1 2008-02-01 10:48:33 signoles Exp $ *)
+(* $Id: utils.mli,v 1.2 2008-02-05 15:36:21 signoles Exp $ *)
 
 (** Some utilities. 
     @since 2.0 *)
@@ -59,7 +58,8 @@ module Float: sig
   val set_precision: float -> unit
     (** Set the precision of [equal] and [compare] for float. 
 	If the precision is [p], then the floats [x] and [y] are equal iff
-	[abs(x-y) < p].  By default, the precision is [1e-6]. *)
+	[abs(x-y) < p].  By default, the precision is [1e-3] (that is one
+	millisecond if floats represents seconds). *)
 
   val round: t -> int
     (** Round a float to the nearest integer. *)

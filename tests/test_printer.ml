@@ -1,13 +1,12 @@
-(*i $Id: test_printer.ml,v 1.5 2008-02-01 10:48:33 signoles Exp $ i*)
+(*i $Id: test_printer.ml,v 1.6 2008-02-05 15:36:21 signoles Exp $ i*)
 
 Printf.printf "Tests of Printer:\n";;
 
 open Calendar;;
-open Printer;;
 include Gen_test;;
 reset ();;
 
-open DatePrinter;;
+open Printer.Date;;
 let d = Date.make 2003 1 6;;
 test (sprint "%D" d = "01/06/03") "sprint %D";;
 test (sprint "the date is %B, the %-dth" d = "the date is January, the 6th")
@@ -25,7 +24,7 @@ test
   (from_fstring "%Y-%b-%d" "2007-Jan-14" = Date.make 2007 1 14) 
   "from_fstring %B";;
 
-open TimePrinter;;
+open Printer.Time;;
 test (to_string (Time.make 12 1 4) = "12:01:04") "to_string (on TimePrinter)";;
 test (sprint "%I" (Time.make 36 4 3) = "12") "sprint %I (on TimePrinter)";;
 test (sprint "%r" (Time.make 24 4 3) = "12:04:03 AM") 
@@ -35,7 +34,7 @@ test (from_fstring "%r" "10:47:25 AM" = Time.make 10 47 25)
 test (from_fstring "%r" "10:47:25 PM" = Time.make 22 47 25)
   "from_fstring PM (on TimePrinter)";;
 
-open CalendarPrinter;;
+open Printer.Calendar;;
 test (sprint "%c" (Calendar.make 2003 1 6 12 1 4) = "Mon Jan 06 12:01:04 2003")
   "sprint %c";;
 test (to_string (Calendar.make 2004 10 25 24 0 1) = "2004-10-26 00:00:01")

@@ -5,9 +5,8 @@
 (*  Copyright (C) 2003-2008 Julien Signoles                               *)
 (*                                                                        *)
 (*  you can redistribute it and/or modify it under the terms of the GNU   *)
-(*  Lesser General Public License as published by the Free Software       *)
-(*  Foundation, either version 2.1 of the Licence, or (at your option)    *)
-(*  version 3.                                                            *)
+(*  Lesser General Public License version 2.1 as published by the         *)
+(*  Free Software Foundation.                                             *)
 (*                                                                        *)
 (*  It is distributed in the hope that it will be useful,                 *)
 (*  but WITHOUT ANY WARRANTY; without even the implied warranty of        *)
@@ -19,7 +18,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: printer.ml,v 1.14 2008-02-01 15:51:05 signoles Exp $ i*)
+(*i $Id: printer.ml,v 1.15 2008-02-05 15:36:21 signoles Exp $ i*)
 
 module type S = sig
   type t
@@ -452,6 +451,15 @@ module Ftime =
 	 let year _ = bad_format "year"
        end)
 
+module Precise_Calendar = 
+  Make(struct
+	 include Calendar.Precise
+	 let make y m d h mn s =
+	   cannot_create_event "calendar" [ y; m; d; h; mn; s ];
+	   make y m d h mn s
+	 let default_format = "%i %T"
+       end)
+
 module Calendar = 
   Make(struct
 	 include Calendar
@@ -462,6 +470,16 @@ module Calendar =
        end)
 
 module CalendarPrinter = Calendar
+
+module Precise_Fcalendar = 
+  Make(struct
+	 include Fcalendar.Precise
+	 let make y m d h mn s =
+	   cannot_create_event "calendar" [ y; m; d; h; mn; s ];
+	   make y m d h mn (Time.Second.from_int s)
+	 let second s = Time.Second.to_int (second s)
+	 let default_format = "%i %T"
+       end)
 
 module Fcalendar = 
   Make(struct

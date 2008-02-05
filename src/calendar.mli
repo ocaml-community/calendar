@@ -5,9 +5,8 @@
 (*  Copyright (C) 2003-2008 Julien Signoles                               *)
 (*                                                                        *)
 (*  you can redistribute it and/or modify it under the terms of the GNU   *)
-(*  Lesser General Public License as published by the Free Software       *)
-(*  Foundation, either version 2.1 of the Licence, or (at your option)    *)
-(*  version 3.                                                            *)
+(*  Lesser General Public License version 2.1 as published by the         *)
+(*  Free Software Foundation.                                             *)
 (*                                                                        *)
 (*  It is distributed in the hope that it will be useful,                 *)
 (*  but WITHOUT ANY WARRANTY; without even the implied warranty of        *)
@@ -19,11 +18,16 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: calendar.mli,v 1.24 2008-02-01 15:51:04 signoles Exp $ i*)
+(*i $Id: calendar.mli,v 1.25 2008-02-05 15:36:21 signoles Exp $ i*)
 
 (** Calendar implementation in which seconds are integer.
 
     This module uses float. Then results may be unprecise, especially
-    comparison if times are similar. *)
+    comparison of calendars which differ with few seconds. 
+    In this case, consider to use module [Precise]. *)
 
 include Calendar_sig.S with module Date = Date and module Time = Time
+
+(** More precise implementation of calendar in which seconds are integer. 
+    @since 2.0 *)
+module Precise: Calendar_sig.S with module Date = Date and module Time = Time

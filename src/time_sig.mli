@@ -5,9 +5,8 @@
 (*  Copyright (C) 2003-2008 Julien Signoles                               *)
 (*                                                                        *)
 (*  you can redistribute it and/or modify it under the terms of the GNU   *)
-(*  Lesser General Public License as published by the Free Software       *)
-(*  Foundation, either version 2.1 of the Licence, or (at your option)    *)
-(*  version 3.                                                            *)
+(*  Lesser General Public License version 2.1 as published by the         *)
+(*  Free Software Foundation.                                             *)
 (*                                                                        *)
 (*  It is distributed in the hope that it will be useful,                 *)
 (*  but WITHOUT ANY WARRANTY; without even the implied warranty of        *)
@@ -19,7 +18,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: time_sig.mli,v 1.3 2008-02-01 15:51:05 signoles Exp $ i*)
+(*i $Id: time_sig.mli,v 1.4 2008-02-05 15:36:21 signoles Exp $ i*)
 
 (** Time interface. A time may be seen as a triple (hour, minute, second). 
 
@@ -115,7 +114,7 @@ module type S = sig
 	[convert t (Time_Zone.current ()) Time_Zone.GMT]. *)
 
   val normalize : t -> t * int
-    (** [normalize t] returns [t] such that [hour t] belongs to [0; 23]. The
+    (** [normalize t] returns [t] such that [hour t] belongs to [\[0; 24\[]. The
 	second component of the result is the number of days needed by the
 	modification.  
 	@example [normalize (make 22 0 0)] returns the time 22-0-0 and 0,

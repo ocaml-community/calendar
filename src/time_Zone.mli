@@ -5,9 +5,8 @@
 (*  Copyright (C) 2003-2008 Julien Signoles                               *)
 (*                                                                        *)
 (*  you can redistribute it and/or modify it under the terms of the GNU   *)
-(*  Lesser General Public License as published by the Free Software       *)
-(*  Foundation, either version 2.1 of the Licence, or (at your option)    *)
-(*  version 3.                                                            *)
+(*  Lesser General Public License version 2.1 as published by the         *)
+(*  Free Software Foundation.                                             *)
 (*                                                                        *)
 (*  It is distributed in the hope that it will be useful,                 *)
 (*  but WITHOUT ANY WARRANTY; without even the implied warranty of        *)
@@ -19,7 +18,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: time_Zone.mli,v 1.11 2008-02-01 10:48:33 signoles Exp $ i*)
+(*i $Id: time_Zone.mli,v 1.12 2008-02-05 15:36:21 signoles Exp $ i*)
 
 (** Time zone management.
 
@@ -59,3 +58,9 @@ val is_dst : unit -> bool
 val hour_of_dst : unit -> int
   (** [hour_of_dst ()] returns [1] if [is_dst ()] and [0] otherwise. 
       @since 1.09.4 *)
+
+val on: ('a -> 'b) -> t -> 'a -> 'b
+  (** [on f tz x] changes the time zone to [tz], then computes [f x], and
+      finally reset the time zone to the initial one and returns the result of
+      the computation. 
+      @since 2.0 *) 
