@@ -2,7 +2,7 @@ version 2.0, 2008-02-08:
 =========================
 * license changes from LGPLv2 to LGPLv2.1
 * use -pack: all modules of the library are packed inside a single module 
-  CalendarLib
+  CalendarLib (calendar now requires ocaml >= 3.09.1)
 * new modules Time_sig, Date_sig and Calendar_sig
 * new module Ftime (time implementation in which seconds are floats)
   (Hezekiah M. Carty's suggestion)

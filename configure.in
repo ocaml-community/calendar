@@ -49,15 +49,19 @@ if test "$OCAMLC" = no ; then
         AC_MSG_ERROR(Cannot find ocamlc.)
 fi
 
-# we extract Ocaml version number and library path
+# we extract Ocaml version number and library path: ocaml 3.09.1 is required
 OCAMLVERSION=`$OCAMLC -v | sed -n -e 's|.*version *\(.*\)$|\1|p' `
-echo "ocaml version is $OCAMLVERSION"
+echo $ECHO_N "ocaml version is $OCAMLVERSION: $ECHO_C"
+case $OCAMLVERSION in
+  3.09.**) echo "${ECHO_T}Good!";;
+  3.09*) echo "${ECHO_T}Warning: unsupported version. Compile at your own risks";;
+  3.0*) echo "${ECHO_T}Unsupported version!"; exit 2;;
+  3.*) echo "${ECHO_T}Good!";;
+  *) echo "${ECHO_T}Unsupported version!"; exit 2;;
+esac
+
 OCAMLLIB=`$OCAMLC -v | tail -1 | cut -f 4 -d " "`
 echo "ocaml library path is $OCAMLLIB"
-
-if [[[ "$OCAMLVERSION" < "3.06" ]]]; then
-	AC_MSG_ERROR(calendar needs ocaml version 3.06)
-fi
 
 # then we look for ocamlopt; if not present, we issue a warning
 # if the version is not the same, we also discard it

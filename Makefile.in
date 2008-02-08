@@ -18,7 +18,7 @@
 #                                                                        #
 ##########################################################################
 
-# $Id: Makefile.in,v 1.59 2008-02-08 10:36:14 signoles Exp $
+# $Id: Makefile.in,v 1.60 2008-02-08 11:05:28 signoles Exp $
 
 # Used programs
 ###############
@@ -36,15 +36,16 @@ CAMLFIND= @OCAMLFIND@
 # Project
 #########
 
-NAME	= calendarLib
+NAME	= calendar
+NAMELIB = calendarLib
 VERSION	= 2.0
 
 LIBDIR	= target
 
-LIBS	= $(LIBDIR)/$(NAME).cmo
+LIBS	= $(LIBDIR)/$(NAMELIB).cmo
 CLIBS   =
 ifneq ($(CAMLOPT),no)
-LIBS	:= $(LIBS) $(LIBDIR)/$(NAME).cmx
+LIBS	:= $(LIBS) $(LIBDIR)/$(NAMELIB).cmx
 CLIBS   := $(CLIBS)
 endif
 
@@ -84,20 +85,20 @@ all: $(LIBS) META
 
 $(LIBS): $(LIBDIR)
 
-$(LIBDIR)/$(NAME).cmo: $(CMO)
+$(LIBDIR)/$(NAMELIB).cmo: $(CMO)
 	$(CAMLFIND) ocamlc $(BYTEFLAGS) -pack -o $@ \
 		$(filter-out $(LIBDIR), $^)
 
-$(LIBDIR)/$(NAME).cma: $(CMO)
+$(LIBDIR)/$(NAMELIB).cma: $(CMO)
 	$(CAMLFIND) ocamlc $(BYTEFLAGS) -a -o $@ $(filter-out $(LIBDIR), $^)
 
 $(CMX):OPTFLAGS:=$(OPTFLAGS) -for-pack CalendarLib
 
-$(LIBDIR)/$(NAME).cmx: $(CMX)
+$(LIBDIR)/$(NAMELIB).cmx: $(CMX)
 	$(CAMLFIND) ocamlopt $(OPTFLAGS) -pack -o $@ \
 		$(filter-out $(LIBDIR), $^)
 
-$(LIBDIR)/$(NAME).a $(LIBDIR)/$(NAME).cmxa: $(CMX)
+$(LIBDIR)/$(NAMELIB).a $(LIBDIR)/$(NAMELIB).cmxa: $(CMX)
 	$(CAMLFIND) ocamlopt $(OPTFLAGS) -a -o $@ $(filter-out $(LIBDIR), $^)
 
 $(LIBDIR):
@@ -108,10 +109,10 @@ src/version.ml:
 	echo "let date = \"`date`\"" >> $@
 
 META: Makefile
-	echo "description = \"Calendar library\"" > $@
+	echo "description = \"$(NAME) library\"" > $@
 	echo "version = \"$(VERSION)\"" >> $@
-	echo "archive(byte) = \"$(NAME).cmo\"" >> $@
-	echo "archive(native) = \"$(NAME).cmx\"" >> $@
+	echo "archive(byte) = \"$(NAMELIB).cmo\"" >> $@
+	echo "archive(native) = \"$(NAMELIB).cmx\"" >> $@
 	echo "requires = \"unix str\"" >> $@
 
 # Generic rules
@@ -147,8 +148,8 @@ TESTS_CMO= $(addsuffix .cmo, $(TESTS))
 $(TESTS_CMO): tests/gen_test.cmo
 tests/test.cmo: $(TESTS_CMO)
 
-tests/test: $(LIBDIR)/$(NAME).cmo tests/test.cmo
-	$(CAMLC) -o $@ $(BYTEFLAGS) unix.cma str.cma $(LIBDIR)/$(NAME).cmo \
+tests/test: $(LIBDIR)/$(NAMELIB).cmo tests/test.cmo
+	$(CAMLC) -o $@ $(BYTEFLAGS) unix.cma str.cma $(LIBDIR)/$(NAMELIB).cmo \
 		tests/gen_test.cmo $(TESTS_CMO) tests/test.cmo
 
 $(TESTS_CMO) tests/test.cmo: BYTEFLAGS := -I tests -I target
@@ -163,7 +164,7 @@ tests: tests/test
 wc: $(SRC)
 	$(CAMLWC) -p $^
 
-$(NAME).ps: $(SRC)
+$(NAMELIB).ps: $(SRC)
 	$(CAMLWEB) --ps -o $@ $^
 
 utils/example.cmo: utils/example.ml
@@ -190,7 +191,7 @@ headers:
 install: $(LIBS) $(CLIBS) META
 	@if [ "`sed -n -e 's/version = "\([0-9.]*\)"/\1/p' META`" = "$(VERSION)" ]; then \
 	  (if test -d $(CAMLLIB)/site-lib/$(NAME); then $(MAKE) uninstall; fi;\
-	  $(CAMLFIND) install calendar target/*.cm[iox] $(MLI) $(CMI) META\
+	  $(CAMLFIND) install $(NAME) target/*.cm[iox] $(MLI) $(CMI) META\
 	)else \
 	  (echo; echo "Not the good version. Please, do :"; \
 	   echo "  make clean && make"; \
@@ -198,12 +199,12 @@ install: $(LIBS) $(CLIBS) META
 	fi
 
 uninstall:
-	$(CAMLFIND) remove calendar
+	$(CAMLFIND) remove $(NAME)
 
 # Exporting
 ###########
 
-EXPORT_DIR= $$HOME/WWW/prog/calendar
+EXPORT_DIR= $$HOME/WWW/prog/$(NAME)
 
 export: doc #$(NAME).ps.gz
 	cvs export -d /tmp/$(NAME)-$(VERSION) -D now $(NAME)
@@ -217,10 +218,10 @@ export: doc #$(NAME).ps.gz
 	   gzip -f --best $(NAME)-$(VERSION).tar; \
 	   rm -rf $(NAME)-$(VERSION); \
 	   mv $(NAME)-$(VERSION).tar.gz $(EXPORT_DIR))
-	cd $(EXPORT_DIR)/../..; \
-	  (sed -e "s/_CALVERS_/$(VERSION)/" misc/bindings.dat.pre \
-	      > misc/bindings.dat; \
-	   ./scripts/create_html.sh)
+# 	cd $(EXPORT_DIR)/../..; \
+# 	  (sed -e "s/_CALVERS_/$(VERSION)/" misc/bindings.dat.pre \
+# 	      > misc/bindings.dat; \
+# 	   ./scripts/create_html.sh)
 
 # Rebuilding Makefile
 #####################
