@@ -18,7 +18,7 @@
 #                                                                        #
 ##########################################################################
 
-# $Id: Makefile.in,v 1.60 2008-02-08 11:05:28 signoles Exp $
+# $Id: Makefile.in,v 1.61 2008-02-08 12:36:06 signoles Exp $
 
 # Used programs
 ###############
@@ -205,13 +205,14 @@ uninstall:
 ###########
 
 EXPORT_DIR= $$HOME/WWW/prog/$(NAME)
+TMP_DIR	= tmp
 
 export: doc #$(NAME).ps.gz
-	cvs export -d /tmp/$(NAME)-$(VERSION) -D now $(NAME)
+	cvs export -d $(TMP_DIR)/$(NAME)-$(VERSION) -D now $(NAME)
 	rm -rf $(EXPORT_DIR)/doc
-	cp -rf .depend configure doc /tmp/$(NAME)-$(VERSION)
+	cp -rf .depend configure doc $(TMP_DIR)/$(NAME)-$(VERSION)
 	cp -rf CHANGES doc $(EXPORT_DIR)
-	cd /tmp; \
+	cd $(TMP_DIR); \
 	  (rm -f $(NAME)-$(VERSION)/html/touch-html \
 		$(NAME)-$(VERSION)/.cvsignore; \
 	   tar cvf $(NAME)-$(VERSION).tar $(NAME)-$(VERSION); \
