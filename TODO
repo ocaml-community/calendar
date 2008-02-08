@@ -5,5 +5,3 @@
 Mettre alors en place des conversions inter-calendrier (de grégorien vers julien et vice-versa, etc).
 * ajouter de quoi faire un timer ?
 * adapter par rapport à la nouvelle FAQ et aux fichiers .ps
-* ajouter module Printer.Date, .Time et .Calendar (déprécier les 3 autres)
-* ajouter check_date (suggestion Richard Jones, code dans un mail de R.J.)

@@ -18,7 +18,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: date.ml,v 1.33 2008-02-08 10:36:14 signoles Exp $ i*)
+(*i $Id: date.ml,v 1.34 2008-02-08 13:06:45 signoles Exp $ i*)
 
 (*S Introduction.
 
@@ -182,6 +182,13 @@ let days_in_month d =
 (* Boolean operation using some getters. *)
 let is_leap_day d = 
   is_leap_year (year d) && month d = Feb && day_of_month d = 24
+
+let is_valid_date y m d =
+  try
+    let t = make y m d in
+    year t = y && int_month t = m && day_of_month t = d
+  with Out_of_bounds | Undefined -> 
+    false
 
 (*S Period. *)
 

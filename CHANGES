@@ -16,6 +16,7 @@ version 2.0, 2008-02-08:
   These last modules still exist but are deprecated.
 * new function Time_Zone.on
 * new function Date.from_day_of_year (Hezekiah M. Carty's suggestion)
+* new function Date.is_valid_date (Richard Jones' suggestion)
 * new module Utils
 * new module Version (information about version of calendar)
 * add tags @example, @raise and @see in the API documentation

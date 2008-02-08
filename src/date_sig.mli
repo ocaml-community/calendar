@@ -18,7 +18,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: date_sig.mli,v 1.4 2008-02-08 10:36:14 signoles Exp $ i*)
+(*i $Id: date_sig.mli,v 1.5 2008-02-08 13:06:45 signoles Exp $ i*)
 
 (** Date interface. A date may be seen as a triple (year, month, day). 
   
@@ -167,6 +167,13 @@ module type S = sig
 	@since 2.0 *)
 
   (** {2 Boolean operations on dates} *)
+
+  val is_valid_date: year -> int -> int -> bool
+    (** Check if a date is valid, that is the date has not been coerced to look
+	like a real date.
+	@example [is_valid_date 2008 2 8] returns [true]
+	@example [is_valid_date 2008 2 30] returns [false]
+	@since 2.0 *)
 
   val is_leap_day : t -> bool
     (** Return [true] if a date is a leap day

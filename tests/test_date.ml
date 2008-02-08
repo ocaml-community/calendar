@@ -1,4 +1,4 @@
-(*i $Id: test_date.ml,v 1.20 2008-02-08 10:36:14 signoles Exp $ i*)
+(*i $Id: test_date.ml,v 1.21 2008-02-08 13:06:45 signoles Exp $ i*)
 
 Printf.printf "Tests of Date:\n";;
 
@@ -64,9 +64,10 @@ test (nth_weekday_of_month 2004 Oct Thu 4 = make 2004 10 28)
   "nth_weekday_of_month";;
 test (nth_weekday_of_month 2006 Mar Fri 3 = make 2006 3 17) 
   "nth_weekday_of_month";;
-
-test (Date.equal (from_day_of_year 2008 39) (make 2008 2 8)) 
+test (equal (from_day_of_year 2008 39) (make 2008 2 8)) 
   "from_day_of_year";;
+test (is_valid_date 2008 2 8) "is_valid_date";;
+test (not (is_valid_date 2008 2 30)) "not is_valid_date";;
 
 (* Unix *)
 Time_Zone.change Time_Zone.UTC;;

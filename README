@@ -13,9 +13,11 @@ Summary
 1- Introduction 
 ---------------
 
-The Calendar library is a library providing a set of operations over dates and times.
-This library is written with and for the version 3.06 of Objective Caml.
-This library was not tested with any older version of Objective Caml.
+The Calendar library is a library providing a set of operations over dates and 
+times. 
+This library requires Objective Caml (OCaml) 3.09.1 or higher.
+OCaml 3.09 is usable at your own risks.
+Older OCaml version are unsupported.
 
 2- Contents
 -----------
@@ -28,21 +30,22 @@ Makefile.in	  Makefile used by configure
 configure	  Script generating Makefile
 configure.in	  Script generating configure (with autoconf)
 calendar_faq.txt  FAQ frow which some algorithms come
-calendar.ps.gz	  Source files documentation
 doc		  HTML documentation of the API
 src		  Source files directory
+target		  Directory containing the built library
 tests		  Test files directory
+utils		  Some utilities
 
 3- Copyright
 ------------
 
-This program is distributed under the GNU LGPL. 
+This program is distributed under the GNU LGPL 2.1. 
 See the enclosed file COPYING for more details.
 
 4- Installation
 ---------------
 
-You need Objective Caml >= 3.06 to compile the sources.
+You need Objective Caml >= 3.09.1 to compile the sources.
 You need too ocamlfind coming with findlib and available at:
 	http://www.ocaml-programming.de/packages/
 
@@ -73,9 +76,9 @@ or
 (c) Or: do not use ocamlfind, link calendar with unix and str and
 specify the directory containing calendar:
 
-	ocamlc -I /usr/local/lib/ocaml/site-lib/calendar unix.cma calendar.cma foo_using_calendar.ml
+	ocamlc -I /usr/local/lib/ocaml/site-lib/calendar unix.cma calendarLib.cmo foo_using_calendar.ml
 or
-	ocamlopt -I /usr/local/lib/ocaml/site-lib/calendar unix.cmxa calendar.cmxa foo_using_calendar.ml
+	ocamlopt -I /usr/local/lib/ocaml/site-lib/calendar unix.cmxa calendarLib.cmx foo_using_calendar.ml
 
 6- Documentation
 ----------------
@@ -84,8 +87,6 @@ The doc directory contains an html documentation of the .mli files.
 This documentation is available online at 
 
 	http://www.lri.fr/~signoles/prog/calendar/doc
-
-The file calendar.ps.gz is the source code documentation.
 
 7- Makefile
 -----------
@@ -98,18 +99,14 @@ Execute some tests
 ii. wc 
 Give informations about the size of the source files. You need ocamlwc (*). 
 
-iii. calendar.ps
-Produce the source file documentation. You need ocamlweb (**).
-
-iv. calendar.ps.gz
+iii. calendar.ps.gz
 Same as above. Moreover the documentation is zipped.
 
-v. doc
-Produce the documentation of the API. You need ocamldoc (***).
+iv. doc
+Produce the documentation of the API. You need ocamldoc (**).
 
 (*)   ocamlwc is available at http://www.lri.fr/~filliatr/software.en.html
-(**)  ocamlweb is available at http://www.lri.fr/~filliatr/ocamlweb
-(***) ocamldoc is included with Objective Caml
+(**) ocamldoc is included with Objective Caml
 
 8- Contact the developper
 -------------------------

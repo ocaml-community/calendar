@@ -18,7 +18,7 @@
 #                                                                        #
 ##########################################################################
 
-# $Id: Makefile.in,v 1.62 2008-02-08 12:45:22 signoles Exp $
+# $Id: Makefile.in,v 1.63 2008-02-08 13:06:45 signoles Exp $
 
 # Used programs
 ###############
@@ -210,7 +210,7 @@ TMP_DIR	= tmp
 export: doc #$(NAME).ps.gz
 	cvs export -d $(TMP_DIR)/$(NAME)-$(VERSION) -D now $(NAME)
 	rm -rf $(EXPORT_DIR)/doc
-	cp -rf .depend configure doc $(TMP_DIR)/$(NAME)-$(VERSION)
+	cp -rf .depend configure config.status doc $(TMP_DIR)/$(NAME)-$(VERSION)
 	cp -rf CHANGES doc $(EXPORT_DIR)
 	chmod -R ugo+r $(TMP_DIR)/$(NAME)-$(VERSION)
 	cd $(TMP_DIR); \
