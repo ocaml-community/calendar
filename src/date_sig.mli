@@ -18,7 +18,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: date_sig.mli,v 1.3 2008-02-05 15:36:21 signoles Exp $ i*)
+(*i $Id: date_sig.mli,v 1.4 2008-02-08 10:36:14 signoles Exp $ i*)
 
 (** Date interface. A date may be seen as a triple (year, month, day). 
   
@@ -101,6 +101,11 @@ module type S = sig
     (** Make a date from its modified Julian day (i.e. Julian day - 2 400 001).
 	The Modified Julian day is more manageable than the Julian day.
 	@example [from_mjd 0] returns the date 1858-11-17. *)
+
+  val from_day_of_year: year -> int -> t
+    (** Make a date from a year and its day of the year.
+	@example [from_day_of_year 2008 39] returns the date 2008-2-8.
+	@since 2.0 *)
 
   (** {2 Getters} *)
 

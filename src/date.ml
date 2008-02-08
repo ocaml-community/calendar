@@ -18,7 +18,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: date.ml,v 1.32 2008-02-05 15:36:21 signoles Exp $ i*)
+(*i $Id: date.ml,v 1.33 2008-02-08 10:36:14 signoles Exp $ i*)
 
 (*S Introduction.
 
@@ -102,14 +102,14 @@ let from_unixfloat x =
   let d = int_of_float (x /. 86400.) + jan_1_1970 in
   current_day d (Unix.gmtime x).Unix.tm_hour
 
+let from_day_of_year y d = make y 1 d
+
 let today () = from_unixfloat (Unix.time ())
 
 let from_jd n = n
-
 let to_jd d = d
 
 let from_mjd x = x + 2400001
-
 let to_mjd d = d - 2400001
 
 (*S Useful operations. *)

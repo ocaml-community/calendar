@@ -1,8 +1,8 @@
-(*i $Id: test_pcalendar.ml,v 1.1 2008-02-05 15:36:21 signoles Exp $ i*)
+(*i $Id: test_pcalendar.ml,v 1.2 2008-02-08 10:36:14 signoles Exp $ i*)
 
 Printf.printf "Tests of Precise Calendar:\n";;
 
-open Calendar
+open CalendarLib;;
 open Calendar.Precise;;
 include Gen_test;;
 reset ();;

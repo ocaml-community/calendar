@@ -18,7 +18,7 @@
 #                                                                        #
 ##########################################################################
 
-# $Id: Makefile.in,v 1.58 2008-02-05 15:36:21 signoles Exp $
+# $Id: Makefile.in,v 1.59 2008-02-08 10:36:14 signoles Exp $
 
 # Used programs
 ###############
@@ -36,7 +36,7 @@ CAMLFIND= @OCAMLFIND@
 # Project
 #########
 
-NAME	= calendar
+NAME	= calendarLib
 VERSION	= 2.0
 
 LIBDIR	= target
@@ -91,7 +91,7 @@ $(LIBDIR)/$(NAME).cmo: $(CMO)
 $(LIBDIR)/$(NAME).cma: $(CMO)
 	$(CAMLFIND) ocamlc $(BYTEFLAGS) -a -o $@ $(filter-out $(LIBDIR), $^)
 
-$(CMX):OPTFLAGS:=$(OPTFLAGS) -for-pack Calendar
+$(CMX):OPTFLAGS:=$(OPTFLAGS) -for-pack CalendarLib
 
 $(LIBDIR)/$(NAME).cmx: $(CMX)
 	$(CAMLFIND) ocamlopt $(OPTFLAGS) -pack -o $@ \
@@ -108,10 +108,10 @@ src/version.ml:
 	echo "let date = \"`date`\"" >> $@
 
 META: Makefile
-	echo "description = \"$(NAME) library\"" > $@
+	echo "description = \"Calendar library\"" > $@
 	echo "version = \"$(VERSION)\"" >> $@
-	echo "archive(byte) = \"$(NAME).cma\"" >> $@
-	echo "archive(native) = \"$(NAME).cmxa\"" >> $@
+	echo "archive(byte) = \"$(NAME).cmo\"" >> $@
+	echo "archive(native) = \"$(NAME).cmx\"" >> $@
 	echo "requires = \"unix str\"" >> $@
 
 # Generic rules
@@ -155,7 +155,7 @@ $(TESTS_CMO) tests/test.cmo: BYTEFLAGS := -I tests -I target
 
 .PHONY: tests
 tests: tests/test
-	time ./$<
+	./$<
 
 # Documentation
 ###############
@@ -190,7 +190,7 @@ headers:
 install: $(LIBS) $(CLIBS) META
 	@if [ "`sed -n -e 's/version = "\([0-9.]*\)"/\1/p' META`" = "$(VERSION)" ]; then \
 	  (if test -d $(CAMLLIB)/site-lib/$(NAME); then $(MAKE) uninstall; fi;\
-	  $(CAMLFIND) install $(NAME) $(LIBS) $(CLIBS) $(MLI) $(CMI) META\
+	  $(CAMLFIND) install calendar target/*.cm[iox] $(MLI) $(CMI) META\
 	)else \
 	  (echo; echo "Not the good version. Please, do :"; \
 	   echo "  make clean && make"; \
@@ -198,7 +198,7 @@ install: $(LIBS) $(CLIBS) META
 	fi
 
 uninstall:
-	$(CAMLFIND) remove $(NAME)
+	$(CAMLFIND) remove calendar
 
 # Exporting
 ###########
@@ -245,7 +245,7 @@ TAGS: $(SRC)
 
 clean:
 	rm -f TAGS META $(TESTS) tests/test $(GENERATED) 
-	for i in . src tests; do \
+	for i in . src tests utils; do \
 	  rm -f $$i/*~ $$i/\#* $$i/*.cm[iox] $$i/*.*a $$i/*.o $$i/a.out; \
 	done
 

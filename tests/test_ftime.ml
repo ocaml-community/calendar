@@ -1,8 +1,8 @@
-(*i $Id: test_ftime.ml,v 1.1 2008-02-01 15:51:05 signoles Exp $ i*)
+(*i $Id: test_ftime.ml,v 1.2 2008-02-08 10:36:14 signoles Exp $ i*)
 
 Printf.printf "Tests of Ftime:\n";;
 
-open Calendar
+open CalendarLib
 open Ftime;;
 include Gen_test;;
 reset ();;

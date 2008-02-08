@@ -2,7 +2,7 @@ version 2.0, 2008-02-05:
 =========================
 * license changes from LGPLv2 to LGPLv2.1
 * use -pack: all modules of the library are packed inside a single module 
-  Calendar
+  CalendarLib
 * new modules Time_sig, Date_sig and Calendar_sig
 * new module Ftime (time implementation in which seconds are floats)
   (Hezekiah M. Carty's suggestion)
@@ -15,6 +15,7 @@ version 2.0, 2008-02-05:
   Printer.DatePrinter, Printer.TimePrinter and Printer.CalendarPrinter.
   These last modules still exist but are deprecated.
 * new function Time_Zone.on
+* new function Date.from_day_of_year (Hezekiah M. Carty's suggestion)
 * new module Utils
 * new module Version (information about version of calendar)
 * add tags @example, @raise and @see in the API documentation

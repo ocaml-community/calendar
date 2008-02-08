@@ -1,8 +1,8 @@
-(*i $Id: test_timezone.ml,v 1.7 2008-02-01 10:48:33 signoles Exp $ i*)
+(*i $Id: test_timezone.ml,v 1.8 2008-02-08 10:36:14 signoles Exp $ i*)
 
 Printf.printf "Tests of Time_Zone:\n";;
 
-open Calendar
+open CalendarLib
 open Time_Zone;;
 include Gen_test;;
 reset ();;

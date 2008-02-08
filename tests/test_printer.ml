@@ -1,8 +1,8 @@
-(*i $Id: test_printer.ml,v 1.6 2008-02-05 15:36:21 signoles Exp $ i*)
+(*i $Id: test_printer.ml,v 1.7 2008-02-08 10:36:14 signoles Exp $ i*)
 
 Printf.printf "Tests of Printer:\n";;
 
-open Calendar;;
+open CalendarLib;;
 include Gen_test;;
 reset ();;
 

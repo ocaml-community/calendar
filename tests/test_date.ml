@@ -1,8 +1,8 @@
-(*i $Id: test_date.ml,v 1.19 2008-02-01 10:48:33 signoles Exp $ i*)
+(*i $Id: test_date.ml,v 1.20 2008-02-08 10:36:14 signoles Exp $ i*)
 
 Printf.printf "Tests of Date:\n";;
 
-open Calendar;;
+open CalendarLib;;
 open Date;;
 include Gen_test;;
 reset ();;
@@ -65,6 +65,9 @@ test (nth_weekday_of_month 2004 Oct Thu 4 = make 2004 10 28)
 test (nth_weekday_of_month 2006 Mar Fri 3 = make 2006 3 17) 
   "nth_weekday_of_month";;
 
+test (Date.equal (from_day_of_year 2008 39) (make 2008 2 8)) 
+  "from_day_of_year";;
+
 (* Unix *)
 Time_Zone.change Time_Zone.UTC;;
 test (to_unixfloat (make 1970 1 1) = 0.) "to_unixfloat 1 Jan 1970";;
@@ -87,7 +90,6 @@ test (from_unixtm { Unix.tm_sec = 0; tm_min = 0; tm_hour = 0; tm_mday = 14;
   "from_unixtm (dec+)";;
 test (from_unixtm (to_unixtm (make 2003 7 16)) = make 2003 7 16) 
   "from_unixtm to_unixtm = id";;
-
 
 (* to_business *)
 test (to_business (make 2003 1 1) = (2003, 1, Wed)) "to_business 1";;

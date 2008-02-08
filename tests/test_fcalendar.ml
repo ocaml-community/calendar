@@ -1,8 +1,8 @@
-(*i $Id: test_fcalendar.ml,v 1.2 2008-02-05 15:36:21 signoles Exp $ i*)
+(*i $Id: test_fcalendar.ml,v 1.3 2008-02-08 10:36:14 signoles Exp $ i*)
 
 Printf.printf "Tests of Fcalendar:\n";;
 
-open Calendar
+open CalendarLib;;
 open Fcalendar;;
 include Gen_test;;
 reset ();;
