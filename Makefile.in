@@ -18,7 +18,7 @@
 #                                                                        #
 ##########################################################################
 
-# $Id: Makefile.in,v 1.63 2008-02-08 13:06:45 signoles Exp $
+# $Id: Makefile.in,v 1.64 2008-02-08 13:12:30 signoles Exp $
 
 # Used programs
 ###############
@@ -228,7 +228,7 @@ export: doc #$(NAME).ps.gz
 # Rebuilding Makefile
 #####################
 
-Makefile: Makefile.in config.status
+Makefile: Makefile.in
 	./config.status			
 
 config.status: configure
