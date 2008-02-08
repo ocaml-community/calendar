@@ -1,4 +1,4 @@
-version 2.0, 2008-02-05:
+version 2.0, 2008-02-08:
 =========================
 * license changes from LGPLv2 to LGPLv2.1
 * use -pack: all modules of the library are packed inside a single module 
