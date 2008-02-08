@@ -18,7 +18,7 @@
 #                                                                        #
 ##########################################################################
 
-# $Id: Makefile.in,v 1.61 2008-02-08 12:36:06 signoles Exp $
+# $Id: Makefile.in,v 1.62 2008-02-08 12:45:22 signoles Exp $
 
 # Used programs
 ###############
@@ -108,7 +108,7 @@ src/version.ml:
 	echo "let version = \"$(VERSION)\"" > $@
 	echo "let date = \"`date`\"" >> $@
 
-META: Makefile
+META: Makefile.in
 	echo "description = \"$(NAME) library\"" > $@
 	echo "version = \"$(VERSION)\"" >> $@
 	echo "archive(byte) = \"$(NAMELIB).cmo\"" >> $@
@@ -212,6 +212,7 @@ export: doc #$(NAME).ps.gz
 	rm -rf $(EXPORT_DIR)/doc
 	cp -rf .depend configure doc $(TMP_DIR)/$(NAME)-$(VERSION)
 	cp -rf CHANGES doc $(EXPORT_DIR)
+	chmod -R ugo+r $(TMP_DIR)/$(NAME)-$(VERSION)
 	cd $(TMP_DIR); \
 	  (rm -f $(NAME)-$(VERSION)/html/touch-html \
 		$(NAME)-$(VERSION)/.cvsignore; \
