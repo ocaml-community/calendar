@@ -18,7 +18,7 @@
 #                                                                        #
 ##########################################################################
 
-# $Id: Makefile.in,v 1.64 2008-02-08 13:12:30 signoles Exp $
+# $Id: Makefile.in,v 1.65 2008-02-11 07:43:06 signoles Exp $
 
 # Used programs
 ###############
@@ -46,7 +46,7 @@ LIBS	= $(LIBDIR)/$(NAMELIB).cmo
 CLIBS   =
 ifneq ($(CAMLOPT),no)
 LIBS	:= $(LIBS) $(LIBDIR)/$(NAMELIB).cmx
-CLIBS   := $(CLIBS)
+CLIBS   := $(CLIBS) $(LIBDIR)/$(NAMELIB).o
 endif
 
 DIRS	= src
@@ -191,7 +191,7 @@ headers:
 install: $(LIBS) $(CLIBS) META
 	@if [ "`sed -n -e 's/version = "\([0-9.]*\)"/\1/p' META`" = "$(VERSION)" ]; then \
 	  (if test -d $(CAMLLIB)/site-lib/$(NAME); then $(MAKE) uninstall; fi;\
-	  $(CAMLFIND) install $(NAME) target/*.cm[iox] $(MLI) $(CMI) META\
+	  $(CAMLFIND) install $(NAME) target/*.cm[iox] $(MLI) $(CMI) $(CLIBS) META\
 	)else \
 	  (echo; echo "Not the good version. Please, do :"; \
 	   echo "  make clean && make"; \
