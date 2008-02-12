@@ -1,3 +1,6 @@
+* bug fixed in printers when %p cannot be parsed (error message was bad)
+  (patch of Yaron Minski)
+
 version 2.0, 2008-02-08:
 =========================
 * license changes from LGPLv2 to LGPLv2.1

@@ -1,4 +1,4 @@
-(*i $Id: test_printer.ml,v 1.7 2008-02-08 10:36:14 signoles Exp $ i*)
+(*i $Id: test_printer.ml,v 1.8 2008-02-12 08:58:32 signoles Exp $ i*)
 
 Printf.printf "Tests of Printer:\n";;
 
@@ -33,6 +33,8 @@ test (from_fstring "%r" "10:47:25 AM" = Time.make 10 47 25)
   "from_fstring AM (on TimePrinter)";;
 test (from_fstring "%r" "10:47:25 PM" = Time.make 22 47 25)
   "from_fstring PM (on TimePrinter)";;
+test_exn (lazy (from_fstring "%p %I:%M:%S" "TM 5:26:17"))
+  "from_fstring error on %p (on TimePrinter)";;
 
 open Printer.Calendar;;
 test (sprint "%c" (Calendar.make 2003 1 6 12 1 4) = "Mon Jan 06 12:01:04 2003")
@@ -40,8 +42,8 @@ test (sprint "%c" (Calendar.make 2003 1 6 12 1 4) = "Mon Jan 06 12:01:04 2003")
 test (to_string (Calendar.make 2004 10 25 24 0 1) = "2004-10-26 00:00:01")
   "to_string (on CalendarPrinter)";;
 test 
-  (from_fstring "%c" "Mon May 14 10:30:00 2007" = 
-      Calendar.make 2007 5 14 10 30 0)
+  (from_fstring "%c" "Mon May 14 10:30:00 2007" 
+   = Calendar.make 2007 5 14 10 30 0)
   "from_fstring (on CalendarPrinter)";;
 
 let ok = nb_ok ();;

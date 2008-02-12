@@ -18,7 +18,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: printer.ml,v 1.15 2008-02-05 15:36:21 signoles Exp $ i*)
+(*i $Id: printer.ml,v 1.16 2008-02-12 08:58:32 signoles Exp $ i*)
 
 module type S = sig
   type t
@@ -301,7 +301,7 @@ struct
       match read_word () with
       | "AM" -> pm := 0
       | "PM" -> pm := 12
-      | s -> not_match "%p" "s"
+      | s -> not_match "%p" ("\"" ^ s ^ "\"")
     in
     let parse_S () = second := read_number 2 in
     let parse_V fmt =
