@@ -1,3 +1,4 @@
+* bug fixed in printers which displayed "Mars" (instead of "March")
 * bug fixed in printers when %p cannot be parsed (error message was bad)
   (patch of Yaron Minski)
 

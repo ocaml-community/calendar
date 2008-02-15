@@ -18,7 +18,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: printer.ml,v 1.16 2008-02-12 08:58:32 signoles Exp $ i*)
+(*i $Id: printer.ml,v 1.17 2008-02-15 07:38:25 signoles Exp $ i*)
 
 module type S = sig
   type t
@@ -53,7 +53,7 @@ let month_name =
   ref (function
 	 | Date.Jan -> "January"
 	 | Date.Feb -> "February"
-	 | Date.Mar -> "Mars"
+	 | Date.Mar -> "March"
 	 | Date.Apr -> "April"
 	 | Date.May -> "May"
 	 | Date.Jun -> "June"
