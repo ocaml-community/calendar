@@ -1,9 +1,12 @@
+version 2.0.1, 2008-02-22:
+==========================
 * bug fixed in printers which displayed "Mars" (instead of "March")
 * bug fixed in printers when %p cannot be parsed (error message was bad)
   (patch of Yaron Minski)
+* bug fixed in "make install" (patch of Sean Seefried)
 
 version 2.0, 2008-02-08:
-=========================
+========================
 * license changes from LGPLv2 to LGPLv2.1
 * use -pack: all modules of the library are packed inside a single module 
   CalendarLib (calendar now requires ocaml >= 3.09.1)
