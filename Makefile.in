@@ -18,7 +18,7 @@
 #                                                                        #
 ##########################################################################
 
-# $Id: Makefile.in,v 1.65 2008-02-11 07:43:06 signoles Exp $
+# $Id: Makefile.in,v 1.66 2008-02-22 07:51:45 signoles Exp $
 
 # Used programs
 ###############
@@ -38,7 +38,7 @@ CAMLFIND= @OCAMLFIND@
 
 NAME	= calendar
 NAMELIB = calendarLib
-VERSION	= 2.0
+VERSION	= 2.0.1
 
 LIBDIR	= target
 
@@ -104,7 +104,7 @@ $(LIBDIR)/$(NAMELIB).a $(LIBDIR)/$(NAMELIB).cmxa: $(CMX)
 $(LIBDIR):
 	mkdir -p $@
 
-src/version.ml:
+src/version.ml: Makefile.in
 	echo "let version = \"$(VERSION)\"" > $@
 	echo "let date = \"`date`\"" >> $@
 
