@@ -140,10 +140,28 @@ AC_CHECK_PROG(OCAMLDOT,ocamldot,ocamldot,true)
 
 # platform
 AC_MSG_CHECKING(platform)
-if echo "let _ = Sys.os_type" | ocaml | grep -q Win32; then
+#if echo "let _ = Sys.os_type" | ocaml | grep -q Win32; then
+if test -z "$system" ; then
+    system=`ocamlc -config 2>/dev/null|grep system|sed 's/system: //'`
+    # This may be
+    # - mingw
+    # - win32
+    # - cygwin
+    # - some other string means Unix
+    # - empty means ocamlc does not support -config
+fi
+
+use_cygpath=0
+case "$system" in
+    mingw) use_cygpath=1;;
+    win32) use_cygpath=1;;
+esac
+
+if test ${use_cygpath} -gt 0 ; then
     AC_MSG_RESULT(Win32)
     OCAMLWIN32=yes
     EXE=.exe
+    OCAMLDEP="${OCAMLDEP} -slash"
 else
     OCAMLWIN32=no
     EXE=
