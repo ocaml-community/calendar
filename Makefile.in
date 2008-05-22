@@ -18,7 +18,7 @@
 #                                                                        #
 ##########################################################################
 
-# $Id: Makefile.in,v 1.67 2008-03-17 09:56:41 signoles Exp $
+# $Id: Makefile.in,v 1.68 2008-05-22 13:39:57 signoles Exp $
 
 # Used programs
 ###############
@@ -38,7 +38,7 @@ CAMLFIND= @OCAMLFIND@
 
 NAME	= calendar
 NAMELIB = calendarLib
-VERSION	= 2.0.2
+VERSION	= 2.0.3
 
 LIBDIR	= target
 
@@ -66,6 +66,7 @@ MLI	= $(filter %.mli, $(SRC))
 CMO	= $(ML:.ml=.cmo)
 CMX	= $(CMO:.cmo=.cmx)
 CMI	= $(MLI:.mli=.cmi)
+CMI_ONLY= src/period.cmi
 
 GENERATED= src/version.ml
 
@@ -85,20 +86,20 @@ all: $(LIBS) META
 
 $(LIBS): $(LIBDIR)
 
-$(LIBDIR)/$(NAMELIB).cmo: $(CMO)
+$(LIBDIR)/$(NAMELIB).cmo: $(CMI_ONLY) $(CMO)
 	$(CAMLFIND) ocamlc $(BYTEFLAGS) -pack -o $@ \
 		$(filter-out $(LIBDIR), $^)
 
-$(LIBDIR)/$(NAMELIB).cma: $(CMO)
+$(LIBDIR)/$(NAMELIB).cma: $(CMI_ONLY) $(CMO)
 	$(CAMLFIND) ocamlc $(BYTEFLAGS) -a -o $@ $(filter-out $(LIBDIR), $^)
 
 $(CMX):OPTFLAGS:=$(OPTFLAGS) -for-pack CalendarLib
 
-$(LIBDIR)/$(NAMELIB).cmx: $(CMX)
+$(LIBDIR)/$(NAMELIB).cmx: $(CMI_ONLY) $(CMX)
 	$(CAMLFIND) ocamlopt $(OPTFLAGS) -pack -o $@ \
 		$(filter-out $(LIBDIR), $^)
 
-$(LIBDIR)/$(NAMELIB).a $(LIBDIR)/$(NAMELIB).cmxa: $(CMX)
+$(LIBDIR)/$(NAMELIB).a $(LIBDIR)/$(NAMELIB).cmxa: $(CMI_ONLY) $(CMX)
 	$(CAMLFIND) ocamlopt $(OPTFLAGS) -a -o $@ $(filter-out $(LIBDIR), $^)
 
 $(LIBDIR):
