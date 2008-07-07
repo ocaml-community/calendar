@@ -1,4 +1,4 @@
-(*i $Id: test.ml,v 1.5 2008-02-05 15:36:21 signoles Exp $ i*)
+(*i $Id: test.ml,v 1.6 2008-07-07 09:42:17 signoles Exp $ i*)
 
 (* Display the results *)
 
@@ -14,7 +14,7 @@ let bug =
   + Test_fcalendar.bug + Test_fpcalendar.bug
   + Test_printer.bug;;
 
-Printf.printf "final results:\n";;
+Printf.printf "\nFinal results:\n";;
 Printf.printf "tests ok : %d; tests ko : %d\n" ok bug;;
 
 assert (bug >= 0);;

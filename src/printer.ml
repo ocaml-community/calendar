@@ -18,7 +18,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: printer.ml,v 1.17 2008-02-15 07:38:25 signoles Exp $ i*)
+(*i $Id: printer.ml,v 1.18 2008-07-07 09:42:17 signoles Exp $ i*)
 
 module type S = sig
   type t
@@ -77,16 +77,17 @@ type pad =
 
 (* [k] should be a power of 10. *)
 let print_number fmt pad k n =
+  assert (k > 0);
   let rec aux k n =
     let fill fmt = function
       | Zero -> Format.pp_print_int fmt 0
       | Blank -> Format.pp_print_char fmt ' '
       | Empty -> ()
     in
-    if k = 0 then Format.pp_print_int fmt n
+    if k = 1 then Format.pp_print_int fmt n
     else begin
       if n < k then fill fmt pad;
-      aux (k mod 10) n
+      aux (k / 10) n
     end
   in
   if n < 0 then Format.pp_print_char fmt '-';
@@ -127,6 +128,7 @@ let set_word_regexp r = word_regexp := r
 module Make(X : sig
 	      type t
 	      val make : int -> int -> int -> int -> int -> int -> t
+	      val from_business: Date.year -> int -> Date.day -> t
 	      val default_format : string
 	      val hour : t -> int
 	      val minute : t -> int
@@ -265,8 +267,18 @@ struct
   let to_string = sprint X.default_format
 
   let from_fstring f s = 
+    let delayed_computations = ref [] in
+    let day_of_week, week = ref (-1), ref (-1) in
     let year, month, day = ref (-1), ref (-1), ref (-1) in
     let hour, minute, second, pm = ref (-1), ref (-1), ref (-1), ref 0 in
+    let from_biz () = 
+      if !week = -1 || !year = -1 then
+	bad_format (f ^ " (either week or year is not provided)");
+      let d = X.from_business !year !week (Date.day_of_int !day_of_week) in
+      year := X.year d;
+      month := Date.int_of_month (X.month d);
+      day := X.day_of_month d
+    in
     let j = ref 0 in
     let lenf = String.length f in
     let lens = String.length s in
@@ -306,7 +318,8 @@ struct
     let parse_S () = second := read_number 2 in
     let parse_V fmt =
       let n = read_number 2 in
-      if n < 1 || n > 53 then not_match fmt (string_of_int n)
+      if n < 1 || n > 53 then not_match fmt (string_of_int n);
+      week := n
     in
     let parse_y () = year := read_number 2 + 1900 in
     let parse_Y () = year := read_number 4 in
@@ -315,83 +328,93 @@ struct
       if i = lenf then bad_format f;
       (* else *)
       (match f.[i] with
-	 | '%' -> read_char '%'
-	 | 'a' -> parse_a ()
-	 | 'A' -> ignore (day_of_short_name (read_word ()))
-	 | 'b' -> parse_b ()
-	 | 'B' -> month := month_of_name (read_word ())
-	 | 'c' ->
-	     parse_a ();
-	     read_char ' ';
-	     parse_b ();
-	     read_char ' ';
-	     parse_d ();
-	     read_char ' ';
-	     parse_H ();
-	     read_char ':';
-	     parse_M ();
-	     read_char ':';
-	     parse_S ();
-	     read_char ' ';
-	     parse_Y ()
-	 | 'd' -> parse_d ()
-	 | 'D' -> 
-	     parse_m ();
-	     read_char '/';
-	     parse_d ();
-	     read_char '/';
-	     parse_y ()
-	 | 'h' -> parse_b ()
-	 | 'H' -> parse_H ()
-	 | 'i' ->
-	     parse_Y ();
-	     read_char '-';
-	     parse_m ();
-	     read_char '-';
-	     parse_d ()
-	 | 'I' -> parse_I ()
-	 | 'j' ->
-	     let n = read_number 3 in
-	     if n < 1 || n > 366 then not_match "%j" (string_of_int n)
-	 | 'm' -> parse_m ()
-	 | 'M' -> parse_M ()
-	 | 'n' -> read_char '\n'
-	 | 'p' -> parse_p ()
-	 | 'r' ->
-	     parse_I ();
-	     read_char ':';
-	     parse_M ();
-	     read_char ':';
-	     parse_S ();
-	     read_char ' ';
-	     parse_p ()
-	 | 'S' -> parse_S ()
-	 | 't' -> read_char '\t'
-	 | 'T' ->
-	     parse_H ();
-	     read_char ':';
-	     parse_M ();
-	     read_char ':';
-	     parse_S ()
-	 | 'V' -> parse_V "%V"
-	 | 'w' ->
-	     let n = read_number 1 in
-	     if n < 1 || n > 7 then not_match "%w" (string_of_int n)
-	 | 'W' -> parse_V "%W"
-	 | 'y' -> parse_y ()
-	 | 'Y' -> parse_Y  ()
-	 | c  -> bad_format ("%" ^ String.make 1 c));
+       | '%' -> read_char '%'
+       | 'a' -> parse_a ()
+       | 'A' -> ignore (day_of_short_name (read_word ()))
+       | 'b' -> parse_b ()
+       | 'B' -> month := month_of_name (read_word ())
+       | 'c' ->
+	   parse_a ();
+	   read_char ' ';
+	   parse_b ();
+	   read_char ' ';
+	   parse_d ();
+	   read_char ' ';
+	   parse_H ();
+	   read_char ':';
+	   parse_M ();
+	   read_char ':';
+	   parse_S ();
+	   read_char ' ';
+	   parse_Y ()
+       | 'd' -> parse_d ()
+       | 'D' -> 
+	   parse_m ();
+	   read_char '/';
+	   parse_d ();
+	   read_char '/';
+	   parse_y ()
+       | 'h' -> parse_b ()
+       | 'H' -> parse_H ()
+       | 'i' ->
+	   parse_Y ();
+	   read_char '-';
+	   parse_m ();
+	   read_char '-';
+	   parse_d ()
+       | 'I' -> parse_I ()
+       | 'j' ->
+	   let n = read_number 3 in
+	   if n < 1 || n > 366 then not_match "%j" (string_of_int n);
+	   delayed_computations :=
+	     (fun () ->
+		if !year = -1 then bad_format "%j (year not provided)";
+		let d = Date.from_day_of_year !year n in
+		month := Date.int_of_month (Date.month d);
+		day := Date.day_of_month d)
+	   :: !delayed_computations
+       | 'm' -> parse_m ()
+       | 'M' -> parse_M ()
+       | 'n' -> read_char '\n'
+       | 'p' -> parse_p ()
+       | 'r' ->
+	   parse_I ();
+	   read_char ':';
+	   parse_M ();
+	   read_char ':';
+	   parse_S ();
+	   read_char ' ';
+	   parse_p ()
+       | 'S' -> parse_S ()
+       | 't' -> read_char '\t'
+       | 'T' ->
+	   parse_H ();
+	   read_char ':';
+	   parse_M ();
+	   read_char ':';
+	   parse_S ()
+       | 'V' -> parse_V "%V"
+       | 'w' ->
+	   let n = read_number 1 in
+	   if n < 1 || n > 7 then not_match "%w" (string_of_int n);
+	   day_of_week := n;
+	   delayed_computations := from_biz :: !delayed_computations;
+       | 'W' -> parse_V "%W"
+       | 'y' -> parse_y ()
+       | 'Y' -> parse_Y  ()
+       | c  -> bad_format ("%" ^ String.make 1 c));
       parse_format (i + 1)
     and parse_format i =
       assert (i <= lenf);
       if i = lenf then begin if !j != lens then not_match f s end
       else match f.[i] with
-	| '%' -> parse_option (i + 1)
-	| c -> 
-	    read_char c;
-	    parse_format (i + 1)
+      | '%' -> parse_option (i + 1)
+      | c -> 
+	  read_char c;
+	  parse_format (i + 1)
     in 
-    parse_format 0; 
+    parse_format 0;
+    List.iter (fun f -> f ()) !delayed_computations;
     X.make !year !month !day (!hour + !pm) !minute !second
 
   let from_string = from_fstring X.default_format
@@ -423,6 +446,7 @@ module Time =
 	   cannot_create_event "time" [ h; m; s ];
 	   make h m s
 	 let default_format = "%T"
+	 let from_business _ _ _ = bad_format "from_business"
 	 let day_of_week _ = bad_format "day_of_week"
 	 let day_of_month _ = bad_format "day_of_month"
 	 let day_of_year _ = bad_format "day_of_year"
@@ -442,6 +466,7 @@ module Ftime =
 	   make h m (Second.from_int s)
 	 let second x = Second.to_int (second x)
 	 let default_format = "%T"
+	 let from_business _ _ _ = bad_format "from_business"
 	 let day_of_week _ = bad_format "day_of_week"
 	 let day_of_month _ = bad_format "day_of_month"
 	 let day_of_year _ = bad_format "day_of_year"
@@ -457,6 +482,7 @@ module Precise_Calendar =
 	 let make y m d h mn s =
 	   cannot_create_event "calendar" [ y; m; d; h; mn; s ];
 	   make y m d h mn s
+	 let from_business y w d = from_date (Date.from_business y w d)
 	 let default_format = "%i %T"
        end)
 
@@ -466,6 +492,7 @@ module Calendar =
 	 let make y m d h mn s =
 	   cannot_create_event "calendar" [ y; m; d; h; mn; s ];
 	   make y m d h mn s
+	 let from_business y w d = from_date (Date.from_business y w d)
 	 let default_format = "%i %T"
        end)
 
@@ -477,6 +504,7 @@ module Precise_Fcalendar =
 	 let make y m d h mn s =
 	   cannot_create_event "calendar" [ y; m; d; h; mn; s ];
 	   make y m d h mn (Time.Second.from_int s)
+	 let from_business y w d = from_date (Date.from_business y w d)
 	 let second s = Time.Second.to_int (second s)
 	 let default_format = "%i %T"
        end)
@@ -487,6 +515,7 @@ module Fcalendar =
 	 let make y m d h mn s =
 	   cannot_create_event "calendar" [ y; m; d; h; mn; s ];
 	   make y m d h mn (Time.Second.from_int s)
+	 let from_business y w d = from_date (Date.from_business y w d)
 	 let second s = Time.Second.to_int (second s)
 	 let default_format = "%i %T"
        end)

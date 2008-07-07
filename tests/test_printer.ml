@@ -1,4 +1,4 @@
-(*i $Id: test_printer.ml,v 1.8 2008-02-12 08:58:32 signoles Exp $ i*)
+(*i $Id: test_printer.ml,v 1.9 2008-07-07 09:42:17 signoles Exp $ i*)
 
 Printf.printf "Tests of Printer:\n";;
 
@@ -11,6 +11,12 @@ let d = Date.make 2003 1 6;;
 test (sprint "%D" d = "01/06/03") "sprint %D";;
 test (sprint "the date is %B, the %-dth" d = "the date is January, the 6th")
   "sprint (long sentence)";;
+test (sprint "%j" d = "006") "sprint %j";;
+test (sprint "%-j" d = "6") "sprint %j";;
+test (sprint "%_j" d = "  6") "sprint %j";;
+test (sprint "%j" (Date.make 2003 1 10) = "010") "sprint %j";;
+test (sprint "%-j" (Date.make 2003 1 10) = "10") "sprint %j";;
+test (sprint "%_j" (Date.make 2003 1 10) = " 10") "sprint %j";;
 test (from_string "2003-01-06" = Date.make 2003 1 6) "from_string";;
 test (from_fstring "%y-%m-%d" "03-01-06" = Date.make 1903 1 6) "from_fstring";;
 test 
@@ -23,6 +29,15 @@ test
 test 
   (from_fstring "%Y-%b-%d" "2007-Jan-14" = Date.make 2007 1 14) 
   "from_fstring %B";;
+
+test (from_fstring "%Y %V %w" "2004 01 1" = Date.make 2003 12 29) 
+  "from_fstring %Y %V %w";;
+test (from_fstring "%V %Y %w" "52 1999 7" = Date.make 2000 1 2) 
+  "from_fstring %w %Y %V";;
+test_exn (lazy (from_fstring "%Y %w" "1999 7")) "from_fstring_exn";;
+test (from_fstring "%Y%j" "1903001" = Date.make 1903 1 1) "from_fstring %Y%j";;
+test (from_fstring "%j%Y" "0011903" = Date.make 1903 1 1) "from_fstring %j%Y";;
+test_exn (lazy (from_fstring "%j" "001")) "from_fstring_exn 2";;
 
 open Printer.Time;;
 test (to_string (Time.make 12 1 4) = "12:01:04") "to_string (on TimePrinter)";;

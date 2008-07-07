@@ -18,7 +18,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: printer.mli,v 1.17 2008-02-05 15:36:21 signoles Exp $ i*)
+(*i $Id: printer.mli,v 1.18 2008-07-07 09:42:17 signoles Exp $ i*)
 
 (** Pretty printing. In the following, an "event" is either a date or a time or
     a calendar.
@@ -117,7 +117,9 @@ val set_word_regexp: Str.regexp -> unit
       [from_fstring]. Default is [[a-zA-Z]*]. 
       @since 1.10 *)
 
-(** {2 Printers} *)
+(** {2 Printers}
+
+    Printers also contain parsers which allow to build events from strings. *)
 
 (** Generic signature of a printer. *)
 module type S = sig
@@ -144,6 +146,8 @@ module type S = sig
   val to_string : t -> string
     (** Same as [sprint d] where [d] is the default format
 	(see the printer implementations). *)
+
+  (** {3 Parser from string} *)
 
   val from_fstring : string -> string -> t
   (** [from_fstring format s] converts [s] to a date according to [format].
