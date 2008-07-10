@@ -1,4 +1,4 @@
-(*i $Id: test_printer.ml,v 1.9 2008-07-07 09:42:17 signoles Exp $ i*)
+(*i $Id: test_printer.ml,v 1.10 2008-07-10 06:28:22 signoles Exp $ i*)
 
 Printf.printf "Tests of Printer:\n";;
 
@@ -33,7 +33,7 @@ test
 test (from_fstring "%Y %V %w" "2004 01 1" = Date.make 2003 12 29) 
   "from_fstring %Y %V %w";;
 test (from_fstring "%V %Y %w" "52 1999 7" = Date.make 2000 1 2) 
-  "from_fstring %w %Y %V";;
+  "from_fstring %V %Y %w";;
 test_exn (lazy (from_fstring "%Y %w" "1999 7")) "from_fstring_exn";;
 test (from_fstring "%Y%j" "1903001" = Date.make 1903 1 1) "from_fstring %Y%j";;
 test (from_fstring "%j%Y" "0011903" = Date.make 1903 1 1) "from_fstring %j%Y";;

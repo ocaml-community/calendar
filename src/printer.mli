@@ -18,10 +18,10 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: printer.mli,v 1.18 2008-07-07 09:42:17 signoles Exp $ i*)
+(*i $Id: printer.mli,v 1.19 2008-07-10 06:28:22 signoles Exp $ i*)
 
-(** Pretty printing. In the following, an "event" is either a date or a time or
-    a calendar.
+(** Pretty printing and parsing from string. 
+    In the following, an "event" is either a date or a time or a calendar.
   
     This module implements different printers: one for each kind of events.
     The three printers have the same signature: 
@@ -117,11 +117,11 @@ val set_word_regexp: Str.regexp -> unit
       [from_fstring]. Default is [[a-zA-Z]*]. 
       @since 1.10 *)
 
-(** {2 Printers}
+(** {2 Printers (including parsers from string)}
 
     Printers also contain parsers which allow to build events from strings. *)
 
-(** Generic signature of a printer. *)
+(** Generic signature of a printer-parser. *)
 module type S = sig
 
   type t 
@@ -147,7 +147,7 @@ module type S = sig
     (** Same as [sprint d] where [d] is the default format
 	(see the printer implementations). *)
 
-  (** {3 Parser from string} *)
+  (** {3 Parsers from string} *)
 
   val from_fstring : string -> string -> t
   (** [from_fstring format s] converts [s] to a date according to [format].
