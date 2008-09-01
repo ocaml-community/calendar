@@ -1,3 +1,5 @@
+* lever limitation intervalles de date
+* mieux préciser différences version Precise vs standart
 * ajouter AC ou BC dans le printer
 * constructeurs safe et "unsafe" (pour Date, Time et Calendar)
 * constructeurs prenant le mois sous forme de month (et non de int) en param
