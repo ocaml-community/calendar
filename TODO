@@ -1,5 +1,12 @@
-* lever limitation intervalles de date
-* mieux préciser différences version Precise vs standart
+* pouvoir gérer facilement les dates moins précis (sans jour ou mois exprimé)
+  (suggestion de Warren Harris). Extensible aux temps et aux calendriers
+* intégrer les nouvelles options de date (date --help)
+* printing float seconds (suggestion de Warren Harris)
+* ajouter timezone aux printers (suggestion de Warren Harris)
+* lever limitation intervalles de date (suggestion de Warren Harris)
+* mieux préciser différences version Precise vs standart, en particulier 
+  connaître "the range and precision of each representation" 
+  (suggestion de Warren Harris)
 * ajouter AC ou BC dans le printer
 * constructeurs safe et "unsafe" (pour Date, Time et Calendar)
 * constructeurs prenant le mois sous forme de month (et non de int) en param
