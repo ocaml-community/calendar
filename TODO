@@ -1,3 +1,4 @@
+* installer calendarLib.cma et calendarLib.cmxa en plus des .cm[ox]
 * pouvoir gérer facilement les dates moins précis (sans jour ou mois exprimé)
   (suggestion de Warren Harris). Extensible aux temps et aux calendriers
 * intégrer les nouvelles options de date (date --help)
