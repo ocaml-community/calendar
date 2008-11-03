@@ -146,6 +146,7 @@ if test -z "$system" ; then
     # This may be
     # - mingw
     # - win32
+    # - win64
     # - cygwin
     # - some other string means Unix
     # - empty means ocamlc does not support -config
@@ -155,6 +156,7 @@ use_cygpath=0
 case "$system" in
     mingw) use_cygpath=1;;
     win32) use_cygpath=1;;
+    win64) use_cygpath=1;;
 esac
 
 if test ${use_cygpath} -gt 0 ; then
@@ -166,6 +168,11 @@ else
     OCAMLWIN32=no
     EXE=
 fi
+
+# extension for object files
+AC_MSG_CHECKING(extension for object files)
+OBJEXT=`ocamlc -config 2>/dev/null|grep ext_obj|sed 's/ext_obj: //'`
+AC_MSG_RESULT(${OBJEXT})
 
 # substitutions to perform
 AC_SUBST(OCAMLC)
@@ -180,6 +187,7 @@ AC_SUBST(OCAMLWEB)
 AC_SUBST(OCAMLWC)
 AC_SUBST(OCAMLDOT)
 AC_SUBST(OCAMLWIN32)
+AC_SUBST(OBJEXT)
 AC_SUBST(EXE)
 
 # Finally create the Makefile from Makefile.in
