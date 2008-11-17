@@ -1,3 +1,5 @@
+* ne plus utiliser = sur les floats (en particulier dans la test suite)
+  ==> utiliser Utils.Float.equal et inclure le patch de Richard Jones
 * installer calendarLib.cma et calendarLib.cmxa en plus des .cm[ox]
 * pouvoir gérer facilement les dates moins précis (sans jour ou mois exprimé)
   (suggestion de Warren Harris). Extensible aux temps et aux calendriers
