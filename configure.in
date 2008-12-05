@@ -34,8 +34,6 @@
 #   OCAMLWEB      "ocamlweb" (not mandatory)
 #   OCAMLWC	  "ocamlwc" (not mandatory)
 #   OCAMLDOT	  "ocamldot" (not mandatory)
-#   OCAMLWIN32    "yes"/"no" depending on Sys.os_type = "Win32"
-#   EXE           ".exe" if OCAMLWIN32=yes, "" otherwise
 
 # check for one particular file of the sources 
 # ADAPT THE FOLLOWING LINE TO YOUR SOURCES!
@@ -60,7 +58,7 @@ case $OCAMLVERSION in
   *) echo "${ECHO_T}Unsupported version!"; exit 2;;
 esac
 
-OCAMLLIB=`$OCAMLC -v | tail -1 | cut -f 4 -d " "`
+OCAMLLIB=`$OCAMLC -where`
 echo "ocaml library path is $OCAMLLIB"
 
 # then we look for ocamlopt; if not present, we issue a warning
@@ -143,6 +141,7 @@ AC_MSG_CHECKING(platform)
 #if echo "let _ = Sys.os_type" | ocaml | grep -q Win32; then
 if test -z "$system" ; then
     system=`ocamlc -config 2>/dev/null|grep system|sed 's/system: //'`
+    AC_MSG_RESULT(${system})
     # This may be
     # - mingw
     # - win32
@@ -160,19 +159,17 @@ case "$system" in
 esac
 
 if test ${use_cygpath} -gt 0 ; then
-    AC_MSG_RESULT(Win32)
-    OCAMLWIN32=yes
-    EXE=.exe
     OCAMLDEP="${OCAMLDEP} -slash"
-else
-    OCAMLWIN32=no
-    EXE=
 fi
 
-# extension for object files
+# extension for object and library files
 AC_MSG_CHECKING(extension for object files)
 OBJEXT=`ocamlc -config 2>/dev/null|grep ext_obj|sed 's/ext_obj: //'`
 AC_MSG_RESULT(${OBJEXT})
+
+AC_MSG_CHECKING(extension for library files)
+LIBEXT=`ocamlc -config 2>/dev/null|grep ext_lib|sed 's/ext_lib: //'`
+AC_MSG_RESULT(${LIBEXT})
 
 # substitutions to perform
 AC_SUBST(OCAMLC)
@@ -186,9 +183,8 @@ AC_SUBST(OCAMLDOC)
 AC_SUBST(OCAMLWEB)
 AC_SUBST(OCAMLWC)
 AC_SUBST(OCAMLDOT)
-AC_SUBST(OCAMLWIN32)
 AC_SUBST(OBJEXT)
-AC_SUBST(EXE)
+AC_SUBST(LIBEXT)
 
 # Finally create the Makefile from Makefile.in
 AC_OUTPUT(Makefile)

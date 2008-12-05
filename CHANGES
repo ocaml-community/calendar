@@ -1,3 +1,6 @@
+* calendarLib.cma and calendarLib.cmxa are now installed 
+  (suggestion of Janne Hellsten)
+* small bug fixed in make install
 * support of win64 (patch of David Allsopp)
 
 version 2.0.4, 2008-07-07:

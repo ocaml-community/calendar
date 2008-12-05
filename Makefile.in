@@ -18,7 +18,7 @@
 #                                                                        #
 ##########################################################################
 
-# $Id: Makefile.in,v 1.70 2008-11-03 10:16:41 signoles Exp $
+# $Id: Makefile.in,v 1.71 2008-12-05 13:54:15 signoles Exp $
 
 # Used programs
 ###############
@@ -33,8 +33,9 @@ CAMLDOT	= @OCAMLDOT@
 CAMLLIB	= @OCAMLLIB@
 CAMLFIND= @OCAMLFIND@
 
-# Object File Extension
+# Object/Library File Extensions
 OBJ_EXT = @OBJEXT@
+LIB_EXT = @LIBEXT@
 
 # Project
 #########
@@ -45,11 +46,12 @@ VERSION	= 2.0.4
 
 LIBDIR	= target
 
-LIBS	= $(LIBDIR)/$(NAMELIB).cmo
+LIBS	= $(LIBDIR)/$(NAMELIB).cmo $(LIBDIR)/$(NAMELIB).cma
 CLIBS   =
 ifneq ($(CAMLOPT),no)
-LIBS	:= $(LIBS) $(LIBDIR)/$(NAMELIB).cmx
-CLIBS   := $(CLIBS) $(LIBDIR)/$(NAMELIB)$(OBJ_EXT)
+LIBS	:= $(LIBS) $(LIBDIR)/$(NAMELIB).cmx $(LIBDIR)/$(NAMELIB).cmxa
+CLIBS   := $(CLIBS) $(LIBDIR)/$(NAMELIB)$(OBJ_EXT) \
+	$(LIBDIR)/$(NAMELIB)$(LIB_EXT)
 endif
 
 DIRS	= src
@@ -93,8 +95,8 @@ $(LIBDIR)/$(NAMELIB).cmo: $(CMI_ONLY) $(CMO)
 	$(CAMLFIND) ocamlc $(BYTEFLAGS) -pack -o $@ \
 		$(filter-out $(LIBDIR), $^)
 
-$(LIBDIR)/$(NAMELIB).cma: $(CMI_ONLY) $(CMO)
-	$(CAMLFIND) ocamlc $(BYTEFLAGS) -a -o $@ $(filter-out $(LIBDIR), $^)
+$(LIBDIR)/$(NAMELIB).cma: $(LIBDIR)/$(NAMELIB).cmo
+	$(CAMLFIND) ocamlc $(BYTEFLAGS) -a -o $@ $<
 
 $(CMX):OPTFLAGS:=$(OPTFLAGS) -for-pack CalendarLib
 
@@ -102,8 +104,8 @@ $(LIBDIR)/$(NAMELIB).cmx: $(CMI_ONLY) $(CMX)
 	$(CAMLFIND) ocamlopt $(OPTFLAGS) -pack -o $@ \
 		$(filter-out $(LIBDIR), $^)
 
-$(LIBDIR)/$(NAMELIB).a $(LIBDIR)/$(NAMELIB).cmxa: $(CMI_ONLY) $(CMX)
-	$(CAMLFIND) ocamlopt $(OPTFLAGS) -a -o $@ $(filter-out $(LIBDIR), $^)
+$(LIBDIR)/$(NAMELIB).a $(LIBDIR)/$(NAMELIB).cmxa: $(LIBDIR)/$(NAMELIB).cmx 
+	$(CAMLFIND) ocamlopt $(OPTFLAGS) -a -o $@ $<
 
 $(LIBDIR):
 	mkdir -p $@
@@ -194,8 +196,8 @@ headers:
 
 install: $(LIBS) $(CLIBS) META
 	@if [ "`sed -n -e 's/version = "\([0-9.]*\)"/\1/p' META`" = "$(VERSION)" ]; then \
-	  (if test -d $(CAMLLIB)/site-lib/$(NAME); then $(MAKE) uninstall; fi;\
-	  $(CAMLFIND) install $(NAME) target/*.cm[iox] $(MLI) $(CMI) $(CLIBS) META\
+	  (if test -d `ocamlfind install -help | grep destdir | sed -e "s/.*default: \(.*\))/\1/"`/$(NAME); then $(MAKE) uninstall; fi;\
+	  $(CAMLFIND) install $(NAME) target/*.cm[iox] target/*.cma target/*.cmxa $(MLI) $(CMI) $(CLIBS) META\
 	)else \
 	  (echo; echo "Not the good version. Please, do :"; \
 	   echo "  make clean && make"; \
