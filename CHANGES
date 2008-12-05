@@ -1,3 +1,4 @@
+* test suite now uses Utils.Float.equal when required (patch of Richard Jones)
 * calendarLib.cma and calendarLib.cmxa are now installed 
   (suggestion of Janne Hellsten)
 * small bug fixed in make install
