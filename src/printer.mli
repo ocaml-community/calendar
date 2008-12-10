@@ -18,7 +18,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: printer.mli,v 1.19 2008-07-10 06:28:22 signoles Exp $ i*)
+(*i $Id: printer.mli,v 1.20 2008-12-10 15:48:07 signoles Exp $ i*)
 
 (** Pretty printing and parsing from string. 
     In the following, an "event" is either a date or a time or a calendar.
@@ -31,7 +31,7 @@
     (see below for a description of such a format). 
     The second one converts a string to an event according to a format string.
 
-    A format string follows the unix date utility (with few modifications). 
+    A format string follows the unix utility 'date' (with few modifications). 
     It is a string which contains two types of objects: plain characters and 
     conversion specifiers. Those specifiers are introduced by 
     a [%] character and their meanings are:
@@ -41,13 +41,15 @@
     - [%b]: short month name (by using a short version of [month_name])
     - [%B]: month name (by using [month_name])
     - [%c]: shortcut for [%a %b %d %H:%M:%S %Y]
+    - [%C]: century: as %Y without the two last digits (since version 2.1)
     - [%d]: day of month (01..31)
     - [%D]: shortcut for [%m/%d/%y]
     - [%e]: same as [%_d]
+    - [%F]: shortcut for [%Y-%m-%d]: ISO-8601 notation (since version 2.1)
     - [%h]: same as [%b]
     - [%H]: hour (00..23)
     - [%I]: hour (01..12)
-    - [%i]: shortcut for [%Y-%m-%d]: ISO-8601 notation
+    - [%i]: same as [%F]; deprecated since 2.01
     - [%j]: day of year (001..366)
     - [%k]: same as [%_H]
     - [%l]: same as [%_I]
@@ -55,7 +57,9 @@
     - [%M]: minute (00..59)
     - [%n]: a newline (same as [\n])
     - [%p]: AM or PM
+    - [%P]: am or pm (same as %p in lowercase) (since version 2.1)
     - [%r]: shortcut for [%I:%M:%S %p]
+    - [%R]: shortcut for [%H:%M] (since version 2.1)
     - [%S]: second (00..60)
     - [%t]: a horizontal tab (same as [\t])
     - [%T]: shortcut for [%H:%M:%S]
@@ -64,11 +68,18 @@
     - [%W]: same as [%V]
     - [%y]: last two digits of year (00..99)
     - [%Y]: year (four digits)
+    - [%z]: time zone in the form +hhmm (e.g. -0400) (since version 2.1)
+    - [%:z]: time zone in the form +hh:mm (e.g. -04:00) (since version 2.1)
+    - [%::z]: time zone in the form +hh:mm:ss (e.g. -04:00:00) (since version 2.1)
+    - [%:::z]: time zone in the form +hh (e.g. -04) (since version 2.1)
 
     By default, date pads numeric fields with zeroes. Two special modifiers 
     between [`%'] and a numeric directive are recognized:
     - ['-' (hyphen)]: do not pad the field
     - ['_' (underscore)]: pad the field with spaces
+    - ['0' (zero)]: pad the field with zeroes (default) (since version 2.1)
+    - ['^']: use uppercase if possible (since version 2.1)
+    Padding is only available for printers, not for parsers.
      
     @example a possible output of [%D] is [01/06/03]
     @example a possible output of [the date is %B, the %-dth] is 

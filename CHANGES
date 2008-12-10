@@ -1,6 +1,18 @@
-* test suite now uses Utils.Float.equal when required (patch of Richard Jones)
+* new formats available for printers and parsers
+    o %C  century: as %Y without the two last digits
+    o %F  replace %i which is now deprecated
+    o %P  am or pm
+    o %R  shortcut for %H:%M
+    o %z  time zone in the form +hhmm (from Warren Harris' suggestion)
+    o %:z  time zone in the form +hh:mm (from Warren Harris' suggestion)
+    o %::z  time zone in the form +hh:mm:ss (from Warren Harris' suggestion)
+    o %:::z  time zone in the form +hh (from Warren Harris' suggestion)
+* new paddings available for printers
+    o 0 (zero): pad fields with zeroes like by default
+    o ^: use uppercase if possible
+* test suite now uses Utils.Float.equal if required (patch of Richard Jones)
 * calendarLib.cma and calendarLib.cmxa are now installed 
-  (suggestion of Janne Hellsten)
+  (Janne Hellsten's suggestion)
 * small bug fixed in make install
 * support of win64 (patch of David Allsopp)
 
@@ -49,7 +61,7 @@ version 2.0, 2008-02-08:
 
 version 1.10, 2007-05-14:
 =========================
-* [from_fstring] in printers recognizes more formats. 
+* [from_fstring] in printers recognizes more formats.
   (Sean Seefried's suggestion)
 * add [Printer.set_word_regexp]
 
@@ -64,7 +76,7 @@ version 1.09.5, 2006-05-26:
 version 1.09.4, 2006-02-13:
 ===========================
 * bug fixed in printers with %I, %l, %p and %r (patch of Jerry Charumilind)
-* add Time_Zone.is_dst and Time_Zone.hour_of_dst (from a suggestion of D. Peng)
+* add Time_Zone.is_dst and Time_Zone.hour_of_dst (Daniel Peng's suggestion)
 * bug fixed when checking bounds in Time_Zone (patch of Daniel Peng)
 
 version 1.09.3, 2005-01-17:

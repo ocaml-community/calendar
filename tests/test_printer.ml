@@ -1,4 +1,4 @@
-(*i $Id: test_printer.ml,v 1.10 2008-07-10 06:28:22 signoles Exp $ i*)
+(*i $Id: test_printer.ml,v 1.11 2008-12-10 15:48:07 signoles Exp $ i*)
 
 Printf.printf "Tests of Printer:\n";;
 
@@ -11,12 +11,14 @@ let d = Date.make 2003 1 6;;
 test (sprint "%D" d = "01/06/03") "sprint %D";;
 test (sprint "the date is %B, the %-dth" d = "the date is January, the 6th")
   "sprint (long sentence)";;
+test (sprint "%^B, the %0dth" d = "JANUARY, the 06th") "sprint padding";;
 test (sprint "%j" d = "006") "sprint %j";;
 test (sprint "%-j" d = "6") "sprint %j";;
 test (sprint "%_j" d = "  6") "sprint %j";;
 test (sprint "%j" (Date.make 2003 1 10) = "010") "sprint %j";;
 test (sprint "%-j" (Date.make 2003 1 10) = "10") "sprint %j";;
 test (sprint "%_j" (Date.make 2003 1 10) = " 10") "sprint %j";;
+test (sprint "%C" (Date.make 2008 12 5) = "21") "sprint %C";;
 test (from_string "2003-01-06" = Date.make 2003 1 6) "from_string";;
 test (from_fstring "%y-%m-%d" "03-01-06" = Date.make 1903 1 6) "from_fstring";;
 test 
@@ -44,6 +46,34 @@ test (to_string (Time.make 12 1 4) = "12:01:04") "to_string (on TimePrinter)";;
 test (sprint "%I" (Time.make 36 4 3) = "12") "sprint %I (on TimePrinter)";;
 test (sprint "%r" (Time.make 24 4 3) = "12:04:03 AM") 
   "sprint %r (on TimePrinter)";;
+test (sprint "%R %z" (Time.make 12 24 5) = "12:24 +0000") "sprint %R %z";;
+test 
+  (Time_Zone.on (fun () -> sprint "%R %z" (Time.make 12 24 5)) 
+     (Time_Zone.UTC_Plus (-3)) () = "12:24 -0300") 
+  "sprint %R %z neg";;
+test (sprint "%R %S %:z" (Time.make 23 47 55) = "23:47 55 +00:00")
+  "sprint %R %S %:z";;
+test 
+  (Time_Zone.on (fun () -> sprint "%R %S %::z" (Time.make 7 47 55)) 
+     (Time_Zone.UTC_Plus 3) () = "07:47 55 +03:00:00") 
+  "sprint %R %S %::z";;
+test_exn (lazy (sprint "%R %:a" (Time.make 23 47 55))) "sprint %R %:a";;
+test_exn (lazy (sprint "%::::z %R" (Time.make 23 47 55))) "sprint %::::z %R";;
+
+test (from_fstring "%R %S %z" "10:47 55 -0300" = Time.make 13 47 55)
+  "from_fstring %R %S %z";;
+test (from_fstring "%R %S %:z" "10:47 55 -13:00" = Time.make 23 47 55)
+  "from_fstring %R %S %:z";;
+test_exn (lazy (from_fstring "%R %S %:z" "10:47 55 -0300"))
+  "from_fstring %R %S %:z bug1";;
+test_exn (lazy (from_fstring "%R %S %:z" "10:47 55 -03:00:00"))
+  "from_fstring %R %S %:z bug2";;
+test (from_fstring "%R %S %::z" "10:47 55 +03:00:00" = Time.make 7 47 55)
+  "from_fstring %R %S %::z";;
+test (from_fstring "%R %S %:::z" "10:47 55 -03" = Time.make 13 47 55)
+  "from_fstring %R %S %:::z";;
+test_exn (lazy (from_fstring "%R %S %::::z" "10:47 55 -0300"))
+  "from_fstring %R %S %::::z";;
 test (from_fstring "%r" "10:47:25 AM" = Time.make 10 47 25)
   "from_fstring AM (on TimePrinter)";;
 test (from_fstring "%r" "10:47:25 PM" = Time.make 22 47 25)
