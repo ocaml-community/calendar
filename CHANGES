@@ -3,6 +3,7 @@
     o %F  replace %i which is now deprecated
     o %P  am or pm
     o %R  shortcut for %H:%M
+    o %s  number of seconds since 1970/1/1
     o %z  time zone in the form +hhmm (from Warren Harris' suggestion)
     o %:z  time zone in the form +hh:mm (from Warren Harris' suggestion)
     o %::z  time zone in the form +hh:mm:ss (from Warren Harris' suggestion)
@@ -12,7 +13,7 @@
     o ^: use uppercase if possible
 * test suite now uses Utils.Float.equal if required (patch of Richard Jones)
 * calendarLib.cma and calendarLib.cmxa are now installed 
-  (Janne Hellsten's suggestion)
+  (Janne Hellsten and Guillaume Yziquel's suggestion)
 * small bug fixed in make install
 * support of win64 (patch of David Allsopp)
 

@@ -18,7 +18,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: printer.mli,v 1.20 2008-12-10 15:48:07 signoles Exp $ i*)
+(*i $Id: printer.mli,v 1.21 2009-01-26 09:00:58 signoles Exp $ i*)
 
 (** Pretty printing and parsing from string. 
     In the following, an "event" is either a date or a time or a calendar.
@@ -60,6 +60,7 @@
     - [%P]: am or pm (same as %p in lowercase) (since version 2.1)
     - [%r]: shortcut for [%I:%M:%S %p]
     - [%R]: shortcut for [%H:%M] (since version 2.1)
+    - [%s]: number of seconds since 1970/1/1 (since version 2.1)
     - [%S]: second (00..60)
     - [%t]: a horizontal tab (same as [\t])
     - [%T]: shortcut for [%H:%M:%S]

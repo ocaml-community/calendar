@@ -18,7 +18,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: printer.ml,v 1.19 2008-12-10 15:48:07 signoles Exp $ i*)
+(*i $Id: printer.ml,v 1.20 2009-01-26 09:00:58 signoles Exp $ i*)
 
 module type S = sig
   type t
@@ -141,6 +141,7 @@ module Make(X : sig
 	      val month : t -> Date.month
 	      val year : t -> int
 	      val century: t -> int
+	      val seconds_since_1970: t -> int
 	    end) =
 struct
 
@@ -171,6 +172,7 @@ struct
     let second = lazy (X.second x) in
     let apm = lazy (if Lazy.force hour mod 24 < 12 then "AM" else "PM") in
     let tz = lazy (Time_Zone.from_gmt ()) in
+    let seconds_since_1970 = lazy (X.seconds_since_1970 x) in
     let print_char c = Format.pp_print_char fmt c in
     let print_int pad k n = print_number fmt pad k (Lazy.force n) in
     let print_string pad s = 
@@ -235,6 +237,7 @@ struct
 	    print_time pad shour;
 	    print_char ' ';
 	    print_string pad apm
+	| 's' -> print_int pad 1 seconds_since_1970
 	| 'R' ->
 	    print_int pad 10 hour;
 	    print_char ':';
@@ -525,6 +528,7 @@ module Date =
 	 let minute _ = bad_format "minute"
 	 let second _ = bad_format "second"
 	 let century d = century (year d)
+	 let seconds_since_1970 _ = bad_format "seconds_since_1970"
        end)
 
 module DatePrinter = Date
@@ -545,6 +549,7 @@ module Time =
 	 let int_month _ = bad_format "int_month"
 	 let year _ = bad_format "year"
 	 let century _ = bad_format "century"
+	 let seconds_since_1970 _ = bad_format "seconds_since_1970"
        end)
 
 module TimePrinter = Time
@@ -566,6 +571,7 @@ module Ftime =
 	 let int_month _ = bad_format "int_month"
 	 let year _ = bad_format "year"
 	 let century _ = bad_format "century"
+	 let seconds_since_1970 _ = bad_format "seconds_since_1970"
        end)
 
 module Precise_Calendar = 
@@ -577,6 +583,9 @@ module Precise_Calendar =
 	 let from_business y w d = from_date (Date.from_business y w d)
 	 let default_format = "%i %T"
 	 let century c = Date.century (year c)
+	 let seconds_since_1970 c =
+	   let p = sub c (make 1970 1 1 0 0 0) in
+	   Time.Second.to_int (Time.Period.to_seconds (Period.to_time p))
        end)
 
 module Calendar = 
@@ -588,6 +597,9 @@ module Calendar =
 	 let from_business y w d = from_date (Date.from_business y w d)
 	 let default_format = "%i %T"
 	 let century c = Date.century (year c)
+	 let seconds_since_1970 c =
+	   let p = sub c (make 1970 1 1 0 0 0) in
+	   Time.Second.to_int (Time.Period.to_seconds (Period.to_time p))
        end)
 
 module CalendarPrinter = Calendar
@@ -602,6 +614,9 @@ module Precise_Fcalendar =
 	 let second s = Time.Second.to_int (second s)
 	 let default_format = "%i %T"
 	 let century c = Date.century (year c)
+	 let seconds_since_1970 c =
+	   let p = sub c (make 1970 1 1 0 0 0) in
+	   Time.Second.to_int (Time.Period.to_seconds (Period.to_time p))
        end)
 
 module Fcalendar = 
@@ -614,4 +629,7 @@ module Fcalendar =
 	 let second s = Time.Second.to_int (second s)
 	 let default_format = "%i %T"
 	 let century c = Date.century (year c)
+	 let seconds_since_1970 c =
+	   let p = sub c (make 1970 1 1 0 0 0) in
+	   Time.Second.to_int (Time.Period.to_seconds (Period.to_time p))
        end)

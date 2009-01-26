@@ -1,4 +1,4 @@
-(*i $Id: test_printer.ml,v 1.11 2008-12-10 15:48:07 signoles Exp $ i*)
+(*i $Id: test_printer.ml,v 1.12 2009-01-26 09:00:58 signoles Exp $ i*)
 
 Printf.printf "Tests of Printer:\n";;
 
@@ -90,6 +90,9 @@ test
   (from_fstring "%c" "Mon May 14 10:30:00 2007" 
    = Calendar.make 2007 5 14 10 30 0)
   "from_fstring (on CalendarPrinter)";;
+test (sprint "%s" (Calendar.make 1971 1 1 0 0 0) = "31536000")
+  "sprint %s";;
+
 
 let ok = nb_ok ();;
 let bug = nb_bug ();;

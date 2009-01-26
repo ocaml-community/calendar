@@ -2,7 +2,6 @@
     %g: 2 derniers chiffres de l'année correspondant au numéro de semaine ISO
     %G: année correspondant au numéro de semaine ISO (utile avec %V seulement)
     %N: nanosecondes (000000000..999999999)
-    %s: secondes depuis 1970-01-01 00:00:00 UTC
     %u: jour de la semaine 1..7, 1=lundi
     %U: numéro de la semaine dans l'année débutant par le dimanche
         comme premier jour de la semaine (00..53)
