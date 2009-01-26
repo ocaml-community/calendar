@@ -18,7 +18,7 @@
 #                                                                        #
 ##########################################################################
 
-# $Id: Makefile.in,v 1.72 2009-01-26 09:08:10 signoles Exp $
+# $Id: Makefile.in,v 1.73 2009-01-26 09:19:17 signoles Exp $
 
 # Used programs
 ###############
@@ -117,8 +117,8 @@ src/version.ml: Makefile
 META: Makefile
 	echo "description = \"$(NAME) library\"" > $@
 	echo "version = \"$(VERSION)\"" >> $@
-	echo "archive(byte) = \"$(NAMELIB).cmo\"" >> $@
-	echo "archive(native) = \"$(NAMELIB).cmx\"" >> $@
+	echo "archive(byte) = \"$(NAMELIB).cmo $(NAMELIB).cma\"" >> $@
+	echo "archive(native) = \"$(NAMELIB).cmx $(NAMELIB).cmxa\"" >> $@
 	echo "requires = \"unix str\"" >> $@
 
 # Generic rules
