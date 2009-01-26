@@ -1,3 +1,5 @@
+version 2.01, 2008-01-26:
+=========================
 * new formats available for printers and parsers
     o %C  century: as %Y without the two last digits
     o %F  replace %i which is now deprecated

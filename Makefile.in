@@ -18,7 +18,7 @@
 #                                                                        #
 ##########################################################################
 
-# $Id: Makefile.in,v 1.71 2008-12-05 13:54:15 signoles Exp $
+# $Id: Makefile.in,v 1.72 2009-01-26 09:08:10 signoles Exp $
 
 # Used programs
 ###############
@@ -42,7 +42,7 @@ LIB_EXT = @LIBEXT@
 
 NAME	= calendar
 NAMELIB = calendarLib
-VERSION	= 2.0.4
+VERSION	= 2.01
 
 LIBDIR	= target
 

@@ -18,7 +18,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: printer.mli,v 1.21 2009-01-26 09:00:58 signoles Exp $ i*)
+(*i $Id: printer.mli,v 1.22 2009-01-26 09:08:10 signoles Exp $ i*)
 
 (** Pretty printing and parsing from string. 
     In the following, an "event" is either a date or a time or a calendar.
@@ -41,11 +41,11 @@
     - [%b]: short month name (by using a short version of [month_name])
     - [%B]: month name (by using [month_name])
     - [%c]: shortcut for [%a %b %d %H:%M:%S %Y]
-    - [%C]: century: as %Y without the two last digits (since version 2.1)
+    - [%C]: century: as %Y without the two last digits (since version 2.01)
     - [%d]: day of month (01..31)
     - [%D]: shortcut for [%m/%d/%y]
     - [%e]: same as [%_d]
-    - [%F]: shortcut for [%Y-%m-%d]: ISO-8601 notation (since version 2.1)
+    - [%F]: shortcut for [%Y-%m-%d]: ISO-8601 notation (since version 2.01)
     - [%h]: same as [%b]
     - [%H]: hour (00..23)
     - [%I]: hour (01..12)
@@ -57,10 +57,10 @@
     - [%M]: minute (00..59)
     - [%n]: a newline (same as [\n])
     - [%p]: AM or PM
-    - [%P]: am or pm (same as %p in lowercase) (since version 2.1)
+    - [%P]: am or pm (same as %p in lowercase) (since version 2.01)
     - [%r]: shortcut for [%I:%M:%S %p]
-    - [%R]: shortcut for [%H:%M] (since version 2.1)
-    - [%s]: number of seconds since 1970/1/1 (since version 2.1)
+    - [%R]: shortcut for [%H:%M] (since version 2.01)
+    - [%s]: number of seconds since 1970/1/1 (since version 2.01)
     - [%S]: second (00..60)
     - [%t]: a horizontal tab (same as [\t])
     - [%T]: shortcut for [%H:%M:%S]
@@ -69,17 +69,17 @@
     - [%W]: same as [%V]
     - [%y]: last two digits of year (00..99)
     - [%Y]: year (four digits)
-    - [%z]: time zone in the form +hhmm (e.g. -0400) (since version 2.1)
-    - [%:z]: time zone in the form +hh:mm (e.g. -04:00) (since version 2.1)
-    - [%::z]: time zone in the form +hh:mm:ss (e.g. -04:00:00) (since version 2.1)
-    - [%:::z]: time zone in the form +hh (e.g. -04) (since version 2.1)
+    - [%z]: time zone in the form +hhmm (e.g. -0400) (since version 2.01)
+    - [%:z]: time zone in the form +hh:mm (e.g. -04:00) (since version 2.01)
+    - [%::z]: time zone in the form +hh:mm:ss (e.g. -04:00:00) (since version 2.01)
+    - [%:::z]: time zone in the form +hh (e.g. -04) (since version 2.01)
 
     By default, date pads numeric fields with zeroes. Two special modifiers 
     between [`%'] and a numeric directive are recognized:
     - ['-' (hyphen)]: do not pad the field
     - ['_' (underscore)]: pad the field with spaces
-    - ['0' (zero)]: pad the field with zeroes (default) (since version 2.1)
-    - ['^']: use uppercase if possible (since version 2.1)
+    - ['0' (zero)]: pad the field with zeroes (default) (since version 2.01)
+    - ['^']: use uppercase if possible (since version 2.01)
     Padding is only available for printers, not for parsers.
      
     @example a possible output of [%D] is [01/06/03]
