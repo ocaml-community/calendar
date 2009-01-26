@@ -18,7 +18,7 @@
 #                                                                        #
 ##########################################################################
 
-# $Id: Makefile.in,v 1.73 2009-01-26 09:19:17 signoles Exp $
+# $Id: Makefile.in,v 1.74 2009-01-26 09:35:03 signoles Exp $
 
 # Used programs
 ###############
@@ -89,9 +89,8 @@ OPTFLAGS = $(CAMLFLAGS) -noassert
 
 all: $(LIBS) META
 
-$(LIBS): $(LIBDIR)
-
 $(LIBDIR)/$(NAMELIB).cmo: $(CMI_ONLY) $(CMO)
+	mkdir -p $(LIBDIR)
 	$(CAMLFIND) ocamlc $(BYTEFLAGS) -pack -o $@ \
 		$(filter-out $(LIBDIR), $^)
 
@@ -101,14 +100,12 @@ $(LIBDIR)/$(NAMELIB).cma: $(LIBDIR)/$(NAMELIB).cmo
 $(CMX):OPTFLAGS:=$(OPTFLAGS) -for-pack CalendarLib
 
 $(LIBDIR)/$(NAMELIB).cmx: $(CMI_ONLY) $(CMX)
+	mkdir -p $(LIBDIR)
 	$(CAMLFIND) ocamlopt $(OPTFLAGS) -pack -o $@ \
 		$(filter-out $(LIBDIR), $^)
 
 $(LIBDIR)/$(NAMELIB).a $(LIBDIR)/$(NAMELIB).cmxa: $(LIBDIR)/$(NAMELIB).cmx 
 	$(CAMLFIND) ocamlopt $(OPTFLAGS) -a -o $@ $<
-
-$(LIBDIR):
-	mkdir -p $@
 
 src/version.ml: Makefile
 	echo "let version = \"$(VERSION)\"" > $@
