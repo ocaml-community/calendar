@@ -18,7 +18,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: date.ml,v 1.34 2008-02-08 13:06:45 signoles Exp $ i*)
+(*i $Id: date.ml,v 1.35 2009-02-23 10:33:17 signoles Exp $ i*)
 
 (*S Introduction.
 
@@ -59,7 +59,7 @@ external int_of_day : day -> int = "%identity"
 external month_of_int : int -> month = "%identity"
 external int_of_month : month -> int = "%identity"
 
-(*S Constructors. *)
+(* Constructors. *)
 
 let lt (d1 : int * int * int) (d2 : int * int * int) = 
   Pervasives.compare d1 d2 < 0
@@ -68,7 +68,22 @@ let lt (d1 : int * int * int) (d2 : int * int * int) =
    [false] otherwise. *)
 let date_ok y m d = lt (-4713, 12, 31) (y, m, d) && lt (y, m, d) (3268, 1, 23)
 
+(* Coerce month to the interval ]-oo; 12]. 
+   Note that the used algorithm of [make] does not require any coercion for
+   negative months *)
+let coerce_month y m = 
+  if m < 0 then
+    y, m
+(*       (* the below commented lines coerce [m] inside the interval [1;12]
+	 instead of ]-oo;12]*)
+   let diff_y = (m + 1) / 12 - 1 in
+    y + diff_y, - 12 * diff_y + m*)
+  else
+    let pred_m = pred m in
+    y + pred_m / 12, pred_m mod 12 + 1
+
 let make y m d = 
+  let y, m = coerce_month y m in
   if date_ok y m d then
     let a = (14 - m) / 12 in
     let y' = y + 4800 - a in
@@ -79,8 +94,10 @@ let make y m d =
     else if lt (y, m, d) (1582, 10, 5) then
       (* Julian calendar *)
       d + (153 * m' + 2) / 5 + y' * 365 + y' / 4 - 32083
-    else raise Undefined
-  else raise Out_of_bounds
+    else 
+      raise Undefined
+  else 
+    raise Out_of_bounds
 
 let lmake ~year ?(month = 1) ?(day = 1) () = make year month day
 
@@ -234,6 +251,9 @@ end
 (*S Arithmetic operations on dates and periods. *)
 
 let add d p = 
+(*  Format.printf "%d %d %d / %d %d %d@."
+    (year d) (int_month d) (day_of_month d)
+    p.Period.y p.Period.m p.Period.d;*)
   make 
     (year d         + p.Period.y) 
     (int_month d    + p.Period.m) 

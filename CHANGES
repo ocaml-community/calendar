@@ -1,6 +1,14 @@
+version 2.01.1, 2009-02-23:
+=========================
+
+* [Date] add a missing coercion rule for months
+  (e.g. "Date.make 2008 18 1" is now equal to "Date.make 2009 6 1")
+* [Date] bug fixed in date arithmetic operations due to the missing above 
+  feature
+
 version 2.01, 2009-01-26:
 =========================
-* new formats available for printers and parsers
+* [Printer] new formats available for printers and parsers
     o %C  century: as %Y without the two last digits
     o %F  replace %i which is now deprecated
     o %P  am or pm
@@ -10,14 +18,15 @@ version 2.01, 2009-01-26:
     o %:z  time zone in the form +hh:mm (from Warren Harris' suggestion)
     o %::z  time zone in the form +hh:mm:ss (from Warren Harris' suggestion)
     o %:::z  time zone in the form +hh (from Warren Harris' suggestion)
-* new paddings available for printers
+* [Printer] new paddings available for printers
     o 0 (zero): pad fields with zeroes like by default
     o ^: use uppercase if possible
-* test suite now uses Utils.Float.equal if required (patch of Richard Jones)
-* calendarLib.cma and calendarLib.cmxa are now installed 
+* [Tests] test suite now uses Utils.Float.equal if required
+  (patch of Richard Jones)
+* [Compilation] calendarLib.cma and calendarLib.cmxa are now installed 
   (Janne Hellsten and Guillaume Yziquel's suggestion)
-* small bug fixed in make install
-* support of win64 (patch of David Allsopp)
+* [Compilation] small bug fixed in make install
+* [Compilation] support of win64 (patch of David Allsopp)
 
 version 2.0.4, 2008-07-07:
 ==========================
@@ -26,24 +35,24 @@ version 2.0.4, 2008-07-07:
 
 version 2.0.3, 2008-05-22:
 ==========================
-* module Period was not properly linked
+* [Compilation] module Period was not properly linked
 
 version 2.0.2, 2008-03-17:
 ==========================
-* Windows build problems fixed (patch of David Allsopp)
+* [Compilation] Windows build problems fixed (patch of David Allsopp)
 
 version 2.0.1, 2008-02-22:
 ==========================
-* bug fixed in printers which displayed "Mars" (instead of "March")
-* bug fixed in printers when %p cannot be parsed (error message was bad)
-  (patch of Yaron Minski)
-* bug fixed in "make install" (patch of Sean Seefried)
+* [Printer] bug fixed in printers which displayed "Mars" (instead of "March")
+* [Printer] bug fixed in printers when %p cannot be parsed
+  (error message was bad) (patch of Yaron Minski)
+* [Compilation] bug fixed in "make install" (patch of Sean Seefried)
 
 version 2.0, 2008-02-08:
 ========================
-* license changes from LGPLv2 to LGPLv2.1
-* use -pack: all modules of the library are packed inside a single module 
-  CalendarLib (calendar now requires ocaml >= 3.09.1)
+* [Licence] license changes from LGPLv2 to LGPLv2.1
+* [Compilation] use -pack: all modules of the library are packed inside a 
+  single module CalendarLib (calendar now requires ocaml >= 3.09.1)
 * new modules Time_sig, Date_sig and Calendar_sig
 * new module Ftime (time implementation in which seconds are floats)
   (Hezekiah M. Carty's suggestion)
@@ -51,80 +60,86 @@ version 2.0, 2008-02-08:
 * new module Fcalendar (calendar implementation using Ftime)
 * new module Calendar.Precise (calendar with a best precision)
 * hash functions are provided
-* new modules Printer.Ftime and Printer.Fcalendar
-* modules Printer.Date, Printer.Time and Printer.Calendar respectively replace
-  Printer.DatePrinter, Printer.TimePrinter and Printer.CalendarPrinter.
-  These last modules still exist but are deprecated.
-* new function Time_Zone.on
-* new function Date.from_day_of_year (Hezekiah M. Carty's suggestion)
-* new function Date.is_valid_date (Richard Jones' suggestion)
+* [Printer] new modules Printer.Ftime and Printer.Fcalendar
+* [Printer] modules Printer.Date, Printer.Time and Printer.Calendar 
+  respectively replace Printer.DatePrinter, Printer.TimePrinter and 
+  Printer.CalendarPrinter. These last modules still exist but are deprecated.
+* [Time_Zone] new function Time_Zone.on
+* [Date] new function Date.from_day_of_year (Hezekiah M. Carty's suggestion)
+* [Date] new function Date.is_valid_date (Richard Jones' suggestion)
 * new module Utils
 * new module Version (information about version of calendar)
-* add tags @example, @raise and @see in the API documentation
+* [Documentation] add tags @example, @raise and @see in the API documentation
 
 version 1.10, 2007-05-14:
 =========================
-* [from_fstring] in printers recognizes more formats.
+* [Printer] "from_fstring" in printers recognizes more formats.
   (Sean Seefried's suggestion)
-* add [Printer.set_word_regexp]
+* [Printer] add Printer.set_word_regexp
 
 version 1.09.6, 2006-07-07:
 ===========================
-* bug fixed in Date.to_business (on some dates in the last days of january)
+* [Date] bug fixed in Date.to_business
+  (on some dates in the last days of january)
 
 version 1.09.5, 2006-05-26:
 ===========================
-* bug fixed in nth_weekday_of_month
+* [Date] bug fixed in Date.nth_weekday_of_month
 
 version 1.09.4, 2006-02-13:
 ===========================
-* bug fixed in printers with %I, %l, %p and %r (patch of Jerry Charumilind)
-* add Time_Zone.is_dst and Time_Zone.hour_of_dst (Daniel Peng's suggestion)
-* bug fixed when checking bounds in Time_Zone (patch of Daniel Peng)
+* [Printer] bug fixed in printers with %I, %l, %p and %r 
+  (patch of Jerry Charumilind)
+* [Time_Zone] add Time_Zone.is_dst and Time_Zone.hour_of_dst
+  (Daniel Peng's suggestion)
+* [Time_Zone] bug fixed when checking bounds in Time_Zone (patch of Daniel Peng)
 
 version 1.09.3, 2005-01-17:
 ===========================
-* bug fixed in Date.to_business
+* [Date] bug fixed in Date.to_business
 
 version 1.09.2, 2004-12-15:
 ===========================
-* bug fixed in Date.from_unixfloat and Date.from_unixtm with time zones <> UTC
+* [Date] bug fixed in Date.from_unixfloat and Date.from_unixtm with 
+  time zones <> UTC
 
 version 1.09.1, 2004-11-17:
 ===========================
-* bug fixed in Calendar.to/from_unixfloat with time zones <> UTC
-* add tag @since in the API documentation
-* META file is now writable
+* [Calendar] bug fixed in Calendar.to/from_unixfloat with time zones <> UTC
+* [Documentation] add tag @since in the API documentation
+* [Compilation] META file is now writable
 
 version 1.09.0, 2004-11-13:
 ===========================
-* add Date.to_business and Date.from_business (Richard Jone's suggestion)
-* add the optional parameter ?month to Date.days_in_year
+* [Date] add Date.to_business and Date.from_business (Richard Jone's suggestion)
+* [Date] add the optional parameter ?month to Date.days_in_year
   (Richard Jones' suggestion)
-* add Date.nth_weekday_of_month (Richard Jones' suggestion)
-* Date: add some Christian dates (Richard Jones' suggestion)
-* add Date.Period.ymd and Calendar.Period.ymds
-* Printer: add the format string %i corresponding to the ISO-8601 notation
-* Printer: ISO-8601 notation is now the default format
+* [Date] add Date.nth_weekday_of_month (Richard Jones' suggestion)
+* [Date] Date: add some Christian dates (Richard Jones' suggestion)
+* [Date] add Date.Period.ymd and Calendar.Period.ymds
+* [Printer] add the format string %i corresponding to the ISO-8601 notation
+* [Printer] ISO-8601 notation is now the default format
 * add [equal] in all the modules
-* Calendar.Period: bug fixed with negative period
-* bug fixed in Calendar.to/from_unixfloat and Date.to/from_unixfloat
-* bug fixed in weeks_in_year
+* [Calendar.Period] bug fixed with negative period
+* [Calendar] bug fixed in Calendar.to/from_unixfloat and Date.to/from_unixfloat
+* [Date] bug fixed in Date.weeks_in_year
 
 version 1.08, 2004-05-18:
 =========================
-* add [week_first_last] computing the first and last days of a week in a year
+* [Date] add [week_first_last] computing the first and last days of a week in a 
+  year
 
 version 1.07, 2004-03-22:
 =========================
-* compile even if no ocaml native compiler is available
+* [Compilation] compile even if no ocaml native compiler is available
   (from a patch of Stefano Zacchiroli)
-* documentation of the API with ocamldoc
+* [Documentation] documentation of the API with ocamldoc
 
 version 1.06, 2003-12-05:
 =========================
-* compile with an optimized compiler (ocamlopt.opt or ocamlc.opt) if possible
-* improved "make install"
+* [Compilation] compile with an optimized compiler (ocamlopt.opt or ocamlc.opt)
+  if possible
+* [Compilation] improved "make install"
 
 version 1.05, 2003-09-18:
 =========================
@@ -136,16 +151,17 @@ version 1.05, 2003-09-18:
 
 version 1.04, 2003-08-31:
 =========================
-* add getters in Time.Period, Date.Period and Calendar.Period
+* [Period] add getters in Time.Period, Date.Period and Calendar.Period
   (from a suggestion of Christoph Bauer)
 
 version 1.03, 2003-08-25:
 =========================
-* add "to_time" in Calendar (Julien Forest's suggestion)
+* [Calendar] add "to_time" in Calendar (Julien Forest's suggestion)
 
 version 1.02, 2003-08-18:
 =========================
-* bug fixed in configure.in (calendar now works with caml version > 3.06)
+* [Compilation] bug fixed in configure.in (calendar now works with 
+  caml version > 3.06)
 
 version 1.01, 2003-07-16:
 =========================

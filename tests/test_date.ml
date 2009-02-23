@@ -1,4 +1,4 @@
-(*i $Id: test_date.ml,v 1.21 2008-02-08 13:06:45 signoles Exp $ i*)
+(*i $Id: test_date.ml,v 1.22 2009-02-23 10:33:17 signoles Exp $ i*)
 
 Printf.printf "Tests of Date:\n";;
 
@@ -14,6 +14,16 @@ test (compare (make 2003 2 29) (make 2003 3 1) = 0) "2003-2-29 = 2003-3-1";;
 let d = make 2003 12 31;;
 test (next d `Month = make 2004 1 31) "2003-12-31 + 1 mois";;
 test (add d (Period.month 2) = make 2004 3 2) "2003-12-31 + 2 mois";;
+test (add (make 2008 12 31) (Period.month 6) = make 2009 7 1)
+  "2008-12-31 + 6 mois";;
+test (rem (make 2008 6 2) (Period.month 12) = make 2007 6 2)
+  "2008-6-2 - 12 mois";;
+test (rem (make 2007 2 30) (Period.month 4) = make 2006 11 2)
+  "2008-2-30 - 4 mois";;
+test (make 2007 (-38) 30 = make 2003 10 30)
+  "2007-(-38)-30 - 2003 10 30";;
+test (rem (make 2007 2 30) (Period.month 40) = make 2003 11 2)
+  "2008-2-30 - 40 mois";;
 let d2 = make (-3000) 1 1;;
 test (rem d (sub d d2) = d2) "rem x (sub x y) = y";;
 test (from_jd 0 = make (-4712) 1 1) "from_jd 0 = 4713 BC-1-1";;
