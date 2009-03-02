@@ -1,3 +1,9 @@
+* module Parser (suggestion de Guillaume Yziquel)
+* plus de fonctions pour faciliter le parsing (en plus des *from_*string*)
+* FAQ (suggestion de Guillaume Yziquel)
+* page introductive comme point d'entrée pour la doc
+  (suggestion de Guillaume Yziquel) 
+
 * intégrer les nouvelles options de date (date --help)
     %g: 2 derniers chiffres de l'année correspondant au numéro de semaine ISO
     %G: année correspondant au numéro de semaine ISO (utile avec %V seulement)
@@ -18,8 +24,7 @@
     #:  casse opposée si possible
     nombre possible après un tag pour indiquer la largeur du champ
     (en fait, largeur champ = max entre nombre indiqué et place requise)
-* printing float seconds (suggestion de Warren Harris)
-    ==> %N
+* printing float seconds (suggestion de Warren Harris) ==> %N
 * ajouter AC ou BC dans le printer. 
   Plus généralement, bien afficher les dates avant JC
 * lever limitation intervalles de date (suggestion de Warren Harris)

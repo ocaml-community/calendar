@@ -86,7 +86,7 @@ or
 The doc directory contains an html documentation of the .mli files.
 This documentation is available online at 
 
-	http://www.lri.fr/~signoles/prog/calendar/doc
+	http://calendar.forge.ocamlcore.org/doc/
 
 7- Makefile
 -----------
@@ -99,13 +99,10 @@ Execute some tests
 ii. wc 
 Give informations about the size of the source files. You need ocamlwc (*). 
 
-iii. calendar.ps.gz
-Same as above. Moreover the documentation is zipped.
-
-iv. doc
+iii. doc
 Produce the documentation of the API. You need ocamldoc (**).
 
-(*)   ocamlwc is available at http://www.lri.fr/~filliatr/software.en.html
+(*)  ocamlwc is available at http://www.lri.fr/~filliatr/software.en.html
 (**) ocamldoc is included with Objective Caml
 
 8- Contact the developper
@@ -113,4 +110,4 @@ Produce the documentation of the API. You need ocamldoc (**).
 
 You can report bugs and/or give feedbacks by e-mail to :
 
-	Julien.Signoles@cea.fr
+	Julien.Signoles@NO_SPAM@gmail.com
