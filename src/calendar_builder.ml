@@ -73,7 +73,7 @@ module Make(D: Date_sig.S)(T: Time_sig.S) = struct
 
   let create d t = 
     to_gmt 
-      (float (D.to_jd d) 
+      (float (D.to_jd d)
        +. T.Second.to_float (T.to_seconds t) /. 86400.) -. 0.5
 
   let make y m d h mn s = 
@@ -149,7 +149,11 @@ module Make(D: Date_sig.S)(T: Time_sig.S) = struct
     
   module Period = struct
 
-    type t = { d : D.Period.t; t : T.Period.t }
+    type +'a p = { d : 'a D.Period.period; t : 'a T.Period.period }
+    constraint 'a = [< Period.date_field ]
+
+    type +'a period = 'a p
+    type t = Period.date_field period
 
     let split x =
       let rec aux s =
@@ -227,7 +231,7 @@ module Make(D: Date_sig.S)(T: Time_sig.S) = struct
 
   let unsplit d t =
     to_gmt 
-      (float (D.to_jd d) 
+      (float (D.to_jd d)
        +. (T.Second.to_float (T.to_seconds t) /. 86400.)) -. 0.5
 
   let add x p =
@@ -260,10 +264,9 @@ module Make_Precise(D: Date_sig.S)(T: Time_sig.S) = struct
   module Date = D
   module Time = T
 
-  type t = { date: D.t; time: T.t }
-      
+  type t = { date: D.t; time: T.t } 
+     
   type day = D.day = Sun | Mon | Tue | Wed | Thu | Fri | Sat
-
   type month = D.month =
       Jan | Feb | Mar | Apr | May | Jun | Jul | Aug | Sep | Oct | Nov | Dec
 	  
@@ -398,7 +401,11 @@ module Make_Precise(D: Date_sig.S)(T: Time_sig.S) = struct
     
   module Period = struct
 
-    type t = { d : D.Period.t; t : T.Period.t }
+    type +'a p = { d : 'a D.Period.period; t : 'a T.Period.period }
+    constraint 'a = [< Period.date_field ]
+
+    type +'a period = 'a p
+    type t = Period.date_field period
 
     let split x =
       let rec aux s =

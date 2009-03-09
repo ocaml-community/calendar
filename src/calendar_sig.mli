@@ -34,9 +34,6 @@ module type S = sig
 
   (** {2 Datatypes} *)
 
-  type t
-    (** Type of a date refined with a time, so called a calendar. *)
-    
   module Date: Date_sig.S
     (** Date implementation used by this calendar.
 	@since 2.0 *)
@@ -44,6 +41,8 @@ module type S = sig
   module Time: Time_sig.S
     (** Time implementation used by this calendar.
 	@since 2.0 *)
+
+  type t
 
   type day = Date.day = Sun | Mon | Tue | Wed | Thu | Fri | Sat
       (** Days of the week. *)
@@ -235,7 +234,39 @@ module type S = sig
 
     (** {3 Arithmetic operations} *)
 
-    include Period.S
+    type +'a period constraint 'a = [< Period.date_field ]
+    type t = Period.date_field period
+	(** Type of a period. *)
+
+    (** {3 Period is an additive monoid} *)
+	
+    val empty : 'a period
+      (** The empty period. *)
+
+    val add : ([> `Day | `Week ] as 'a) period -> 'a period -> 'a period
+      (** Addition of periods. *)
+      
+    val sub : ([> `Day | `Week ] as 'a) period -> 'a period -> 'a period
+      (** Substraction of periods. *)
+      
+    val opp : ([> `Day | `Week ] as 'a) period -> 'a period
+      (** Opposite of a period. *)
+
+    (** {3 Periods are comparable} *)
+      
+    val equal: 'a period -> 'a period -> bool
+      (** Equality function between two periods.
+	  @see <Utils.Comparable.html#VALequal> Utils.Comparable.equal
+	  @since 1.09.0 *)
+
+    val compare : 'a period -> 'a period -> int
+      (** Comparison function between two periods.
+ 	  @see <Utils.Comparable.html#VALcompare> Utils.Comparable.compare *)
+
+    val hash: 'a period -> int
+      (** Hash function for periods.
+	  @see <Utils.Comparable.html#VALhash> Utils.Comparable.hash 
+	  @since 2.0 *)
 
     (** {3 Constructors} *)
       
@@ -252,39 +283,39 @@ module type S = sig
     (** Those functions have the same behavious as those defined in
 	{!Date_sig.S.Period}. *)
 
-    val year : int -> t
+    val year : int -> [> `Year ] period
       (** @see <Date_sig.S.Period.html#VALyear> Date_sig.S.Period.year *)
 
-    val month : int -> t
+    val month : int -> [> `Year | `Month ] period
       (** @see <Date_sig.S.Period.html#VALmonth> Date_sig.S.Period.month *)
 
-    val week : int -> t
+    val week : int -> [> `Week | `Day ] period
       (** @see <Date_sig.S.Period.html#VALweek> Date_sig.S.Period.week *)
 
-    val day : int -> t
+    val day : int -> [> `Week | `Day ] period
       (** @see <Date_sig.S.Period.html#VALday> Date_sig.S.Period.day *)
 
     (** Those functions have the same behavious as those defined in
 	{Time_sig.S.Period}. *)
 
-    val hour : int -> t
+    val hour : int -> [> `Week | `Day ] period
       (** @see <Time_sig.S.Period.html#VALhour> Time_sig.S.Period.hour *)
 
-    val minute : int -> t
+    val minute : int -> [> `Week | `Day] period
       (** @see <Time_sig.S.Period.html#VALminute> Time_sig.S.Period.minute *)
 
-    val second : second -> t
+    val second : second -> [> `Week | `Day] period
       (** @see <Time_sig.S.Period.html#VALsecond> Time_sig.S.Period.second *)
 
     (** {3 Coercions} *)
       
-    val from_date : Date.Period.t -> t
+    val from_date : 'a Date.Period.period -> 'a period
       (** Convert a date period to a calendar period. *)
 
-    val from_time : Time.Period.t -> t
+    val from_time : 'a Time.Period.period -> 'a period
       (** Convert a time period to a calendar period. *)
 
-    val to_date : t -> Date.Period.t
+    val to_date : 'a period -> 'a Date.Period.period
       (** Convert a calendar period to a date period. 
 	  The fractional time period is ignored. 
 	  @example [to_date (hour 60)] is equivalent to [Date.Period.days 2]. *)
@@ -293,7 +324,7 @@ module type S = sig
       (** [= Date.Period.Not_computable].
 	  @since 1.04 *)
 
-    val to_time : t -> Time.Period.t
+    val to_time : 'a period -> 'a Time.Period.period
       (** Convert a calendar period to a date period. 
 	  @raise Not_computable if the time period is not computable.
 	  @example [to_time (day 6)] returns a time period of [24 * 3600 * 6 =
@@ -303,7 +334,7 @@ module type S = sig
 	  a year is not a constant number of days. 
 	  @since 1.04 *)
 
-    val ymds: t -> int * int * int * second
+    val ymds: 'a period -> int * int * int * second
       (** Number of years, months, days and seconds in a period.
 	  @example [ymds (make 1 2 3 1 2 3)] returns [1, 2, 3, 3723] 
 	  @example [ymds (make (-1) (-2) (-3) (-1) (-2) (-3)] returns

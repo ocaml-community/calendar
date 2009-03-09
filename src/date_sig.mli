@@ -46,8 +46,14 @@ module type S = sig
 
   (** {2 Datatypes} *)
 
+  (** The different fields of a date. *)
+  type field = Period.date_field
+
+  (** Type of a date, without specifying any precision level. *)
+  type -'a date constraint 'a = [< field ]
+
   (** Type of a date. *)
-  type t
+  type t = field date
 
   (** Days of the week. *)
   type day = Sun | Mon | Tue | Wed | Thu | Fri | Sat
@@ -59,9 +65,6 @@ module type S = sig
   (** Year as an [int]. *)
   type year = int
       
-  (** The different fields of a date. *)
-  type field = [ `Year | `Month | `Week | `Day ]
-
   (** {2 Exceptions} *)
 
   exception Out_of_bounds
@@ -109,7 +112,7 @@ module type S = sig
 
   (** {2 Getters} *)
 
-  val days_in_month : t -> int
+  val days_in_month : [> `Year | `Month ] date -> int
     (** Number of days in the month of a date.
 	@example [days_in_month (make 2003 6 26)] returns [30]. *)
 
@@ -133,11 +136,11 @@ module type S = sig
 	@example [week (make 2003 12 28)] returns [52].
 	@example [week (make 2003 12 29)] returns [1]. *)
 
-  val month : t -> month
+  val month : [> `Month ] date -> month
     (** Month. 
 	@example [month (make 2003 6 26)] returns [Jun]. *)
 
-  val year : t -> year
+  val year : [> `Year ] date -> year
     (** Year. 
 	@example [year (make 2003 6 26)] returns [2003]. *)
 
@@ -152,16 +155,16 @@ module type S = sig
 
   (** {2 Dates are comparable} *)
     
-  val equal: t -> t -> bool
+  val equal: 'a date -> 'a date -> bool
     (** Equality function between two dates.
 	@see <Utils.Comparable.html#VALequal> Utils.Comparable.equal
 	@since 1.09.0 *)
 
-  val compare : t -> t -> int
+  val compare : 'a date -> 'a date -> int
     (** Comparison function between two dates.
  	@see <Utils.Comparable.html#VALcompare> Utils.Comparable.compare *)
 
-  val hash: t -> int
+  val hash: 'a date -> int
     (** Hash function for dates.
 	@see <Utils.Comparable.html#VALhash> Utils.Comparable.hash 
 	@since 2.0 *)
@@ -250,7 +253,8 @@ module type S = sig
 
     (** {3 Arithmetic operations} *)
     
-    include Period.S
+    type +'a p constraint 'a = [< field ]
+    include Period.S with type +'a period = 'a p 
 
     (** {3 Constructors} *)
 
@@ -261,16 +265,16 @@ module type S = sig
       (** Labelled version of [make]. 
 	  The default value of each argument is [0]. *)
 
-    val year : int -> t
+    val year : int -> [> `Year ] period
       (** [year n] makes a period of [n] years. *)
       
-    val month : int -> t
+    val month : int -> [> `Year | `Month ] period
       (** [month n] makes a period of [n] months. *)
 
-    val week : int -> t
+    val week : int -> [> `Week | `Day ] period
       (** [week n] makes a period of [n] weeks. *)
 
-    val day : int -> t
+    val day : int -> [> `Week | `Day ] period
       (** [day n] makes a period of [n] days. *)
 
     (** {3 Getters} *)
@@ -278,7 +282,7 @@ module type S = sig
     exception Not_computable
       (** @since 1.04 *)
       
-    val nb_days : t -> int
+    val nb_days : 'a period -> int
       (** Number of days in a period. 
 	  @raise Not_computable if the number of days is not computable. 
 	  @example [nb_days (day 6)] returns [6] 
@@ -286,7 +290,7 @@ module type S = sig
 	  not a constant number of days.
 	  @since 1.04 *)
 
-    val ymd: t -> int * int * int
+    val ymd: 'a period -> int * int * int
       (** Number of years, months and days in a period.
 	  @example [ymd (make 1 2 3)] returns [1, 2, 3]. 
 	  @since 1.09.0 *)
@@ -295,7 +299,7 @@ module type S = sig
 
   (** {2 Arithmetic operations on dates and periods} *)
 
-  val add : t -> Period.t -> t
+  val add : 'a date -> 'a Period.period -> 'a date
     (** [add d p] returns [d + p].
 	@raise Out_of_bounds when the resulting date is outside the Julian
 	period.
@@ -306,17 +310,17 @@ module type S = sig
 	@example [add (make 2003 12 31) (Period.month 2)] returns the date 
 	2004-3-2 (following the coercion rule describes in the introduction). *)
 
-  val sub : t -> t -> Period.t
+  val sub : 'a date -> 'a date -> 'a Period.period
     (** [sub d1 d2] returns the period between [d1] and [d2]. *)
 
-  val rem : t -> Period.t -> t
+  val rem : 'a date -> 'a Period.period -> 'a date
     (** [rem d p] is equivalent to [add d (Period.opp p)]. 
 	@raise Out_of_bounds when the resulting date is outside the Julian
 	period.
 	@raise Undefined when the resulting date belongs to [[October 5th,
 	1582; October 14th, 1582]]. *)
 
-  val next : t -> field -> t
+  val next : 'a date -> ([< field ] as 'a) -> 'a date
     (** [next d f] returns the date corresponding to the next specified field.
 	@raise Out_of_bounds when the resulting date is outside the Julian
 	period.
@@ -325,7 +329,7 @@ module type S = sig
 	@example [next (make 2003 12 31) `Month] returns the date 2004-1-31
 	(i.e. one month later). *)
 
-  val prev : t -> field -> t
+  val prev : 'a date -> ([< field ] as 'a) -> t
     (** [prev d f] returns the date corresponding to the previous specified 
 	field.
 	@raise Out_of_bounds when the resulting date is outside the Julian

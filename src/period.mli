@@ -25,38 +25,41 @@
   An implementation of this interface depends on the kind of an event (see
   module [Time.Period], [Date.Period] and [Calendar.Period]). *)
 
+type date_field = [ `Year | `Month | `Week | `Day ]
+
 (** Common interface for all periods. *)
 module type S = sig
 
-  type t
+  type +'a period constraint 'a = [< date_field ]
+  type t = date_field period
     (** Type of a period. *)
 
   (** {3 Period is an additive monoid} *)
 
-  val empty : t
+  val empty : 'a period
     (** The empty period. *)
 
-  val add : t -> t -> t
+  val add : 'a period -> 'a period -> 'a period
     (** Addition of periods. *)
 
-  val sub : t -> t -> t
+  val sub : 'a period -> 'a period -> 'a period
     (** Substraction of periods. *)
 
-  val opp : t -> t
+  val opp : 'a period -> 'a period
     (** Opposite of a period. *)
 
   (** {3 Periods are comparable} *)
 
-  val equal: t -> t -> bool
+  val equal: 'a period -> 'a period -> bool
     (** Equality function between two periods.
 	@see <Utils.Comparable.html#VALequal> Utils.Comparable.equal
 	@since 1.09.0 *)
 
-  val compare : t -> t -> int
+  val compare : 'a period -> 'a period -> int
     (** Comparison function between two periods.
  	@see <Utils.Comparable.html#VALcompare> Utils.Comparable.compare *)
 
-  val hash: t -> int
+  val hash: 'a period -> int
     (** Hash function for periods.
 	@see <Utils.Comparable.html#VALhash> Utils.Comparable.hash 
 	@since 2.0 *)

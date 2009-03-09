@@ -111,6 +111,7 @@ end
 
 module Period = struct
 
+  type +'a period = float constraint 'a = [< Period.date_field ]
   include Utils.Float
 
   let make h m s = float (h * 3600 + m * 60) +. s

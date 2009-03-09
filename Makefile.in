@@ -42,7 +42,7 @@ LIB_EXT = @LIBEXT@
 
 NAME	= calendar
 NAMELIB = calendarLib
-VERSION	= 2.01.1
+VERSION	= 2.01.1+dev
 
 LIBDIR	= target
 
@@ -71,7 +71,7 @@ MLI	= $(filter %.mli, $(SRC))
 CMO	= $(ML:.ml=.cmo)
 CMX	= $(CMO:.cmo=.cmx)
 CMI	= $(MLI:.mli=.cmi)
-CMI_ONLY= src/period.cmi
+CMI_ONLY= src/period.cmi src/date_sig.mli src/time_sig.mli #src/calendar_sig.mli
 
 GENERATED= src/version.ml
 
@@ -266,9 +266,8 @@ clean-configure cleanconfig: dist-clean
 
 .depend depend: $(GENERATED)
 	rm -f .depend
-	for i in src tests; do \
-	  $(CAMLDEP) $(CAMLIBS) -I tests $$i/*.ml $$i/*.mli; \
-	done > .depend
+	$(CAMLDEP) $(CAMLIBS) src/*.ml src/*.mli > .depend
+	$(CAMLDEP) -I tests tests/*.ml tests/*.mli >> .depend
 
 view-depend:
 	$(CAMLDOT) .depend | dot -Tps | gv -

@@ -197,49 +197,49 @@ module type S = sig
 
     (** {3 Arithmetic operations} *)
 
-    include Period.S 
+    include Period.S
 
-    val length : t -> second
+    val length : 'a period -> second
       (** Number of seconds of a period. *)
 
-    val mul : t -> t -> t
+    val mul : 'a period -> 'a period -> 'a period
       (** Multiplication. *)
 
-    val div : t -> t -> t
+    val div : 'a period -> 'a period -> 'a period
       (** Division. *)
 
     (** {3 Constructors} *)
 
-    val make : int -> int -> second -> t
+    val make : int -> int -> second -> 'a period
       (** [make hour minute second] makes a period of the specified length. *)
 
-    val lmake : ?hour:int -> ?minute:int -> ?second:second -> unit -> t
+    val lmake : ?hour:int -> ?minute:int -> ?second:second -> unit -> 'a period
       (** Labelled version of [make]. 
 	  The default value is [0] for each argument. *)
 
-    val hour : int -> t
+    val hour : int -> 'a period
       (** [hour n] makes a period of [n] hours. *)
 
-    val minute : int -> t
+    val minute : int -> 'a period
       (** [minute n] makes a period of [n] minutes. *)
 
-    val second : second -> t
+    val second : second -> 'a period
       (** [second n] makes a period of [n] seconds. *)
 
     (** {3 Getters} *)
 
-    val to_seconds : t -> second
+    val to_seconds : 'a period -> second
       (** Number of seconds of a period. 
 	  @example [to_seconds (make 1 2 3)] returns [3600 + 120 + 3 = 3723]. 
 	  @since 1.04 *)
 
-    val to_minutes : t -> float
+    val to_minutes : 'a period -> float
       (** Number of minutes of a period. The resulting fractional part 
 	  represents seconds.
 	  @example [to_minutes (make 1 2 3)] returns [60 + 2 + 0.05 = 62.05]. 
 	  @since 1.04 *)
 
-    val to_hours : t -> float
+    val to_hours : 'a period -> float
       (** Number of hours of a period. The resulting fractional part represents 
 	  minutes and seconds.
 	  @example [to_hours (make 1 3 0)] returns [1 + 0.05 = 1.05]. 
@@ -249,15 +249,15 @@ module type S = sig
 
   (** {2 Arithmetic operations on times and periods} *)
 
-  val add : t -> Period.t -> t
+  val add : t -> 'a Period.period -> t
     (** [app t p] returns [t + p]. 
 	@example [add (make 20 0 0) (Period.minute 70)] returns the time
 	21:10:0. *)
 
-  val sub : t -> t -> Period.t
+  val sub : t -> t -> 'a Period.period
     (** [sub t1 t2] returns the period between [t1] and [t2]. *)
 
-  val rem : t -> Period.t -> t
+  val rem : t -> 'a Period.period -> t
     (** [rem t p] is equivalent to [add t (Period.opp p)]. *)
 
   val next : t -> field -> t

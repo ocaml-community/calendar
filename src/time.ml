@@ -104,6 +104,7 @@ end
 
 module Period = struct
 
+  type +'a period = int constraint 'a = [< Period.date_field ]
   include Utils.Int
 
   let make h m s = h * 3600 + m * 60 + s

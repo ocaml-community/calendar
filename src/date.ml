@@ -29,7 +29,12 @@
 
 (*S Datatypes. *)
 
-include Utils.Int (* the integer represents the Julian day *)
+type field = Period.date_field
+
+(* the integer represents the Julian day *)
+type -'a date = int constraint 'a = [< field ]
+
+type t = field date
 
 type day = Sun | Mon | Tue | Wed | Thu | Fri | Sat
 
@@ -38,12 +43,9 @@ type month =
 
 type year = int
 
-type field = [ `Year | `Month | `Week | `Day ]
-
 (*S Exceptions. *)
 
 exception Out_of_bounds
-
 exception Undefined
 
 (*S Locale coercions.
@@ -58,6 +60,12 @@ external int_of_day : day -> int = "%identity"
 (* pre: 0 <= n < 12 *)
 external month_of_int : int -> month = "%identity"
 external int_of_month : month -> int = "%identity"
+
+(* Dates are comparable *)
+
+let compare = Utils.Int.compare
+let equal = Utils.Int.equal
+let hash = Utils.Int.hash
 
 (* Constructors. *)
 
@@ -218,7 +226,12 @@ module Period = struct
      resulting date is 2001-3-12 (yep, one year later). But if we add [p] to 
      the date 1999-3-12, [p] corresponds to 365 days and the resulting date is
      2000-3-12 (yep, one year later too). *)
-  type t = { y (* year *) : int; m (* month *) : int; d (* day *) : int }
+  type +'a period = 
+      { y (* year *) : int; m (* month *) : int; d (* day *) : int }
+  constraint 'a = [< field ]
+
+  type +'a p = 'a period
+  type t = field period
 
   let empty = { y = 0; m = 0; d = 0 }
 
