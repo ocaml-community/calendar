@@ -2,7 +2,7 @@
 #                                                                        #
 #  This file is part of Calendar.                                        #
 #                                                                        #
-#  Copyright (C) 2003-2008 Julien Signoles                               #
+#  Copyright (C) 2003-2009 Julien Signoles                               #
 #                                                                        #
 #  you can redistribute it and/or modify it under the terms of the GNU   #
 #  Lesser General Public License version 2.1 as published by the         #
@@ -54,7 +54,7 @@ CLIBS   := $(CLIBS) $(LIBDIR)/$(NAMELIB)$(OBJ_EXT) \
 	$(LIBDIR)/$(NAMELIB)$(LIB_EXT)
 endif
 
-DIRS	= src
+DIRS	= src target tests
 
 SRC	= utils.mli utils.ml time_Zone.mli time_Zone.ml period.mli \
 	time_sig.mli time.mli time.ml ftime.mli ftime.ml \
@@ -78,11 +78,12 @@ GENERATED= src/version.ml
 # Libs and flags
 ################
 
-CAMLIBS	= -I $(DIRS)
+CAMLIBS	= $(addprefix -I , $(DIRS))
 
 CAMLFLAGS= $(CAMLIBS)
 BYTEFLAGS= $(CAMLFLAGS)
-OPTFLAGS = $(CAMLFLAGS) -noassert
+LINK_OPTFLAGS = $(CAMLFLAGS) -noassert
+OPTFLAGS = $(LINK_OPTFLAGS) -for-pack CalendarLib
 
 # Main rules
 ############
@@ -97,15 +98,13 @@ $(LIBDIR)/$(NAMELIB).cmo: $(CMI_ONLY) $(CMO)
 $(LIBDIR)/$(NAMELIB).cma: $(LIBDIR)/$(NAMELIB).cmo
 	$(CAMLFIND) ocamlc $(BYTEFLAGS) -a -o $@ $<
 
-$(CMX):OPTFLAGS:=$(OPTFLAGS) -for-pack CalendarLib
-
 $(LIBDIR)/$(NAMELIB).cmx: $(CMI_ONLY) $(CMX)
 	mkdir -p $(LIBDIR)
-	$(CAMLFIND) ocamlopt $(OPTFLAGS) -pack -o $@ \
+	$(CAMLFIND) ocamlopt $(LINK_OPTFLAGS) -pack -o $@ \
 		$(filter-out $(LIBDIR), $^)
 
 $(LIBDIR)/$(NAMELIB).a $(LIBDIR)/$(NAMELIB).cmxa: $(LIBDIR)/$(NAMELIB).cmx 
-	$(CAMLFIND) ocamlopt $(OPTFLAGS) -a -o $@ $<
+	$(CAMLFIND) ocamlopt $(LINK_OPTFLAGS) -a -o $@ $<
 
 src/version.ml: Makefile
 	echo "let version = \"$(VERSION)\"" > $@
@@ -141,21 +140,17 @@ META: Makefile
 # Tests
 #######
 
-TESTS	= test_timezone test_time test_ftime test_date \
-	test_calendar test_fcalendar test_pcalendar test_fpcalendar \
-	test_printer
-TESTS	:= $(addprefix tests/, $(TESTS))
+TESTS_SRC= gen_test.mli gen_test.ml test_timezone.ml test_time.ml \
+	test_ftime.ml test_date.ml test_calendar.ml test_fcalendar.ml \
+	test_pcalendar.ml test_fpcalendar.ml test_printer.ml test.ml
+TESTS_SRC:= $(addprefix tests/, $(TESTS_SRC))
 
-TESTS_CMO= $(addsuffix .cmo, $(TESTS))
+TESTS_ML= $(filter %.ml, $(TESTS_SRC))
+TESTS_CMO= $(TESTS_ML:.ml=.cmo)
 
-$(TESTS_CMO): tests/gen_test.cmo
-tests/test.cmo: $(TESTS_CMO)
-
-tests/test: $(LIBDIR)/$(NAMELIB).cmo tests/test.cmo
+tests/test: $(LIBDIR)/$(NAMELIB).cmo $(TESTS_CMO)
 	$(CAMLC) -o $@ $(BYTEFLAGS) unix.cma str.cma $(LIBDIR)/$(NAMELIB).cmo \
-		tests/gen_test.cmo $(TESTS_CMO) tests/test.cmo
-
-$(TESTS_CMO) tests/test.cmo: BYTEFLAGS := -I tests -I target
+		$(TESTS_CMO)
 
 .PHONY: tests
 tests: tests/test
@@ -185,7 +180,8 @@ doc: $(CMO) utils/example.cmo
 
 .PHONY: headers
 headers:
-	headache -c headache_config.txt -h HEADER $(SRC) Makefile.in 
+	headache -c headache_config.txt -h HEADER $(SRC) $(TESTS_SRC) \
+	  Makefile.in utils/example.ml
 	headache -c headache_config.txt -h CONFIGURE_HEADER configure.in
 
 # Install
@@ -266,8 +262,8 @@ clean-configure cleanconfig: dist-clean
 
 .depend depend: $(GENERATED)
 	rm -f .depend
-	$(CAMLDEP) $(CAMLIBS) src/*.ml src/*.mli > .depend
-	$(CAMLDEP) -I tests tests/*.ml tests/*.mli >> .depend
+	$(CAMLDEP) $(CAMLIBS) src/*.ml src/*.mli tests/*.ml tests/*.mli \
+	  > .depend
 
 view-depend:
 	$(CAMLDOT) .depend | dot -Tps | gv -
