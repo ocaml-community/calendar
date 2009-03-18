@@ -80,10 +80,21 @@ test (weeks_in_year 2000 = 52) "weeks_in_year 2000";;
 test (weeks_in_year 2020 = 53) "weeks_in_year 2020";;
 test (weeks_in_year 1991 = 52) "weeks_in_year 1991";;
 test (weeks_in_year 1999 = 52) "weeks_in_year 1999";;
+test (days_in_month (make 2000 2 18) = 29) "days_in_month 2000-2-18";;
+test (days_in_month (make_year_month 2000 2) = 29) "days_in_month 2000-2";;
+(* untypable: *)
+(* test (days_in_month ((make_year 2000 :> [ `Year | `Month ] Date.date)) = 29) "days_in_month 2000-2";; *)
+test (days_in_year 1900 = 365) "days_in_year 1900";;
 test (century 2000 = 20) "century 2000";;
 test (century 2001 = 21) "century 2001";;
 test (millenium 2000 = 2) "millenium 2000";;
 test (millenium 2001 = 3) "millenium 2001";;
+test (year (make_year_month 2000 3) = 2000) "year 2000-3";;
+test (year (make_year 2000) = 2000) "year 2000";;
+test (month (make 2000 4 23) = Apr) "year 2000-4-23";;
+test (month (make_year_month 2000 3) = Mar) "year 2000-3";;
+(* untypable: *)
+(*test (month (make_year 2000) = Mar) "year 2000";;*)
 test (easter 2003 = make 2003 4 20) "Paques 2003";;
 test (Period.nb_days (Period.make 0 0 6) = 6) "Period.nb_days ok";;
 test_exn (lazy (Period.nb_days (Period.make 1 0 0))) "Period.nb_days ko";;

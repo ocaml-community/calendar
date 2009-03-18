@@ -93,6 +93,16 @@ module type S = sig
 	14th, 1582]].
 	@since 1.05 *)
 
+  val make_year: int -> [ `Year ] date
+    (** [make_year y] makes a date only represented by its year [y]. The month
+	and the day of such a date are not relevant.
+	@since 2.02 *)
+
+  val make_year_month: int -> int -> [ `Year | `Month ] date
+    (** [make_year_month y m] makes a date only represented by its year [y] and
+	its month [m]. The day of such a date is not relevant.
+	@since 2.02 *)
+
   val today : unit -> t
     (** Date of the current day (based on [Time_Zone.current ()]). *)
 

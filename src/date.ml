@@ -109,6 +109,9 @@ let make y m d =
 
 let lmake ~year ?(month = 1) ?(day = 1) () = make year month day
 
+let make_year y = make y 1 1
+let make_year_month y m = make y m 1
+
 let current_day day gmt_hour =
   let hour = Time_Zone.from_gmt () + gmt_hour in
   (* change the day according to the time zone *)
