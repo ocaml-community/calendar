@@ -6,6 +6,7 @@ Mark "*": bug fixed.
 Mark "!": change that can break compatibility with older version of the library
 ===============================================================================
 
+o [Date] improve memory representation of Date.Period.t
 * [Compilation] META files was incorrect, so "ocamlfind ocamlopt" did not work
 * [Compilation] file date_sig.mli, time_sig.mli and calendar_sig.mli was not 
   properly linked

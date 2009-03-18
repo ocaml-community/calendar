@@ -226,26 +226,25 @@ module Period = struct
      resulting date is 2001-3-12 (yep, one year later). But if we add [p] to 
      the date 1999-3-12, [p] corresponds to 365 days and the resulting date is
      2000-3-12 (yep, one year later too). *)
-  type +'a period = 
-      { y (* year *) : int; m (* month *) : int; d (* day *) : int }
+  type +'a period = { m (* month *) : int; d (* day *) : int }
   constraint 'a = [< field ]
 
   type +'a p = 'a period
   type t = field period
 
-  let empty = { y = 0; m = 0; d = 0 }
+  let empty = { m = 0; d = 0 }
 
-  let make y m d = { y = y; m = m; d = d }
+  let make y m d = { m = 12 * y + m; d = d }
   let lmake ?(year = 0) ?(month = 0) ?(day = 0) () = make year month day
 
   let day n = { empty with d = n }
   let week n = { empty with d = 7 * n }
   let month n = { empty with m = n }
-  let year n = { empty with y = n }
+  let year n = { empty with m = 12 * n }
 
-  let add x y = { y = x.y + y.y; m = x.m + y.m; d = x.d + y.d }
-  let sub x y = { y = x.y - y.y; m = x.m - y.m; d = x.d - y.d }
-  let opp x = { y = - x.y; m = - x.m; d = - x.d }
+  let add x y = { m = x.m + y.m; d = x.d + y.d }
+  let sub x y = { m = x.m - y.m; d = x.d - y.d }
+  let opp x = { m = - x.m; d = - x.d }
 
   (* Lexicographical order over the fields of the type [t].
      Yep, [Pervasives.compare] correctly works. *)
@@ -255,9 +254,9 @@ module Period = struct
 
   exception Not_computable
 
-  let nb_days p = if p.y <> 0 || p.m <> 0 then raise Not_computable else p.d
+  let nb_days p = if p.m <> 0 then raise Not_computable else p.d
 
-  let ymd p = p.y, p.m, p.d
+  let ymd p = p.m / 12, p.m mod 12, p.d
 
 end
 
@@ -267,10 +266,11 @@ let add d p =
 (*  Format.printf "%d %d %d / %d %d %d@."
     (year d) (int_month d) (day_of_month d)
     p.Period.y p.Period.m p.Period.d;*)
+  let y,m,day = Period.ymd p in
   make 
-    (year d         + p.Period.y) 
-    (int_month d    + p.Period.m) 
-    (day_of_month d + p.Period.d)
+    (year d         + y) 
+    (int_month d    + m) 
+    (day_of_month d + day)
 
 let sub x y = { Period.empty with Period.d = x - y }
 
