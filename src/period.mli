@@ -18,7 +18,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: period.mli,v 1.16 2008-02-05 15:36:21 signoles Exp $ i*)
+(*i $Id$ i*)
 
 (** A period represents the time passed between two events (a date, a time...).
   Only an interface defining arithmetic operations on periods is defined here.

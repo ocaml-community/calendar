@@ -18,7 +18,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: version.mli,v 1.8 2008-02-05 15:36:21 signoles Exp $ i*)
+(*i $Id$ i*)
 
 (** Information about version of calendar. 
     @since 2.0 *)

@@ -18,7 +18,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: calendar.mli,v 1.25 2008-02-05 15:36:21 signoles Exp $ i*)
+(*i $Id$ i*)
 
 (** Calendar implementation in which seconds are integer.
 

@@ -18,7 +18,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: date_sig.mli,v 1.5 2008-02-08 13:06:45 signoles Exp $ i*)
+(*i $Id$ i*)
 
 (** Date interface. A date may be seen as a triple (year, month, day). 
   

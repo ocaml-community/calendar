@@ -18,7 +18,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: test_calendar.ml,v 1.18 2008-02-08 10:36:14 signoles Exp $ i*)
+(*i $Id$ i*)
 
 Printf.printf "Tests of Calendar:\n";;
 

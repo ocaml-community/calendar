@@ -18,7 +18,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: printer.mli,v 1.22 2009-01-26 09:08:10 signoles Exp $ i*)
+(*i $Id$ i*)
 
 (** Pretty printing and parsing from string. 
     In the following, an "event" is either a date or a time or a calendar.

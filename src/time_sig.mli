@@ -18,7 +18,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: time_sig.mli,v 1.4 2008-02-05 15:36:21 signoles Exp $ i*)
+(*i $Id$ i*)
 
 (** Time interface. A time may be seen as a triple (hour, minute, second). 
 

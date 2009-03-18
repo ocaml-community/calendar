@@ -18,7 +18,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: test_fpcalendar.ml,v 1.2 2008-02-08 10:36:14 signoles Exp $ i*)
+(*i $Id$ i*)
 
 Printf.printf "Tests of FPcalendar:\n";;
 

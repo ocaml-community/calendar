@@ -18,7 +18,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: test_timezone.ml,v 1.8 2008-02-08 10:36:14 signoles Exp $ i*)
+(*i $Id$ i*)
 
 Printf.printf "Tests of Time_Zone:\n";;
 

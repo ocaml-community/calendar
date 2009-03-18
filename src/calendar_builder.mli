@@ -18,7 +18,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: calendar_builder.mli,v 1.3 2008-02-05 15:36:21 signoles Exp $ i*)
+(*i $Id$ i*)
 
 (** Generic calendar implementation. 
     @since 2.0 *)

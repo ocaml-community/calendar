@@ -18,7 +18,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: time.mli,v 1.20 2008-02-05 15:36:21 signoles Exp $ i*)
+(*i $Id$ i*)
 
 (** Time implementation in which seconds are integers. *)
 

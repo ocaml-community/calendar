@@ -18,7 +18,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: calendar_sig.mli,v 1.3 2008-02-05 15:36:21 signoles Exp $ i*)
+(*i $Id$ i*)
 
 (** Calendar interface. A calendar combines a date and a time: it may be seen
     as a 6-uple (year, month, day, hour, minute, second).

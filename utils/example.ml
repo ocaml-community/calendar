@@ -18,7 +18,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: example.ml,v 1.2 2008-02-01 15:51:05 signoles Exp $ *)
+(* $Id$ *)
 
 (** Add a tag @example *)
 class example = object (self)
