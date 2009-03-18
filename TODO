@@ -3,24 +3,23 @@
 planned for next release:
 =========================
 
-* documentation de la nouvelle feature avec variant polymorphe
-* utiliser les variants polymorphes pour types les printers et les parsers
-  (i.e. coder leur version safe). Pour cela, introduire un type "'a fmt" pour 
-  les formats et coder des constructeurs de format avec les bonnes contraintes 
-  de types ainsi qu'une fonction de concaténation de format.
-* fonction Date.make_year : [ `Year ] Date.t
-* fonction Date.make_month: [ `Month ] Date.t
 * Utils.Deprecated
 * module Parser (suggestion de Guillaume Yziquel)
 * plus de fonctions pour faciliter le parsing (en plus des *from_*string*)
-* FAQ (suggestion de Guillaume Yziquel)
-* page introductive comme point d'entrée pour la doc
-  (suggestion de Guillaume Yziquel) 
 * support des noms de ville principale pour les Time Zone
-  (suggestion de Guillaume Yziquel)
-
+ (suggestion de Guillaume Yziquel)
+* improve documentation (suggestion de Guillaume Yziquel)
+    - FAQ
+    - page introductive comme point d'entrée pour la doc
 * [ongoing] pouvoir gérer facilement les dates moins précises 
   (sans jour ou mois exprimé) (suggestion de Warren Harris).
+    - documentation de la nouvelle feature avec variant polymorphe
+    - fonction Date.make_year : [ `Year ] Date.t
+    - fonction Date.make_month: [ `Month ] Date.t
+    - utiliser les variants polymorphes pour types les printers et les parsers
+(i.e. coder leur version safe). Pour cela, introduire un type "'a fmt" pour les
+formats et coder des constructeurs de format avec les bonnes contraintes de
+types ainsi qu'une fonction de concaténation de format.
 
 ===============
 other features:
