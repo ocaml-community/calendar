@@ -114,8 +114,8 @@ src/version.ml: Makefile
 META: Makefile
 	echo "description = \"$(NAME) library\"" > $@
 	echo "version = \"$(VERSION)\"" >> $@
-	echo "archive(byte) = \"$(NAMELIB).cmo $(NAMELIB).cma\"" >> $@
-	echo "archive(native) = \"$(NAMELIB).cmx $(NAMELIB).cmxa\"" >> $@
+	echo "archive(byte) = \"$(NAMELIB).cma\"" >> $@
+	echo "archive(native) = \"$(NAMELIB).cmxa\"" >> $@
 	echo "requires = \"unix str\"" >> $@
 
 # Generic rules

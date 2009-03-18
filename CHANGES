@@ -6,6 +6,7 @@ Mark "*": bug fixed.
 Mark "!": change that can break compatibility with older version of the library
 ===============================================================================
 
+* [Compilation] META files was incorrect, so "ocamlfind ocamlopt" did not work
 * [Compilation] file date_sig.mli, time_sig.mli and calendar_sig.mli was not 
   properly linked
 
@@ -45,7 +46,7 @@ o [Printer] support of "%w" and "%V" in parsers of date from string
 
 version 2.0.3, 2008-05-22:
 ==========================
-* [Compilation] module Period was not properly linked
+* [Compilation] module Period was not properly linked 
 
 version 2.0.2, 2008-03-17:
 ==========================
@@ -60,7 +61,8 @@ version 2.0.1, 2008-02-22:
 
 version 2.0, 2008-02-08:
 ========================
-o! [Licence] license changes from LGPLv2 to LGPLv2.1
+o! [Licence] license changes from LGPLv2 to LGPLv2.1 
+   (from a suggestion of Hezekiah M. Carty)
 o! [Compilation] use -pack: all modules of the library are packed inside a 
   single module CalendarLib (calendar now requires ocaml >= 3.09.1)
 o new modules Time_sig, Date_sig and Calendar_sig
