@@ -10,7 +10,6 @@ planned for next release:
   de types ainsi qu'une fonction de concaténation de format.
 * fonction Date.make_year : [ `Year ] Date.t
 * fonction Date.make_month: [ `Month ] Date.t
-* memory efficiency of Date.Period
 * Utils.Deprecated
 * module Parser (suggestion de Guillaume Yziquel)
 * plus de fonctions pour faciliter le parsing (en plus des *from_*string*)
