@@ -60,7 +60,7 @@ case $OCAMLVERSION in
   *) echo "${ECHO_T}Unsupported version!"; exit 2;;
 esac
 
-OCAMLLIB=`$OCAMLC -where`
+OCAMLLIB=`$OCAMLC -where | tr -d '\r'`
 echo "ocaml library path is $OCAMLLIB"
 
 # then we look for ocamlopt; if not present, we issue a warning
