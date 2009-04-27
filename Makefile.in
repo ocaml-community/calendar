@@ -49,7 +49,8 @@ LIBDIR	= target
 LIBS	= $(LIBDIR)/$(NAMELIB).cmo $(LIBDIR)/$(NAMELIB).cma
 CLIBS   =
 ifneq ($(CAMLOPT),no)
-LIBS	:= $(LIBS) $(LIBDIR)/$(NAMELIB).cmx $(LIBDIR)/$(NAMELIB).cmxa
+LIBS   := $(LIBS) $(LIBDIR)/$(NAMELIB).cmx $(LIBDIR)/$(NAMELIB).cmxa \
+	$(if $(wildcard $(CAMLLIB)/dynlink.cmxa),$(LIBDIR)/$(NAMELIB).cmxs)
 CLIBS   := $(CLIBS) $(LIBDIR)/$(NAMELIB)$(OBJ_EXT) \
 	$(LIBDIR)/$(NAMELIB)$(LIB_EXT)
 endif
@@ -71,7 +72,7 @@ MLI	= $(filter %.mli, $(SRC))
 CMO	= $(ML:.ml=.cmo)
 CMX	= $(CMO:.cmo=.cmx)
 CMI	= $(MLI:.mli=.cmi)
-CMI_ONLY= src/period.cmi src/date_sig.mli src/time_sig.mli #src/calendar_sig.mli
+CMI_ONLY= src/period.cmi src/date_sig.cmi src/time_sig.cmi src/calendar_sig.cmi
 
 GENERATED= src/version.ml
 
@@ -105,6 +106,9 @@ $(LIBDIR)/$(NAMELIB).cmx: $(CMI_ONLY) $(CMX)
 
 $(LIBDIR)/$(NAMELIB).a $(LIBDIR)/$(NAMELIB).cmxa: $(LIBDIR)/$(NAMELIB).cmx 
 	$(CAMLFIND) ocamlopt $(LINK_OPTFLAGS) -a -o $@ $<
+
+$(LIBDIR)/$(NAMELIB).cmxs: $(LIBDIR)/$(NAMELIB).cmxa
+	$(CAMLFIND) ocamlopt -I $(LIBDIR) -shared -linkall -o $@ $<
 
 src/version.ml: Makefile
 	echo "let version = \"$(VERSION)\"" > $@
@@ -190,7 +194,7 @@ headers:
 install: $(LIBS) $(CLIBS) META
 	@if [ "`sed -n -e 's/version = "\([0-9.]*\)"/\1/p' META`" = "$(VERSION)" ]; then \
 	  (if test -d `ocamlfind install -help | grep destdir | sed -e "s/.*default: \(.*\))/\1/"`/$(NAME); then $(MAKE) uninstall; fi;\
-	  $(CAMLFIND) install $(NAME) target/*.cm[iox] target/*.cma target/*.cmxa $(MLI) $(CMI) $(CLIBS) META\
+	  $(CAMLFIND) install $(NAME) target/*.cm[ioxa] target/*.cmx[as] $(MLI) $(CMI) $(CLIBS) META\
 	)else \
 	  (echo; echo "Not the good version. Please, do :"; \
 	   echo "  make clean && make"; \

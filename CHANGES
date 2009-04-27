@@ -6,6 +6,8 @@ Mark "*": bug fixed.
 Mark "!": change that can break compatibility with older version of the library
 ===============================================================================
 
+o [Compilation] native dynlink of calendarLib is possible with ocaml>=3.11
+  (patch of Mehdi Dogguy)
 * [Compilation] bug fixed under Cygwin
 o [Date] new functions Date.make_year and Date.make_year_month
 o [Date] improve memory representation of Date.Period.t
