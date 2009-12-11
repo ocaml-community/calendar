@@ -210,25 +210,23 @@ uninstall:
 ###########
 
 EXPORT_DIR= $$HOME/WWW/prog/$(NAME)
-TMP_DIR	= tmp
+TMP_DIR	= $$HOME/tmp
 
-export: doc #$(NAME).ps.gz
-	cvs export -d $(TMP_DIR)/$(NAME)-$(VERSION) -D now $(NAME)
+ROOT= $$HOME/DEV/calendar
+
+export: doc
+	(cd $(ROOT); svn copy trunk tags/v$(VERSION))
 	rm -rf $(EXPORT_DIR)/doc
-	cp -rf .depend configure config.status doc $(TMP_DIR)/$(NAME)-$(VERSION)
 	cp -rf CHANGES doc $(EXPORT_DIR)
-	chmod -R ugo+r $(TMP_DIR)/$(NAME)-$(VERSION)
+	mkdir -p $(TMP_DIR)/$(NAME)-$(VERSION)
+	cp -rf .depend configure config.status doc $(TMP_DIR)/$(NAME)-$(VERSION)
 	cd $(TMP_DIR); \
-	  (rm -f $(NAME)-$(VERSION)/html/touch-html \
-		$(NAME)-$(VERSION)/.cvsignore; \
+	  (rm -f $(NAME)-$(VERSION)/.cvsignore; \
 	   tar cvf $(NAME)-$(VERSION).tar $(NAME)-$(VERSION); \
 	   gzip -f --best $(NAME)-$(VERSION).tar; \
 	   rm -rf $(NAME)-$(VERSION); \
 	   mv $(NAME)-$(VERSION).tar.gz $(EXPORT_DIR))
-# 	cd $(EXPORT_DIR)/../..; \
-# 	  (sed -e "s/_CALVERS_/$(VERSION)/" misc/bindings.dat.pre \
-# 	      > misc/bindings.dat; \
-# 	   ./scripts/create_html.sh)
+	rm -rf $(TMP_DIR)/$(NAME)-$(VERSION)
 
 # Rebuilding Makefile
 #####################
