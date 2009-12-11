@@ -215,7 +215,8 @@ TMP_DIR	= $$HOME/tmp
 ROOT= $$HOME/DEV/calendar
 
 export: doc
-	(cd $(ROOT); svn copy trunk tags/v$(VERSION))
+	(cd $(ROOT); svn copy trunk tags/v$(VERSION); \
+	  cd tags; svn commit -m "v $(VERSION)")
 	rm -rf $(EXPORT_DIR)/doc
 	cp -rf CHANGES doc $(EXPORT_DIR)
 	mkdir -p $(TMP_DIR)/$(NAME)-$(VERSION)
