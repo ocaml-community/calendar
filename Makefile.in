@@ -42,7 +42,7 @@ LIB_EXT = @LIBEXT@
 
 NAME	= calendar
 NAMELIB = calendarLib
-VERSION	= 2.01.1+dev
+VERSION	= 2.02
 
 LIBDIR	= target
 
@@ -151,6 +151,8 @@ TESTS_SRC:= $(addprefix tests/, $(TESTS_SRC))
 
 TESTS_ML= $(filter %.ml, $(TESTS_SRC))
 TESTS_CMO= $(TESTS_ML:.ml=.cmo)
+
+$(TESTS_CMO) $(TESTS_CMI): $(LIBDIR)/$(NAMELIB).cmo $(LIBDIR)/$(NAMELIB).cmi
 
 tests/test: $(LIBDIR)/$(NAMELIB).cmo $(TESTS_CMO)
 	$(CAMLC) -o $@ $(BYTEFLAGS) unix.cma str.cma $(LIBDIR)/$(NAMELIB).cmo \

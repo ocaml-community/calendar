@@ -46,10 +46,12 @@ module type S = sig
 
   (** {2 Datatypes} *)
 
-  (** The different fields of a date. *)
+  (** The different fields of a date. 
+      @since 2.02 *)
   type field = Period.date_field
 
-  (** Type of a date, without specifying any precision level. *)
+  (** Type of a date, without specifying any precision level. 
+      @since 2.02 *)
   type -'a date constraint 'a = [< field ]
 
   (** Type of a date. *)

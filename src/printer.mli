@@ -18,8 +18,6 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id$ i*)
-
 (** Pretty printing and parsing from string. 
     In the following, an "event" is either a date or a time or a calendar.
   

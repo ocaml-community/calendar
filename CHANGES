@@ -6,6 +6,8 @@ Mark "*": bug fixed.
 Mark "!": change that can break compatibility with older version of the library
 ===============================================================================
 
+version 2.02, 2009-12-11:
+=========================
 o [Calendar] Calendar_sig.Period.to_time is deprecated.
   Replaced by a new function Calendar_sig.Period.safe_to_time
 o [Date] Date.Period.nb_days is deprecated.
@@ -21,7 +23,7 @@ o [Date] improve memory representation of Date.Period.t
   properly linked
 
 version 2.01.1, 2009-02-23:
-=========================
+===========================
 * [Date] add a missing coercion rule for months
   (e.g. "Date.make 2008 18 1" is now equal to "Date.make 2009 6 1")
 * [Date] bug fixed in date arithmetic operations due to the missing above 
