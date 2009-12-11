@@ -215,6 +215,11 @@ TMP_DIR	= $$HOME/tmp
 ROOT= $$HOME/DEV/calendar
 
 export: doc
+	(cd $(TMP_DIR); \
+	  svn co svn+ssh://signoles@svn.forge.ocamlcore.org/svnroot/calendar/trunk)
+	svn copy $(TMP_DIR)/trunk $(ROOT)/tags/v$(VERSION)
+	rm -rf $(TMP_DIR)/trunk
+	(cd $(ROOT)/tags; svn commit -m "v $(VERSION)")
 	rm -rf $(EXPORT_DIR)/doc
 	cp -rf CHANGES doc $(EXPORT_DIR)
 	cp -rf $(ROOT)/tags/v$(VERSION) $(TMP_DIR)/$(NAME)-$(VERSION)
