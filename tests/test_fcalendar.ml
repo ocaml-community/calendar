@@ -161,6 +161,10 @@ test (Period.to_time (Period.second 30.12) = Time.Period.second 30.12)
   "Period.to_time second";;
 test (Period.to_time (Period.day 6) = Time.Period.second 518400.) 
   "Period.to_time day";;
+test (Period.safe_to_time (Period.second 30.12) = Time.Period.second 30.12) 
+  "Period.safe_to_time second";;
+test (Period.safe_to_time (Period.day 6) = Time.Period.second 518400.) 
+  "Period.safe_to_time day";;
 test_exn (lazy (Period.to_time (Period.year 1))) "Period.to_time year";;
 test (Period.ymds (Period.make 1 2 3 1 2 3.1) = (1, 2, 3, 3723.1)) 
   "Period.ymds";;

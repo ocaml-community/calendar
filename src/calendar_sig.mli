@@ -254,12 +254,12 @@ module type S = sig
 
     (** {3 Periods are comparable} *)
       
-    val equal: 'a period -> 'a period -> bool
+    val equal: 'a period -> 'b period -> bool
       (** Equality function between two periods.
 	  @see <Utils.Comparable.html#VALequal> Utils.Comparable.equal
 	  @since 1.09.0 *)
 
-    val compare : 'a period -> 'a period -> int
+    val compare : 'a period -> 'b period -> int
       (** Comparison function between two periods.
  	  @see <Utils.Comparable.html#VALcompare> Utils.Comparable.compare *)
 
@@ -332,7 +332,13 @@ module type S = sig
 	  @example [to_time (second 30)] returns a time period of [30] seconds
 	  @example [to_time (year 1)] raises [Not_computable] because
 	  a year is not a constant number of days. 
-	  @since 1.04 *)
+	  @since 1.04 
+	  @deprecated since 2.02: use {!safe_to_time} instead*)
+
+    val safe_to_time: 
+      ([<  `Week | `Day ] as 'a) period -> 'a Time.Period.period
+      (** Equivalent to {!to_time} but never raises any exception.
+	  @since 2.02 *)
 
     val ymds: 'a period -> int * int * int * second
       (** Number of years, months, days and seconds in a period.
@@ -348,13 +354,13 @@ module type S = sig
   (** Those functions have the same behavious as those defined in
       {!Date_sig.S}. *)
 
-  val add : t -> Period.t -> t
+  val add : t -> 'a Period.period -> t
     (** @see <Date_sig.S.html#VALadd> Date_sig.S.add *)
 
-  val sub : t -> t -> Period.t
+  val sub : t -> t -> [> `Week | `Day ] Period.period
     (** @see <Date_sig.S.html#VALsub> Date_sig.S.sub *)
 
-  val rem : t -> Period.t -> t
+  val rem : t -> 'a Period.period -> t
     (** @see <Date_sig.S.html#VALrem> Date_sig.S.rem *)
 
   val next : t -> field -> t

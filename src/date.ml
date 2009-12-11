@@ -249,15 +249,18 @@ module Period = struct
   let sub x y = { m = x.m - y.m; d = x.d - y.d }
   let opp x = { m = - x.m; d = - x.d }
 
-  (* Lexicographical order over the fields of the type [t].
-     Yep, [Pervasives.compare] correctly works. *)
-  let compare = Pervasives.compare
-  let equal = Pervasives.(=)
+  (* exactly equivalent to [Pervasives.compare] but more flexible typing *)
+  let compare x y = 
+    let n = Pervasives.compare x.m y.m in
+    if n = 0 then Pervasives.compare x.d y.d else n
+  let equal x y = compare x y = 0
   let hash = Hashtbl.hash
 
   exception Not_computable
 
   let nb_days p = if p.m <> 0 then raise Not_computable else p.d
+
+  let safe_nb_days p = p.d
 
   let ymd p = p.m / 12, p.m mod 12, p.d
 

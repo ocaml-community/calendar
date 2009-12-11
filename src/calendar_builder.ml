@@ -211,8 +211,9 @@ module Make(D: Date_sig.S)(T: Time_sig.S) = struct
 
     exception Not_computable = D.Period.Not_computable
 
-    let to_time x = 
-      T.Period.add (T.Period.hour (D.Period.nb_days x.d * 24)) x.t
+    let gen_to_time f x = T.Period.add (T.Period.hour (f x.d * 24)) x.t
+    let to_time x = gen_to_time D.Period.nb_days x (* eta-expansion required *)
+    let safe_to_time x = gen_to_time D.Period.safe_nb_days x
 
     let ymds x =
       let y, m, d = D.Period.ymd x.d in
@@ -236,9 +237,9 @@ module Make(D: Date_sig.S)(T: Time_sig.S) = struct
 
   let add x p =
     let d, t = split x in
-    unsplit (D.add d p.Period.d) (T.add t p.Period.t)
+    unsplit (D.add d (p.Period.d :> D.Period.t)) (T.add t p.Period.t)
 
-  let rem x p = add x (Period.opp p)
+  let rem x p = add x (Period.opp (p :> Period.t))
 
   let sub x y = 
     let d1, t1 = split x
@@ -463,8 +464,9 @@ module Make_Precise(D: Date_sig.S)(T: Time_sig.S) = struct
 
     exception Not_computable = D.Period.Not_computable
 
-    let to_time x = 
-      T.Period.add (T.Period.hour (D.Period.nb_days x.d * 24)) x.t
+    let gen_to_time f x = T.Period.add (T.Period.hour (f x.d * 24)) x.t
+    let to_time x = gen_to_time D.Period.nb_days x (* eta-expansion required *)
+    let safe_to_time x = gen_to_time D.Period.safe_nb_days x
 
     let ymds x =
       let y, m, d = D.Period.ymd x.d in
@@ -474,10 +476,13 @@ module Make_Precise(D: Date_sig.S)(T: Time_sig.S) = struct
 
   (*S Arithmetic operations on calendars and periods. *)
 
-  let add x p = normalize (D.add x.date p.Period.d) (T.add x.time p.Period.t)
-  let rem x p = add x (Period.opp p)
+  let add x p = 
+    normalize 
+      (D.add x.date (p.Period.d :> D.Period.t)) (T.add x.time p.Period.t)
 
-  let sub x y = 
+  let rem x p = add x (Period.opp (p :> Period.t))
+
+  let sub x y =
     Period.normalize 
       { Period.d = D.sub x.date y.date; Period.t = T.sub x.time y.time }
 

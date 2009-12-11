@@ -50,12 +50,12 @@ module type S = sig
 
   (** {3 Periods are comparable} *)
 
-  val equal: 'a period -> 'a period -> bool
+  val equal: 'a period -> 'b period -> bool
     (** Equality function between two periods.
 	@see <Utils.Comparable.html#VALequal> Utils.Comparable.equal
 	@since 1.09.0 *)
 
-  val compare : 'a period -> 'a period -> int
+  val compare : 'a period -> 'b period -> int
     (** Comparison function between two periods.
  	@see <Utils.Comparable.html#VALcompare> Utils.Comparable.compare *)
 

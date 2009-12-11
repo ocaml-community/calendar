@@ -192,10 +192,10 @@ headers:
 #########
 
 install: $(LIBS) $(CLIBS) META
-	@if [ "`sed -n -e 's/version = "\([0-9.]*\)"/\1/p' META`" = "$(VERSION)" ]; then \
+	@if [ "`sed -n -e 's/version = "\([0-9.+dev]*\)"/\1/p' META`" = "$(VERSION)" ]; then \
 	  (if test -d `ocamlfind install -help | grep destdir | sed -e "s/.*default: \(.*\))/\1/"`/$(NAME); then $(MAKE) uninstall; fi;\
-	  $(CAMLFIND) install $(NAME) target/*.cm[ioxa] target/*.cmx[as] $(MLI) $(CMI) $(CLIBS) META\
-	)else \
+	  $(CAMLFIND) install $(NAME) target/*.cm[ioxa] target/*.cmx[as] $(MLI)  $(CLIBS) META); \
+	else \
 	  (echo; echo "Not the good version. Please, do :"; \
 	   echo "  make clean && make"; \
 	   echo "next reinstall"; echo) \

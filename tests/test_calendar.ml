@@ -63,7 +63,9 @@ test
   (equal (rem (make 9 8 7 6 5 4) (Period.make 1 2 3 4 5 6)) 
      (make 8 6 4 1 59 58))
   "rem 9-8-7-6-5-4 1-2-3-4-5-6";;
-test (sub (make 0 0 7 6 5 4) (make 0 0 3 54 5 6) = Period.make 0 0 1 23 59 58) 
+test (Period.equal
+	(sub (make 0 0 7 6 5 4) (make 0 0 3 54 5 6)) 
+	(Period.make 0 0 1 23 59 58))
   "sub 0-0-7-6-5-4 0-0-3-54-5-6";;
 
 test (Period.equal 
@@ -145,6 +147,10 @@ test (Period.to_time (Period.second 30) = Time.Period.second 30)
   "Period.to_time second";;
 test (Period.to_time (Period.day 6) = Time.Period.second 518400) 
   "Period.to_time day";;
+test (Period.safe_to_time (Period.second 30) = Time.Period.second 30) 
+  "Period.safe_to_time second";;
+test (Period.safe_to_time (Period.day 6) = Time.Period.second 518400) 
+  "Period.safe_to_time day";;
 test_exn (lazy (Period.to_time (Period.year 1))) "Period.to_time year";;
 test (Period.ymds (Period.make 1 2 3 1 2 3) = (1, 2, 3, 3723)) "Period.ymds";;
 test

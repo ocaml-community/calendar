@@ -93,12 +93,12 @@ module type S = sig
 	14th, 1582]].
 	@since 1.05 *)
 
-  val make_year: int -> [ `Year ] date
+  val make_year: int -> [< `Year ] date
     (** [make_year y] makes a date only represented by its year [y]. The month
 	and the day of such a date are not relevant.
 	@since 2.02 *)
 
-  val make_year_month: int -> int -> [ `Year | `Month ] date
+  val make_year_month: int -> int -> [< `Year | `Month ] date
     (** [make_year_month y m] makes a date only represented by its year [y] and
 	its month [m]. The day of such a date is not relevant.
 	@since 2.02 *)
@@ -165,12 +165,12 @@ module type S = sig
 
   (** {2 Dates are comparable} *)
     
-  val equal: 'a date -> 'a date -> bool
+  val equal: 'a date -> 'b date -> bool
     (** Equality function between two dates.
 	@see <Utils.Comparable.html#VALequal> Utils.Comparable.equal
 	@since 1.09.0 *)
 
-  val compare : 'a date -> 'a date -> int
+  val compare : 'a date -> 'b date -> int
     (** Comparison function between two dates.
  	@see <Utils.Comparable.html#VALcompare> Utils.Comparable.compare *)
 
@@ -268,23 +268,23 @@ module type S = sig
 
     (** {3 Constructors} *)
 
-    val make : int -> int -> int -> t
+    val make: int -> int -> int -> t
       (** [make year month day] makes a period of the specified length. *)
 
-    val lmake : ?year:int -> ?month:int -> ?day:int -> unit -> t
+    val lmake: ?year:int -> ?month:int -> ?day:int -> unit -> t
       (** Labelled version of [make]. 
 	  The default value of each argument is [0]. *)
 
-    val year : int -> [> `Year ] period
+    val year: int -> [> `Year ] period
       (** [year n] makes a period of [n] years. *)
       
-    val month : int -> [> `Year | `Month ] period
+    val month: int -> [> `Year | `Month ] period
       (** [month n] makes a period of [n] months. *)
 
-    val week : int -> [> `Week | `Day ] period
+    val week: int -> [> `Week | `Day ] period
       (** [week n] makes a period of [n] weeks. *)
 
-    val day : int -> [> `Week | `Day ] period
+    val day: int -> [> `Week | `Day ] period
       (** [day n] makes a period of [n] days. *)
 
     (** {3 Getters} *)
@@ -292,13 +292,18 @@ module type S = sig
     exception Not_computable
       (** @since 1.04 *)
       
-    val nb_days : 'a period -> int
+    val nb_days: 'a period -> int
       (** Number of days in a period. 
 	  @raise Not_computable if the number of days is not computable. 
 	  @example [nb_days (day 6)] returns [6] 
 	  @example [nb_days (year 1)] raises [Not_computable] because a year is
 	  not a constant number of days.
-	  @since 1.04 *)
+	  @since 1.04 
+	  @deprecated since 2.02: use {!safe_nb_days} instead *)
+
+    val safe_nb_days: [< `Week | `Day ] period -> int
+      (** Equivalent to {!nb_days} but never raises any exception.
+	  @since 2.02 *)
 
     val ymd: 'a period -> int * int * int
       (** Number of years, months and days in a period.
@@ -320,7 +325,7 @@ module type S = sig
 	@example [add (make 2003 12 31) (Period.month 2)] returns the date 
 	2004-3-2 (following the coercion rule describes in the introduction). *)
 
-  val sub : 'a date -> 'a date -> 'a Period.period
+  val sub : 'a date -> 'a date -> [> `Week | `Day ] Period.period
     (** [sub d1 d2] returns the period between [d1] and [d2]. *)
 
   val rem : 'a date -> 'a Period.period -> 'a date
@@ -339,7 +344,7 @@ module type S = sig
 	@example [next (make 2003 12 31) `Month] returns the date 2004-1-31
 	(i.e. one month later). *)
 
-  val prev : 'a date -> ([< field ] as 'a) -> t
+  val prev : 'a date -> ([< field ] as 'a) -> 'a date
     (** [prev d f] returns the date corresponding to the previous specified 
 	field.
 	@raise Out_of_bounds when the resulting date is outside the Julian

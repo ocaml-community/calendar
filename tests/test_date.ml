@@ -97,6 +97,7 @@ test (month (make_year_month 2000 3) = Mar) "year 2000-3";;
 (*test (month (make_year 2000) = Mar) "year 2000";;*)
 test (easter 2003 = make 2003 4 20) "Paques 2003";;
 test (Period.nb_days (Period.make 0 0 6) = 6) "Period.nb_days ok";;
+test (Period.safe_nb_days (Period.week 3) = 21) "Period.safe_nb_days ok";;
 test_exn (lazy (Period.nb_days (Period.make 1 0 0))) "Period.nb_days ko";;
 test (week_first_last 21 2004 = (make 2004 5 17, make 2004 5 23)) 
   "week_beggining_end";;

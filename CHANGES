@@ -6,11 +6,16 @@ Mark "*": bug fixed.
 Mark "!": change that can break compatibility with older version of the library
 ===============================================================================
 
-o [Compilation] native dynlink of calendarLib is possible with ocaml>=3.11
+o [Calendar] Calendar_sig.Period.to_time is deprecated.
+  Replaced by a new function Calendar_sig.Period.safe_to_time
+o [Date] Date.Period.nb_days is deprecated.
+  Replaced by a new function Date.Period.safe_nb_days
+o [Compilation] calendarLib.cmxs provided if ocaml >= 3.11 is installed
   (patch of Mehdi Dogguy)
-* [Compilation] bug fixed under Cygwin
 o [Date] new functions Date.make_year and Date.make_year_month
 o [Date] improve memory representation of Date.Period.t
+* [Compilation] remove installation of packed *.cmi
+* [Compilation] bug fixed under Cygwin
 * [Compilation] META files was incorrect, so "ocamlfind ocamlopt" did not work
 * [Compilation] file date_sig.mli, time_sig.mli and calendar_sig.mli was not 
   properly linked

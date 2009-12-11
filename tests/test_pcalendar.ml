@@ -145,8 +145,12 @@ test (from_unixtm (to_unixtm (make 2003 7 16 23 22 21)) =
 
 test (Period.to_time (Period.second 30) = Time.Period.second 30) 
   "Period.to_time second";;
+test (Period.safe_to_time (Period.second 30) = Time.Period.second 30) 
+  "Period.safe_to_time second";;
 test (Period.to_time (Period.day 6) = Time.Period.second 518400) 
   "Period.to_time day";;
+test (Period.safe_to_time (Period.day 6) = Time.Period.second 518400) 
+  "Period.safe_to_time day";;
 test_exn (lazy (Period.to_time (Period.year 1))) "Period.to_time year";;
 test (Period.ymds (Period.make 1 2 3 1 2 3) = (1, 2, 3, 3723)) "Period.ymds";;
 test
