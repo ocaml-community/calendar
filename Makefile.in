@@ -219,7 +219,7 @@ export: doc
 	  cd tags; svn commit -m "v $(VERSION)")
 	rm -rf $(EXPORT_DIR)/doc
 	cp -rf CHANGES doc $(EXPORT_DIR)
-	mkdir -p $(TMP_DIR)/$(NAME)-$(VERSION)
+	cp -rf tags/v$(VERSION) $(TMP_DIR)/$(NAME)-$(VERSION)
 	cp -rf .depend configure config.status doc $(TMP_DIR)/$(NAME)-$(VERSION)
 	cd $(TMP_DIR); \
 	  (rm -f $(NAME)-$(VERSION)/.cvsignore; \
