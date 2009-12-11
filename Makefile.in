@@ -215,15 +215,17 @@ TMP_DIR	= $$HOME/tmp
 ROOT= $$HOME/DEV/calendar
 
 export: doc
-	(cd $(ROOT); svn copy trunk tags/v$(VERSION); \
-	  cd tags; svn commit -m "v $(VERSION)")
+	(cd $(TMP_DIR); \
+	  svn co svn+ssh://signoles@svn.forge.ocamlcore.org/svnroot/calendar/trunk)
+	svn copy $(TMP_DIR/trunk $(ROOT)/tags/v$(VERSION)
+	rm -rf $(TMP_DIR)/trunk
+	(cd $(ROOT)/tags; svn commit -m "v $(VERSION)")
 	rm -rf $(EXPORT_DIR)/doc
 	cp -rf CHANGES doc $(EXPORT_DIR)
 	cp -rf $(ROOT)/tags/v$(VERSION) $(TMP_DIR)/$(NAME)-$(VERSION)
 	cp -rf .depend configure config.status doc $(TMP_DIR)/$(NAME)-$(VERSION)
 	cd $(TMP_DIR); \
-	  (rm -rf $(NAME)-$(VERSION)/.svn $(NAME)-$(VERSION)/*/.svn; \
-	   tar cvf $(NAME)-$(VERSION).tar $(NAME)-$(VERSION); \
+	  (tar cvf $(NAME)-$(VERSION).tar $(NAME)-$(VERSION); \
 	   gzip -f --best $(NAME)-$(VERSION).tar; \
 	   rm -rf $(NAME)-$(VERSION); \
 	   mv $(NAME)-$(VERSION).tar.gz $(EXPORT_DIR))
