@@ -17,7 +17,7 @@ The Calendar library is a library providing a set of operations over dates and
 times. 
 This library requires Objective Caml (OCaml) 3.09.1 or higher.
 OCaml 3.09 is usable at your own risks.
-Older OCaml version are unsupported.
+Older OCaml versions are unsupported.
 
 2- Contents
 -----------
