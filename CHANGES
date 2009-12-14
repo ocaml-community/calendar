@@ -8,6 +8,7 @@ Mark "!": change that can break compatibility with older version of the library
 
 version 2.02, 2009-12-11:
 =========================
+o [License] add the usual Ocaml linking exception in the license
 o [Calendar] Calendar_sig.Period.to_time is deprecated.
   Replaced by a new function Calendar_sig.Period.safe_to_time
 o [Date] Date.Period.nb_days is deprecated.
@@ -73,7 +74,7 @@ version 2.0.1, 2008-02-22:
 
 version 2.0, 2008-02-08:
 ========================
-o! [Licence] license changes from LGPLv2 to LGPLv2.1 
+o! [License] license changes from LGPLv2 to LGPLv2.1 
    (from a suggestion of Hezekiah M. Carty)
 o! [Compilation] use -pack: all modules of the library are packed inside a 
   single module CalendarLib (calendar now requires ocaml >= 3.09.1)
