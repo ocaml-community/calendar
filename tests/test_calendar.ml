@@ -40,6 +40,14 @@ test (make (-4712) 1 1 12 0 0 = make (-4712) 1 0 36 0 0) "calendar coercion";;
 test (from_jd 0. = make (-4712) 1 1 12 0 0) "from_jd 0 = 4713 BC-1-1";;
 test (from_mjd 0. = make 1858 11 17 0 0 0) "from_mjd 0 = 1858-11-17";;
 
+test (Precise.compare (Precise.make 2009 12 14 13 49 0) (Precise.make 2009 12 14 13 49 1) < 0)
+  "Precise.compare 2009/12/14/13/19/0 2009/12/14/13/19/1";;
+
+Utils.Float.set_precision 1e-5;;
+test (compare (make 2009 12 14 13 49 0) (make 2009 12 14 13 49 1) < 0)
+  "compare 2009/12/14/13/19/0 2009/12/14/13/19/1";;
+Utils.Float.set_precision 1e-3;;
+
 Time_Zone.change (Time_Zone.UTC_Plus 5);;
 
 test (abs_float (to_jd (from_jd 12345.6789) -. 12345.6789) < eps) 
