@@ -2,7 +2,7 @@
 (*                                                                        *)
 (*  This file is part of Calendar.                                        *)
 (*                                                                        *)
-(*  Copyright (C) 2003-2009 Julien Signoles                               *)
+(*  Copyright (C) 2003-2010 Julien Signoles                               *)
 (*                                                                        *)
 (*  you can redistribute it and/or modify it under the terms of the GNU   *)
 (*  Lesser General Public License version 2.1 as published by the         *)
@@ -20,23 +20,21 @@
 (*  LICENSE.                                                              *)
 (**************************************************************************)
 
-(*i $Id$ i*)
-
-(** Time interface. A time may be seen as a triple (hour, minute, second). 
+(** Time interface. A time may be seen as a triple (hour, minute, second).
 
     If minutes and seconds do not belong to [\[0; 60\[], they are coerced into
-    this interval. 
+    this interval.
 
     @example "30 hours, 60 minutes, 80 seconds" is coerced to "31 hours, 1
     minute, 20 seconds".
 
-    Each time is interpreted in the current time zone (given by 
-    [Time_Zone.current ()]). So, if you change the time zone (by 
-    {!Time_Zone.change}), each time consequently changes. 
-    If you want to express a time in another time zone (and do not affect 
+    Each time is interpreted in the current time zone (given by
+    [Time_Zone.current ()]). So, if you change the time zone (by
+    {!Time_Zone.change}), each time consequently changes.
+    If you want to express a time in another time zone (and do not affect
     others times), use the [convert] function. *)
 
-(** Interface for seconds. 
+(** Interface for seconds.
     @since 2.0 *)
 module type Second = sig
 
@@ -57,7 +55,7 @@ module type Second = sig
 
 end
 
-(** Common operations for all time representations. 
+(** Common operations for all time representations.
     @since 2.0 (this signature was before inlined in interface of Time). *)
 module type S = sig
 
@@ -72,7 +70,7 @@ module type S = sig
   (** {2 Second} *)
 
   type second
-    (** Type of a second. 
+    (** Type of a second.
 	@since 2.0 (was an integer in previous versions). *)
 
   (** Second implementation
@@ -80,21 +78,21 @@ module type S = sig
   module Second: Second with type t = second
 
   (** {2 Constructors} *)
-      
+
   val make : int -> int -> second -> t
     (** [make hour minute second] makes the time hour-minute-second. *)
 
   val lmake : ?hour:int -> ?minute:int -> ?second:second -> unit -> t
-    (** Labelled version of [make]. The default value is [0] for each argument. 
+    (** Labelled version of [make]. The default value is [0] for each argument.
 	@since 1.05 *)
 
   val now : unit -> t
     (** The current time based on [Time_Zone.current ()]. *)
-    
+
   val midnight : unit -> t
     (** [midnight ()] is midnight (expressed in the current time zone).
 	So, it has always the same behaviour as [make 0 0 0]. *)
-    
+
   val midday : unit -> t
     (** [midday ()] is midday (expressed in the current time zone).
 	So, it has always the same behaviour as [make 12 0 0]. *)
@@ -112,13 +110,13 @@ module type S = sig
 	[convert t Time_Zone.GMT (Time_Zone.current ())]. *)
 
   val to_gmt : t -> t
-    (** [to_gmt t] is equivalent to 
+    (** [to_gmt t] is equivalent to
 	[convert t (Time_Zone.current ()) Time_Zone.GMT]. *)
 
   val normalize : t -> t * int
     (** [normalize t] returns [t] such that [hour t] belongs to [\[0; 24\[]. The
 	second component of the result is the number of days needed by the
-	modification.  
+	modification.
 	@example [normalize (make 22 0 0)] returns the time 22-0-0 and 0,
 	[normalize (make 73 0 0)] returns the time 1-0-0 and 3 and [normalize
 	(make (-73) 0 0)] returns the time 23-0-0 and (-4). *)
@@ -126,33 +124,33 @@ module type S = sig
   (** {2 Getters} *)
 
   val hour : t -> int
-    (** Hour. 
+    (** Hour.
 	@example [hour (make 20 0 0)] returns 20. *)
 
   val minute : t -> int
-    (** Minute. 
+    (** Minute.
 	@example [minute (make 20 10 0)] returns 10. *)
 
   val second : t -> second
-    (** Second. 
+    (** Second.
 	@example [second (make 20 10 5)] returns 5. *)
 
   val to_seconds : t -> second
-    (** Number of seconds of a time. 
+    (** Number of seconds of a time.
 	@example [to_seconds (make 1 2 3)] returns [3600 + 120 + 3 = 3723]. *)
 
   val to_minutes : t -> float
-    (** Number of minutes of a time. The resulting fractional part represents 
+    (** Number of minutes of a time. The resulting fractional part represents
 	seconds.
 	@example [to_minutes (make 1 2 3)] returns [60+2+0.05 = 62.05]. *)
 
   val to_hours : t -> float
-    (** Number of hours of a time. The resulting fractional part represents 
+    (** Number of hours of a time. The resulting fractional part represents
 	minutes and seconds.
 	@example [to_hours (make 1 3 0)] returns [1 + 0.05 = 1.05]. *)
 
   (** {2 Times are comparable} *)
-    
+
   val equal: t -> t -> bool
     (** Equality function between two times.
 	@see <Utils.Comparable.html#VALequal> Utils.Comparable.equal.
@@ -164,7 +162,7 @@ module type S = sig
 
   val hash: t -> int
     (** Hash function for times.
-	@see <Utils.Comparable.html#VALhash> Utils.Comparable.hash. 
+	@see <Utils.Comparable.html#VALhash> Utils.Comparable.hash.
 	@since 2.0 *)
 
   (** {2 Boolean operations on times} *)
@@ -172,13 +170,13 @@ module type S = sig
   val is_pm : t -> bool
     (** Return [true] is the time is before midday in the current time zone;
 	[false] otherwise.
-	@example both [is_pm (make 10 0 0)] and [is_pm (make 34 0 0)] return 
+	@example both [is_pm (make 10 0 0)] and [is_pm (make 34 0 0)] return
 	[true]. *)
 
   val is_am : t -> bool
-    (** Return [true] is the time is after midday in the current time zone; 
-	[false] otherwise. 
-	@example both [is_am (make 20 0 0)] and [is_am (make 44 0 0)] return 
+    (** Return [true] is the time is after midday in the current time zone;
+	[false] otherwise.
+	@example both [is_am (make 20 0 0)] and [is_am (make 44 0 0)] return
 	[true]. *)
 
   (** {2 Coercions} *)
@@ -216,7 +214,7 @@ module type S = sig
       (** [make hour minute second] makes a period of the specified length. *)
 
     val lmake : ?hour:int -> ?minute:int -> ?second:second -> unit -> 'a period
-      (** Labelled version of [make]. 
+      (** Labelled version of [make].
 	  The default value is [0] for each argument. *)
 
     val hour : int -> 'a period
@@ -231,20 +229,20 @@ module type S = sig
     (** {3 Getters} *)
 
     val to_seconds : 'a period -> second
-      (** Number of seconds of a period. 
-	  @example [to_seconds (make 1 2 3)] returns [3600 + 120 + 3 = 3723]. 
+      (** Number of seconds of a period.
+	  @example [to_seconds (make 1 2 3)] returns [3600 + 120 + 3 = 3723].
 	  @since 1.04 *)
 
     val to_minutes : 'a period -> float
-      (** Number of minutes of a period. The resulting fractional part 
+      (** Number of minutes of a period. The resulting fractional part
 	  represents seconds.
-	  @example [to_minutes (make 1 2 3)] returns [60 + 2 + 0.05 = 62.05]. 
+	  @example [to_minutes (make 1 2 3)] returns [60 + 2 + 0.05 = 62.05].
 	  @since 1.04 *)
 
     val to_hours : 'a period -> float
-      (** Number of hours of a period. The resulting fractional part represents 
+      (** Number of hours of a period. The resulting fractional part represents
 	  minutes and seconds.
-	  @example [to_hours (make 1 3 0)] returns [1 + 0.05 = 1.05]. 
+	  @example [to_hours (make 1 3 0)] returns [1 + 0.05 = 1.05].
 	  @since 1.04 *)
 
   end
@@ -252,7 +250,7 @@ module type S = sig
   (** {2 Arithmetic operations on times and periods} *)
 
   val add : t -> 'a Period.period -> t
-    (** [app t p] returns [t + p]. 
+    (** [app t p] returns [t + p].
 	@example [add (make 20 0 0) (Period.minute 70)] returns the time
 	21:10:0. *)
 
@@ -269,7 +267,7 @@ module type S = sig
 
   val prev : t -> field -> t
     (** [prev t f] returns the time corresponding to the previous specified
-	field.  
+	field.
 	@example [prev (make 20 3 31) `Second] returns the time 20:03:30
 	(i.e. one second ago). *)
 

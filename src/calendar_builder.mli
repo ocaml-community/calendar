@@ -2,7 +2,7 @@
 (*                                                                        *)
 (*  This file is part of Calendar.                                        *)
 (*                                                                        *)
-(*  Copyright (C) 2003-2009 Julien Signoles                               *)
+(*  Copyright (C) 2003-2010 Julien Signoles                               *)
 (*                                                                        *)
 (*  you can redistribute it and/or modify it under the terms of the GNU   *)
 (*  Lesser General Public License version 2.1 as published by the         *)
@@ -20,20 +20,18 @@
 (*  LICENSE.                                                              *)
 (**************************************************************************)
 
-(*i $Id$ i*)
-
-(** Generic calendar implementation. 
+(** Generic calendar implementation.
     @since 2.0 *)
 
 (** Implement a calendar from a date implementation and a time implementation.
 
     This module uses float. Then results may be very unprecise.
-    @since 2.0 *) 
-module Make(D:Date_sig.S)(T:Time_sig.S) 
+    @since 2.0 *)
+module Make(D:Date_sig.S)(T:Time_sig.S)
   : Calendar_sig.S with module Date = D and module Time = T
 
 (** Similar to {!Make} but results are more precise. The counterpart is that
     some operations are less efficient.
-    @since 2.0 *) 
-module Make_Precise(D:Date_sig.S)(T:Time_sig.S) 
+    @since 2.0 *)
+module Make_Precise(D:Date_sig.S)(T:Time_sig.S)
   : Calendar_sig.S with module Date = D and module Time = T

@@ -2,7 +2,7 @@
 (*                                                                        *)
 (*  This file is part of Calendar.                                        *)
 (*                                                                        *)
-(*  Copyright (C) 2003-2009 Julien Signoles                               *)
+(*  Copyright (C) 2003-2010 Julien Signoles                               *)
 (*                                                                        *)
 (*  you can redistribute it and/or modify it under the terms of the GNU   *)
 (*  Lesser General Public License version 2.1 as published by the         *)
@@ -19,8 +19,6 @@
 (*  The special linking exception is detailled in the enclosed file       *)
 (*  LICENSE.                                                              *)
 (**************************************************************************)
-
-(*i $Id$ i*)
 
 (** A period represents the time passed between two events (a date, a time...).
   Only an interface defining arithmetic operations on periods is defined here.
@@ -63,7 +61,7 @@ module type S = sig
 
   val hash: 'a period -> int
     (** Hash function for periods.
-	@see <Utils.Comparable.html#VALhash> Utils.Comparable.hash 
+	@see <Utils.Comparable.html#VALhash> Utils.Comparable.hash
 	@since 2.0 *)
 
 end

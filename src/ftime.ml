@@ -2,7 +2,7 @@
 (*                                                                        *)
 (*  This file is part of Calendar.                                        *)
 (*                                                                        *)
-(*  Copyright (C) 2003-2009 Julien Signoles                               *)
+(*  Copyright (C) 2003-2010 Julien Signoles                               *)
 (*                                                                        *)
 (*  you can redistribute it and/or modify it under the terms of the GNU   *)
 (*  Lesser General Public License version 2.1 as published by the         *)
@@ -19,8 +19,6 @@
 (*  The special linking exception is detailled in the enclosed file       *)
 (*  LICENSE.                                                              *)
 (**************************************************************************)
-
-(*i $Id$ i*)
 
 (*S Introduction.
 
@@ -48,7 +46,7 @@ let from_gmt t = convert t Time_Zone.UTC (Time_Zone.current ())
 let to_gmt t = convert t (Time_Zone.current ()) Time_Zone.UTC
 
 (* Coerce [t] into the interval $[0; 86400[$ (i.e. a one day interval). *)
-let normalize t = 
+let normalize t =
   let t = from_gmt t in
   let t_mod, t_div = to_gmt (mod_float t fone_day), int_of_float t / one_day in
   if t < 0. then t_mod +. fone_day, t_div - 1 else t_mod, t_div
@@ -67,8 +65,8 @@ let now () =
   let now = Unix.gettimeofday () in
   let gmnow = Unix.gmtime now in
   let frac, _ = modf now in
-  float 
-    (3600 * gmnow.Unix.tm_hour + 60 * gmnow.Unix.tm_min + gmnow.Unix.tm_sec) 
+  float
+    (3600 * gmnow.Unix.tm_hour + 60 * gmnow.Unix.tm_min + gmnow.Unix.tm_sec)
   +. frac
 
 (*S Getters. *)
@@ -83,13 +81,13 @@ let to_seconds t = from_gmt t
 
 (*S Boolean operations. *)
 
-let is_pm t = 
-  let t, _ = normalize t in 
+let is_pm t =
+  let t, _ = normalize t in
   let m, _ = normalize (midday ()) in
   t < m
 
-let is_am t = 
-  let t, _ = normalize t in 
+let is_am t =
+  let t, _ = normalize t in
   let m, _ = normalize (midday ()) in
   t >= m
 

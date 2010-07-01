@@ -2,7 +2,7 @@
 (*                                                                        *)
 (*  This file is part of Calendar.                                        *)
 (*                                                                        *)
-(*  Copyright (C) 2003-2009 Julien Signoles                               *)
+(*  Copyright (C) 2003-2010 Julien Signoles                               *)
 (*                                                                        *)
 (*  you can redistribute it and/or modify it under the terms of the GNU   *)
 (*  Lesser General Public License version 2.1 as published by the         *)
@@ -20,14 +20,12 @@
 (*  LICENSE.                                                              *)
 (**************************************************************************)
 
-(*i $Id$ i*)
-
 (** Time zone management.
 
   You can [change] the [current] time zone in your program by side effect. *)
 
 (** Type of a time zone. *)
-type t = 
+type t =
   | UTC             (** Greenwich Meridian Time              *)
   | Local           (** Local Time                           *)
   | UTC_Plus of int (** Another time zone specified from UTC *)
@@ -36,10 +34,10 @@ val current : unit -> t
   (** Return the current time zone. It is [UTC] before any change. *)
 
 val change : t -> unit
-  (** Change the current time zone by another one. 
+  (** Change the current time zone by another one.
       Raise [Invalid_argument] if the specified time zone is [UTC_Plus x] with
       [x < -12] or [x > 11] *)
-  
+
 val gap : t -> t -> int
   (** Return the gap between two time zone.
       @example [gap UTC (UTC_Plus 5)] returns 5 and, at Paris in summer,
@@ -54,15 +52,15 @@ val to_gmt : unit -> int
 val is_dst : unit -> bool
   (** [is_dst ()] checks if daylight saving time is in effect.
       Only relevant in local time.
-      Returns alway [false] in another time zone. 
+      Returns alway [false] in another time zone.
       @since 1.09.4 *)
 
 val hour_of_dst : unit -> int
-  (** [hour_of_dst ()] returns [1] if [is_dst ()] and [0] otherwise. 
+  (** [hour_of_dst ()] returns [1] if [is_dst ()] and [0] otherwise.
       @since 1.09.4 *)
 
 val on: ('a -> 'b) -> t -> 'a -> 'b
   (** [on f tz x] changes the time zone to [tz], then computes [f x], and
       finally reset the time zone to the initial one and returns the result of
-      the computation. 
-      @since 2.0 *) 
+      the computation.
+      @since 2.0 *)

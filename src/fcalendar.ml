@@ -2,7 +2,7 @@
 (*                                                                        *)
 (*  This file is part of Calendar.                                        *)
 (*                                                                        *)
-(*  Copyright (C) 2003-2009 Julien Signoles                               *)
+(*  Copyright (C) 2003-2010 Julien Signoles                               *)
 (*                                                                        *)
 (*  you can redistribute it and/or modify it under the terms of the GNU   *)
 (*  Lesser General Public License version 2.1 as published by the         *)
@@ -19,8 +19,6 @@
 (*  The special linking exception is detailled in the enclosed file       *)
 (*  LICENSE.                                                              *)
 (**************************************************************************)
-
-(*i $Id$ i*)
 
 include Calendar_builder.Make(Date)(Ftime)
 

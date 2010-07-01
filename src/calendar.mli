@@ -2,7 +2,7 @@
 (*                                                                        *)
 (*  This file is part of Calendar.                                        *)
 (*                                                                        *)
-(*  Copyright (C) 2003-2009 Julien Signoles                               *)
+(*  Copyright (C) 2003-2010 Julien Signoles                               *)
 (*                                                                        *)
 (*  you can redistribute it and/or modify it under the terms of the GNU   *)
 (*  Lesser General Public License version 2.1 as published by the         *)
@@ -20,16 +20,14 @@
 (*  LICENSE.                                                              *)
 (**************************************************************************)
 
-(*i $Id$ i*)
-
 (** Calendar implementation in which seconds are integer.
 
     This module uses float. Then results may be unprecise, especially
-    comparison of calendars which differ with few seconds. 
+    comparison of calendars which differ with few seconds.
     In this case, consider to use module [Precise]. *)
 
 include Calendar_sig.S with module Date = Date and module Time = Time
 
-(** More precise implementation of calendar in which seconds are integer. 
+(** More precise implementation of calendar in which seconds are integer.
     @since 2.0 *)
 module Precise: Calendar_sig.S with module Date = Date and module Time = Time

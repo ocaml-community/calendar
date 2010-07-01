@@ -2,7 +2,7 @@
 (*                                                                        *)
 (*  This file is part of Calendar.                                        *)
 (*                                                                        *)
-(*  Copyright (C) 2003-2009 Julien Signoles                               *)
+(*  Copyright (C) 2003-2010 Julien Signoles                               *)
 (*                                                                        *)
 (*  you can redistribute it and/or modify it under the terms of the GNU   *)
 (*  Lesser General Public License version 2.1 as published by the         *)
@@ -20,8 +20,6 @@
 (*  LICENSE.                                                              *)
 (**************************************************************************)
 
-(*i $Id$ i*)
-
 (** Calendar interface. A calendar combines a date and a time: it may be seen
     as a 6-uple (year, month, day, hour, minute, second).
 
@@ -30,7 +28,7 @@
     dates, use this module. The exact Julian period is now [[January, 1st 4713
     BC at midday GMT; January 22th, 3268 AC at midday GMT]]. *)
 
-(** Common operations for all calendar representations. 
+(** Common operations for all calendar representations.
     @since 2.0 (this signature was before inlined in interface of Calendar). *)
 module type S = sig
 
@@ -65,17 +63,17 @@ module type S = sig
 
   val make : int -> int -> int -> int -> int -> second -> t
     (** [make year month day hour minute second] makes the calendar
-	"year-month-day; hour-minute-second". 
+	"year-month-day; hour-minute-second".
 	@raise D.Out_of_bounds when a date is outside the Julian period.
 	@raise D.Undefined when a date belongs to [[October 5th, 1582; October
 	14th, 1582]]. *)
 
-  val lmake : 
-    year:int -> ?month:int -> ?day:int -> 
+  val lmake :
+    year:int -> ?month:int -> ?day:int ->
     ?hour:int -> ?minute:int -> ?second:second -> unit -> t
-    (** Labelled version of [make]. 
-	The default value of [month] and [day] (resp. of [hour], [minute] 
-	and [second]) is [1] (resp. [0]). 
+    (** Labelled version of [make].
+	The default value of [month] and [day] (resp. of [hour], [minute]
+	and [second]) is [1] (resp. [0]).
 	@raise D.Out_of_bounds when a date is outside the Julian period.
 	@raise D.Undefined when a date belongs to [[October 5th, 1582; October
 	14th, 1582]].
@@ -89,8 +87,8 @@ module type S = sig
 	zone). *)
 
   val from_jd : float -> t
-    (** Return the Julian day. 
-	More precise than [Date.from_jd]: the fractional part represents the 
+    (** Return the Julian day.
+	More precise than [Date.from_jd]: the fractional part represents the
 	time. *)
 
   val from_mjd : float -> t
@@ -115,7 +113,7 @@ module type S = sig
 
   (** Those functions have the same behavious as those defined in
       {!Date_sig.S}. *)
-  
+
   val days_in_month : t -> int
     (** @see <Date_sig.S.html#VALdays_in_month> Date_sig.S.days_in_month *)
 
@@ -137,9 +135,9 @@ module type S = sig
   val year : t -> int
     (** @see <Date_sig.S.html#VALyear> Date_sig.S.year *)
 
-  (** [to_jd] and [to_mjd] are more precise than {!Date_sig.S.to_jd} and 
+  (** [to_jd] and [to_mjd] are more precise than {!Date_sig.S.to_jd} and
       {!Date_sig.S.to_mjd}. *)
-    
+
   val to_jd : t -> float
   val to_mjd : t -> float
 
@@ -167,7 +165,7 @@ module type S = sig
 
   val hash: t -> int
     (** Hash function for calendars.
-	@see <Utils.Comparable.html#VALhash> Utils.Comparable.hash. 
+	@see <Utils.Comparable.html#VALhash> Utils.Comparable.hash.
 	@since 2.0 *)
 
   (** Those functions have the same behavious as those defined in
@@ -200,18 +198,18 @@ module type S = sig
 	@since 1.01 *)
 
   val from_unixtm : Unix.tm -> t
-    (** Inverse of [to_unixtm]. Assumes the current time zone. 
+    (** Inverse of [to_unixtm]. Assumes the current time zone.
 	So, The following invariant holds:
 	[hour (from_unixtm u) = u.Unix.tm_hour].
 	@since 1.01 *)
 
   val to_unixfloat : t -> float
-    (** Convert a calendar to a float such than 
+    (** Convert a calendar to a float such than
 	[to_unixfloat (make 1970 1 1 0 0 0)] returns [0.0] at UTC.
-	So such a float is convertible with those of the module [Unix]. 
+	So such a float is convertible with those of the module [Unix].
 	More precise than {!Date_sig.S.to_unixfloat}.
 	@since 1.01 *)
-    
+
   val from_unixfloat : float -> t
     (** Inverse of [to_unixfloat]. Assumes the current time zone.
 	So, the following invariant holds:
@@ -219,14 +217,14 @@ module type S = sig
 	@since 1.01 *)
 
   val from_date : Date.t -> t
-    (** Convert a date to a calendar. 
+    (** Convert a date to a calendar.
 	The time is midnight in the current time zone. *)
 
   val to_date : t -> Date.t
     (** Convert a calendar to a date. Time part of the calendar is ignored. *)
 
   val to_time : t -> Time.t
-    (** Convert a calendar to a time. Date part of the calendar is ignored. 
+    (** Convert a calendar to a time. Date part of the calendar is ignored.
 	@since 1.03 *)
 
   (** {2 Period} *)
@@ -241,21 +239,21 @@ module type S = sig
 	(** Type of a period. *)
 
     (** {3 Period is an additive monoid} *)
-	
+
     val empty : 'a period
       (** The empty period. *)
 
     val add : ([> `Day | `Week ] as 'a) period -> 'a period -> 'a period
       (** Addition of periods. *)
-      
+
     val sub : ([> `Day | `Week ] as 'a) period -> 'a period -> 'a period
       (** Substraction of periods. *)
-      
+
     val opp : ([> `Day | `Week ] as 'a) period -> 'a period
       (** Opposite of a period. *)
 
     (** {3 Periods are comparable} *)
-      
+
     val equal: 'a period -> 'b period -> bool
       (** Equality function between two periods.
 	  @see <Utils.Comparable.html#VALequal> Utils.Comparable.equal
@@ -267,19 +265,19 @@ module type S = sig
 
     val hash: 'a period -> int
       (** Hash function for periods.
-	  @see <Utils.Comparable.html#VALhash> Utils.Comparable.hash 
+	  @see <Utils.Comparable.html#VALhash> Utils.Comparable.hash
 	  @since 2.0 *)
 
     (** {3 Constructors} *)
-      
+
     val make : int -> int -> int -> int -> int -> second -> t
-      (** [make year month day hour minute second] makes a period of the 
+      (** [make year month day hour minute second] makes a period of the
 	  specified length. *)
 
-    val lmake : 
-      ?year:int -> ?month:int -> ?day:int -> 
+    val lmake :
+      ?year:int -> ?month:int -> ?day:int ->
       ?hour:int -> ?minute:int -> ?second:second -> unit -> t
-      (** Labelled version of [make]. 
+      (** Labelled version of [make].
 	  The default value of each argument is [0]. *)
 
     (** Those functions have the same behavious as those defined in
@@ -310,7 +308,7 @@ module type S = sig
       (** @see <Time_sig.S.Period.html#VALsecond> Time_sig.S.Period.second *)
 
     (** {3 Coercions} *)
-      
+
     val from_date : 'a Date.Period.period -> 'a period
       (** Convert a date period to a calendar period. *)
 
@@ -318,8 +316,8 @@ module type S = sig
       (** Convert a time period to a calendar period. *)
 
     val to_date : 'a period -> 'a Date.Period.period
-      (** Convert a calendar period to a date period. 
-	  The fractional time period is ignored. 
+      (** Convert a calendar period to a date period.
+	  The fractional time period is ignored.
 	  @example [to_date (hour 60)] is equivalent to [Date.Period.days 2]. *)
 
     exception Not_computable
@@ -327,28 +325,28 @@ module type S = sig
 	  @since 1.04 *)
 
     val to_time : 'a period -> 'a Time.Period.period
-      (** Convert a calendar period to a date period. 
+      (** Convert a calendar period to a date period.
 	  @raise Not_computable if the time period is not computable.
 	  @example [to_time (day 6)] returns a time period of [24 * 3600 * 6 =
 	  518400] seconds
 	  @example [to_time (second 30)] returns a time period of [30] seconds
 	  @example [to_time (year 1)] raises [Not_computable] because
-	  a year is not a constant number of days. 
-	  @since 1.04 
+	  a year is not a constant number of days.
+	  @since 1.04
 	  @deprecated since 2.02: use {!safe_to_time} instead*)
 
-    val safe_to_time: 
+    val safe_to_time:
       ([<  `Week | `Day ] as 'a) period -> 'a Time.Period.period
       (** Equivalent to {!to_time} but never raises any exception.
 	  @since 2.02 *)
 
     val ymds: 'a period -> int * int * int * second
       (** Number of years, months, days and seconds in a period.
-	  @example [ymds (make 1 2 3 1 2 3)] returns [1, 2, 3, 3723] 
+	  @example [ymds (make 1 2 3 1 2 3)] returns [1, 2, 3, 3723]
 	  @example [ymds (make (-1) (-2) (-3) (-1) (-2) (-3)] returns
-	  [-1, -2, -4, 82677]. 
+	  [-1, -2, -4, 82677].
 	  @since 1.09.0 *)
-    
+
   end
 
   (** {2 Arithmetic operations on calendars and periods} *)
@@ -361,6 +359,10 @@ module type S = sig
 
   val sub : t -> t -> [> `Week | `Day ] Period.period
     (** @see <Date_sig.S.html#VALsub> Date_sig.S.sub *)
+
+  val precise_sub : t -> t -> Period.t
+    (** @see <Date_sig.S.html#VALprecise_sub> Date_sig.S.precise_sub
+	@since 2.03 *)
 
   val rem : t -> 'a Period.period -> t
     (** @see <Date_sig.S.html#VALrem> Date_sig.S.rem *)

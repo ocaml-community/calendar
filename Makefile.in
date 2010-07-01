@@ -2,7 +2,7 @@
 #                                                                        #
 #  This file is part of Calendar.                                        #
 #                                                                        #
-#  Copyright (C) 2003-2009 Julien Signoles                               #
+#  Copyright (C) 2003-2010 Julien Signoles                               #
 #                                                                        #
 #  you can redistribute it and/or modify it under the terms of the GNU   #
 #  Lesser General Public License version 2.1 as published by the         #
@@ -19,8 +19,6 @@
 #  The special linking exception is detailled in the enclosed file       #
 #  LICENSE.                                                              #
 ##########################################################################
-
-# $Id$
 
 # Used programs
 ###############
@@ -44,7 +42,7 @@ LIB_EXT = @LIBEXT@
 
 NAME	= calendar
 NAMELIB = calendarLib
-VERSION	= 2.02
+VERSION	= 2.02+dev
 
 LIBDIR	= target
 
@@ -106,7 +104,7 @@ $(LIBDIR)/$(NAMELIB).cmx: $(CMI_ONLY) $(CMX)
 	$(CAMLFIND) ocamlopt $(LINK_OPTFLAGS) -pack -o $@ \
 		$(filter-out $(LIBDIR), $^)
 
-$(LIBDIR)/$(NAMELIB).a $(LIBDIR)/$(NAMELIB).cmxa: $(LIBDIR)/$(NAMELIB).cmx 
+$(LIBDIR)/$(NAMELIB).a $(LIBDIR)/$(NAMELIB).cmxa: $(LIBDIR)/$(NAMELIB).cmx
 	$(CAMLFIND) ocamlopt $(LINK_OPTFLAGS) -a -o $@ $<
 
 $(LIBDIR)/$(NAMELIB).cmxs: $(LIBDIR)/$(NAMELIB).cmxa
@@ -238,7 +236,7 @@ export: doc
 #####################
 
 Makefile: Makefile.in
-	./config.status			
+	./config.status
 
 config.status: configure
 	./config.status --recheck
@@ -256,7 +254,7 @@ TAGS: $(SRC)
 ##########
 
 clean:
-	rm -f TAGS META $(TESTS) tests/test $(GENERATED) 
+	rm -f TAGS META $(TESTS) tests/test $(GENERATED)
 	for i in . src tests utils; do \
 	  rm -f $$i/*~ $$i/\#* $$i/*.cm[iox] $$i/*.*a $$i/*$(OBJ_EXT) $$i/a.out; \
 	done

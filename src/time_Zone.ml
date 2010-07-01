@@ -2,7 +2,7 @@
 (*                                                                        *)
 (*  This file is part of Calendar.                                        *)
 (*                                                                        *)
-(*  Copyright (C) 2003-2009 Julien Signoles                               *)
+(*  Copyright (C) 2003-2010 Julien Signoles                               *)
 (*                                                                        *)
 (*  you can redistribute it and/or modify it under the terms of the GNU   *)
 (*  Lesser General Public License version 2.1 as published by the         *)
@@ -20,11 +20,9 @@
 (*  LICENSE.                                                              *)
 (**************************************************************************)
 
-(*i $Id$ i*)
-
-type t = 
+type t =
   | UTC
-  | Local 
+  | Local
   | UTC_Plus of int
 
 let tz = ref UTC
@@ -39,7 +37,7 @@ let make_in_bounds x =
   else if y > 11 then y - 24
   else y
 
-let gap_gmt_local = 
+let gap_gmt_local =
   let t = Unix.time () in
   (Unix.localtime t).Unix.tm_hour - (Unix.gmtime t).Unix.tm_hour
 
@@ -50,7 +48,7 @@ let change = function
   | _ as t -> tz := t
 
 let gap t1 t2 =
-  let aux t1 t2 = 
+  let aux t1 t2 =
     assert (t1 < t2);
     match t1, t2 with
       | UTC, Local             -> gap_gmt_local
@@ -58,8 +56,8 @@ let gap t1 t2 =
       | Local, UTC_Plus x      -> x - gap_gmt_local
       | UTC_Plus x, UTC_Plus y -> y - x
       | _                      -> assert false
-  in 
-  let res = 
+  in
+  let res =
     if t1 = t2 then 0
     else if t1 < t2 then aux t1 t2
     else - aux t2 t1
@@ -69,7 +67,7 @@ let gap t1 t2 =
 let from_gmt () = gap UTC (current ())
 let to_gmt () = gap (current ()) UTC
 
-let is_dst () = 
+let is_dst () =
   current () = Local && (Unix.localtime (Unix.time ())).Unix.tm_isdst
 
 let hour_of_dst () = if is_dst () then 1 else 0

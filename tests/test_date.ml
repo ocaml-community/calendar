@@ -2,7 +2,7 @@
 (*                                                                        *)
 (*  This file is part of Calendar.                                        *)
 (*                                                                        *)
-(*  Copyright (C) 2003-2009 Julien Signoles                               *)
+(*  Copyright (C) 2003-2010 Julien Signoles                               *)
 (*                                                                        *)
 (*  you can redistribute it and/or modify it under the terms of the GNU   *)
 (*  Lesser General Public License version 2.1 as published by the         *)
@@ -19,8 +19,6 @@
 (*  The special linking exception is detailled in the enclosed file       *)
 (*  LICENSE.                                                              *)
 (**************************************************************************)
-
-(*i $Id$ i*)
 
 Printf.printf "Tests of Date:\n";;
 
@@ -48,6 +46,16 @@ test (rem (make 2007 2 30) (Period.month 40) = make 2003 11 2)
   "2008-2-30 - 40 mois";;
 let d2 = make (-3000) 1 1;;
 test (rem d (sub d d2) = d2) "rem x (sub x y) = y";;
+test (Period.ymd (precise_sub (make 2010 10 5) (make 2010 6 2)) = (0, 4, 3))
+"precise_sub 2010-10-5 2010-6-2";;
+test (Period.ymd (precise_sub (make 2010 10 5) (make 2010 6 5)) = (0, 4, 0))
+"precise_sub 2010-10-5 2010-6-2";;
+test (Period.ymd (precise_sub (make 2010 10 5) (make 2010 6 6)) = (0, 3, 29))
+"precise_sub 2010-10-5 2010-6-6";;
+test (Period.ymd (precise_sub (make 2010 10 5) (make 2010 6 4)) = (0, 4, 1))
+"precise_sub 2010-10-5 2010-6-4";;
+test (Period.ymd (precise_sub (make 2010 1 1) (make 2000 1 1)) = (10, 0, 0))
+"precise_sub 2010-1-1 2000-1-1";;
 test (from_jd 0 = make (-4712) 1 1) "from_jd 0 = 4713 BC-1-1";;
 test (to_jd (from_jd 12345) = 12345) "to_jd (from_jd x) = x";;
 test (from_mjd 0 = make 1858 11 17) "from_mjd 0 = 1858-11-17";;
@@ -101,14 +109,14 @@ test (easter 2003 = make 2003 4 20) "Paques 2003";;
 test (Period.nb_days (Period.make 0 0 6) = 6) "Period.nb_days ok";;
 test (Period.safe_nb_days (Period.week 3) = 21) "Period.safe_nb_days ok";;
 test_exn (lazy (Period.nb_days (Period.make 1 0 0))) "Period.nb_days ko";;
-test (week_first_last 21 2004 = (make 2004 5 17, make 2004 5 23)) 
+test (week_first_last 21 2004 = (make 2004 5 17, make 2004 5 23))
   "week_beggining_end";;
 test (Period.ymd (Period.make 1 2 3) = (1, 2, 3)) "Period.ymd";;
-test (nth_weekday_of_month 2004 Oct Thu 4 = make 2004 10 28) 
+test (nth_weekday_of_month 2004 Oct Thu 4 = make 2004 10 28)
   "nth_weekday_of_month";;
-test (nth_weekday_of_month 2006 Mar Fri 3 = make 2006 3 17) 
+test (nth_weekday_of_month 2006 Mar Fri 3 = make 2006 3 17)
   "nth_weekday_of_month";;
-test (equal (from_day_of_year 2008 39) (make 2008 2 8)) 
+test (equal (from_day_of_year 2008 39) (make 2008 2 8))
   "from_day_of_year";;
 test (is_valid_date 2008 2 8) "is_valid_date";;
 test (not (is_valid_date 2008 2 30)) "not is_valid_date";;
@@ -119,21 +127,21 @@ test (to_unixfloat (make 1970 1 1) = 0.) "to_unixfloat 1 Jan 1970";;
 test (from_unixfloat 0. = make 1970 1 1) "from_unixfloat 0.";;
 test (to_unixfloat (make 2004 11 13) = 1100304000.) "to_unixfloat";;
 test (from_unixfloat 1100304000. = make 2004 11 13) "from_unixfloat";;
-test (from_unixtm (to_unixtm (make 2003 7 16)) = make 2003 7 16) 
+test (from_unixtm (to_unixtm (make 2003 7 16)) = make 2003 7 16)
   "from_unixtm to_unixtm = id";;
 Time_Zone.change (Time_Zone.UTC_Plus (-1));;
 test (from_unixfloat 0. = make 1969 12 31) "from_unixfloat 0. (dec-)";;
-test (from_unixtm { Unix.tm_sec = 0; tm_min = 0; tm_hour = 0; tm_mday = 1; 
-		    tm_mon = 0; tm_year = 70; tm_wday = 4; tm_yday = 0; 
-		    tm_isdst = false } = make 1969 12 31) 
+test (from_unixtm { Unix.tm_sec = 0; tm_min = 0; tm_hour = 0; tm_mday = 1;
+		    tm_mon = 0; tm_year = 70; tm_wday = 4; tm_yday = 0;
+		    tm_isdst = false } = make 1969 12 31)
   "from_unixtm (dec-)";;
 Time_Zone.change (Time_Zone.UTC_Plus 1);;
 test (from_unixfloat 1100390390. = make 2004 11 14) "from_unixfloat (dec+)";;
-test (from_unixtm { Unix.tm_sec = 0; tm_min = 0; tm_hour = 0; tm_mday = 14; 
+test (from_unixtm { Unix.tm_sec = 0; tm_min = 0; tm_hour = 0; tm_mday = 14;
 		    tm_mon = 10; tm_year = 104; tm_wday = 0; tm_yday = 318;
-		    tm_isdst = false } = make 2004 11 14) 
+		    tm_isdst = false } = make 2004 11 14)
   "from_unixtm (dec+)";;
-test (from_unixtm (to_unixtm (make 2003 7 16)) = make 2003 7 16) 
+test (from_unixtm (to_unixtm (make 2003 7 16)) = make 2003 7 16)
   "from_unixtm to_unixtm = id";;
 
 (* to_business *)

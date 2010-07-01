@@ -6,6 +6,12 @@ Mark "*": bug fixed.
 Mark "!": change that can break compatibility with older version of the library
 ===============================================================================
 
+version 2.03, 2010-07-01:
+=========================
+o [Date] new function Date.precise_sub
+o [Calendar] new function Calendar.precise_sub
+  (from Dario Teixeira's suggestion)
+
 version 2.02, 2009-12-11:
 =========================
 o [License] add the usual Ocaml linking exception in the license
@@ -20,14 +26,14 @@ o [Date] improve memory representation of Date.Period.t
 * [Compilation] remove installation of packed *.cmi
 * [Compilation] bug fixed under Cygwin
 * [Compilation] META files was incorrect, so "ocamlfind ocamlopt" did not work
-* [Compilation] file date_sig.mli, time_sig.mli and calendar_sig.mli was not 
+* [Compilation] file date_sig.mli, time_sig.mli and calendar_sig.mli was not
   properly linked
 
 version 2.01.1, 2009-02-23:
 ===========================
 * [Date] add a missing coercion rule for months
   (e.g. "Date.make 2008 18 1" is now equal to "Date.make 2009 6 1")
-* [Date] bug fixed in date arithmetic operations due to the missing above 
+* [Date] bug fixed in date arithmetic operations due to the missing above
   feature
 
 version 2.01, 2009-01-26:
@@ -45,7 +51,7 @@ o [Printer] new formats available for printers and parsers
 o [Printer] new paddings available for printers
     - 0 (zero): pad fields with zeroes like by default
     - ^: use uppercase if possible
-o [Compilation] calendarLib.cma and calendarLib.cmxa are now installed 
+o [Compilation] calendarLib.cma and calendarLib.cmxa are now installed
   (Janne Hellsten and Guillaume Yziquel's suggestion)
 * [Tests] test suite now uses Utils.Float.equal if required
   (patch of Richard Jones)
@@ -59,7 +65,7 @@ o [Printer] support of "%w" and "%V" in parsers of date from string
 
 version 2.0.3, 2008-05-22:
 ==========================
-* [Compilation] module Period was not properly linked 
+* [Compilation] module Period was not properly linked
 
 version 2.0.2, 2008-03-17:
 ==========================
@@ -74,9 +80,9 @@ version 2.0.1, 2008-02-22:
 
 version 2.0, 2008-02-08:
 ========================
-o! [License] license changes from LGPLv2 to LGPLv2.1 
+o! [License] license changes from LGPLv2 to LGPLv2.1
    (from a suggestion of Hezekiah M. Carty)
-o! [Compilation] use -pack: all modules of the library are packed inside a 
+o! [Compilation] use -pack: all modules of the library are packed inside a
   single module CalendarLib (calendar now requires ocaml >= 3.09.1)
 o new modules Time_sig, Date_sig and Calendar_sig
 o new module Ftime (time implementation in which seconds are floats)
@@ -86,8 +92,8 @@ o new module Fcalendar (calendar implementation using Ftime)
 o new module Calendar.Precise (calendar with a best precision)
 o hash functions are provided
 o [Printer] new modules Printer.Ftime and Printer.Fcalendar
-o [Printer] modules Printer.Date, Printer.Time and Printer.Calendar 
-  respectively replace Printer.DatePrinter, Printer.TimePrinter and 
+o [Printer] modules Printer.Date, Printer.Time and Printer.Calendar
+  respectively replace Printer.DatePrinter, Printer.TimePrinter and
   Printer.CalendarPrinter. These last modules still exist but are deprecated.
 o [Time_Zone] new function Time_Zone.on
 o [Date] new function Date.from_day_of_year (Hezekiah M. Carty's suggestion)
@@ -115,7 +121,7 @@ version 1.09.4, 2006-02-13:
 ===========================
 o [Time_Zone] add Time_Zone.is_dst and Time_Zone.hour_of_dst
   (Daniel Peng's suggestion)
-* [Printer] bug fixed in printers with %I, %l, %p and %r 
+* [Printer] bug fixed in printers with %I, %l, %p and %r
   (patch of Jerry Charumilind)
 * [Time_Zone] bug fixed when checking bounds in Time_Zone (patch of Daniel Peng)
 
@@ -125,7 +131,7 @@ version 1.09.3, 2005-01-17:
 
 version 1.09.2, 2004-12-15:
 ===========================
-* [Date] bug fixed in Date.from_unixfloat and Date.from_unixtm with 
+* [Date] bug fixed in Date.from_unixfloat and Date.from_unixtm with
   time zones <> UTC
 
 version 1.09.1, 2004-11-17:
@@ -151,7 +157,7 @@ o add "equal" in all the modules
 
 version 1.08, 2004-05-18:
 =========================
-o [Date] add "week_first_last" computing the first and last days of a week in a 
+o [Date] add "week_first_last" computing the first and last days of a week in a
   year
 
 version 1.07, 2004-03-22:
@@ -185,12 +191,12 @@ o [Calendar] add "to_time" in Calendar (Julien Forest's suggestion)
 
 version 1.02, 2003-08-18:
 =========================
-* [Compilation] bug fixed in configure.in (calendar now works with 
+* [Compilation] bug fixed in configure.in (calendar now works with
   caml version > 3.06)
 
 version 1.01, 2003-07-16:
 =========================
-o add to_unixtm, from_unixtm, to_unixfloat and from_unixfloat in 
+o add to_unixtm, from_unixtm, to_unixfloat and from_unixfloat in
   Date and Calendar
 *! change "minut" by "minute"
 *! change "egal" by "equal"
@@ -198,6 +204,6 @@ o add to_unixtm, from_unixtm, to_unixfloat and from_unixfloat in
 
 (Thank's to Eric C. Cooper for those suggestions)
 
-version 1.0, 2003-07-11: 
+version 1.0, 2003-07-11:
 ========================
 o first release

@@ -2,7 +2,7 @@
 (*                                                                        *)
 (*  This file is part of Calendar.                                        *)
 (*                                                                        *)
-(*  Copyright (C) 2003-2009 Julien Signoles                               *)
+(*  Copyright (C) 2003-2010 Julien Signoles                               *)
 (*                                                                        *)
 (*  you can redistribute it and/or modify it under the terms of the GNU   *)
 (*  Lesser General Public License version 2.1 as published by the         *)
@@ -19,8 +19,6 @@
 (*  The special linking exception is detailled in the enclosed file       *)
 (*  LICENSE.                                                              *)
 (**************************************************************************)
-
-(* $Id$ *)
 
 module type Comparable = sig
   type t
@@ -46,8 +44,8 @@ module Float = struct
 
   let equal x y = abs_float (x -. y) < !precision
 
-  let compare x y = 
-    if equal x y then 0 
+  let compare x y =
+    if equal x y then 0
     else if x < y then -1
     else 1
 
