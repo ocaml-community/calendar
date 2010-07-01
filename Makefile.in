@@ -37,6 +37,8 @@ CAMLFIND= @OCAMLFIND@
 OBJ_EXT = @OBJEXT@
 LIB_EXT = @LIBEXT@
 
+HAS_NATDYNLINK=@HAS_NATDYNLINK@
+
 # Project
 #########
 
@@ -49,8 +51,10 @@ LIBDIR	= target
 LIBS	= $(LIBDIR)/$(NAMELIB).cmo $(LIBDIR)/$(NAMELIB).cma
 CLIBS   =
 ifneq ($(CAMLOPT),no)
-LIBS   := $(LIBS) $(LIBDIR)/$(NAMELIB).cmx $(LIBDIR)/$(NAMELIB).cmxa \
-	$(if $(wildcard $(CAMLLIB)/dynlink.cmxa),$(LIBDIR)/$(NAMELIB).cmxs)
+LIBS   := $(LIBS) $(LIBDIR)/$(NAMELIB).cmx $(LIBDIR)/$(NAMELIB).cmxa
+ifeq ($(HAS_NATDYNLINK),yes)
+LIBS	:= $(LIBS) $(LIBDIR)/$(NAMELIB).cmxs
+endif
 CLIBS   := $(CLIBS) $(LIBDIR)/$(NAMELIB)$(OBJ_EXT) \
 	$(LIBDIR)/$(NAMELIB)$(LIB_EXT)
 endif

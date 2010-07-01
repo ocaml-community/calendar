@@ -8,6 +8,7 @@ Mark "!": change that can break compatibility with older version of the library
 
 version 2.03, 2010-07-01:
 =========================
+* Detect whether native dynlink works (prevents compilation bug on Mac OS X)
 o [Date] new function Date.precise_sub
 o [Calendar] new function Calendar.precise_sub
   (from Dario Teixeira's suggestion)

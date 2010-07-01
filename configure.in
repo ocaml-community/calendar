@@ -171,6 +171,23 @@ AC_MSG_CHECKING(extension for library files)
 LIBEXT=`ocamlc -config 2>/dev/null|grep ext_lib|sed 's/ext_lib: //'`
 AC_MSG_RESULT(${LIBEXT})
 
+# Checking workable native dynlink
+HAS_NATDYNLINK=no
+AC_CHECK_FILE(${OCAMLLIB}/dynlink.cmxa,HAS_NATDYNLINK=yes,HAS_NATDYNLINK=no)
+
+if test "$HAS_NATDYNLINK" != "no" ; then
+  echo "Dynlink.loadfile \"foo\"; ignore (Dynlink.is_native);" > test_dynlink.ml
+  if ($OCAMLOPT -shared -o test_dynlink.cmxs test_dynlink.ml) 2> /dev/null ; \
+  then
+    HAS_NATDYNLINK=yes
+    AC_MSG_RESULT([native dynlink works fine. Great.])
+  else
+    HAS_NATDYNLINK=no
+    AC_MSG_WARN([native dynlink does not work on your platform. Disabled.])
+  fi
+  rm -f test_dynlink.*
+fi
+
 # substitutions to perform
 AC_SUBST(OCAMLC)
 AC_SUBST(OCAMLOPT)
@@ -185,6 +202,7 @@ AC_SUBST(OCAMLWC)
 AC_SUBST(OCAMLDOT)
 AC_SUBST(OBJEXT)
 AC_SUBST(LIBEXT)
+AC_SUBST(HAS_NATDYNLINK)
 
 # Finally create the Makefile from Makefile.in
 AC_OUTPUT(Makefile)
