@@ -176,8 +176,9 @@ HAS_NATDYNLINK=no
 AC_CHECK_FILE(${OCAMLLIB}/dynlink.cmxa,HAS_NATDYNLINK=yes,HAS_NATDYNLINK=no)
 
 if test "$HAS_NATDYNLINK" != "no" ; then
-  echo "Dynlink.loadfile \"foo\"; ignore (Dynlink.is_native);" > test_dynlink.ml
-  if ($OCAMLOPT -shared -o test_dynlink.cmxs test_dynlink.ml) 2> /dev/null ; \
+  echo "let f x y = Dynlink.loadfile \"foo\"; ignore (Dynlink.is_native); abs_float (x -. y)" > test_dynlink.ml
+  if ($OCAMLOPT -shared -linkall -o test_dynlink.cmxs test_dynlink.ml) \
+        2> /dev/null ; \
   then
     HAS_NATDYNLINK=yes
     AC_MSG_RESULT([native dynlink works fine. Great.])
