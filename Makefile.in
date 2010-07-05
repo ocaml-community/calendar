@@ -44,7 +44,7 @@ HAS_NATDYNLINK=@HAS_NATDYNLINK@
 
 NAME	= calendar
 NAMELIB = calendarLib
-VERSION	= 2.02+dev
+VERSION	= 2.03
 
 LIBDIR	= target
 

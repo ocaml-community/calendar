@@ -6,7 +6,7 @@ Mark "*": bug fixed.
 Mark "!": change that can break compatibility with older version of the library
 ===============================================================================
 
-version 2.03, 2010-07-01:
+version 2.03, 2010-07-05:
 =========================
 * Detect whether native dynlink works (prevents compilation bug on Mac OS X)
 o [Date] new function Date.precise_sub
