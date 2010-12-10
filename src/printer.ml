@@ -33,19 +33,19 @@ module type S = sig
   val from_string : string -> t
 end
 
-let day_name = 
+let day_name =
   ref (function
 	 | Date.Sun -> "Sunday"
 	 | Date.Mon -> "Monday"
 	 | Date.Tue -> "Tuesday"
 	 | Date.Wed -> "Wednesday"
-	 | Date.Thu -> "Thurday"
+	 | Date.Thu -> "Thursday"
 	 | Date.Fri -> "Friday"
 	 | Date.Sat -> "Saturday")
 
 let name_of_day d = !day_name d
 
-let short_name_of_day d = 
+let short_name_of_day d =
   let d = name_of_day d in
   try String.sub d 0 3 with Invalid_argument _ -> d
 
@@ -66,7 +66,7 @@ let month_name =
 
 let name_of_month m = !month_name m
 
-let short_name_of_month m = 
+let short_name_of_month m =
   let m = name_of_month m in
   try String.sub m 0 3 with Invalid_argument _ -> m
 
@@ -96,13 +96,13 @@ let print_number fmt pad k n =
 
 let bad_format s = raise (Invalid_argument ("bad format: " ^ s))
 
-let not_match f s = 
+let not_match f s =
   raise (Invalid_argument (s ^ " does not match the format " ^ f))
 
 let gen_month_of_name f fmt name =
-  let rec aux i = 
+  let rec aux i =
     if i = 0 then not_match fmt name
-    else if f (Date.month_of_int i) = name then i 
+    else if f (Date.month_of_int i) = name then i
     else aux (i-1)
   in
   aux 12
@@ -111,9 +111,9 @@ let month_of_name = gen_month_of_name name_of_month "%b"
 let month_of_short_name = gen_month_of_name short_name_of_month "%B"
 
 let gen_day_of_name f fmt name =
-  let rec aux i = 
+  let rec aux i =
     if i = 0 then not_match fmt name
-    else if f (Date.day_of_int i) = name then i 
+    else if f (Date.day_of_int i) = name then i
     else aux (i-1)
   in
   aux 7
@@ -175,9 +175,9 @@ struct
     let seconds_since_1970 = lazy (X.seconds_since_1970 x) in
     let print_char c = Format.pp_print_char fmt c in
     let print_int pad k n = print_number fmt pad k (Lazy.force n) in
-    let print_string pad s = 
-      let pad s = match pad with 
-	| Uppercase -> String.uppercase s 
+    let print_string pad s =
+      let pad s = match pad with
+	| Uppercase -> String.uppercase s
 	| Empty | Zero | Blank -> s
       in
       Format.pp_print_string fmt (pad (Lazy.force s))
@@ -189,7 +189,7 @@ struct
       print_char ':';
       print_int pad 10 second in
     let rec parse_option i pad =
-      let parse_char c = 
+      let parse_char c =
 	let jump = ref 0 in
 	begin match c with
 	| '%' -> print_char '%'
@@ -209,7 +209,7 @@ struct
 	    print_int pad 1000 year
 	| 'C' -> print_int pad 10 century
 	| 'd' -> print_int pad 10 day_of_month
-	| 'D' -> 
+	| 'D' ->
 	    print_int pad 10 int_month;
 	    print_char '/';
 	    print_int pad 10 day_of_month;
@@ -231,9 +231,9 @@ struct
 	| 'M' -> print_int pad 10 minute
 	| 'n' -> print_char '\n'
 	| 'p' -> print_string pad apm
-	| 'P' -> 
+	| 'P' ->
 	    Format.pp_print_string fmt (String.lowercase (Lazy.force apm))
-	| 'r' -> 
+	| 'r' ->
 	    print_time pad shour;
 	    print_char ' ';
 	    print_string pad apm
@@ -245,16 +245,16 @@ struct
 	| 'S' -> print_int pad 10 second
 	| 't' -> print_char '\t'
 	| 'T' -> print_time pad hour
-	| 'V' | 'W' -> print_int pad 10 week	     
+	| 'V' | 'W' -> print_int pad 10 week
 	| 'w' -> print_int Empty 1 day_of_week
 	| 'y' -> print_int pad 10 syear
 	| 'Y' -> print_int pad 1000 year
-	| 'z' -> 
+	| 'z' ->
 	    if Lazy.force tz >= 0 then print_char '+';
 	    print_int pad 10 tz;
 	    print_number fmt Zero 10 0
 	| ':' ->
-	    let idx = 
+	    let idx =
 	      try Str.search_forward (Str.regexp "z\\|:z\\|::z") f (i+1)
 	      with Not_found -> bad_format f
 	    in
@@ -262,9 +262,9 @@ struct
 	    if idx <> i+1 then bad_format f;
 	    if Lazy.force tz >= 0 then print_char '+';
 	    print_int pad 10 tz;
-	    let print_block () = 
-	      print_char ':'; 
-	      print_number fmt Zero 10 0 
+	    let print_block () =
+	      print_char ':';
+	      print_number fmt Zero 10 0
 	    in
 	    jump := String.length next;
 	    (match next with
@@ -294,10 +294,10 @@ struct
       if i = len then ()
       else match f.[i] with
       | '%' -> parse_option (i + 1) Zero
-      | c   -> 
+      | c   ->
 	  Format.pp_print_char fmt c;
 	  parse_format (i + 1)
-    in 
+    in
     parse_format 0;
     Format.pp_print_flush fmt ()
 
@@ -305,7 +305,7 @@ struct
 
   let dprint = print X.default_format
 
-  let sprint f d = 
+  let sprint f d =
     let buf = Buffer.create 15 in
     let fmt = Format.formatter_of_buffer buf in
     fprint f fmt d;
@@ -313,15 +313,15 @@ struct
 
   let to_string = sprint X.default_format
 
-  let from_fstring f s = 
+  let from_fstring f s =
     let delayed_computations = ref [] in
     let day_of_week, week = ref min_int, ref min_int in
     let year, month, day = ref min_int, ref min_int, ref min_int in
-    let hour, minute, second, pm = 
-      ref min_int, ref min_int, ref min_int, ref 0 
+    let hour, minute, second, pm =
+      ref min_int, ref min_int, ref min_int, ref 0
     in
     let tz = ref 0 in
-    let from_biz () = 
+    let from_biz () =
       if !week = -1 || !year = -1 then
 	bad_format (f ^ " (either week or year is not provided)");
       let d = X.from_business !year !week (Date.day_of_int !day_of_week) in
@@ -334,20 +334,20 @@ struct
     let lens = String.length s in
     let read_char c =
       if !j >= lens || s.[!j] != c then not_match f s;
-      incr j 
+      incr j
     in
     let read_number n =
       let jn = !j + n in
       if jn > lens then not_match f s;
-      let res = 
+      let res =
 	try int_of_string (String.sub s !j n)
 	with Failure _ -> not_match f s
-      in 
+      in
       j := jn;
       res
     in
-    let read_word ?(regexp=(!word_regexp)) () = 
-      let jn = 
+    let read_word ?(regexp=(!word_regexp)) () =
+      let jn =
 	try Str.search_forward regexp s !j with Not_found -> not_match f s
       in
       if jn <> !j then not_match f s;
@@ -362,7 +362,7 @@ struct
     let parse_I () = hour := read_number 2 in
     let parse_m () = month := read_number 2 in
     let parse_M () = minute := read_number 2 in
-    let parse_p () = 
+    let parse_p () =
       match read_word () with
       | "AM" -> pm := 0
       | "PM" -> pm := 12
@@ -376,7 +376,7 @@ struct
     in
     let parse_y () = year := read_number 2 + 1900 in
     let parse_Y () = year := read_number 4 in
-    let parse_tz () = 
+    let parse_tz () =
       let sign = match read_word ~regexp:(Str.regexp "[\\+-]") () with
 	| "+" -> -1
 	| "-" -> 1
@@ -385,7 +385,7 @@ struct
       let n = read_number 2 in
       tz := sign * n;
     in
-    let rec parse_option i = 
+    let rec parse_option i =
       assert (i <= lenf);
       if i = lenf then bad_format f;
       (* else *)
@@ -412,7 +412,7 @@ struct
 	   parse_Y ()
        | 'C' -> ignore (read_number 2)
        | 'd' -> parse_d ()
-       | 'D' -> 
+       | 'D' ->
 	   parse_m ();
 	   read_char '/';
 	   parse_d ();
@@ -441,7 +441,7 @@ struct
        | 'M' -> parse_M ()
        | 'n' -> read_char '\n'
        | 'p' -> parse_p ()
-       | 'P' -> 
+       | 'P' ->
 	   (match read_word () with
 	    | "am" -> pm := 0
 	    | "pm" -> pm := 12
@@ -475,7 +475,7 @@ struct
        | 'W' -> parse_V "%W"
        | 'y' -> parse_y ()
        | 'Y' -> parse_Y  ()
-       | 'z' -> 
+       | 'z' ->
 	   parse_tz ();
 	   ignore (read_number 2)
        | ':' ->
@@ -501,10 +501,10 @@ struct
       if i = lenf then begin if !j != lens then not_match f s end
       else match f.[i] with
       | '%' -> parse_option (i + 1)
-      | c -> 
+      | c ->
 	  read_char c;
 	  parse_format (i + 1)
-    in 
+    in
     parse_format 0;
     List.iter (fun f -> f ()) !delayed_computations;
     X.make !year !month !day (!hour + !pm + !tz) !minute !second
@@ -517,8 +517,8 @@ let cannot_create_event kind args =
   if List.exists ((=) min_int) args then
     raise (Invalid_argument ("Cannot create the " ^ kind))
 
-module Date = 
-  Make(struct 
+module Date =
+  Make(struct
 	 include Date
 	 let make y m d _ _ _ =
 	   cannot_create_event "date" [ y; m; d ];
@@ -533,7 +533,7 @@ module Date =
 
 module DatePrinter = Date
 
-module Time = 
+module Time =
   Make(struct
 	 include Time
 	 let make _ _ _ h m s =
@@ -554,7 +554,7 @@ module Time =
 
 module TimePrinter = Time
 
-module Ftime = 
+module Ftime =
   Make(struct
 	 include Ftime
 	 let make _ _ _ h m s =
@@ -574,7 +574,7 @@ module Ftime =
 	 let seconds_since_1970 _ = bad_format "seconds_since_1970"
        end)
 
-module Precise_Calendar = 
+module Precise_Calendar =
   Make(struct
 	 include Calendar.Precise
 	 let make y m d h mn s =
@@ -588,7 +588,7 @@ module Precise_Calendar =
 	   Time.Second.to_int (Time.Period.to_seconds (Period.to_time p))
        end)
 
-module Calendar = 
+module Calendar =
   Make(struct
 	 include Calendar
 	 let make y m d h mn s =
@@ -604,7 +604,7 @@ module Calendar =
 
 module CalendarPrinter = Calendar
 
-module Precise_Fcalendar = 
+module Precise_Fcalendar =
   Make(struct
 	 include Fcalendar.Precise
 	 let make y m d h mn s =
@@ -619,7 +619,7 @@ module Precise_Fcalendar =
 	   Time.Second.to_int (Time.Period.to_seconds (Period.to_time p))
        end)
 
-module Fcalendar = 
+module Fcalendar =
   Make(struct
 	 include Fcalendar
 	 let make y m d h mn s =
