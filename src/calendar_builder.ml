@@ -257,7 +257,11 @@ module Make(D: Date_sig.S)(T: Time_sig.S) = struct
     | #D.field as f -> unsplit (D.next d f) t
     | #T.field as f -> unsplit d (T.next t f)
 
-  let prev x f = -. next (-. x) f
+  let prev x f =
+    let d, t = split x in
+    match f with
+    | #D.field as f -> unsplit (D.prev d f) t
+    | #T.field as f -> unsplit d (T.prev t f)
 
 end
 

@@ -6,6 +6,10 @@ Mark "*": bug fixed.
 Mark "!": change that can break compatibility with older version of the library
 ===============================================================================
 
+version 2.03.1, 2011-03-24:
+===========================
+* [Calendar] Fixed bug in Calendar.prev and Fcalendar.prev: mostly raised
+  exception Date.Out_of_bounds before.
 * [Printer] `Thurday' was printed instead of `Thursday'
 
 version 2.03, 2010-07-05:

@@ -112,6 +112,8 @@ test (Period.equal
 let d = make 2003 12 31 12 24 48;;
 test (next d `Month = make 2004 1 31 12 24 48) "2003-12-31 + 1 mois";;
 test (add d (Period.month 2) = make 2004 3 2 12 24 48) "2003-12-31 + 2 mois";;
+let d3 = make 2011 3 24 0 0 0;;
+test (prev d3 `Year = make 2010 3 24 0 0 0) "2011-3-24 - 1 year";;
 let d2 = make (-3000) 1 1 6 12 24;;
 test (equal (rem d (sub d d2)) d2) "rem x (sub x y) = y";;
 test (is_leap_day (make 2000 2 24 0 0 0)) "2000-2-24 leap day";;
