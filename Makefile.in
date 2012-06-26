@@ -32,6 +32,7 @@ CAMLWC	= @OCAMLWC@
 CAMLDOT	= @OCAMLDOT@
 CAMLLIB	= @OCAMLLIB@
 CAMLFIND= @OCAMLFIND@
+CAMLMAJORVERSION= @OCAMLMAJOR@
 
 # Object/Library File Extensions
 OBJ_EXT = @OBJEXT@
@@ -174,6 +175,14 @@ wc: $(SRC)
 
 $(NAMELIB).ps: $(SRC)
 	$(CAMLWEB) --ps -o $@ $^
+
+ifeq ($(CAMLMAJORVERSION),3)
+utils/example.ml: utils/example.ml.3
+	cp $< $@
+else
+utils/example.ml: utils/example.ml.4
+	cp $< $@
+endif
 
 utils/example.cmo: utils/example.ml
 	$(CAMLC) -I +ocamldoc -I utils -c $<

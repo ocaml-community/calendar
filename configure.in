@@ -51,10 +51,11 @@ fi
 OCAMLVERSION=`$OCAMLC -v | sed -n -e 's|.*version *\(.*\)$|\1|p' `
 echo $ECHO_N "ocaml version is $OCAMLVERSION: $ECHO_C"
 case $OCAMLVERSION in
-  3.09.**) echo "${ECHO_T}Good!";;
-  3.09*) echo "${ECHO_T}Warning: unsupported version. Compile at your own risks";;
+  3.09.**) OCAMLMAJOR=3; echo "${ECHO_T}Good!";;
+  3.09*) OCAMLMAJOR=3; echo "${ECHO_T}Warning: unsupported version. Compile at your own risks";;
   3.0*) echo "${ECHO_T}Unsupported version!"; exit 2;;
-  3.*) echo "${ECHO_T}Good!";;
+  3.*) OCAMLMAJOR=3; echo "${ECHO_T}Good!";;
+  4.*) OCAMLMAJOR=4; echo "${ECHO_T}Good!";;
   *) echo "${ECHO_T}Unsupported version!"; exit 2;;
 esac
 
@@ -195,7 +196,7 @@ AC_SUBST(OCAMLOPT)
 AC_SUBST(OCAMLDEP)
 AC_SUBST(OCAMLFIND)
 AC_SUBST(OCAMLBEST)
-AC_SUBST(OCAMLVERSION)
+AC_SUBST(OCAMLMAJOR)
 AC_SUBST(OCAMLLIB)
 AC_SUBST(OCAMLDOC)
 AC_SUBST(OCAMLWEB)
