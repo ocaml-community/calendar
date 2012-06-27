@@ -6,7 +6,9 @@ Mark "*": bug fixed.
 Mark "!": change that can break compatibility with older version of the library
 ===============================================================================
 
-* [Compilation] Compatibility with OCaml 4.
+version 2.03.2, 2012-06-26:
+===========================
+o [Compilation] Compatibility with OCaml 4
 
 version 2.03.1, 2011-03-24:
 ===========================
