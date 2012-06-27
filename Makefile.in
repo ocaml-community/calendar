@@ -222,7 +222,7 @@ uninstall:
 # Exporting
 ###########
 
-EXPORT_DIR= $$HOME/WWW/prog/$(NAME)
+EXPORT_DIR= $$HOME/EXPORT/$(NAME)
 TMP_DIR	= $$HOME/tmp
 
 ROOT= $$HOME/DEV/calendar
@@ -234,6 +234,7 @@ export: doc
 	rm -rf $(TMP_DIR)/trunk
 	(cd $(ROOT)/tags; svn commit -m "v $(VERSION)")
 	rm -rf $(EXPORT_DIR)/doc
+	mkdir -p $(EXPORT_DIR)
 	cp -rf CHANGES doc $(EXPORT_DIR)
 	cp -rf $(ROOT)/tags/v$(VERSION) $(TMP_DIR)/$(NAME)-$(VERSION)
 	cp -rf .depend configure config.status doc $(TMP_DIR)/$(NAME)-$(VERSION)
