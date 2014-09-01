@@ -20,8 +20,6 @@
 (*  LICENSE.                                                              *)
 (**************************************************************************)
 
-(*i $Id$ i*)
-
 Printf.printf "Tests of Printer:\n";;
 
 open CalendarLib;;
@@ -115,6 +113,12 @@ test
 test (sprint "%s" (Calendar.make 1971 1 1 0 0 0) = "31536000")
   "sprint %s";;
 
+test (Utils.Float.equal
+        (Ftime.second
+           (Printer.Ftime.from_fstring
+              "%Y-%m-%dT%H:%M:%S%:z" "2014-03-19T15:51:25.05-07:00"))
+        25.05)
+  "from_string with floating seconds";;
 
 let ok = nb_ok ();;
 let bug = nb_bug ();;

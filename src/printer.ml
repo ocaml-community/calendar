@@ -125,10 +125,14 @@ let word_regexp = ref (Str.regexp "[a-zA-Z]+")
 
 let set_word_regexp r = word_regexp := r
 
+type 'a second_builder =
+  | Int of (int -> int -> int -> int -> int -> int -> 'a)
+  | Float of (int -> int -> int -> int -> int -> float -> 'a)
+
 (* [Make] creates a printer from a small set of functions. *)
 module Make(X : sig
 	      type t
-	      val make : int -> int -> int -> int -> int -> int -> t
+	      val make : t second_builder
 	      val from_business: Date.year -> int -> Date.day -> t
 	      val default_format : string
 	      val hour : t -> int
@@ -318,7 +322,7 @@ struct
     let day_of_week, week = ref min_int, ref min_int in
     let year, month, day = ref min_int, ref min_int, ref min_int in
     let hour, minute, second, pm =
-      ref min_int, ref min_int, ref min_int, ref 0
+      ref min_int, ref min_int, ref (float min_int), ref 0
     in
     let tz = ref 0 in
     let from_biz () =
@@ -355,6 +359,12 @@ struct
       j := jn + String.length w;
       w
     in
+    let read_float =
+      let regexp = Str.regexp "[0-9][0-9]\\(\\.[0-9]*\\)?" in
+      fun () ->
+        try float_of_string (read_word ~regexp ())
+        with Failure _ -> not_match f s
+    in
     let parse_a () = ignore (day_of_short_name (read_word ())) in
     let parse_b () = month := month_of_short_name (read_word ()) in
     let parse_d () = day := read_number 2 in
@@ -368,7 +378,10 @@ struct
       | "PM" -> pm := 12
       | s -> not_match "%p" ("\"" ^ s ^ "\"")
     in
-    let parse_S () = second := read_number 2 in
+    let parse_S () = match X.make with
+      | Int _ -> second := float (read_number 2)
+      | Float _ -> second := read_float ()
+    in
     let parse_V fmt =
       let n = read_number 2 in
       if n < 1 || n > 53 then not_match fmt (string_of_int n);
@@ -507,7 +520,10 @@ struct
     in
     parse_format 0;
     List.iter (fun f -> f ()) !delayed_computations;
-    X.make !year !month !day (!hour + !pm + !tz) !minute !second
+    let build mk = mk !year !month !day (!hour + !pm + !tz) !minute in
+    match X.make with
+    | Int f  -> build f (Utils.Float.round !second)
+    | Float f -> build f !second
 
   let from_string = from_fstring X.default_format
 
@@ -523,6 +539,7 @@ module Date =
 	 let make y m d _ _ _ =
 	   cannot_create_event "date" [ y; m; d ];
 	   make y m d
+         let make = Int make
 	 let default_format = "%i"
 	 let hour _ = bad_format "hour"
 	 let minute _ = bad_format "minute"
@@ -539,6 +556,7 @@ module Time =
 	 let make _ _ _ h m s =
 	   cannot_create_event "time" [ h; m; s ];
 	   make h m s
+         let make = Int make
 	 let default_format = "%T"
 	 let from_business _ _ _ = bad_format "from_business"
 	 let day_of_week _ = bad_format "day_of_week"
@@ -558,8 +576,9 @@ module Ftime =
   Make(struct
 	 include Ftime
 	 let make _ _ _ h m s =
-	   cannot_create_event "time" [ h; m; s ];
-	   make h m (Second.from_int s)
+	   cannot_create_event "time" [ h; m; Utils.Float.round s ];
+	   make h m s
+         let make = Float make
 	 let second x = Second.to_int (second x)
 	 let default_format = "%T"
 	 let from_business _ _ _ = bad_format "from_business"
@@ -586,6 +605,7 @@ module Precise_Calendar =
 	 let seconds_since_1970 c =
 	   let p = sub c (make 1970 1 1 0 0 0) in
 	   Time.Second.to_int (Time.Period.to_seconds (Period.to_time p))
+         let make = Int make
        end)
 
 module Calendar =
@@ -600,6 +620,7 @@ module Calendar =
 	 let seconds_since_1970 c =
 	   let p = sub c (make 1970 1 1 0 0 0) in
 	   Time.Second.to_int (Time.Period.to_seconds (Period.to_time p))
+         let make = Int make
        end)
 
 module CalendarPrinter = Calendar
@@ -608,28 +629,32 @@ module Precise_Fcalendar =
   Make(struct
 	 include Fcalendar.Precise
 	 let make y m d h mn s =
-	   cannot_create_event "calendar" [ y; m; d; h; mn; s ];
-	   make y m d h mn (Time.Second.from_int s)
+           cannot_create_event
+             "calendar" [ y; m; d; h; mn; Utils.Float.round s ];
+	   make y m d h mn s
 	 let from_business y w d = from_date (Date.from_business y w d)
 	 let second s = Time.Second.to_int (second s)
 	 let default_format = "%i %T"
 	 let century c = Date.century (year c)
 	 let seconds_since_1970 c =
-	   let p = sub c (make 1970 1 1 0 0 0) in
+           let p = sub c (make 1970 1 1 0 0 0.) in
 	   Time.Second.to_int (Time.Period.to_seconds (Period.to_time p))
+         let make = Float make
        end)
 
 module Fcalendar =
   Make(struct
 	 include Fcalendar
 	 let make y m d h mn s =
-	   cannot_create_event "calendar" [ y; m; d; h; mn; s ];
-	   make y m d h mn (Time.Second.from_int s)
+           cannot_create_event
+             "calendar" [ y; m; d; h; mn; Utils.Float.round s ];
+           make y m d h mn s
 	 let from_business y w d = from_date (Date.from_business y w d)
 	 let second s = Time.Second.to_int (second s)
 	 let default_format = "%i %T"
 	 let century c = Date.century (year c)
 	 let seconds_since_1970 c =
-	   let p = sub c (make 1970 1 1 0 0 0) in
+           let p = sub c (make 1970 1 1 0 0 0.) in
 	   Time.Second.to_int (Time.Period.to_seconds (Period.to_time p))
+         let make = Float make
        end)

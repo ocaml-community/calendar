@@ -6,6 +6,10 @@ Mark "*": bug fixed.
 Mark "!": change that can break compatibility with older version of the library
 ===============================================================================
 
+o [Printer] In function from_fstring of sub-module Ftime, Fcalendar, and
+  Precise_Fcalendar, the number of seconds corresponding to %S may be a floating
+  point number (from Christophe Troestler' suggestion).
+
 version 2.03.2, 2012-06-26:
 ===========================
 o [Compilation] Compatibility with OCaml 4
