@@ -6,7 +6,7 @@ Mark "*": bug fixed.
 Mark "!": change that can break compatibility with older version of the library
 ===============================================================================
 
-* [Makefile] Fix issues with META and 'make install' on OpenBSD (from 
+* [Makefile] Fix minor issues with ocamlfind and 'make install' (from 
   Christopher Zimmermann).
 o [Printer] In function from_fstring of sub-module Ftime, Fcalendar, and
   Precise_Fcalendar, the number of seconds corresponding to %S may be a floating
