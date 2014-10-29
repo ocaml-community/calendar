@@ -45,7 +45,7 @@ HAS_NATDYNLINK=@HAS_NATDYNLINK@
 
 NAME	= calendar
 NAMELIB = calendarLib
-VERSION	= 2.03.2
+VERSION	= 2.04
 
 LIBDIR	= target
 
@@ -178,10 +178,10 @@ $(NAMELIB).ps: $(SRC)
 	$(CAMLWEB) --ps -o $@ $^
 
 ifeq ($(CAMLMAJORVERSION),3)
-utils/example.ml: utils/example.ml.3
+utils/example.ml: utils/example.ml.3 Makefile
 	cp $< $@
 else
-utils/example.ml: utils/example.ml.4
+utils/example.ml: utils/example.ml.4 Makefile
 	cp $< $@
 endif
 
@@ -273,6 +273,7 @@ clean:
 	for i in . src tests utils; do \
 	  rm -f $$i/*~ $$i/\#* $$i/*.cm[iox] $$i/*.*a $$i/*$(OBJ_EXT) $$i/a.out; \
 	done
+	rm -f utils/example.ml
 
 dist-clean distclean: clean
 	rm -rf $(NAME).ps.gz doc $(LIBDIR)
