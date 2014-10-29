@@ -6,6 +6,8 @@ Mark "*": bug fixed.
 Mark "!": change that can break compatibility with older version of the library
 ===============================================================================
 
+version 2.04, 2014-10-29:
+===========================
 * [Makefile] Fix minor issues with ocamlfind and 'make install' (from 
   Christopher Zimmermann).
 o [Printer] In function from_fstring of sub-module Ftime, Fcalendar, and
