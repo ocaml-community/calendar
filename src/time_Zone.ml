@@ -44,7 +44,6 @@ let gap_gmt_local =
 let current () = !tz
 
 let change = function
-  | UTC_Plus x when out_of_bounds x -> invalid_arg "Not a valid time zone"
   | _ as t -> tz := t
 
 let gap t1 t2 =
