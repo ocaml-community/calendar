@@ -337,7 +337,7 @@ let weeks_in_year y =
     | _   -> 52
 
 let week_first_last w y =
-  let d = make y 1 1 in
+  let d = make y 1 4 in (* January 4th must be in the first week (ISO 8601) *)
   let d = d - d mod 7 in
   let b = d + 7 * (w - 1) in
   b, 6 + b
