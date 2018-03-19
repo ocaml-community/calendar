@@ -58,8 +58,8 @@ module Float: sig
   val set_precision: float -> unit
     (** Set the precision of [equal] and [compare] for float.
 	If the precision is [p], then the floats [x] and [y] are equal iff
-	[abs(x-y) < p].  By default, the precision is [1e-3] (that is one
-	millisecond if floats represents seconds). *)
+	[abs(x-y) < p].  By default, the precision is [1e-8] (that is 0.864
+	milliseconds if floats represent days). *)
 
   val round: t -> int
     (** Round a float to the nearest integer. *)
