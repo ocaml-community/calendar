@@ -38,7 +38,7 @@ module Float = struct
 
   type t = float
 
-  let precision = ref 1e-3
+  let precision = ref 1e-8
 
   let set_precision f = precision := f
 
