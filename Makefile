@@ -30,7 +30,7 @@ CAMLDOC	= ocamldoc
 CAMLWEB	= ocamlweb
 CAMLWC	= ocamlwc
 CAMLDOT	= ocamldot
-CAMLLIB	= /home/jerome/.opam/4.04.0/lib/ocaml
+CAMLLIB	= /home/jerome/.opam/4.04.2/lib/ocaml
 CAMLFIND= ocamlfind
 CAMLMAJORVERSION= 4
 
@@ -84,7 +84,7 @@ GENERATED= src/version.ml
 # Libs and flags
 ################
 
-CAMLIBS	= $(addprefix -I , $(DIRS))
+CAMLIBS	= $(addprefix -I , $(DIRS)) -package re.str
 
 CAMLFLAGS= $(CAMLIBS)
 BYTEFLAGS= $(CAMLFLAGS)
@@ -125,7 +125,7 @@ META: Makefile
 	echo "version = \"$(VERSION)\"" >> $@
 	echo "archive(byte) = \"$(NAMELIB).cma\"" >> $@
 	echo "archive(native) = \"$(NAMELIB).cmxa\"" >> $@
-	echo "requires = \"unix str\"" >> $@
+	echo "requires = \"unix re.str\"" >> $@
 
 # Generic rules
 ###############
@@ -136,16 +136,16 @@ META: Makefile
 .SUFFIXES: .ml .mli .cmo .cmi .cmx $(OBJ_EXT)
 
 .mli.cmi:
-	$(CAMLC) $(BYTEFLAGS) -c $<
+	$(CAMLFIND) ocamlc $(BYTEFLAGS) -c $<
 
 .ml.cmo:
-	$(CAMLC) $(BYTEFLAGS) -c $<
+	$(CAMLFIND) ocamlc $(BYTEFLAGS) -c $<
 
 .ml$(OBJ_EXT):
-	$(CAMLOPT) $(OPTFLAGS) -c $<
+	$(CAMLFIND) ocamlopt $(OPTFLAGS) -c $<
 
 .ml.cmx:
-	$(CAMLOPT) $(OPTFLAGS) -c $<
+	$(CAMLFIND) ocamlopt $(OPTFLAGS) -c $<
 
 # Tests
 #######

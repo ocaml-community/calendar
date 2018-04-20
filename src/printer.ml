@@ -121,7 +121,7 @@ let gen_day_of_name f fmt name =
 let day_of_name = gen_day_of_name name_of_day "%a"
 let day_of_short_name = gen_day_of_name short_name_of_day "%A"
 
-let word_regexp = ref (Str.regexp "[a-zA-Z]+")
+let word_regexp = ref (Re.Str.regexp "[a-zA-Z]+")
 
 let set_word_regexp r = word_regexp := r
 
@@ -259,10 +259,10 @@ struct
 	    print_number fmt Zero 10 0
 	| ':' ->
 	    let idx =
-	      try Str.search_forward (Str.regexp "z\\|:z\\|::z") f (i+1)
+	      try Re.Str.search_forward (Re.Str.regexp "z\\|:z\\|::z") f (i+1)
 	      with Not_found -> bad_format f
 	    in
-	    let next = Str.matched_string f in
+	    let next = Re.Str.matched_string f in
 	    if idx <> i+1 then bad_format f;
 	    if Lazy.force tz >= 0 then print_char '+';
 	    print_int pad 10 tz;
@@ -352,15 +352,15 @@ struct
     in
     let read_word ?(regexp=(!word_regexp)) () =
       let jn =
-	try Str.search_forward regexp s !j with Not_found -> not_match f s
+	try Re.Str.search_forward regexp s !j with Not_found -> not_match f s
       in
       if jn <> !j then not_match f s;
-      let w = Str.matched_string s in
+      let w = Re.Str.matched_string s in
       j := jn + String.length w;
       w
     in
     let read_float =
-      let regexp = Str.regexp "[0-9][0-9]\\(\\.[0-9]*\\)?" in
+      let regexp = Re.Str.regexp "[0-9][0-9]\\(\\.[0-9]*\\)?" in
       fun () ->
         try float_of_string (read_word ~regexp ())
         with Failure _ -> not_match f s
@@ -390,7 +390,7 @@ struct
     let parse_y () = year := read_number 2 + 1900 in
     let parse_Y () = year := read_number 4 in
     let parse_tz () =
-      let sign = match read_word ~regexp:(Str.regexp "[\\+-]") () with
+      let sign = match read_word ~regexp:(Re.Str.regexp "[\\+-]") () with
 	| "+" -> -1
 	| "-" -> 1
 	| _ -> assert false

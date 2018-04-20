@@ -125,7 +125,7 @@ val short_name_of_month : Date.month -> string
     [name_of_month d].
     Used by the specifier [%b]. *)
 
-val set_word_regexp: Str.regexp -> unit
+val set_word_regexp: Re.Str.regexp -> unit
   (** Set the regular expression used to recognize words in
       [from_fstring]. Default is [[a-zA-Z]*].
       @since 1.10 *)
