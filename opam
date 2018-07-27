@@ -10,4 +10,7 @@ build: [
 ]
 install: [make "install"]
 remove: ["ocamlfind" "remove" "calendar"]
-depends: "ocamlfind"
+depends: [
+  "ocamlfind"
+  "re"
+]
