@@ -2,7 +2,7 @@
 
 A calendar library for OCaml.
 
-[![Travis build Status](https://travis-ci.org/ocaml-community/calendar.svg?branch=master)](https://travis-ci.org/ocaml-community/calendar)
+[![Travis build Status](https://travis-ci.org/ocaml-community/calendar.svg?branch=2.x)](https://travis-ci.org/ocaml-community/calendar)
 
 1. [Introduction](#1--introduction)
 2. [Contents](#2--contents)
