@@ -1,4 +1,8 @@
-# Summary
+# Calendar
+
+A calendar library for OCaml.
+
+[![Travis build Status](https://travis-ci.org/ocaml-community/calendar.svg?branch=master)](https://travis-ci.org/ocaml-community/calendar)
 
 1. [Introduction](#1--introduction)
 2. [Contents](#2--contents)
@@ -9,15 +13,12 @@
 7. [Makefile](#7--makefile)
 8. [Contact the developper](#8--contact-the-developper)
 
-## 1- Introduction 
+## 1- Introduction
 
-The Calendar library is a library providing a set of operations over dates and 
-times. 
-This library requires Objective Caml (OCaml) 3.09.1 or higher.
-OCaml 3.09 is usable at your own risks.
+The Calendar library provides types and operations over dates and times.
+This library requires OCaml 3.09.1 or higher.
+OCaml 3.09 is usable at your own risk.
 Older OCaml versions are unsupported.
-
-[![Travis build Status](https://travis-ci.org/ocaml-community/calendar.svg?branch=master)](https://travis-ci.org/ocaml-community/calendar)
 
 ## 2- Contents
 
@@ -37,7 +38,7 @@ Older OCaml versions are unsupported.
 
 ## 3- Copyright
 
-This program is distributed under the GNU LGPL 2.1. 
+This program is distributed under the GNU LGPL 2.1.
 See the enclosed file COPYING for more details.
 
 ## 4- Installation
@@ -90,7 +91,7 @@ A description of some Makefile entries follows :
 - i. tests
   Execute some tests
 
-- ii. wc 
+- ii. wc
   Give informations about the size of the source files. You need ocamlwc `(*)`.
 
 - iii. doc
