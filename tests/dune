@@ -1,0 +1,8 @@
+
+(executable
+  (name test)
+  (libraries calendar))
+
+(alias
+  (name runtest)
+  (action (run ./test.exe)))

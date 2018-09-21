@@ -1,0 +1,8 @@
+
+(library
+  (name calendarLib)
+  (public_name calendar)
+  (wrapped true)
+  (libraries str unix)
+  (modules_without_implementation calendar_sig date_sig period time_sig version)
+  (flags :standard -warn-error -32 -safe-string))
