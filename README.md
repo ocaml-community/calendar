@@ -7,7 +7,7 @@
 5. [How to use](#5--how-to-use)
 6. [Documentation](#6--documentation)
 7. [Makefile](#7--makefile)
-8. [Contact the developper](#--contact-the-developper)
+8. [Contact the developper](#8--contact-the-developper)
 
 ## 1- Introduction 
 
