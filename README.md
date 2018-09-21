@@ -1,13 +1,13 @@
 # Summary
 
-1. Introduction
-2. Contents
-3. Copyright
-4. Installation
-5. How to use
-6. Documentation
-7. Makefile
-8. Contact the developper
+1. [Introduction](#1--introduction)
+2. [Contents](#2--contents)
+3. [Copyright](#3--copyright)
+4. [Installation](#4--installation)
+5. [How to use](#5--how-to-use)
+6. [Documentation](#6--documentation)
+7. [Makefile](#7--makefile)
+8. [Contact the developper](#--contact-the-developper)
 
 ## 1- Introduction 
 
