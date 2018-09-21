@@ -181,7 +181,7 @@ struct
     let print_int pad k n = print_number fmt pad k (Lazy.force n) in
     let print_string pad s =
       let pad s = match pad with
-	| Uppercase -> String.uppercase s
+	| Uppercase -> String.uppercase_ascii s
 	| Empty | Zero | Blank -> s
       in
       Format.pp_print_string fmt (pad (Lazy.force s))
@@ -236,7 +236,7 @@ struct
 	| 'n' -> print_char '\n'
 	| 'p' -> print_string pad apm
 	| 'P' ->
-	    Format.pp_print_string fmt (String.lowercase (Lazy.force apm))
+	    Format.pp_print_string fmt (String.lowercase_ascii (Lazy.force apm))
 	| 'r' ->
 	    print_time pad shour;
 	    print_char ' ';
