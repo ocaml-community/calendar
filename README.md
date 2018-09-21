@@ -17,6 +17,8 @@ This library requires Objective Caml (OCaml) 3.09.1 or higher.
 OCaml 3.09 is usable at your own risks.
 Older OCaml versions are unsupported.
 
+[![Travis build Status](https://travis-ci.org/ocaml-community/calendar.svg?branch=master)](https://travis-ci.org/ocaml-community/calendar)
+
 ## 2- Contents
 
 - `CHANGES`		  Information about the last changes
