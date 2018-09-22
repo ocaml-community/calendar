@@ -11,7 +11,7 @@ A calendar library for OCaml.
 5. [How to use](#5--how-to-use)
 6. [Documentation](#6--documentation)
 7. [Makefile](#7--makefile)
-8. [Contact the developper](#8--contact-the-developper)
+8. [Contact the developers](#8--contact-the-developers)
 
 ## 1- Introduction
 
@@ -100,6 +100,6 @@ A description of some Makefile entries follows :
 `(*)`  ocamlwc is available at http://www.lri.fr/~filliatr/software.en.html
 `(**)` ocamldoc is included with Objective Caml
 
-## 8- Contact the developper
+## 8- Contact the developers
 
 You can report bugs at https://github.com/ocaml-community/calendar/issues
