@@ -16,8 +16,7 @@ A calendar library for OCaml.
 ## 1- Introduction
 
 The Calendar library provides types and operations over dates and times.
-This library requires OCaml 3.09.1 or higher.
-OCaml 3.09 is usable at your own risk.
+This library requires OCaml 4.03.0 or higher.
 Older OCaml versions are unsupported.
 
 ## 2- Contents
@@ -26,13 +25,10 @@ Older OCaml versions are unsupported.
 - `COPYING`		  Information about copyright
 - `LGPL`		  Information about LGPL
 - `README.md`		  This file
-- `Makefile.in`	  Makefile used by configure
-- `configure`	  Script generating Makefile
-- `configure.in`	  Script generating configure (with autoconf)
 - `calendar_faq.txt`  FAQ frow which some algorithms come
 - `doc`		  HTML documentation of the API
 - `src`		  Source files directory
-- `target`		  Directory containing the built library
+- `_build/default/`		  Directory containing the built library
 - `tests`		  Test files directory
 - `utils`		  Some utilities
 
@@ -43,41 +39,24 @@ See the enclosed file COPYING for more details.
 
 ## 4- Installation
 
-You need Objective Caml >= 3.09.1 to compile the sources.
-You need too ocamlfind coming with findlib and available at:
-	http://www.ocaml-programming.de/packages/
+Easiest way is `opam install calendar`.
 
-1. Configure with `./configure`.
-2. Compile with `make`.
-3. Install with `make install` (you may need superuser permissions).
-4. Clean the directory with `make clean`.
+To manually install the library, you first need to install `dune` and `re`.
+Then:
 
-You can remove files installed by "make install" at any time with :
+```
+$ dune build @install
+$ dune install
+```
 
-`make uninstall` (you may need superuser permissions)
+You can remove files installed with :
+
+`dune uninstall`
 
 ## 5- How to use
 
-(a) Use the GODI package of calendar !
-
-  see: http://godi.ocaml-programming.de
-
-(b) Or: simply link calendar with your files using ocamlfind.
-
-For example, if you have a file foo_using_calendar.ml, compile it as follow:
-
-	ocamlfind ocamlc -package calendar -linkpkg foo_using_calendar.ml
-or
-
-	ocamlfind ocamlopt -package calendar -linkpkg foo_using_calendar.ml
-
-(c) Or: do not use ocamlfind, link calendar with unix and str and
-specify the directory containing calendar:
-
-	ocamlc -I /usr/local/lib/ocaml/site-lib/calendar unix.cma calendarLib.cmo foo_using_calendar.ml
-or
-
-	ocamlopt -I /usr/local/lib/ocaml/site-lib/calendar unix.cmxa calendarLib.cmx foo_using_calendar.ml
+Use the `calendar` library using ocamlfind. In dune, it means having
+an entry `(libraries calendar)`.
 
 ## 6- Documentation
 
@@ -88,17 +67,11 @@ This documentation is available online at http://calendar.forge.ocamlcore.org/do
 
 A description of some Makefile entries follows :
 
-- i. tests
-  Execute some tests
+- `make test` will execute some tests. You'll need [alcotest](https://github.com/mirage/alcotest).
 
-- ii. wc
-  Give informations about the size of the source files. You need ocamlwc `(*)`.
+  To run only some tests: `dune exec ./tests/test.exe test time` (for example)
 
-- iii. doc
-  Produce the documentation of the API. You need ocamldoc `(**)`.
-
-`(*)`  ocamlwc is available at http://www.lri.fr/~filliatr/software.en.html
-`(**)` ocamldoc is included with Objective Caml
+- `make doc` to produce the documentation of the API. You need [odoc](https://github.com/ocaml/odoc)
 
 ## 8- Contact the developper
 

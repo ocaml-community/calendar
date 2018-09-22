@@ -22,151 +22,149 @@
 
 (*i $Id$ i*)
 
-Printf.printf "Tests of FPcalendar:\n";;
-
 open CalendarLib;;
 open Fcalendar.Precise;;
-include Gen_test;;
-reset ();;
 
-let eps = 0.000001;;
 
-Time_Zone.change Time_Zone.UTC;;
+let test () =
+  let test x s = Alcotest.(check bool) s true x in
 
-(* Fcalendar *)
+  let eps = 0.000001 in
 
-test_exn (lazy (make (-4712) 1 1 12 0 (-1.))) "-4713-12-31-23-59-59";;
-test (make (-4712) 1 1 12 0 0. = make (-4712) 1 0 36 0 0.) "calendar coercion";;
-test (from_jd 0. = make (-4712) 1 1 12 0 0.) "from_jd 0 = 4713 BC-1-1";;
-test (from_mjd 0. = make 1858 11 17 0 0 0.) "from_mjd 0 = 1858-11-17";;
+  Time_Zone.change Time_Zone.UTC;
 
-Time_Zone.change (Time_Zone.UTC_Plus 5);;
+  (* Fcalendar *)
 
-test (abs_float (to_jd (from_jd 12345.6789) -. 12345.6789) < eps)
-  "to_jd (from_jd x) = x";;
-test (abs_float (to_mjd (from_mjd 12345.6789) -. 12345.6789) < eps)
-  "to_mjd (from_mjd x) = x";;
-test (Period.to_date (Period.hour 60) = Date.Period.day 2)
-  "period(60h) = period(2d)";;
-test (Period.compare (Period.day 2) (Period.hour 60) < 0) "Period.compare <";;
-test (Period.compare (Period.day 3) (Period.hour 60) > 0) "Period.compare >";;
-test (Period.compare
-	(Period.add (Period.day 2) (Period.hour 12))
-	(Period.hour 60) = 0) "Period.compare =";;
-test
-  (add (make 1 2 3 4 5 6.) (Period.make 9 8 7 6 5 4.5) =
-      make 10 10 10 10 10 10.5)
-  "add 1-2-3-4-5-6 9-8-7-6-5-4.5";;
-test
-  (add (make 3 1 1 0 0 0.7) (Period.make 0 0 0 (-25) 0 (-1.3)) =
-  make 2 12 30 22 59 59.4)
-  "add 3-1-1-0-0-0.7 0-0-0-(-25)-0-(-1.3)";;
+  Gen_test.test_exn (lazy (make (-4712) 1 1 12 0 (-1.))) "-4713-12-31-23-59-59";
+  test (make (-4712) 1 1 12 0 0. = make (-4712) 1 0 36 0 0.) "calendar coercion";
+  test (from_jd 0. = make (-4712) 1 1 12 0 0.) "from_jd 0 = 4713 BC-1-1";
+  test (from_mjd 0. = make 1858 11 17 0 0 0.) "from_mjd 0 = 1858-11-17";
 
-test
-  (equal (rem (make 9 8 7 6 5 4.9) (Period.make 1 2 3 4 5 6.4))
-     (make 8 6 4 1 59 58.5))
-  "rem 9-8-7-6-5-4 1-2-3-4-5-6";;
+  Time_Zone.change (Time_Zone.UTC_Plus 5);
 
-test (Period.equal
-	(sub (make 0 0 7 6 5 4.) (make 0 0 3 54 5 6.))
-	(Period.make 0 0 1 23 59 58.))
-  "sub 0-0-7-6-5-4 0-0-3-54-5-6";;
+  test (abs_float (to_jd (from_jd 12345.6789) -. 12345.6789) < eps)
+    "to_jd (from_jd x) = x";
+  test (abs_float (to_mjd (from_mjd 12345.6789) -. 12345.6789) < eps)
+    "to_mjd (from_mjd x) = x";
+  test (Period.to_date (Period.hour 60) = Date.Period.day 2)
+    "period(60h) = period(2d)";
+  test (Period.compare (Period.day 2) (Period.hour 60) < 0) "Period.compare <";
+  test (Period.compare (Period.day 3) (Period.hour 60) > 0) "Period.compare >";
+  test (Period.compare
+      (Period.add (Period.day 2) (Period.hour 12))
+      (Period.hour 60) = 0) "Period.compare =";
+  test
+    (add (make 1 2 3 4 5 6.) (Period.make 9 8 7 6 5 4.5) =
+        make 10 10 10 10 10 10.5)
+    "add 1-2-3-4-5-6 9-8-7-6-5-4.5";
+  test
+    (add (make 3 1 1 0 0 0.7) (Period.make 0 0 0 (-25) 0 (-1.3)) =
+    make 2 12 30 22 59 59.4)
+    "add 3-1-1-0-0-0.7 0-0-0-(-25)-0-(-1.3)";
 
-test (Period.equal
-	(Period.opp (Period.make 0 0 2 3 0 0.))
-	(Period.make 0 0 (-2) (-3) 0 0.))
-  "period opp";;
+  test
+    (equal (rem (make 9 8 7 6 5 4.9) (Period.make 1 2 3 4 5 6.4))
+       (make 8 6 4 1 59 58.5))
+    "rem 9-8-7-6-5-4 1-2-3-4-5-6";
 
-(* Date *)
+  test (Period.equal
+      (sub (make 0 0 7 6 5 4.) (make 0 0 3 54 5 6.))
+      (Period.make 0 0 1 23 59 58.))
+    "sub 0-0-7-6-5-4 0-0-3-54-5-6";
 
-let d = make 2003 12 31 12 24 48.;;
-test (next d `Month = make 2004 1 31 12 24 48.) "2003-12-31 + 1 mois";;
-test (add d (Period.month 2) = make 2004 3 2 12 24 48.) "2003-12-31 + 2 mois";;
-let d3 = make 2011 3 24 0 0 0.;;
-test (prev d3 `Year = make 2010 3 24 0 0 0.) "2011-3-24 - 1 year";;
-let d2 = make (-3000) 1 1 6 12 24.5;;
-test (equal (rem d (sub d d2)) d2) "rem x (sub x y) = y";;
-test (is_leap_day (make 2000 2 24 0 0 0.)) "2000-2-24 leap day";;
-test (not (is_leap_day (make 2000 2 25 0 0 0.))) "2000-2-25 not leap day";;
-test (is_gregorian (make 1600 1 1 0 0 0.4)) "1600-1-1 gregorian";;
-test (not (is_gregorian (make 1400 1 1 0 0 0.1))) "1400-1-1 not gregorian";;
-test (is_julian (make 1582 1 1 0 0 0.1)) "1582-1-1 julian";;
-test (not (is_julian (make 1583 1 1 0 0 0.9832))) "1583-1-1 not julian";;
+  test (Period.equal
+      (Period.opp (Period.make 0 0 2 3 0 0.))
+      (Period.make 0 0 (-2) (-3) 0 0.))
+    "period opp";
 
-(* Time *)
+  (* Date *)
 
-test (let n = Unix.gmtime (Unix.time ()) in
-      hour (from_unixtm n) = n.Unix.tm_hour) "from_unixtm invariant UTC";;
-test (let n = Unix.time () in
-      hour (from_unixfloat n) = (Unix.gmtime n).Unix.tm_hour)
-  "from_unixfloat invariant UTC";;
+  let d = make 2003 12 31 12 24 48. in
+  test (next d `Month = make 2004 1 31 12 24 48.) "2003-12-31 + 1 mois";
+  test (add d (Period.month 2) = make 2004 3 2 12 24 48.) "2003-12-31 + 2 mois";
+  let d3 = make 2011 3 24 0 0 0. in
+  test (prev d3 `Year = make 2010 3 24 0 0 0.) "2011-3-24 - 1 year";
+  let d2 = make (-3000) 1 1 6 12 24.5 in
+  test (equal (rem d (sub d d2)) d2) "rem x (sub x y) = y";
+  test (is_leap_day (make 2000 2 24 0 0 0.)) "2000-2-24 leap day";
+  test (not (is_leap_day (make 2000 2 25 0 0 0.))) "2000-2-25 not leap day";
+  test (is_gregorian (make 1600 1 1 0 0 0.4)) "1600-1-1 gregorian";
+  test (not (is_gregorian (make 1400 1 1 0 0 0.1))) "1400-1-1 not gregorian";
+  test (is_julian (make 1582 1 1 0 0 0.1)) "1582-1-1 julian";
+  test (not (is_julian (make 1583 1 1 0 0 0.9832))) "1583-1-1 not julian";
 
-Time_Zone.change (Time_Zone.UTC_Plus 10);;
+  (* Time *)
 
-test (let n = Unix.gmtime (Unix.time ()) in
-      hour (from_unixtm n) = n.Unix.tm_hour) "from_unixtm invariant +10";;
-test (let n = Unix.time () in
-      hour (from_unixfloat n) = (Unix.gmtime n).Unix.tm_hour)
-  "from_unixfloat invariant +10";;
+  test (let n = Unix.gmtime (Unix.time ()) in
+        hour (from_unixtm n) = n.Unix.tm_hour) "from_unixtm invariant UTC";
+  test (let n = Unix.time () in
+        hour (from_unixfloat n) = (Unix.gmtime n).Unix.tm_hour)
+    "from_unixfloat invariant UTC";
 
-test (equal (add (make 0 0 0 10 0 0.1) (Period.hour 30)) (make 0 0 1 16 0 0.1))
-  "add 0-0-0-20-0-0 30h";;
-test (equal
-	(next (make 1999 12 31 23 59 59.43) `Second)
-	(make 2000 1 1 0 0 0.43))
-  "next 1999-31-12-23-59-59 `Second";;
-let n = now ();;
-test (equal (prev (next n `Minute) `Minute) n) "prev next = id";;
-test (equal
-	(convert
-	   (make 0 0 0 23 0 0.1234)
-	   (Time_Zone.UTC_Plus 2)
-	   (Time_Zone.UTC_Plus 4))
-	(make 0 0 1 1 0 0.1234)) "convert";;
+  Time_Zone.change (Time_Zone.UTC_Plus 10);
 
-test (hour (make 0 0 0 20 0 0.) = 20) "hour";;
-test (minute (make 0 0 0 20 10 0.2) = 10) "minute";;
-test (Utils.Float.equal (second (make 0 0 0 20 10 5.123)) 5.123) "second";;
+  test (let n = Unix.gmtime (Unix.time ()) in
+        hour (from_unixtm n) = n.Unix.tm_hour) "from_unixtm invariant +10";
+  test (let n = Unix.time () in
+        hour (from_unixfloat n) = (Unix.gmtime n).Unix.tm_hour)
+    "from_unixfloat invariant +10";
 
-test (is_pm (make 0 0 0 10 0 0.1)) "is_pm 10-0-0";;
-test (is_pm (make 0 0 0 34 0 0.)) "is_pm 34-0-0";;
-test (not (is_pm (make 0 0 0 (- 10) 0 0.))) "not (is_pm (- 10) 0 0)";;
-test (is_am (make 0 0 0 20 0 0.)) "is_am 20-0-0";;
-test (is_am (make 0 0 0 (- 34) 0 0.)) "is_am (- 34) 0 0";;
-test (not (is_am (make 0 0 0 34 0 0.))) "not (is_pm 34 0 0)";;
+  test (equal (add (make 0 0 0 10 0 0.1) (Period.hour 30)) (make 0 0 1 16 0 0.1))
+    "add 0-0-0-20-0-0 30h";
+  test (equal
+      (next (make 1999 12 31 23 59 59.43) `Second)
+      (make 2000 1 1 0 0 0.43))
+    "next 1999-31-12-23-59-59 `Second";
+  let n = now () in
+  test (equal (prev (next n `Minute) `Minute) n) "prev next = id";
+  test (equal
+      (convert
+         (make 0 0 0 23 0 0.1234)
+         (Time_Zone.UTC_Plus 2)
+         (Time_Zone.UTC_Plus 4))
+      (make 0 0 1 1 0 0.1234)) "convert";
 
-Time_Zone.change Time_Zone.UTC;;
+  test (hour (make 0 0 0 20 0 0.) = 20) "hour";
+  test (minute (make 0 0 0 20 10 0.2) = 10) "minute";
+  test (Utils.Float.equal (second (make 0 0 0 20 10 5.123)) 5.123) "second";
 
-test (let n = Unix.gmtime (Unix.time ()) in
-      hour (from_unixtm n) = n.Unix.tm_hour) "from_unixtm invariant UTC2";;
-test (let n = Unix.time () in
-      hour (from_unixfloat n) = (Unix.gmtime n).Unix.tm_hour)
-  "from_unixfloat invariant UTC2";;
+  test (is_pm (make 0 0 0 10 0 0.1)) "is_pm 10-0-0";
+  test (is_pm (make 0 0 0 34 0 0.)) "is_pm 34-0-0";
+  test (not (is_pm (make 0 0 0 (- 10) 0 0.))) "not (is_pm (- 10) 0 0)";
+  test (is_am (make 0 0 0 20 0 0.)) "is_am 20-0-0";
+  test (is_am (make 0 0 0 (- 34) 0 0.)) "is_am (- 34) 0 0";
+  test (not (is_am (make 0 0 0 34 0 0.))) "not (is_pm 34 0 0)";
 
-test (to_unixfloat (make 1970 1 1 0 0 0.) = 0.) "to_unixfloat 1 Jan 1970";;
-test (from_unixfloat 0. = make 1970 1 1 0 0 0.) "from_unixfloat 1 Jan 1970";;
-test (floor (to_unixfloat (make 2004 11 13 19 17 10.)) = 1100373429.)
-  "to_unixfloat";;
-test (equal (from_unixfloat 1100373429.) (make 2004 11 13 19 17 09.))
-  "from_unixfloat";;
+  Time_Zone.change Time_Zone.UTC;
 
-test (equal
-	(from_unixtm (to_unixtm (make 2003 7 16 23 22 21.)))
-	(make 2003 7 16 23 22 21.))
-  "from_unixtm to_unixtm = id";;
+  test (let n = Unix.gmtime (Unix.time ()) in
+        hour (from_unixtm n) = n.Unix.tm_hour) "from_unixtm invariant UTC2";
+  test (let n = Unix.time () in
+        hour (from_unixfloat n) = (Unix.gmtime n).Unix.tm_hour)
+    "from_unixfloat invariant UTC2";
 
-test (Period.safe_to_time (Period.second 30.12) = Time.Period.second 30.12)
-  "Period.safe_to_time second";;
-test (Period.safe_to_time (Period.day 6) = Time.Period.second 518400.)
-  "Period.safe_to_time day";;
-test_exn (lazy (Period.to_time (Period.year 1))) "Period.to_time year";;
-test (Period.ymds (Period.make 1 2 3 1 2 3.1) = (1, 2, 3, 3723.1))
-  "Period.ymds";;
-test
-  (Period.ymds (Period.make (-1) (-2) (-3) (-1) (-2) (-3.)) = (-1,-2,-4,82677.))
-  "Period.ymds neg";;
+  test (to_unixfloat (make 1970 1 1 0 0 0.) = 0.) "to_unixfloat 1 Jan 1970";
+  test (from_unixfloat 0. = make 1970 1 1 0 0 0.) "from_unixfloat 1 Jan 1970";
+  test (floor (to_unixfloat (make 2004 11 13 19 17 10.)) = 1100373429.)
+    "to_unixfloat";
+  test (equal (from_unixfloat 1100373429.) (make 2004 11 13 19 17 09.))
+    "from_unixfloat";
 
-let ok = nb_ok ();;
-let bug = nb_bug ();;
-Printf.printf "tests ok : %d; tests ko : %d\n" ok bug;;
-flush stdout;;
+  test (equal
+      (from_unixtm (to_unixtm (make 2003 7 16 23 22 21.)))
+      (make 2003 7 16 23 22 21.))
+    "from_unixtm to_unixtm = id";
+
+  test (Period.safe_to_time (Period.second 30.12) = Time.Period.second 30.12)
+    "Period.safe_to_time second";
+  test (Period.safe_to_time (Period.day 6) = Time.Period.second 518400.)
+    "Period.safe_to_time day";
+  Gen_test.test_exn (lazy (Period.to_time (Period.year 1))) "Period.to_time year";
+  test (Period.ymds (Period.make 1 2 3 1 2 3.1) = (1, 2, 3, 3723.1))
+    "Period.ymds";
+  test
+    (Period.ymds (Period.make (-1) (-2) (-3) (-1) (-2) (-3.)) = (-1,-2,-4,82677.))
+    "Period.ymds neg";
+  ()
+
+let suite = ["fpcalendar", `Quick, test]
