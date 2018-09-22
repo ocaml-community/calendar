@@ -8,6 +8,6 @@ clean:
 	@dune clean
 
 test:
-	@dune runtest
+	@exec dune runtest --no-buffer --force
 
 .PHONY: all clean test
