@@ -2,7 +2,7 @@ opam-version: "2.0"
 version: "dev"
 author: "Julien Signoles"
 maintainer: "ocaml-community"
-license: "LGPL"
+license: "LGPL-2.1 with OCaml linking exception"
 build: [
   ["dune" "build" "-p" name]
   ["dune" "build" "@doc" "-p" name] {with-doc}
@@ -11,6 +11,7 @@ run-test: [
   ["dune" "runtest" "-p" name]
 ]
 depends: [
+  "re"
   "dune" {build}
   "odoc" {doc}
 ]
