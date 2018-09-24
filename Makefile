@@ -8,9 +8,9 @@ clean:
 	@dune clean
 
 test:
-	@exec dune runtest --no-buffer --force
+	@dune runtest --no-buffer --force
 
 doc:
 	@dune build @doc
 
-.PHONY: all clean test
+.PHONY: all clean test doc

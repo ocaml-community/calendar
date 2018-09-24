@@ -21,16 +21,16 @@ Older OCaml versions are unsupported.
 
 ## 2- Contents
 
-- `CHANGES`		  Information about the last changes
-- `COPYING`		  Information about copyright
-- `LGPL`		  Information about LGPL
-- `README.md`		  This file
+- `CHANGES`      Information about the last changes
+- `COPYING`      Information about copyright
+- `LGPL`      Information about LGPL
+- `README.md`      This file
 - `calendar_faq.txt`  FAQ frow which some algorithms come
-- `doc`		  HTML documentation of the API
-- `src`		  Source files directory
-- `_build/default/`		  Directory containing the built library
-- `tests`		  Test files directory
-- `utils`		  Some utilities
+- `doc`      HTML documentation of the API
+- `src`      Source files directory
+- `_build/default/`      Directory containing the built library
+- `tests`      Test files directory
+- `utils`      Some utilities
 
 ## 3- Copyright
 
