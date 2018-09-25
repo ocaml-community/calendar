@@ -1,0 +1,23 @@
+opam-version: "2.0"
+version: "dev"
+author: "Julien Signoles"
+maintainer: "ocaml-community"
+license: "LGPL-2.1 with OCaml linking exception"
+build: [
+  ["dune" "build" "-p" name]
+  ["dune" "build" "@doc" "-p" name] {with-doc}
+]
+run-test: [
+  ["dune" "runtest" "-p" name]
+]
+depends: [
+  "re"
+  "dune" {build}
+  "odoc" {doc}
+  "alcotest" {test}
+]
+tags: [ "calendar" "date" "time" "datetime" ]
+homepage: "https://github.com/ocaml-community/calendar"
+doc: "https://github.com/ocaml-community/calendar" # TODO
+bug-reports: "https://github.com/ocaml-community/calendar/issues"
+dev-repo: "git+https://github.com/ocaml-community/calendar"

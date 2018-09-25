@@ -40,7 +40,6 @@ let test x s =
 let test_exn x s =
   try
     ignore (Lazy.force x);
-    Printf.printf "%s\n" s;
-    bug ()
+    Alcotest.failf "expected exception: %s" s
   with _ ->
-    ok ();;
+    ()
