@@ -108,8 +108,18 @@ let test() =
   test (Period.nb_days (Period.make 0 0 6) = 6) "Period.nb_days ok";
   test (Period.safe_nb_days (Period.week 3) = 21) "Period.safe_nb_days ok";
   Gen_test.test_exn (lazy (Period.nb_days (Period.make 1 0 0))) "Period.nb_days ko";
+
   test (week_first_last 21 2004 = (make 2004 5 17, make 2004 5 23))
     "week_beggining_end";
+
+  (* January 4th must be in the first week (ISO 8601) *)
+  (* 2015 is an interesting year in this regard as it tests this rule
+     to its extreme *)
+  test (week_first_last 1 2015 = (make 2014 12 29, make 2015 1 4))
+    "iso_week_number_startof_2015";
+  test (week_first_last 53 2015 = (make 2015 12 28, make 2016 1 3))
+    "iso_week_number_endof_2015";
+
   test (Period.ymd (Period.make 1 2 3) = (1, 2, 3)) "Period.ymd";
   test (nth_weekday_of_month 2004 Oct Thu 4 = make 2004 10 28)
     "nth_weekday_of_month";
