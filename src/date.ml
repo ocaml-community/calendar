@@ -65,6 +65,12 @@ external int_of_month : month -> int = "%identity"
 
 let compare = Utils.Int.compare
 let equal = Utils.Int.equal
+let ( > ) x y = compare x y = 1
+let ( >= ) x y = compare x y > -1
+let ( < ) x y = compare x y = -1
+let ( <= ) x y = compare x y < 1
+
+
 let hash = Utils.Int.hash
 
 (* Constructors. *)

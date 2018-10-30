@@ -30,6 +30,14 @@ let test() =
   Gen_test.test_exn (lazy (make 3268 1 23)) "make 3268 1 23";
   Gen_test.test_exn (lazy (make 1582 10 5)) "make 1582 10 10";
   test (compare (make 2003 2 29) (make 2003 3 1) = 0) "2003-2-29 = 2003-3-1";
+
+  test ((make 2018 10 29) > (make 2018 10 28)) "2018-10-29 > 2018-10-28";
+  test ((make 2018 10 29) >= (make 2018 10 28)) "2018-10-29 >= 2018-10-28";
+  test ((make 2018 10 29) >= (make 2018 10 29)) "2018-10-29 >= 2018-10-29";
+  test ((make 2018 10 29) < (make 2018 10 30)) "2018-10-29 < 2018-10-30";
+  test ((make 2018 10 29) <= (make 2018 10 30)) "2018-10-29 <= 2018-10-30";
+  test ((make 2018 10 29) <= (make 2018 10 29)) "2018-10-29 <= 2018-10-29";
+
   let d = make 2003 12 31 in
   test (next d `Month = make 2004 1 31) "2003-12-31 + 1 mois";
   test (add d (Period.month 2) = make 2004 3 2) "2003-12-31 + 2 mois";

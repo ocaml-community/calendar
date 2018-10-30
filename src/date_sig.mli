@@ -176,6 +176,18 @@ module type S = sig
     (** Comparison function between two dates.
  	@see <Utils.Comparable.html#VALcompare> Utils.Comparable.compare *)
 
+  val ( > ) : 'a date -> 'b date -> bool
+    (** Check if the first date is later than the second *)
+
+  val ( >= ) : 'a date -> 'b date -> bool
+    (** Check if the first date is later or equal to the second *)
+
+  val ( < ) : 'a date -> 'b date -> bool
+    (** Check if the first date is earlier than the second *)
+
+  val ( <= ) : 'a date -> 'b date -> bool
+    (** Check if the first date is earlier or equal to the second *)
+
   val hash: 'a date -> int
     (** Hash function for dates.
 	@see <Utils.Comparable.html#VALhash> Utils.Comparable.hash
