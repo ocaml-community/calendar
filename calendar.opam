@@ -3,21 +3,23 @@ version: "dev"
 author: "Julien Signoles"
 maintainer: "ocaml-community"
 license: "LGPL-2.1 with OCaml linking exception"
+synopsis: "Library for handling dates and times in your program"
 build: [
   ["dune" "build" "-p" name]
   ["dune" "build" "@doc" "-p" name] {with-doc}
-]
-run-test: [
-  ["dune" "runtest" "-p" name]
+  ["dune" "runtest" "-p" name] {with-test}
 ]
 depends: [
   "re"
   "dune" {build}
-  "odoc" {doc}
-  "alcotest" {test}
+  "odoc" {with-doc}
+  "alcotest" {with-test}
 ]
 tags: [ "calendar" "date" "time" "datetime" ]
 homepage: "https://github.com/ocaml-community/calendar"
-doc: "https://github.com/ocaml-community/calendar" # TODO
+doc: "https://ocaml-community.github.io/calendar/"
 bug-reports: "https://github.com/ocaml-community/calendar/issues"
 dev-repo: "git+https://github.com/ocaml-community/calendar"
+description:"""
+Calendar is a library for handling dates and times in your program.
+"""
