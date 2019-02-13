@@ -1,6 +1,6 @@
 # Calendar
 
-A calendar library for OCaml.
+A calendar library for OCaml. API documentation: https://ocaml-community.github.io/calendar/calendar/CalendarLib/index.html
 
 [![Travis build Status](https://travis-ci.org/ocaml-community/calendar.svg?branch=master)](https://travis-ci.org/ocaml-community/calendar)
 
