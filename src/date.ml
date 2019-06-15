@@ -76,7 +76,7 @@ let hash = Utils.Int.hash
 (* Constructors. *)
 
 let lt (d1 : int * int * int) (d2 : int * int * int) =
-  Pervasives.compare d1 d2 < 0
+  Stdlib.compare d1 d2 < 0
 
 (* [date_ok] returns [true] is the date belongs to the Julian period;
    [false] otherwise. *)
@@ -257,8 +257,8 @@ module Period = struct
 
   (* exactly equivalent to [Pervasives.compare] but more flexible typing *)
   let compare x y =
-    let n = Pervasives.compare x.m y.m in
-    if n = 0 then Pervasives.compare x.d y.d else n
+    let n = Stdlib.compare x.m y.m in
+    if n = 0 then Stdlib.compare x.d y.d else n
   let equal x y = compare x y = 0
   let hash = Hashtbl.hash
 
