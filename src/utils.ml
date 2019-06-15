@@ -20,6 +20,8 @@
 (*  LICENSE.                                                              *)
 (**************************************************************************)
 
+module Stdlib = Calendar_shims.Stdlib
+
 module type Comparable = sig
   type t
   val equal: t -> t -> bool

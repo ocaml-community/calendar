@@ -29,6 +29,8 @@
 
 (*S Datatypes. *)
 
+module Stdlib = Calendar_shims.Stdlib
+
 type field = Period.date_field
 
 (* the integer represents the Julian day *)
