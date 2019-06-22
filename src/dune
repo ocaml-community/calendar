@@ -4,13 +4,7 @@
   (public_name calendar)
   (libraries re unix)
   (modules_without_implementation calendar_sig date_sig period time_sig)
-  (modules :standard \ make_calendar_shims)
   (flags :standard -warn-error -32 -safe-string))
-
-(executable
-  (name make_calendar_shims)
-  (modules make_calendar_shims)
-  (libraries dune.configurator))
 
 (rule
   (targets version.ml)
@@ -22,7 +16,3 @@
         (system date)
         (echo "\"\n")))))
 
-(rule
-  (targets Calendar_shims.ml)
-  (deps ./make_calendar_shims.exe)
-  (action (run ./make_calendar_shims.exe)))

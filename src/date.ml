@@ -29,8 +29,6 @@
 
 (*S Datatypes. *)
 
-module Stdlib = Calendar_shims.Stdlib
-
 type field = Period.date_field
 
 (* the integer represents the Julian day *)
@@ -77,8 +75,16 @@ let hash = Utils.Int.hash
 
 (* Constructors. *)
 
-let lt (d1 : int * int * int) (d2 : int * int * int) =
-  Stdlib.compare d1 d2 < 0
+let lt ((y1, m1, d1) : int * int * int) ((y2, m2, d2) : int * int * int) =
+  let cmp = match compare y1 y2 with
+  | 0 -> begin
+      match compare m1 m2 with
+      | 0 -> compare d1 d2
+      | i -> i
+    end
+  | i -> i
+  in
+  cmp < 0
 
 (* [date_ok] returns [true] is the date belongs to the Julian period;
    [false] otherwise. *)
@@ -259,8 +265,8 @@ module Period = struct
 
   (* exactly equivalent to [Pervasives.compare] but more flexible typing *)
   let compare x y =
-    let n = Stdlib.compare x.m y.m in
-    if n = 0 then Stdlib.compare x.d y.d else n
+    let n = compare x.m y.m in
+    if n = 0 then compare x.d y.d else n
   let equal x y = compare x y = 0
   let hash = Hashtbl.hash
 

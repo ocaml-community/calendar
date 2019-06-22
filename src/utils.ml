@@ -20,8 +20,6 @@
 (*  LICENSE.                                                              *)
 (**************************************************************************)
 
-module Stdlib = Calendar_shims.Stdlib
-
 module type Comparable = sig
   type t
   val equal: t -> t -> bool
@@ -31,8 +29,8 @@ end
 
 module Int = struct
   type t = int
-  let equal = Stdlib.(=)
-  let compare = Stdlib.compare
+  let equal (a: int) b = a = b
+  let compare (a: int) b = compare a b
   let hash = Hashtbl.hash
 end
 
