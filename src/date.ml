@@ -69,22 +69,17 @@ let ( > ) x y = compare x y = 1
 let ( >= ) x y = compare x y > -1
 let ( < ) x y = compare x y = -1
 let ( <= ) x y = compare x y < 1
+let ( <?> ) c (ord, x, y) =
+  if c = 0 then ord x y else c
+let cmp_date (y1, m1, d1) (y2, m2, d2) =
+  compare y1 y2 <?> (compare, m1, m2) <?> (compare, d1, d2)
 
 
 let hash = Utils.Int.hash
 
 (* Constructors. *)
 
-let lt ((y1, m1, d1) : int * int * int) ((y2, m2, d2) : int * int * int) =
-  let cmp = match compare y1 y2 with
-  | 0 -> begin
-      match compare m1 m2 with
-      | 0 -> compare d1 d2
-      | i -> i
-    end
-  | i -> i
-  in
-  cmp < 0
+let lt d1 d2 = (cmp_date d1 d2) < 0
 
 (* [date_ok] returns [true] is the date belongs to the Julian period;
    [false] otherwise. *)
