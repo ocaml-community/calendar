@@ -10,8 +10,4 @@
   (targets version.ml)
   (action
     (with-stdout-to %{targets}
-      (progn
-        (echo "let version = String.trim \"" %{version:calendar} "\"\n")
-        (echo "let date = String.trim \"")
-        (system date)
-        (echo "\"\n")))))
+      (echo "let version = String.trim \"" %{version:calendar} "\"\n"))))
