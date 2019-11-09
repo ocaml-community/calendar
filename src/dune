@@ -11,3 +11,4 @@
   (action
     (with-stdout-to %{targets}
       (echo "let version = String.trim \"" %{version:calendar} "\"\n"))))
+
