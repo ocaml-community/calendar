@@ -31,7 +31,6 @@ let suite = [
   "date", Test_date.suite;
   "calendar", Test_calendar.suite;
   "pcalendar", Test_pcalendar.suite;
-  "pcalendar", Test_fpcalendar.suite;
   "fpcalendar", Test_fpcalendar.suite;
   "printer", Test_printer.suite;
 ]
