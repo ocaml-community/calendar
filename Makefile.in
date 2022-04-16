@@ -86,7 +86,7 @@ GENERATED= src/version.ml
 
 CAMLIBS	= $(addprefix -I , $(DIRS))
 
-CAMLFLAGS= $(CAMLIBS)
+CAMLFLAGS= $(CAMLIBS) -I +unix -I +str
 BYTEFLAGS= $(CAMLFLAGS)
 LINK_OPTFLAGS = $(CAMLFLAGS) -noassert
 OPTFLAGS = $(LINK_OPTFLAGS) -for-pack CalendarLib
