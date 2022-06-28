@@ -26,13 +26,9 @@ Older OCaml versions are unsupported.
 - `COPYING`		  Information about copyright
 - `LGPL`		  Information about LGPL
 - `README.md`		  This file
-- `Makefile.in`	  Makefile used by configure
-- `configure`	  Script generating Makefile
-- `configure.in`	  Script generating configure (with autoconf)
 - `calendar_faq.txt`  FAQ frow which some algorithms come
 - `doc`		  HTML documentation of the API
 - `src`		  Source files directory
-- `target`		  Directory containing the built library
 - `tests`		  Test files directory
 - `utils`		  Some utilities
 
@@ -43,18 +39,9 @@ See the enclosed file COPYING for more details.
 
 ## 4- Installation
 
-You need Objective Caml >= 3.09.1 to compile the sources.
-You need too ocamlfind coming with findlib and available at:
-	http://www.ocaml-programming.de/packages/
+You need Objective Caml >= 4.02.0 to compile the sources.
 
-1. Configure with `./configure`.
-2. Compile with `make`.
-3. Install with `make install` (you may need superuser permissions).
-4. Clean the directory with `make clean`.
-
-You can remove files installed by "make install" at any time with :
-
-`make uninstall` (you may need superuser permissions)
+1. `opam install calendar`
 
 ## 5- How to use
 
