@@ -11,4 +11,12 @@
  (name calendar)
  (synopsis "Library for handling dates and times in your program")
  (depends
-   ocaml))
+   ocaml
+   stdlib-shims))
+
+(package
+ (name CalendarLib)
+ (synopsis "Library for handling dates and times in your program")
+ (depends
+   ocaml
+   stdlib-shims))
