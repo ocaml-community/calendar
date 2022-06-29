@@ -20,8 +20,6 @@
 (*  LICENSE.                                                              *)
 (**************************************************************************)
 
-(*i $Id$ i*)
-
 Printf.printf "Tests of Fcalendar:\n";;
 
 open CalendarLib;;

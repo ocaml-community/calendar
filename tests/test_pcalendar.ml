@@ -20,9 +20,7 @@
 (*  LICENSE.                                                              *)
 (**************************************************************************)
 
-(*i $Id$ i*)
-
-Printf.printf "Tests of Precise Calendar:\n";;
+Printf.printf "tests of Precise Calendar:\n";;
 
 open CalendarLib;;
 open Calendar.Precise;;
