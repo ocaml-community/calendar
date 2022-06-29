@@ -1,0 +1,8 @@
+(library
+  (public_name CalendarLib)
+  (libraries unix str stdlib-shims)
+  (modules_without_implementation calendar_sig date_sig period time_sig))
+
+(deprecated_library_name
+  (old_public_name calendar)
+  (new_public_name CalendarLib))

@@ -16,8 +16,7 @@ A calendar library for OCaml. [API documentation](https://ocaml-community.github
 ## 1- Introduction
 
 The Calendar library provides types and operations over dates and times.
-This library requires OCaml 3.09.1 or higher.
-OCaml 3.09 is usable at your own risk.
+This library requires OCaml 4.02 or higher.
 Older OCaml versions are unsupported.
 
 ## 2- Contents
@@ -26,13 +25,9 @@ Older OCaml versions are unsupported.
 - `COPYING`		  Information about copyright
 - `LGPL`		  Information about LGPL
 - `README.md`		  This file
-- `Makefile.in`	  Makefile used by configure
-- `configure`	  Script generating Makefile
-- `configure.in`	  Script generating configure (with autoconf)
 - `calendar_faq.txt`  FAQ frow which some algorithms come
 - `doc`		  HTML documentation of the API
 - `src`		  Source files directory
-- `target`		  Directory containing the built library
 - `tests`		  Test files directory
 - `utils`		  Some utilities
 
@@ -43,24 +38,23 @@ See the enclosed file COPYING for more details.
 
 ## 4- Installation
 
-You need Objective Caml >= 3.09.1 to compile the sources.
-You need too ocamlfind coming with findlib and available at:
-	http://www.ocaml-programming.de/packages/
+You need OCaml >= 4.02.0 to compile the sources.
 
-1. Configure with `./configure`.
-2. Compile with `make`.
-3. Install with `make install` (you may need superuser permissions).
-4. Clean the directory with `make clean`.
-
-You can remove files installed by "make install" at any time with :
-
-`make uninstall` (you may need superuser permissions)
+1. `opam switch create ./ ocaml-base-compiler.4.14.0 --no-install`
+1. `opam install . --deps-only --with-test`
+1. `dune build`
 
 ## 5- How to use
 
-(a) Use the GODI package of calendar !
+Install the OPAM package of calendar:
 
-  see: http://godi.ocaml-programming.de
+`opam install calendar`
+
+(a) Add `calendar` to your `dune` libraries:
+
+```
+    (libraries calendar)
+```
 
 (b) Or: simply link calendar with your files using ocamlfind.
 
@@ -82,24 +76,8 @@ or
 ## 6- Documentation
 
 The doc directory contains an html documentation of the .mli files.
-This documentation is available online at http://calendar.forge.ocamlcore.org/doc/
+This documentation is available online at https://ocaml-community.github.io/calendar/
 
-## 7- Makefile
-
-A description of some Makefile entries follows :
-
-- i. tests
-  Execute some tests
-
-- ii. wc
-  Give informations about the size of the source files. You need ocamlwc `(*)`.
-
-- iii. doc
-  Produce the documentation of the API. You need ocamldoc `(**)`.
-
-`(*)`  ocamlwc is available at http://www.lri.fr/~filliatr/software.en.html
-`(**)` ocamldoc is included with Objective Caml
-
-## 8- Contact the developers
+## 7- Contact the developers
 
 You can report bugs at https://github.com/ocaml-community/calendar/issues

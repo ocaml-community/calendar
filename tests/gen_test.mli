@@ -20,8 +20,6 @@
 (*  LICENSE.                                                              *)
 (**************************************************************************)
 
-(*i $Id$ i*)
-
 (* Generic functions used in the tests. *)
 
 val reset : unit -> unit
