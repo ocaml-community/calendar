@@ -29,6 +29,7 @@ open Time_Zone;;
 include Gen_test;;
 reset ();;
 
+change UTC;;
 test (current () = UTC) "current () = UTC";;
 change Local;;
 test (current () = Local) "current () = Local";;
