@@ -26,5 +26,3 @@
 val version: string
   (** Name of this version. *)
 
-val date: string
-  (** Date of compilation. *)

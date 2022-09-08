@@ -1,0 +1,14 @@
+
+(library
+  (name calendarLib)
+  (public_name calendar)
+  (libraries re unix)
+  (modules_without_implementation calendar_sig date_sig period time_sig)
+  (flags :standard -warn-error -32 -safe-string))
+
+(rule
+  (targets version.ml)
+  (action
+    (with-stdout-to %{targets}
+      (echo "let version = String.trim \"" %{version:calendar} "\"\n"))))
+

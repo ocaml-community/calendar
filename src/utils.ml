@@ -29,8 +29,8 @@ end
 
 module Int = struct
   type t = int
-  let equal = Pervasives.(=)
-  let compare = Pervasives.compare
+  let equal (a: int) b = a = b
+  let compare (a: int) b = compare a b
   let hash = Hashtbl.hash
 end
 
@@ -38,7 +38,7 @@ module Float = struct
 
   type t = float
 
-  let precision = ref 1e-3
+  let precision = ref 1e-8
 
   let set_precision f = precision := f
 

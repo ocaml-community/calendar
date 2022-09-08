@@ -65,12 +65,21 @@ external int_of_month : month -> int = "%identity"
 
 let compare = Utils.Int.compare
 let equal = Utils.Int.equal
+let ( > ) x y = compare x y = 1
+let ( >= ) x y = compare x y > -1
+let ( < ) x y = compare x y = -1
+let ( <= ) x y = compare x y < 1
+let ( <?> ) c (ord, x, y) =
+  if c = 0 then ord x y else c
+let cmp_date (y1, m1, d1) (y2, m2, d2) =
+  compare y1 y2 <?> (compare, m1, m2) <?> (compare, d1, d2)
+
+
 let hash = Utils.Int.hash
 
 (* Constructors. *)
 
-let lt (d1 : int * int * int) (d2 : int * int * int) =
-  Pervasives.compare d1 d2 < 0
+let lt d1 d2 = (cmp_date d1 d2) < 0
 
 (* [date_ok] returns [true] is the date belongs to the Julian period;
    [false] otherwise. *)
@@ -251,8 +260,8 @@ module Period = struct
 
   (* exactly equivalent to [Pervasives.compare] but more flexible typing *)
   let compare x y =
-    let n = Pervasives.compare x.m y.m in
-    if n = 0 then Pervasives.compare x.d y.d else n
+    let n = compare x.m y.m in
+    if n = 0 then compare x.d y.d else n
   let equal x y = compare x y = 0
   let hash = Hashtbl.hash
 
@@ -337,7 +346,7 @@ let weeks_in_year y =
     | _   -> 52
 
 let week_first_last w y =
-  let d = make y 1 1 in
+  let d = make y 1 4 in (* January 4th must be in the first week (ISO 8601) *)
   let d = d - d mod 7 in
   let b = d + 7 * (w - 1) in
   b, 6 + b

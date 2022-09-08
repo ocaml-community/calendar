@@ -22,8 +22,6 @@
 
 (*i $Id$ i*)
 
-Printf.printf "Tests of Fcalendar:\n";;
-
 open CalendarLib;;
 open Fcalendar;;
 include Gen_test;;
