@@ -10,8 +10,9 @@ build: [
   ["dune" "runtest" "-p" name] {with-test}
 ]
 depends: [
-  "re"
-  "dune" {build}
+  "ocaml" {>= "4.03"}
+  "re" {>= "1.7.2"}
+  "dune" {>= "1.0"}
   "odoc" {with-doc}
   "alcotest" {with-test}
 ]
