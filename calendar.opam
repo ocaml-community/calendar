@@ -5,9 +5,9 @@ maintainer: "ocaml-community"
 license: "LGPL-2.1 with OCaml linking exception"
 synopsis: "Library for handling dates and times in your program"
 build: [
-  ["dune" "build" "-p" name]
-  ["dune" "build" "@doc" "-p" name] {with-doc}
-  ["dune" "runtest" "-p" name] {with-test}
+  ["dune" "build" "-p" name "-j" jobs]
+  ["dune" "build" "@doc" "-p" name "-j" jobs] {with-doc}
+  ["dune" "runtest" "-p" name "-j" jobs] {with-test}
 ]
 depends: [
   "ocaml" {>= "4.03"}
