@@ -6,6 +6,15 @@ Mark "*": bug fixed.
 Mark "!": change that can break compatibility with older version of the library
 ===============================================================================
 
+version 3.0.0, 2022-10-11:
+==========================
+* Fix Date.week_first_last according to ISO 8601 (@balat)
+* Remove incorrect time zone bound check (@vouillon)
+! Switch from Str to Re (@vouillon)
+! Remove date function from the version API (@c-cube)
+o Add some uility function for comparing dates (@loxs)
+* Switch the build-system to dune (@c-cube)
+
 version 2.04, 2014-10-29:
 ===========================
 * [Makefile] Fix minor issues with ocamlfind and 'make install' (from 
