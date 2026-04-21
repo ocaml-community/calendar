@@ -25,7 +25,14 @@
 open CalendarLib
 open Time_Zone;;
 
-let tz = Alcotest.testable (Fmt.always "timezone") (=) ;;
+let tz = Alcotest.testable (Fmt.any "timezone") (=) ;;
+
+let check_hour jet_lag hour res =
+  change UTC;
+  let c = Calendar.lmake ~year:2026 ~hour () in
+  change (UTC_Plus jet_lag);
+  Alcotest.(check int)
+    "Calendar.hour d1 = 22" res (Calendar.hour c)
 
 let test () =
   change UTC;
@@ -42,6 +49,10 @@ let test () =
   change (UTC_Plus 4);
   Alcotest.(check int) "from_gmt () = 4" 4 (from_gmt ()) ;
   Alcotest.(check int) "to_gmt () = -4" ~-4 (to_gmt ());
-  ()
+  (* test large time zones (out of [-12; 11]) *)
+  check_hour 13 9 22;
+  check_hour 13 12 1;
+  check_hour (-15) 16 1;
+  check_hour (-15) 9 18
 
 let suite = ["timezone", `Quick, test]

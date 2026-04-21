@@ -27,24 +27,13 @@ type t =
 
 let tz = ref UTC
 
-let out_of_bounds x = x < - 12 || x > 11
-
-let in_bounds x = not (out_of_bounds x)
-
-let make_in_bounds x =
-  let y = x mod 24 in
-  if y < -12 then y + 24
-  else if y > 11 then y - 24
-  else y
-
 let gap_gmt_local =
   let t = Unix.time () in
   (Unix.localtime t).Unix.tm_hour - (Unix.gmtime t).Unix.tm_hour
 
 let current () = !tz
 
-let change = function
-  | _ as t -> tz := t
+let change t = tz := t
 
 let gap t1 t2 =
   let aux t1 t2 =
@@ -56,12 +45,9 @@ let gap t1 t2 =
       | UTC_Plus x, UTC_Plus y -> y - x
       | _                      -> assert false
   in
-  let res =
-    if t1 = t2 then 0
-    else if t1 < t2 then aux t1 t2
-    else - aux t2 t1
-  in
-  make_in_bounds res
+  if t1 = t2 then 0
+  else if t1 < t2 then aux t1 t2
+  else - aux t2 t1
 
 let from_gmt () = gap UTC (current ())
 let to_gmt () = gap (current ()) UTC

@@ -34,9 +34,7 @@ val current : unit -> t
   (** Return the current time zone. It is [UTC] before any change. *)
 
 val change : t -> unit
-  (** Change the current time zone by another one.
-      Raise [Invalid_argument] if the specified time zone is [UTC_Plus x] with
-      [x < -12] or [x > 11] *)
+  (** Change the current time zone by another one. *)
 
 val gap : t -> t -> int
   (** Return the gap between two time zone.

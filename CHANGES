@@ -6,6 +6,8 @@ Mark "*": bug fixed.
 Mark "!": change that can break compatibility with older version of the library
 ===============================================================================
 
+* Fix Time_Zone.change for time zones out of [-12; 11] (@signoles)
+
 version 3.0.0, 2022-10-11:
 ==========================
 * Fix Date.week_first_last according to ISO 8601 (@balat)
