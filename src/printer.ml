@@ -45,9 +45,17 @@ let day_name =
 
 let name_of_day d = !day_name d
 
-let short_name_of_day d =
-  let d = name_of_day d in
-  try String.sub d 0 3 with Invalid_argument _ -> d
+let day_short_name =
+  ref (function
+	 | Date.Sun -> "Sun"
+	 | Date.Mon -> "Mon"
+	 | Date.Tue -> "Tue"
+	 | Date.Wed -> "Wed"
+	 | Date.Thu -> "Thu"
+	 | Date.Fri -> "Fri"
+	 | Date.Sat -> "Sat")
+
+let short_name_of_day d = !day_short_name d
 
 let month_name =
   ref (function
@@ -66,9 +74,22 @@ let month_name =
 
 let name_of_month m = !month_name m
 
-let short_name_of_month m =
-  let m = name_of_month m in
-  try String.sub m 0 3 with Invalid_argument _ -> m
+let month_short_name =
+  ref (function
+	 | Date.Jan -> "Jan"
+	 | Date.Feb -> "Feb"
+	 | Date.Mar -> "Mar"
+	 | Date.Apr -> "Apr"
+	 | Date.May -> "May"
+	 | Date.Jun -> "Jun"
+	 | Date.Jul -> "Jul"
+	 | Date.Aug -> "Aug"
+	 | Date.Sep -> "Sep"
+	 | Date.Oct -> "Oct"
+	 | Date.Nov -> "Nov"
+	 | Date.Dec -> "Dec")
+
+let short_name_of_month m = !month_short_name m
 
 type pad =
   | Zero

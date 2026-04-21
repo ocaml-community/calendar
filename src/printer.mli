@@ -109,6 +109,9 @@ val name_of_day : Date.day -> string
 (** [name_of_day d] is equivalent to [!day_name d].
     Used by the specifier [%A]. *)
 
+val day_short_name : (Date.day -> string) ref
+(** String representation of short day names. *)
+
 val short_name_of_day : Date.day -> string
 (** [short_name_of_day d] returns the 3 first characters of [name_of_day d].
     Used by the specifier [%a]. *)
@@ -119,6 +122,9 @@ val month_name : (Date.month -> string) ref
 val name_of_month : Date.month -> string
 (** [name_of_month m] is equivalent to [!day_month m].
     Used by the specifier [%B]. *)
+
+val month_short_name : (Date.month -> string) ref
+(** String representation of short month names. *)
 
 val short_name_of_month : Date.month -> string
 (** [short_name_of_month d] returns the 3 first characters of
