@@ -117,8 +117,6 @@ let gen_day_of_name f fmt name =
     else aux (i-1)
   in
   aux 7
-
-let day_of_name = gen_day_of_name name_of_day "%a"
 let day_of_short_name = gen_day_of_name short_name_of_day "%A"
 
 let word_regexp = ref (Re.Str.regexp "[a-zA-Z]+")
@@ -564,7 +562,6 @@ module Time =
 	 let day_of_year _ = bad_format "day_of_year"
 	 let week _ = bad_format "week"
 	 let month _ = bad_format "month"
-	 let int_month _ = bad_format "int_month"
 	 let year _ = bad_format "year"
 	 let century _ = bad_format "century"
 	 let seconds_since_1970 _ = bad_format "seconds_since_1970"
@@ -587,7 +584,6 @@ module Ftime =
 	 let day_of_year _ = bad_format "day_of_year"
 	 let week _ = bad_format "week"
 	 let month _ = bad_format "month"
-	 let int_month _ = bad_format "int_month"
 	 let year _ = bad_format "year"
 	 let century _ = bad_format "century"
 	 let seconds_since_1970 _ = bad_format "seconds_since_1970"
